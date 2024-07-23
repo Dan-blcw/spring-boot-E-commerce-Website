@@ -18,6 +18,6 @@ public class CategoryDtos {
     public String categoryName;
     public String description;
     public Date createdDate;
-    public String status;
+    public Integer status;
     private byte[] image;
 }

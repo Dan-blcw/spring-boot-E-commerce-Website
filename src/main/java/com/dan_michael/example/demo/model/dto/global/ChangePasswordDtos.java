@@ -1,4 +1,4 @@
-package com.dan_michael.example.demo.model.dto;
+package com.dan_michael.example.demo.model.dto.global;
 
 import lombok.Builder;
 import lombok.Getter;

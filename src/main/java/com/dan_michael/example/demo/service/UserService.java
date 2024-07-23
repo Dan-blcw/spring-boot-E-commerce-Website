@@ -1,7 +1,7 @@
 package com.dan_michael.example.demo.service;
 
-import com.dan_michael.example.demo.model.dto.ChangePasswordDtos;
-import com.dan_michael.example.demo.model.dto.ChangeProfileDtos;
+import com.dan_michael.example.demo.model.dto.global.ChangePasswordDtos;
+import com.dan_michael.example.demo.model.dto.global.ChangeProfileDtos;
 import com.dan_michael.example.demo.model.entities.User;
 import com.dan_michael.example.demo.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;

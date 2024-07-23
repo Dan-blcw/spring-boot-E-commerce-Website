@@ -1,6 +1,6 @@
 package com.dan_michael.example.demo.model.entities;
 
-import com.dan_michael.example.demo.service.ProductService;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,10 +21,15 @@ public class Comment {
     private int id;
 
     private String content;
+    private Integer rating;
 
+    private String identification_pro;
+    private String identification_user;
     @ManyToOne
     private User comment_user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    @JsonBackReference
     private Product product;
 }

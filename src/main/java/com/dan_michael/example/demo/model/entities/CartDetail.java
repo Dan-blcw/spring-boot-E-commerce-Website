@@ -13,18 +13,24 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class OrderDetail {
+public class CartDetail {
+
     @Id
-    @GeneratedValue
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = true)
-    private Order order;
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
-    private Integer identification_order;
-    private Integer product_id;
-    private Integer quantity;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+
+    private Integer identification_cart;
+    private Integer identification_product;
+    private int quantity;
+    private String colors;
     private String size;
-    private String color;
 }

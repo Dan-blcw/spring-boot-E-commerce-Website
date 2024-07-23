@@ -1,5 +1,6 @@
 package com.dan_michael.example.demo.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,10 +28,9 @@ public class Product {
     @GeneratedValue
     private Integer id;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<ProductImg> images;
-//    private List<MultipartFile> images;
-
     private String name;
     @Column(length = 10485760)
     private String description;
@@ -46,8 +46,9 @@ public class Product {
     private Float salePrice;
     private Boolean newStatus;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<Comment> comments = new HashSet<>();
+    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<Comment> comments;
 
     @CreatedDate
     @Column(

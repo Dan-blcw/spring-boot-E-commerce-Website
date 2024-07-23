@@ -9,40 +9,31 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "orders")
 @EntityListeners(AuditingEntityListener.class)
-public class Order {
+public class Cart {
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    private Integer identification_user;
-    @OneToMany(mappedBy = "order",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cart",fetch = FetchType.EAGER)
     @JsonManagedReference
-    private List<OrderDetail> orderDetails;
+    private List<CartDetail> cartDetails;
 
-    private String address;
-    private String companyName;
-    private String phoneNumber;
-    private String emailAddress;
-
-    private String shippingStatus;
-    private Integer orderStatus;
-
+    private Integer identification_user;
     @CreationTimestamp
     private Date createdAt;
 }

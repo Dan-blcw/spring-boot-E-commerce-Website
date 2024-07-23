@@ -1,4 +1,4 @@
-package com.dan_michael.example.demo.model.dto;
+package com.dan_michael.example.demo.model.dto.global;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

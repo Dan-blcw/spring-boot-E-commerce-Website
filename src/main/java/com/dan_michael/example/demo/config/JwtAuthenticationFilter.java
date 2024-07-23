@@ -40,17 +40,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
-        // if authheader khong mo dau voi bearer thi lap tuc return,
         if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-        /* đại diện cho việc chuyển tiếp yêu cầu (request) và phản hồi (response)đến bộ lọc hoặc servlet tiếp theo trong chuỗi filter. Nếu không có
-          lệnh này hoặc nếu lệnh này không được gọi, yêu cầu sẽ không tiếp tụcxử lý và cuối cùng không có phản hồi trả về cho người dùng.*/
             filterChain.doFilter(request, response);
             return;
         }
         jwt = authHeader.substring(7);
         userEmail = jwtService.extractUsername(jwt);
-        /*  istokenvalid đóng vai trò như 1 bộ lọc, xem rằng liệu token mà chúng ta cócó còn được xác thực ?,
-            trong trường hợp mã token hết hạn, thì đơn giản t lúc này sẽ trả về false */
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             var isTokenValid = tokenRepository.findByToken(jwt)
@@ -65,8 +60,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
-                //  securitycontextholder đóng vai trò như là 1 bảo vệ giữ mã lệnh token, khi cần chúng ta sẽ lấy thông
-                //  qua securitycontextholder
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }

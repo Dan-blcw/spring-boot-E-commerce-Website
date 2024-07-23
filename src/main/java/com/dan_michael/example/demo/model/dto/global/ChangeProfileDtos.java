@@ -1,4 +1,4 @@
-package com.dan_michael.example.demo.model.dto;
+package com.dan_michael.example.demo.model.dto.global;
 
 import com.dan_michael.example.demo.model.entities.Role;
 import lombok.Builder;

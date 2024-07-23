@@ -23,7 +23,12 @@ public class ProductDtos {
     private String category;
     private String colour;
     private String size;
+    private Float rating;
+    private Integer nRating;
+    private Boolean favourite;
     private Boolean saleStatus;
     private Float salePrice;
+    private Boolean newStatus;
+
     private Integer createdByUserid;
 }

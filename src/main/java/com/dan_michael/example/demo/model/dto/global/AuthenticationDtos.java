@@ -1,5 +1,6 @@
 package com.dan_michael.example.demo.model.dto.global;
 
+import com.dan_michael.example.demo.model.entities.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,11 +11,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Products_Order {
+public class AuthenticationDtos {
 
-    @JsonProperty("product_id")
-    private Integer id;
+  @JsonProperty("jwt")
+  private String jwt;
 
-    @JsonProperty("quantity")
-    private Integer quantity;
+  @JsonProperty("user")
+  private User user;
 }

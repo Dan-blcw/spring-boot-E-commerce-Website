@@ -1,6 +1,5 @@
 package com.dan_michael.example.demo.model.dto.ob;
 
-import com.dan_michael.example.demo.model.entities.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,11 +10,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentDto {
+public class ItemDetailDto {
 
-    @JsonProperty("content")
-    private String content;
+    private Integer id;
 
-    @JsonProperty("username")
-    private String username;
+    @JsonProperty("product_id")
+    private Integer product_id;
+
+    @JsonProperty("quantity")
+    private Integer quantity;
+
+    private String size;
+    private String colors;
 }

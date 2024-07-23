@@ -1,6 +1,6 @@
 package com.dan_michael.example.demo.service;
 
-import com.dan_michael.example.demo.model.dto.AuthenticationDtos;
+import com.dan_michael.example.demo.model.dto.global.AuthenticationDtos;
 import com.dan_michael.example.demo.model.dto.global.RegisterDtos;
 import com.dan_michael.example.demo.model.dto.global.SignInDtos;
 import com.dan_michael.example.demo.model.entities.Role;

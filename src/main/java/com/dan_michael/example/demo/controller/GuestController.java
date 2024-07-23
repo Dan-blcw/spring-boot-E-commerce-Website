@@ -1,17 +1,11 @@
 package com.dan_michael.example.demo.controller;
 
 
-import com.dan_michael.example.demo.model.dto.ChangePasswordDtos;
-import com.dan_michael.example.demo.model.dto.ChangeProfileDtos;
-import com.dan_michael.example.demo.model.dto.global.PaginationDto;
-import com.dan_michael.example.demo.model.dto.ob.ProductListDtos;
 import com.dan_michael.example.demo.service.ProductService;
 import com.dan_michael.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/v1/global")
@@ -21,6 +15,7 @@ public class GuestController {
     private final ProductService service;
 
     private final UserService Change_service;
+//--------------------------Read Only Product----------------------------------
     @GetMapping(value = "/detail-ob")
     public ResponseEntity<?> detail(
             @RequestParam (required = false)Integer id
@@ -37,31 +32,10 @@ public class GuestController {
         var list = service.findAll();
         return ResponseEntity.ok(list);
     }
-//--------------------Comment----------------------------------
+//--------------------------Cart----------------------------------
 
 
-//--------------------change information account----------------------------------
-//    @PatchMapping("/change-profile")
-//    public ResponseEntity<?> changeProfile(
-//            @RequestBody ChangeProfileDtos request,
-//            Principal connectedUser
-//    ) {
-//        Change_service.changeProfile(request, connectedUser);
-//        return ResponseEntity.ok("changeProfile successfully !!!");
-//    }
-//
-//    @PatchMapping("/change-password")
-//    public ResponseEntity<?> changePassword(
-//            @RequestBody ChangePasswordDtos request,
-//            Principal connectedUser
-//    ) {
-//        var bol = Change_service.changePassword(request, connectedUser);
-//        if(bol.equals("changePassword successfully !!!")){
-//            return ResponseEntity.status(200).body("changePassword successfully !!!");
-//        }else{
-//            return ResponseEntity.status(405).body(bol);
-//        }
-//    }
+//--------------------------Order----------------------------------
 
 
 }
