@@ -1,6 +1,8 @@
 package com.dan_michael.example.demo.controller;
 
 
+import com.dan_michael.example.demo.model.dto.global.PaginationDto;
+import com.dan_michael.example.demo.model.dto.ob.ProductListDtos;
 import com.dan_michael.example.demo.service.ProductService;
 import com.dan_michael.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +23,7 @@ public class GuestController {
             @RequestParam (required = false)Integer id
 
     ) {
-        var ob = service.findbyID(id);
+        var ob = service.findbyIDHander(id);
         return ResponseEntity.ok(ob);
     }
     @GetMapping(value = "/list-ob")
@@ -29,8 +31,8 @@ public class GuestController {
             @RequestParam (required = false)Integer _limit
 
     ) {
-        var list = service.findAll();
-        return ResponseEntity.ok(list);
+        var list = service.findAllHander();
+        return ResponseEntity.ok(ProductListDtos.builder().data(list).paginationDto(new PaginationDto(10,5)).build());
     }
 //--------------------------Cart----------------------------------
 

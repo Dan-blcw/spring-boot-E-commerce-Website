@@ -1,6 +1,7 @@
 package com.dan_michael.example.demo.model.dto.ob;
 import com.dan_michael.example.demo.model.dto.global.PaginationDto;
 import com.dan_michael.example.demo.model.entities.Product;
+import com.dan_michael.example.demo.model.response.ProductResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,7 @@ import java.util.List;
 public class ProductListDtos {
 
     @JsonProperty("data")
-    private List<Product> data;
+    private List<ProductResponse> data;
 
     @JsonProperty("pagination")
     private PaginationDto paginationDto;

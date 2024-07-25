@@ -21,8 +21,9 @@ public class ProductDtos {
     private Float price;
     private Integer quantity;
     private String category;
-    private String colour;
-    private String size;
+    private List<String> colours;
+    private List<String> sizes;
+    private List<String> brands;
     private Float rating;
     private Integer nRating;
     private Boolean favourite;

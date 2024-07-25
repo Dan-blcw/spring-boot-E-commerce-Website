@@ -1,5 +1,7 @@
-package com.dan_michael.example.demo.model.entities;
+package com.dan_michael.example.demo.model.response;
 
+import com.dan_michael.example.demo.model.entities.Comment;
+import com.dan_michael.example.demo.model.entities.ProductImg;
 import com.dan_michael.example.demo.model.entities.SubEn.Brands;
 import com.dan_michael.example.demo.model.entities.SubEn.Colors;
 import com.dan_michael.example.demo.model.entities.SubEn.Sizes;
@@ -11,40 +13,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 import java.util.List;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@EntityListeners(AuditingEntityListener.class)
-@Table(name = "product")
-public class Product {
-
-    @Id
-    @GeneratedValue
+@NoArgsConstructor
+public class ProductResponse {
     private Integer id;
-
-    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
-    @JsonManagedReference
     private List<ProductImg> images;
-    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<Colors> colours;
-    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<Sizes> sizes;
-    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<Brands> brands;
-
-
+    private List<String> colours;
+    private List<String> sizes;
+    private List<String> brands;
     private String name;
-    @Column(length = 10485760)
     private String description;
     private Float price;
     private Integer quantity;
@@ -55,23 +38,7 @@ public class Product {
     private Boolean saleStatus;
     private Float salePrice;
     private Boolean newStatus;
-
-    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
-    @JsonManagedReference
     private List<Comment> comments;
-
-    @CreatedDate
-    @Column(
-            nullable = false,
-            updatable = false
-    )
     private Date createDate;
-
-    @CreatedBy
-    @Column(
-            nullable = false,
-            updatable = false
-    )
     private Integer createdByUserid;
-
 }

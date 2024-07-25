@@ -52,6 +52,7 @@ public class Order {
     private Float TotalAmountOrder;
 
     private Integer orderStatus;
+
     @CreationTimestamp
     private Date createdAt;
 }

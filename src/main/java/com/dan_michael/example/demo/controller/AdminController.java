@@ -5,6 +5,7 @@ import com.dan_michael.example.demo.model.entities.PaymentMethods;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.dto.ob.CategoryDtos;
 import com.dan_michael.example.demo.model.dto.ob.ProductDtos;
+import com.dan_michael.example.demo.model.dto.ob.Test;
 import com.dan_michael.example.demo.model.entities.Category;
 import com.dan_michael.example.demo.model.entities.Product;
 import com.dan_michael.example.demo.service.CategoryService;
@@ -37,7 +38,19 @@ public class AdminController {
     public ResponseEntity<?> createProduct(
             @ModelAttribute ProductDtos request
     ) {
-        Product response = service.createProduct(request);
+        var response = service.createProduct(request);
+        if(response != null){
+            return ResponseEntity.ok(response);
+        }else {
+            return ResponseEntity.badRequest().body(ResponseMessageDtos.builder().message("This Product already exist").status(400).build());
+        }
+    }
+
+    @PostMapping(value = "/add-product-test-list")
+    public ResponseEntity<?> createProductTest(
+            @RequestBody ProductDtos request
+    ) {
+        var response = service.createProduct(request);
         if(response != null){
             return ResponseEntity.ok(response);
         }else {
@@ -49,7 +62,7 @@ public class AdminController {
     public ResponseEntity<?> updateProduct(
             @ModelAttribute ProductDtos request
     ) {
-        Product response = service.updateProduct(request);
+        var response = service.updateProduct(request);
         if(response != null){
             return ResponseEntity.ok(response);
         }else {
