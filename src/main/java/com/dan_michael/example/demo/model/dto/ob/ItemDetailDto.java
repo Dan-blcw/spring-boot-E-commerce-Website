@@ -22,4 +22,10 @@ public class ItemDetailDto {
 
     private String size;
     private String colors;
+
+    private Float subTotal;
+    private Float shippingFee;
+    private Float taxFee;
+
+    private Float total;
 }

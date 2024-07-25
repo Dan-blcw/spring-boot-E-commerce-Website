@@ -21,8 +21,8 @@ public class Comment {
     private int id;
 
     private String content;
-    private Integer rating;
-
+    private String productQuality;
+    private Float rating;
     private String identification_pro;
     private String identification_user;
     @ManyToOne

@@ -17,5 +17,9 @@ public class OrderDtos {
     private String companyName;
     private String phoneNumber;
     private String emailAddress;
+
+    private String PaymentMethods;
+    private Integer paymentStatus;
+
     private Integer orderStatus;
 }

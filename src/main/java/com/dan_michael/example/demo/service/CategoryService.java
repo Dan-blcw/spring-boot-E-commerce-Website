@@ -1,12 +1,13 @@
 package com.dan_michael.example.demo.service;
 
-import com.dan_michael.example.demo.model.dto.global.ResponseMessageDtos;
+import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.dto.ob.CategoryDtos;
 import com.dan_michael.example.demo.model.entities.Category;
 import com.dan_michael.example.demo.repositories.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -25,13 +26,18 @@ public class CategoryService {
             return null;
         }
 
-        var category_flag = Category.builder()
-                .name(request.getCategoryName())
-                .image(request.getImage())
-                .description(request.getDescription())
-                .createdDate(new Date())
-                .status(1)
-                .build();
+        Category category_flag = null;
+        try {
+            category_flag = Category.builder()
+                    .name(request.getCategoryName())
+                    .image(request.getImage().getBytes())
+                    .description(request.getDescription())
+                    .createdDate(new Date())
+                    .status(request.getStatus())
+                    .build();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         repository.save(category_flag);
         return category_flag;
@@ -42,9 +48,12 @@ public class CategoryService {
         var category_flag = repository.findCategoryByName_(request.getCategoryName());
 
         if(category_flag != null){
-            category_flag.setName(request.getCategoryName());
-            category_flag.setDescription(request.getCategoryName());
-            category_flag.setImage(request.getImage());
+            category_flag.setDescription(request.getDescription());
+            try {
+                category_flag.setImage(request.getImage().getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             category_flag.setStatus(request.getStatus());
         }
         repository.save(category_flag);

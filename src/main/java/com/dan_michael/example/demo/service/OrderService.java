@@ -39,30 +39,52 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(OrderDtos request) {
+        var totalAmountOrder = 0.0F;
+        var subAmountOrder = 0.0F;
         var user = userRepository.findById_create(request.getUserId());
-        Order flag = new Order();
+        Order order = new Order();
 
-        flag.setIdentification_user(user.getId());
-        flag.setAddress(request.getAddress());
-        flag.setCompanyName(request.getCompanyName());
-        flag.setPhoneNumber(request.getPhoneNumber());
-        flag.setEmailAddress(request.getEmailAddress());
-        flag.setOrderStatus(request.getOrderStatus());
-        flag.setShippingStatus("ĐANG CHUẨN BỊ HÀNG");
-        flag.setCreatedAt(new Date());
-        var y = orderRepository.save(flag);
+        order.setIdentification_user(user.getId());
+
+        order.setAddress(request.getAddress());
+        order.setCompanyName(request.getCompanyName());
+        order.setPhoneNumber(request.getPhoneNumber());
+        order.setEmailAddress(request.getEmailAddress());
+
+        order.setPaymentMethods(request.getPaymentMethods());
+        order.setPaymentStatus(request.getPaymentStatus());
+
+        order.setOrderStatus(request.getOrderStatus());
+
+        order.setShippingStatus("ĐANG CHUẨN BỊ HÀNG");
+        order.setCreatedAt(new Date());
+        var y = orderRepository.save(order);
         List<OrderDetail> box = new ArrayList<>();
         for (ItemDetailDto x : request.getOrderDetails()) {
-            OrderDetail flag_1 = new OrderDetail();
-            flag_1.setProduct_id(x.getProduct_id());
-            flag_1.setQuantity(x.getQuantity());
-            flag_1.setIdentification_order(y.getId());
-            box.add(flag_1);
-            createOrderDetail(flag_1);
+            OrderDetail detail = new OrderDetail();
+            detail.setProduct_id(x.getProduct_id());
+
+            detail.setQuantity(x.getQuantity());
+            detail.setColor(x.getColors());
+            detail.setSize(x.getSize());
+            detail.setIdentification_order(y.getId());
+
+            detail.setSubTotal(x.getSubTotal());
+            detail.setShippingFee(x.getShippingFee());
+            detail.setTaxFee(x.getTaxFee());
+
+            var subdetail = x.getSubTotal() ;
+            subAmountOrder += subdetail;
+            detail.setTotalAmountOrderDetail(x.getSubTotal() + x.getTaxFee() + x.getShippingFee());
+            box.add(detail);
+            createOrderDetail(detail);
         }
         y.setOrderDetails(box);
-//        y.setUser(user); //Dang bi loi
-        // Save the Order entity
+        y.setShippingFee(request.getOrderDetails().get(0).getShippingFee());
+        y.setTaxFee(request.getOrderDetails().get(0).getTaxFee());
+        y.setSubTotal(subAmountOrder);
+        y.setTotalAmountOrder(subAmountOrder +request.getOrderDetails().get(0).getShippingFee()+request.getOrderDetails().get(0).getTaxFee());
+        order.setTotalAmountOrder(totalAmountOrder);
         return orderRepository.save(y);
     }
 
@@ -73,7 +95,7 @@ public class OrderService {
             order.setCompanyName(request.getCompanyName());
             order.setPhoneNumber(request.getPhoneNumber());
             order.setEmailAddress(request.getEmailAddress());
-//            order.setOrderStatus(request.getOrderStatus());
+            order.setOrderStatus(request.getOrderStatus());
 //            var a = orderDetailRepository.findByIdentification_order(id);
 //            var for_save = updateOrderDetail(request.getOrderDetails(),a);
 //            order.setOrderDetails(for_save);
@@ -91,9 +113,7 @@ public class OrderService {
 //--------------------------OrderDetail----------------------------------
 
     public List<OrderDetail> getOrderDetailsByOrderId(Integer orderId) {
-        return orderRepository.findById(orderId)
-                .map(order -> order.getOrderDetails())
-                .orElse(null);
+        return orderDetailRepository.findByIdentification_order(orderId);
     }
     public OrderDetail createOrderDetail(OrderDetail orderDetail) {
         return orderDetailRepository.save(orderDetail);

@@ -38,6 +38,8 @@ public class User implements UserDetails {
   private Date last_update;
   private Integer is_active;
 
+  private Integer useFirstDiscount;
+
   @Enumerated(EnumType.STRING)
   private Role role;
 

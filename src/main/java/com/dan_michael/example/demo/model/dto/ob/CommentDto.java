@@ -16,6 +16,12 @@ public class CommentDto {
     @JsonProperty("content")
     private String content;
 
+    @JsonProperty("rating")
+    private Float rating;
+
+    @JsonProperty("productQuality")
+    private String productQuality;
+
     @JsonProperty("username")
     private String username;
 }

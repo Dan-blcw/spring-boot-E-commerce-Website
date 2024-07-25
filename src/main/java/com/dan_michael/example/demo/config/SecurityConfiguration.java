@@ -33,10 +33,13 @@ public class SecurityConfiguration {
             "/api/v1/user/**",
             "/api/v1/carts/**",
             "/api/v1/orders/**",
+            "/api/v1/email-sender/**",
+            "/api/v1/payments/**",
             "/api/v1/global/**",
             "/api/v1/product/**",
             "/configuration/ui",
             "/configuration/security",
+
     };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;

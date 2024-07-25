@@ -13,8 +13,8 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     Optional<Product> findByName(String name);
-
-    Product findByName_(String name);
+    @Query("SELECT p FROM Product p WHERE p.name = :name")
+    Product findByName_(@Param("name")String name);
 //    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.images WHERE p.id = :productId")
 //    Product findProductWithImages(@Param("productId") Integer productId);
 //    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.comments WHERE p.id = :productId")
@@ -28,7 +28,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findAllProductsWithImagesAndComments();
 
     @Query("SELECT p FROM Product p LEFT JOIN FETCH p.images WHERE p.id = :productId")
-    Optional<Product>   findByIdWithImages(@Param("productId") Integer productId);
+    Optional<Product> findByIdWithImages(@Param("productId") Integer productId);
 }
 
 

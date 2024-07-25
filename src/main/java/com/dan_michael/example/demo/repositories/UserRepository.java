@@ -10,7 +10,8 @@ package com.dan_michael.example.demo.repositories;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
   Optional<User> findByEmail(String email);
-
+  @Query("SELECT pi FROM User pi WHERE pi.email = :email")
+  User findByEmail_(@Param("email")String email);
   @Query("SELECT pi FROM User pi WHERE pi.id = :id")
   User findById_create(@Param("id")Integer id);
 }

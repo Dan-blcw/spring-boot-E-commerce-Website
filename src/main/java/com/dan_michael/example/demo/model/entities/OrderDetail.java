@@ -27,4 +27,11 @@ public class OrderDetail {
     private Integer quantity;
     private String size;
     private String color;
+
+    private Float subTotal;
+    private Float shippingFee;
+    private Float taxFee;
+
+    private Float totalAmountOrderDetail;
+
 }

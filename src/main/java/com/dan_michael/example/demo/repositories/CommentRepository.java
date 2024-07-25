@@ -15,14 +15,12 @@ import java.util.Set;
 
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
 //    @Transactional
-//    @Query("SELECT pi FROM Comment pi WHERE pi.identification_pro = :name")
-    Comment findCommentById(Integer Id);
+    @Query("SELECT pi FROM Comment pi WHERE pi.id = :Id")
+    Comment findCommentById(@Param("Id")Integer Id);
 
-    @Transactional
     @Query("SELECT pi FROM Comment pi WHERE pi.identification_pro = :identification_pro")
     List<Comment> findCommentByIAndIdentification_pro(@Param("identification_pro") String identification_pro);
 
-    @Transactional
     @Query("SELECT pi FROM Comment pi WHERE pi.identification_user = :identification_user")
     List<Comment> findCommentByIAndIdentification_user(@Param("identification_user") String identification_user);
 }

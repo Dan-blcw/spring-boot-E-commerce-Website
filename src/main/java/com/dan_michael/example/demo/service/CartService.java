@@ -128,9 +128,11 @@ public class CartService {
 
 
 
+
     public boolean deleteCart(Integer id) {
         return cartRepository.findById(id).map(cart -> {
             cartRepository.delete(cart);
+            cartDetailRepository.deleteByIdentificationCart(id);
             return true;
         }).orElse(false);
     }

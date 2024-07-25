@@ -11,7 +11,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.CommandLineRunner;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Date;
 
@@ -39,32 +41,12 @@ public class PjCdtnApplication {
 			System.out.println("Admin token: " + service.createAdmin(admin));
 
 			var user = RegisterDtos.builder()
-					.email("dan@mail.com")
+					.email("phuhuong646@gmail.com")
 					.name("dan")
 					.password("password")
 					.build();
 			System.out.println("User token: " + service.register(user).getJwt());
-
-
-//			var product_flag = Product.builder()
-//					.images(request.getImages())
-//					.name(request.getName())
-//					.description(request.getDescription())
-//					.price(request.getPrice())
-//					.quantity(request.getQuantity())
-//					.category(request.getCategory())
-//					.colour(request.getColour())
-//					.size(request.getSize())
-//					.nRating(0)
-//					.favourite(false)
-//					.saleStatus(request.getSaleStatus())
-//					.salePrice(request.getSalePrice())
-//					.newStatus(request.getNewStatus())
-//					.createDate(new Date())
-//					.createdByUserid(request.getCreatedByUserid())
-//					.build();
-//
-//			repository.save(product_flag);
 		};
 	}
+
 }

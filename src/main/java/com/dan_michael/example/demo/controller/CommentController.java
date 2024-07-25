@@ -1,6 +1,6 @@
 package com.dan_michael.example.demo.controller;
 
-import com.dan_michael.example.demo.model.dto.global.ResponseMessageDtos;
+import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.dto.ob.CommentDto;
 import com.dan_michael.example.demo.model.entities.Comment;
 import com.dan_michael.example.demo.service.ProductService;
@@ -33,21 +33,13 @@ public class CommentController {
             @PathVariable String identification
     ) throws ChangeSetPersister.NotFoundException {
         List<Comment> listComment = service.listCommentByIdentification_user(identification);
-        return new ResponseEntity<List<Comment>>(listComment, HttpStatus.OK);
+        return new ResponseEntity<>(listComment, HttpStatus.OK);
     }
 
     @GetMapping("/List-comments")
     public ResponseEntity<?> listComment() throws ChangeSetPersister.NotFoundException {
         List<Comment> listComment = service.listComment();
         return new ResponseEntity<List<Comment>>(listComment, HttpStatus.OK);
-    }
-    @PostMapping("/{commment_id}/update-comments")
-    public ResponseMessageDtos UpdateComment(
-            @RequestBody CommentDto comment,
-            @PathVariable Integer commment_id
-    ) throws ChangeSetPersister.NotFoundException {
-        ResponseMessageDtos responseMessageDtos = service.updateComment(comment,commment_id);
-        return responseMessageDtos;
     }
     @PostMapping("/{product_id}/add-comments")
     public ResponseEntity<Comment> createComment(
@@ -58,6 +50,14 @@ public class CommentController {
         return new ResponseEntity<Comment>(createComment, HttpStatus.CREATED);
     }
 
+    @PutMapping("/update-comments/{commment_id}")
+    public ResponseMessageDtos UpdateComment(
+            @RequestBody CommentDto comment,
+            @PathVariable Integer commment_id
+    ) throws ChangeSetPersister.NotFoundException {
+        ResponseMessageDtos responseMessageDtos = service.updateComment(comment,commment_id);
+        return responseMessageDtos;
+    }
     @DeleteMapping("/comments/{comment_id}")
     public ResponseEntity<ResponseMessageDtos> deleteComment(
             @PathVariable Integer comment_id) throws ChangeSetPersister.NotFoundException {

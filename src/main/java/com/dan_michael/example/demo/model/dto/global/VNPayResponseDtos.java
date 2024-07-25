@@ -1,6 +1,5 @@
 package com.dan_michael.example.demo.model.dto.global;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseMessageDtos {
-    @JsonProperty("status")
-    Integer status;
-
-    @JsonProperty("message")
-    String message;
+public class VNPayResponseDtos {
+    public String code;
+    public String message;
+    public String paymentUrl;
 }

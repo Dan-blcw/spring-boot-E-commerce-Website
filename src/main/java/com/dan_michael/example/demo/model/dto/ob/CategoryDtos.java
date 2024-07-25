@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
@@ -17,7 +18,6 @@ import java.util.List;
 public class CategoryDtos {
     public String categoryName;
     public String description;
-    public Date createdDate;
     public Integer status;
-    private byte[] image;
+    private MultipartFile image;
 }

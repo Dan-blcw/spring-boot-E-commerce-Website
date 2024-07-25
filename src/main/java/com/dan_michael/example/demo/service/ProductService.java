@@ -1,6 +1,6 @@
 package com.dan_michael.example.demo.service;
 
-import com.dan_michael.example.demo.model.dto.global.ResponseMessageDtos;
+import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.dto.ob.CommentDto;
 import com.dan_michael.example.demo.model.dto.ob.ProductDtos;
 import com.dan_michael.example.demo.model.entities.Comment;
@@ -23,7 +23,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ProductService {
 
-    private final ProductRepository repository;
+    private final ProductRepository productRepository;
 
     private final CommentRepository commentRepository;
 
@@ -32,7 +32,7 @@ public class ProductService {
 //-------------------Product-----------------------------------
     public Product createProduct(ProductDtos request) {
 
-        var ob = repository.findByName(request.getName());
+        var ob = productRepository.findByName(request.getName());
 
         if(ob.isPresent()){
             return null;
@@ -68,13 +68,13 @@ public class ProductService {
             }
         }
         product_flag.setImages(productImages);
-        repository.save(product_flag);
+        productRepository.save(product_flag);
         return product_flag;
     }
 
     public Product updateProduct(ProductDtos request) {
 
-        var oproduct_flag = repository.findByName_(request.getName());
+        var oproduct_flag = productRepository.findByName_(request.getName());
 
         if(oproduct_flag != null){
             oproduct_flag.setName(request.getName());
@@ -108,20 +108,20 @@ public class ProductService {
             }
         }
         oproduct_flag.setImages(productImages);
-        repository.save(oproduct_flag);
+        productRepository.save(oproduct_flag);
         return oproduct_flag;
     }
     public void removeImageFromProduct(Integer productId, Integer imageId) {
-        Product product = repository.findById(productId).orElse(null);
+        Product product = productRepository.findById(productId).orElse(null);
         if (product != null) {
             product.getImages().removeIf(image -> image.getId().equals(imageId));
-            repository.save(product);
+            productRepository.save(product);
         }
     }
 
     public List<Product> findAll() {
         List<Product> products = new ArrayList<>();
-        var flag = repository.findAll();
+        var flag = productRepository.findAll();
         for (var x : flag) {
             List<ProductImg> imgs = productImgRepository.findProductImgByProductId(x.getName());
             List<Comment> commentsList = commentRepository.findCommentByIAndIdentification_pro(x.getName());
@@ -131,16 +131,23 @@ public class ProductService {
         }
         return products;
     }
+    public Optional<Product> findbyID(Integer id){
+        var boxItem = productRepository.findById(id);
+        List<ProductImg> imgs = productImgRepository.findProductImgByProductId(boxItem.get().getName());
+        List<Comment> commentsList = commentRepository.findCommentByIAndIdentification_pro(boxItem.get().getName());
+        boxItem.get().setImages(imgs);
+        boxItem.get().setComments(commentsList);
+        return boxItem;
+    }
+
 
     public ResponseMessageDtos removebyId(Integer id) {
-        repository.deleteById(id);
+        productRepository.deleteById(id);
         return ResponseMessageDtos.builder()
                 .status(200)
                 .message("Delete Product successfully !")
                 .build();
     }
-    public Optional<Product> findbyID(Integer id){return repository.findByIdWithImages(id);}
-
 //-------------------comments-----------------------------------
     public List<Comment> listCommentByIdentification_pro (String identification) throws ChangeSetPersister.NotFoundException {
 
@@ -163,10 +170,12 @@ public class ProductService {
 
     public Comment createComment (CommentDto commentDto,Integer product_id) throws ChangeSetPersister.NotFoundException {
 
-        Product product = repository.findById(product_id).orElseThrow(()-> new ChangeSetPersister.NotFoundException());
+        Product product = productRepository.findById(product_id).orElseThrow(()-> new ChangeSetPersister.NotFoundException());
 
         Comment comment = Comment.builder()
                 .content(commentDto.getContent())
+                .rating(commentDto.getRating())
+                .productQuality(commentDto.getProductQuality())
                 .identification_pro(product.getName())
                 .identification_user(commentDto.getUsername())
                 .build();
@@ -177,9 +186,14 @@ public class ProductService {
     public ResponseMessageDtos updateComment (CommentDto commentDto,Integer comment_id) throws ChangeSetPersister.NotFoundException {
         Comment comment = commentRepository.findCommentById(comment_id);
         if(comment == null){
-            return ResponseMessageDtos.builder().status(400).message("Error! From Update Comment").build();
+            return ResponseMessageDtos.builder().status(400).message("Error! Comment Do not exits").build();
+        }
+        if(!Objects.equals(comment.getIdentification_user(), commentDto.getUsername())){
+            return ResponseMessageDtos.builder().status(400).message("Error! You are not the one commenting on this comment, Editing failed !!!").build();
         }
         comment.setContent(commentDto.getContent());
+        comment.setRating(commentDto.getRating());
+        comment.setProductQuality(commentDto.getProductQuality());
         commentRepository.save(comment);
         return ResponseMessageDtos.builder().status(200).message("Update Comment successfully !").build();
     }

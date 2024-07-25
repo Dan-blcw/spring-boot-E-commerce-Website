@@ -41,8 +41,17 @@ public class Order {
     private String emailAddress;
 
     private String shippingStatus;
-    private Integer orderStatus;
 
+    private String PaymentMethods;
+    private Integer paymentStatus;
+
+    private Float subTotal;
+    private Float shippingFee;
+    private Float taxFee;
+
+    private Float TotalAmountOrder;
+
+    private Integer orderStatus;
     @CreationTimestamp
     private Date createdAt;
 }

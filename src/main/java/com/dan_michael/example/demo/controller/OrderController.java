@@ -1,7 +1,8 @@
 package com.dan_michael.example.demo.controller;
 
-import com.dan_michael.example.demo.model.dto.global.ResponseMessageDtos;
+import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.entities.Order;
+import com.dan_michael.example.demo.model.entities.OrderDetail;
 import com.dan_michael.example.demo.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrderController {
 
-//--------------------------Read Only Product----------------------------------
-
-
-
+//--------------------------Order(CRUD)----------------------------------
     private final OrderService orderService;
 
     // Get all orders
@@ -25,15 +23,12 @@ public class OrderController {
     public List<Order> getAllOrders() {
         return orderService.getAllOrders();
     }
-
-    // Get order by id
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable Integer id) {
         Optional<Order> order = orderService.getOrderById(id);
         return order.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 //     Create a new order
     @PostMapping
     public ResponseEntity<?> createOrder(
@@ -43,7 +38,7 @@ public class OrderController {
         if(response != null){
             return ResponseEntity.ok(response);
         }else {
-            return ResponseEntity.badRequest().body(ResponseMessageDtos.builder().message("This Category already exist").status(400).build());
+            return ResponseEntity.badRequest().body(ResponseMessageDtos.builder().message("This Order already exist").status(400).build());
         }
     }
 
@@ -58,14 +53,20 @@ public class OrderController {
 
     // Delete an order
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteOrder(@PathVariable Integer id) {
         boolean isDeleted = orderService.deleteOrderAndOrderDetail(id);
-        return isDeleted ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+        return isDeleted ? ResponseEntity.ok().body(ResponseMessageDtos.builder().message("Delete Order successfully").status(200).build()) : ResponseEntity.notFound().build();
     }
 
+//--------------------------Order Detail----------------------------------
+    @GetMapping("/order-detail/{id}")
+    public ResponseEntity<?> getOrderDetailsByOrderId(@PathVariable Integer id) {
+        List<OrderDetail> order = orderService.getOrderDetailsByOrderId(id);
+        return ResponseEntity.ok(order);
+    }
     @DeleteMapping("/order-detail/{id}")
-    public ResponseEntity<Void> deleteOrderDetail(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteOrderDetail(@PathVariable Integer id) {
         boolean isDeleted = orderService.deleteOrderDetail(id);
-        return isDeleted ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+        return isDeleted ? ResponseEntity.ok().body(ResponseMessageDtos.builder().message("Delete Order Detail successfully").status(200).build()) : ResponseEntity.notFound().build();
     }
 }
