@@ -29,14 +29,19 @@ public class ProductResponse {
     private List<String> brands;
     private String name;
     private String description;
-    private Float price;
+
     private Integer quantity;
     private String category;
     private Float rating;
     private Integer nRating;
-    private Boolean favourite;
+
+    private List<Integer> favourite;
+
+    private Float originalPrice ;
+    private Float saleDiscountPercent ;
+    private Float finalPrice ;
     private Boolean saleStatus;
-    private Float salePrice;
+
     private Boolean newStatus;
     private List<Comment> comments;
     private Date createDate;

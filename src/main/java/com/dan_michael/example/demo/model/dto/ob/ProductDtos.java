@@ -18,17 +18,19 @@ public class ProductDtos {
     private List<MultipartFile> images;
     private String name;
     private String description;
-    private Float price;
+
     private Integer quantity;
     private String category;
     private List<String> colours;
     private List<String> sizes;
     private List<String> brands;
-    private Float rating;
-    private Integer nRating;
+
     private Boolean favourite;
+
+    private Float originalPrice ;
+    private Float saleDiscountPercent ;
     private Boolean saleStatus;
-    private Float salePrice;
+
     private Boolean newStatus;
 
     private Integer createdByUserid;

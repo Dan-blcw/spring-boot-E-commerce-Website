@@ -28,15 +28,38 @@ public class GuestController {
     }
     @GetMapping(value = "/list-ob")
     public ResponseEntity<?> get_detail(
-            @RequestParam (required = false)Integer _limit
-
+            @RequestParam (required = false)Integer _limit,
+        @RequestParam (required = false)Integer _total
     ) {
         var list = service.findAllHander();
-        return ResponseEntity.ok(ProductListDtos.builder().data(list).paginationDto(new PaginationDto(10,5)).build());
+        return ResponseEntity.ok(ProductListDtos.builder().data(list).paginationDto(new PaginationDto(_total,_limit)).build());
     }
-//--------------------------Cart----------------------------------
+//--------------------------favorite----------------------------------
+    @GetMapping(value = "/favorite-products")
+    public ResponseEntity<?> getFavoriteByUser_id(
+            @RequestParam (required = false)Integer use_id
 
+    ) {
+        var ob = service.findbyFavouriteByUserID(use_id);
+        return ResponseEntity.ok(ob);
+    }
+    @PostMapping(value = "/add-favorite")
+    public ResponseEntity<?> addFavorite(
+            @RequestParam (required = false)String Product_name,
+            @RequestParam (required = false)Integer use_id
+    ) {
+        var response = service.addFavourite(Product_name,use_id);
+        return ResponseEntity.ok(response);
+    }
 
+    @DeleteMapping(value = "/delete-favorite")
+    public ResponseEntity<?> deleteFavorite(
+            @RequestParam (required = false)String Product_name,
+            @RequestParam (required = false)Integer use_id
+    ) {
+        var response = service.deleteFavourite(Product_name,use_id);
+        return ResponseEntity.ok(response);
+    }
 //--------------------------Order----------------------------------
 
 

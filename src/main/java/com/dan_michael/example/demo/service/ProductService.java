@@ -2,6 +2,7 @@ package com.dan_michael.example.demo.service;
 
 import com.dan_michael.example.demo.model.entities.SubEn.Brands;
 import com.dan_michael.example.demo.model.entities.SubEn.Colors;
+import com.dan_michael.example.demo.model.entities.SubEn.FavouriteProduct;
 import com.dan_michael.example.demo.model.entities.SubEn.Sizes;
 import com.dan_michael.example.demo.model.response.ProductResponse;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
@@ -16,6 +17,7 @@ import com.dan_michael.example.demo.repositories.ProductImgRepository;
 import com.dan_michael.example.demo.repositories.ProductRepository;
 import com.dan_michael.example.demo.repositories.SupRe.BrandRepository;
 import com.dan_michael.example.demo.repositories.SupRe.ColorsRepository;
+import com.dan_michael.example.demo.repositories.SupRe.FavouriteProductRepository;
 import com.dan_michael.example.demo.repositories.SupRe.SizeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -43,10 +45,9 @@ public class ProductService {
 
     private final SizeRepository sizeRepository;
 
-
+    private final FavouriteProductRepository favouriteProductRepository;
 //-------------------Product-----------------------------------
     public ProductResponse createProduct(ProductDtos request) {
-        System.out.println(request.getColours());
         var ob = productRepository.findByName(request.getName());
 
         if(ob.isPresent()){
@@ -55,21 +56,29 @@ public class ProductService {
         var product_flag = new Product();
         product_flag.setName(request.getName());
         product_flag.setDescription(request.getDescription());
-        product_flag.setPrice(request.getPrice());
+
+
         product_flag.setQuantity(request.getQuantity());
         product_flag.setCategory(request.getCategory());
 
+        product_flag.setRating(5.0f);
         product_flag.setNRating(0);
 
+
+        product_flag.setOriginalPrice(request.getOriginalPrice());
+        product_flag.setSaleDiscountPercent(request.getSaleDiscountPercent());
+        var finalPrice = request.getOriginalPrice() - request.getOriginalPrice()* (request.getSaleDiscountPercent()/100);
+        product_flag.setFinalPrice(finalPrice);
         product_flag.setSaleStatus(request.getSaleStatus());
-        product_flag.setSalePrice(request.getSalePrice());
+
         product_flag.setNewStatus(true);
+        product_flag.setFavourite(null);
 
         product_flag.setCreateDate(new Date());
         product_flag.setCreatedByUserid(request.getCreatedByUserid());
 
+
         List<Colors> colorsBox = new ArrayList<>();
-        List<String> sendColors = new ArrayList<>();
         if (request.getColours() != null && request.getColours().size() > 0) {
             for (var x : request.getColours()) {
                 Colors colorItem = new Colors();
@@ -132,14 +141,19 @@ public class ProductService {
                 .brands(request.getBrands())
                 .name(product_flag.getName())
                 .description(product_flag.getDescription())
-                .price(product_flag.getPrice())
                 .quantity(product_flag.getQuantity())
                 .category(product_flag.getCategory())
+
                 .rating(product_flag.getRating())
                 .nRating(product_flag.getNRating())
-                .favourite(product_flag.getFavourite())
+
+                .favourite(null)
+
+                .originalPrice(product_flag.getOriginalPrice())
+                .saleDiscountPercent(product_flag.getSaleDiscountPercent())
+                .finalPrice(product_flag.getFinalPrice())
                 .saleStatus(product_flag.getSaleStatus())
-                .salePrice(product_flag.getSalePrice())
+
                 .newStatus(product_flag.getNewStatus())
                 .comments(product_flag.getComments())
                 .createDate(product_flag.getCreateDate())
@@ -209,14 +223,18 @@ public class ProductService {
         if(product_flag != null){
             product_flag.setName(request.getName());
             product_flag.setDescription(request.getDescription());
-            product_flag.setPrice(request.getPrice());
+
             product_flag.setQuantity(request.getQuantity());
             product_flag.setCategory(request.getCategory());
 
             product_flag.setNRating(0);
 
+            product_flag.setOriginalPrice(request.getOriginalPrice());
+            product_flag.setSaleDiscountPercent(request.getSaleDiscountPercent());
+            var finalPrice = request.getOriginalPrice() - request.getOriginalPrice()* (request.getSaleDiscountPercent()/100);
+            product_flag.setFinalPrice(finalPrice);
             product_flag.setSaleStatus(request.getSaleStatus());
-            product_flag.setSalePrice(request.getSalePrice());
+
             product_flag.setNewStatus(true);
 
             product_flag.setCreateDate(new Date());
@@ -278,6 +296,10 @@ public class ProductService {
         product_flag.setSizes(sizesBox);
         product_flag.setImages(productImagesBox);
 
+        List<FavouriteProduct> favouriteList = favouriteProductRepository.findFavouriteByIAndIdentification(product_flag.getName());
+        List<Integer> favouriteListRe = new ArrayList<>();
+        for (var x_0: favouriteList) { favouriteListRe.add(x_0.getUser_id());}
+
         productRepository.save(product_flag);
         var productResponse = ProductResponse.builder()
                 .id(product_flag.getId())
@@ -287,14 +309,16 @@ public class ProductService {
                 .brands(request.getBrands())
                 .name(product_flag.getName())
                 .description(product_flag.getDescription())
-                .price(product_flag.getPrice())
                 .quantity(product_flag.getQuantity())
                 .category(product_flag.getCategory())
                 .rating(product_flag.getRating())
                 .nRating(product_flag.getNRating())
-                .favourite(product_flag.getFavourite())
+                .favourite(favouriteListRe)
+                .originalPrice(product_flag.getOriginalPrice())
+                .saleDiscountPercent(product_flag.getSaleDiscountPercent())
+                .finalPrice(product_flag.getFinalPrice())
                 .saleStatus(product_flag.getSaleStatus())
-                .salePrice(product_flag.getSalePrice())
+
                 .newStatus(product_flag.getNewStatus())
                 .comments(product_flag.getComments())
                 .createDate(product_flag.getCreateDate())
@@ -302,6 +326,7 @@ public class ProductService {
                 .build();
         return productResponse;
     }
+
     public void removeImageFromProduct(Integer productId, Integer imageId) {
         Product product = productRepository.findById(productId).orElse(null);
         if (product != null) {
@@ -319,10 +344,19 @@ public class ProductService {
             List<Colors> colorsList = colorsRepository.findColorsByIAndIdentification(x.getName());
             List<Brands> brandsList = brandRepository.findBrandsByIAndIdentification(x.getName());
             List<Sizes> sizeList = sizeRepository.findSizesByIAndIdentification(x.getName());
+            List<FavouriteProduct> favouriteList = favouriteProductRepository.findFavouriteByIAndIdentification(x.getName());
 
+            List<Integer> favouriteListRe = new ArrayList<>();
             List<String> colorsListRe = new ArrayList<>();
             List<String> brandsListRe = new ArrayList<>();
             List<String> sizeListRe = new ArrayList<>();
+            Float rating = 0.0f;
+            int nRating = commentsList.size();
+            for (var x_0: commentsList) {
+                rating += x_0.getRating();
+            }
+            rating = rating/nRating;
+            for (var x_0: favouriteList) { favouriteListRe.add(x_0.getUser_id());}
             for (var x_0: colorsList) { colorsListRe.add(x_0.getColor());}
             for (var x_0: brandsList) { brandsListRe.add(x_0.getBrand());}
             for (var x_0: sizeList) { sizeListRe.add(x_0.getSize());}
@@ -335,14 +369,17 @@ public class ProductService {
                     .brands(brandsListRe)
                     .name(x.getName())
                     .description(x.getDescription())
-                    .price(x.getPrice())
                     .quantity(x.getQuantity())
                     .category(x.getCategory())
-                    .rating(x.getRating())
-                    .nRating(x.getNRating())
-                    .favourite(x.getFavourite())
+                    .rating(rating)
+                    .nRating(nRating)
+                    .favourite(favouriteListRe)
+
+                    .originalPrice(x.getOriginalPrice())
+                    .saleDiscountPercent(x.getSaleDiscountPercent())
+                    .finalPrice(x.getFinalPrice())
                     .saleStatus(x.getSaleStatus())
-                    .salePrice(x.getSalePrice())
+
                     .newStatus(x.getNewStatus())
                     .comments(commentsList)
                     .createDate(x.getCreateDate())
@@ -359,10 +396,19 @@ public class ProductService {
         List<Colors> colorsList = colorsRepository.findColorsByIAndIdentification(boxItem.get().getName());
         List<Brands> brandsList = brandRepository.findBrandsByIAndIdentification(boxItem.get().getName());
         List<Sizes> sizeList = sizeRepository.findSizesByIAndIdentification(boxItem.get().getName());
+        List<FavouriteProduct> favouriteList = favouriteProductRepository.findFavouriteByIAndIdentification(boxItem.get().getName());
 
+        List<Integer> favouriteListRe = new ArrayList<>();
         List<String> colorsListRe = new ArrayList<>();
         List<String> brandsListRe = new ArrayList<>();
         List<String> sizeListRe = new ArrayList<>();
+        Float rating = 0.0f;
+        int nRating = commentsList.size();
+        for (var x_0: commentsList) {
+            rating += x_0.getRating();
+        }
+        rating = rating/nRating;
+        for (var x_0: favouriteList) { favouriteListRe.add(x_0.getUser_id());}
         for (var x_0: colorsList) { colorsListRe.add(x_0.getColor());}
         for (var x_0: brandsList) { brandsListRe.add(x_0.getBrand());}
         for (var x_0: sizeList) { sizeListRe.add(x_0.getSize());}
@@ -375,14 +421,17 @@ public class ProductService {
                 .brands(brandsListRe)
                 .name(boxItem.get().getName())
                 .description(boxItem.get().getDescription())
-                .price(boxItem.get().getPrice())
                 .quantity(boxItem.get().getQuantity())
                 .category(boxItem.get().getCategory())
-                .rating(boxItem.get().getRating())
-                .nRating(boxItem.get().getNRating())
-                .favourite(boxItem.get().getFavourite())
+                .rating(rating)
+                .nRating(nRating)
+                .favourite(favouriteListRe)
+
+                .originalPrice(boxItem.get().getOriginalPrice())
+                .saleDiscountPercent(boxItem.get().getSaleDiscountPercent())
+                .finalPrice(boxItem.get().getFinalPrice())
                 .saleStatus(boxItem.get().getSaleStatus())
-                .salePrice(boxItem.get().getSalePrice())
+
                 .newStatus(boxItem.get().getNewStatus())
                 .comments(commentsList)
                 .createDate(boxItem.get().getCreateDate())
@@ -455,4 +504,94 @@ public class ProductService {
         commentRepository.delete(comment);
         return null;
     }
+//-------------------------------------------Favourite-----------------------------------------------------------------
+    public List<ProductResponse> findbyFavouriteByUserID(Integer id){
+        List<ProductResponse> boxProduct = new ArrayList<>();
+        var boxItems = productRepository.findAll();
+        for (var x : boxItems) {
+            List<FavouriteProduct> favouriteList = favouriteProductRepository.findFavouriteByIAndIdentification(x.getName());
+            List<Integer> favouriteListRe = new ArrayList<>();
+            for (var x_0: favouriteList) { favouriteListRe.add(x_0.getUser_id());}
+            if(favouriteListRe.contains(id)){
+                List<ProductImg> imgs = productImgRepository.findProductImgByProductId(x.getName());
+                List<Comment> commentsList = commentRepository.findCommentByIAndIdentification_pro(x.getName());
+                List<Colors> colorsList = colorsRepository.findColorsByIAndIdentification(x.getName());
+                List<Brands> brandsList = brandRepository.findBrandsByIAndIdentification(x.getName());
+                List<Sizes> sizeList = sizeRepository.findSizesByIAndIdentification(x.getName());
+
+
+                List<String> colorsListRe = new ArrayList<>();
+                List<String> brandsListRe = new ArrayList<>();
+                List<String> sizeListRe = new ArrayList<>();
+                Float rating = 0.0f;
+                int nRating = commentsList.size();
+                for (var x_0: commentsList) {
+                    rating += x_0.getRating();
+                }
+                rating = rating/nRating;
+                for (var x_0: colorsList) { colorsListRe.add(x_0.getColor());}
+                for (var x_0: brandsList) { brandsListRe.add(x_0.getBrand());}
+                for (var x_0: sizeList) { sizeListRe.add(x_0.getSize());}
+
+                var productResponse = ProductResponse.builder()
+                        .id(x.getId())
+                        .images(imgs)
+                        .colours(colorsListRe)
+                        .sizes(sizeListRe)
+                        .brands(brandsListRe)
+                        .name(x.getName())
+                        .description(x.getDescription())
+                        .quantity(x.getQuantity())
+                        .category(x.getCategory())
+                        .rating(rating)
+                        .nRating(nRating)
+                        .favourite(favouriteListRe)
+
+                        .originalPrice(x.getOriginalPrice())
+                        .saleDiscountPercent(x.getSaleDiscountPercent())
+                        .finalPrice(x.getFinalPrice())
+                        .saleStatus(x.getSaleStatus())
+
+                        .newStatus(x.getNewStatus())
+                        .comments(commentsList)
+                        .createDate(x.getCreateDate())
+                        .createdByUserid(x.getCreatedByUserid())
+                        .build();
+                boxProduct.add(productResponse);
+            }
+        }
+
+        return boxProduct;
+    }
+    public String addFavourite(String product_name,Integer user_id) {
+
+        var product_flag = productRepository.findByName_(product_name);
+        if(product_flag != null){
+            List<FavouriteProduct> favouriteList = favouriteProductRepository.findFavouriteByIAndIdentification(product_name);
+            FavouriteProduct newF = FavouriteProduct.builder()
+                    .user_id(user_id)
+                    .identification(product_name)
+                    .build();
+            favouriteList.add(newF);
+            favouriteProductRepository.save(newF);
+            product_flag.setFavourite(favouriteList);
+            productRepository.save(product_flag);
+            return  "Add Favorite successfully !!!";
+        }
+        return "Add Favorite Failure !!!";
+    }
+
+    public String deleteFavourite(String product_name,Integer user_id) {
+
+        var product_flag = productRepository.findByName_(product_name);
+        if(product_flag != null){
+            favouriteProductRepository.deleteByUser_id(user_id,product_name);
+            List<FavouriteProduct> favouriteList = favouriteProductRepository.findFavouriteByIAndIdentification(product_name);
+            product_flag.setFavourite(favouriteList);
+            productRepository.save(product_flag);
+            return  "delete Favorite successfully !!!";
+        }
+        return "delete Favorite Failure !!!";
+    }
+
 }

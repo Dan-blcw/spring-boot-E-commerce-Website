@@ -15,15 +15,10 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Optional<Product> findByName(String name);
     @Query("SELECT p FROM Product p WHERE p.name = :name")
     Product findByName_(@Param("name")String name);
-//    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.images WHERE p.id = :productId")
-//    Product findProductWithImages(@Param("productId") Integer productId);
-//    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.comments WHERE p.id = :productId")
-//    Product findProductWithComments(@Param("productId") Integer productId);
-//
-//    // Optionally, you can fetch both images and comments
-//    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.images LEFT JOIN FETCH p.comments WHERE p.id = :productId")
-//    Product findProductWithImagesAndComments(@Param("productId") Integer productId);
-//    // Or fetch all products with their images and comments
+
+    @Query("SELECT p FROM Product p WHERE p.id = :id")
+    Product findByID_(@Param("id")Integer id);
+
     @Query("SELECT DISTINCT p FROM Product p LEFT JOIN p.images LEFT JOIN p.comments")
     List<Product> findAllProductsWithImagesAndComments();
 

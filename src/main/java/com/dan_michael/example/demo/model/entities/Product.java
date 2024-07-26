@@ -2,6 +2,7 @@ package com.dan_michael.example.demo.model.entities;
 
 import com.dan_michael.example.demo.model.entities.SubEn.Brands;
 import com.dan_michael.example.demo.model.entities.SubEn.Colors;
+import com.dan_michael.example.demo.model.entities.SubEn.FavouriteProduct;
 import com.dan_michael.example.demo.model.entities.SubEn.Sizes;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -42,18 +43,26 @@ public class Product {
     @JsonManagedReference
     private List<Brands> brands;
 
+    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<FavouriteProduct> favourite;
 
     private String name;
     @Column(length = 10485760)
     private String description;
-    private Float price;
+
     private Integer quantity;
     private String category;
+
     private Float rating;
     private Integer nRating;
-    private Boolean favourite;
+
+
+    private Float originalPrice ;
+    private Float saleDiscountPercent ;
+    private Float finalPrice ;
     private Boolean saleStatus;
-    private Float salePrice;
+
     private Boolean newStatus;
 
     @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)

@@ -14,22 +14,48 @@ let nickname = null;
 let fullname = null;
 let selectedUserId = null;
 
-function connect(event) {
-    nickname = document.querySelector('#nickname').value.trim();
-    fullname = document.querySelector('#fullname').value.trim();
+// function connect(event) {
+//     nickname = document.querySelector('#nickname').value.trim();
+//     fullname = document.querySelector('#fullname').value.trim();
+//
+//     if (nickname && fullname) {
+//         usernamePage.classList.add('hidden');
+//         chatPage.classList.remove('hidden');
+//
+//         const socket = new SockJS('/ws');
+//         stompClient = Stomp.over(socket);
+//
+//         stompClient.connect({}, onConnected, onError);
+//     }
+//     event.preventDefault();
+// }
+//
+async function login(event) {
+    event.preventDefault();
+
+    const nickname = document.querySelector('#nickname').value.trim();
+    const fullname = document.querySelector('#fullname').value.trim();
 
     if (nickname && fullname) {
-        usernamePage.classList.add('hidden');
-        chatPage.classList.remove('hidden');
+        const response = await fetch('/api/v1/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: nickname, password: fullname }) // Assuming email and password
+        });
 
-        const socket = new SockJS('/ws');
-        stompClient = Stomp.over(socket);
-
-        stompClient.connect({}, onConnected, onError);
+        if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem('jwtToken', data.jwt); // Save JWT token
+            window.location.href = '/chat.html'; // Redirect to chat page
+        } else {
+            console.error('Login failed');
+        }
     }
-    event.preventDefault();
 }
 
+document.querySelector('#usernameForm').addEventListener('submit', login);
 
 function onConnected() {
     stompClient.subscribe(`/user/${nickname}/queue/messages`, onMessageReceived);
