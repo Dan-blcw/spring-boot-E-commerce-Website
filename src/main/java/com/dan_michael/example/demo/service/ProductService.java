@@ -280,6 +280,7 @@ public class ProductService {
     public List<ProductResponse> findAllHander() {
         List<ProductResponse> productsResponseList = new ArrayList<>();
         var flag = productRepository.findAll();
+        flag.sort(Comparator.comparing(Product::getFinalPrice).reversed());
         for (var x : flag) {
             List<ProductImg> imgs = productImgRepository.findProductImgByProductId(x.getName());
             List<Comment> commentsList = commentRepository.findCommentByIAndIdentification_pro(x.getName());
