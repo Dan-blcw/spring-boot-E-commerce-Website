@@ -105,6 +105,8 @@
 package com.dan_michael.example.demo.service.Payment;
 
         import com.dan_michael.example.demo.model.dto.ob.ItemDetailDto;
+        import com.dan_michael.example.demo.model.dto.ob.OrderDtos;
+        import com.dan_michael.example.demo.repositories.ProductRepository;
         import com.paypal.api.payments.*;
         import com.paypal.base.rest.APIContext;
         import com.paypal.base.rest.PayPalRESTException;
@@ -123,6 +125,7 @@ package com.dan_michael.example.demo.service.Payment;
 @RequiredArgsConstructor
 public class PaymentPaypalService {
 
+    private final ProductRepository productRepository;
     private static final Logger logger = LoggerFactory.getLogger(PaymentPaypalService.class);
 
     @Getter
@@ -137,12 +140,12 @@ public class PaymentPaypalService {
 
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.00");
 
-    public String authorizePayment(ItemDetailDto itemDetailDto) throws PayPalRESTException {
-        logger.info("Authorizing payment for item detail: {}", itemDetailDto);
+    public String authorizePayment(OrderDtos orderDtos) throws PayPalRESTException {
+        logger.info("Authorizing payment for item detail: {}", orderDtos);
 
         Payer payer = getPayerInfo();
         RedirectUrls redirectUrls = getRedirectURLs();
-        List<Transaction> listTransactions = getTransactionInfo(itemDetailDto);
+        List<Transaction> listTransactions = getTransactionInfo(orderDtos);
 
         Payment requestPayment = new Payment();
         requestPayment.setTransactions(listTransactions)
@@ -171,31 +174,33 @@ public class PaymentPaypalService {
         return approvalLink;
     }
 
-    private List<Transaction> getTransactionInfo(ItemDetailDto itemDetailDto) {
+    private List<Transaction> getTransactionInfo(OrderDtos orderDtos) {
         Details details = new Details();
-        details.setShipping(formatAmount(itemDetailDto.getShippingFee()));
-        details.setSubtotal(formatAmount(itemDetailDto.getSubTotal()));
-        details.setTax(formatAmount(itemDetailDto.getTaxFee()));
+        details.setShipping(formatAmount(orderDtos.getShippingFee()));
+        details.setSubtotal(formatAmount(orderDtos.getSubTotal()));
+        details.setTax(formatAmount(orderDtos.getTaxFee()));
 
         Amount amount = new Amount();
         amount.setCurrency("USD");
-        amount.setTotal(formatAmount(itemDetailDto.getTotal()));
+        amount.setTotal(formatAmount(orderDtos.getTotal()));
         amount.setDetails(details);
 
         Transaction transaction = new Transaction();
         transaction.setAmount(amount);
-        transaction.setDescription("Description Paypal ProductName");
+        transaction.setDescription("Description Paypal Product Name");
 
         ItemList itemList = new ItemList();
         List<Item> items = new ArrayList<>();
 
-        Item item = new Item();
-        item.setCurrency("USD")
-                .setName("Description Paypal")
-                .setPrice(formatAmount(itemDetailDto.getSubTotal() / itemDetailDto.getQuantity())) // Ensure the price is per item
-                .setTax(formatAmount(itemDetailDto.getTaxFee() / itemDetailDto.getQuantity())) // Ensure the tax is per item
-                .setQuantity(String.valueOf(itemDetailDto.getQuantity()));
-        items.add(item);
+        for (var x: orderDtos.getOrderDetails()) {
+            Item item = new Item();
+            item.setCurrency("USD")
+                    .setName(productRepository.findByID_(x.getProduct_id()).getName())
+                    .setPrice(formatAmount(x.getSubTotal() / x.getQuantity())) // Ensure the price is per item
+                    .setTax(formatAmount(orderDtos.getTaxFee() / x.getQuantity())) // Ensure the tax is per item
+                    .setQuantity(String.valueOf(x.getQuantity()));
+            items.add(item);
+        }
         itemList.setItems(items);
         transaction.setItemList(itemList);
 
@@ -206,7 +211,8 @@ public class PaymentPaypalService {
     }
 
     private String formatAmount(Float amount) {
-        return DECIMAL_FORMAT.format(amount);
+//        return DECIMAL_FORMAT.format(amount);
+        return String.valueOf(amount);
     }
 
     private RedirectUrls getRedirectURLs() {

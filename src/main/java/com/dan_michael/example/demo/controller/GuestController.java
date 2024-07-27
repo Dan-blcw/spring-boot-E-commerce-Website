@@ -102,7 +102,11 @@ public class GuestController {
         var response = service.getQuantityByColorAndSize(product_id,color,size);
         return ResponseEntity.ok(response);
     }
-
-
+//--------------------------Brands----------------------------------
+    @GetMapping(value = "/list-ob/get-all-brands")
+    public ResponseEntity<?> getAllBrands() {
+        var response = service.getbrands();
+        return ResponseEntity.ok(response);
+    }
 
 }

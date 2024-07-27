@@ -89,9 +89,9 @@ public class PjCdtnApplication {
 			listsub1.add(sub4);
 			listsub1.add(sub5);
 
-			listsub2.add(sub0);
-			listsub2.add(sub1);
-			listsub2.add(sub2);
+			listsub2.add(sub3);
+			listsub2.add(sub4);
+			listsub2.add(sub5);
 
 			var pro0 = ProductDtos.builder()
 					.name("Product DTO 1")

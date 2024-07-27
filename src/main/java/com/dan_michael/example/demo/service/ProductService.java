@@ -1,5 +1,6 @@
 package com.dan_michael.example.demo.service;
 
+import com.dan_michael.example.demo.model.dto.ob.sub.SubBrandsResponse;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubQuantityResponse;
 import com.dan_michael.example.demo.model.entities.SubEn.*;
 import com.dan_michael.example.demo.model.response.ProductResponse;
@@ -113,10 +114,8 @@ public class ProductService {
             }
         }
 
-//        product_flag.setColours(colorsBox);
-//        product_flag.setBrands(brandBox);
-//        product_flag.setSizes(sizesBox);
         product_flag.setQuantityDetails(Box);
+        product_flag.setTotalQuantity(totalQuantity);
         product_flag.setImages(productImagesBox);
 
         productRepository.save(product_flag);
@@ -132,7 +131,7 @@ public class ProductService {
                 .category(product_flag.getCategory())
                 .rating(product_flag.getRating())
                 .nRating(product_flag.getNRating())
-
+                .totalQuantity(totalQuantity)
                 .favourite(null)
 
                 .originalPrice(product_flag.getOriginalPrice())
@@ -148,33 +147,33 @@ public class ProductService {
         return productResponse;
     }
 
-    public Product test(Test request) {
-        var ob = productRepository.findByName(request.getName());
-
-        if(ob.isPresent()){
-            return null;
-        }
-        var product_flag = new Product();
-        product_flag.setName(request.getName());
-        product_flag.setNewStatus(true);
-        product_flag.setCreateDate(new Date());
-        List<QuantityDetail> Box = new ArrayList<>();
-        if (request.getQuantityDetails() != null && request.getQuantityDetails().size() > 0) {
-            for (var x : request.getQuantityDetails()) {
-                QuantityDetail Item = new QuantityDetail();
-                Item.setColor(x.getColor());
-                Item.setSize(x.getSize());
-                Item.setQuantity(x.getQuantity());
-                Item.setIdentification(product_flag.getName());
-                Box.add(Item);
-                quantityDetailRepository.save(Item);
-            }
-        }
-        product_flag.setBrand(request.getBrands());
-        product_flag.setQuantityDetails(Box);
-        productRepository.save(product_flag);
-        return product_flag;
-    }
+//    public Product test(Test request) {
+//        var ob = productRepository.findByName(request.getName());
+//
+//        if(ob.isPresent()){
+//            return null;
+//        }
+//        var product_flag = new Product();
+//        product_flag.setName(request.getName());
+//        product_flag.setNewStatus(true);
+//        product_flag.setCreateDate(new Date());
+//        List<QuantityDetail> Box = new ArrayList<>();
+//        if (request.getQuantityDetails() != null && request.getQuantityDetails().size() > 0) {
+//            for (var x : request.getQuantityDetails()) {
+//                QuantityDetail Item = new QuantityDetail();
+//                Item.setColor(x.getColor());
+//                Item.setSize(x.getSize());
+//                Item.setQuantity(x.getQuantity());
+//                Item.setIdentification(product_flag.getName());
+//                Box.add(Item);
+//                quantityDetailRepository.save(Item);
+//            }
+//        }
+//        product_flag.setBrand(request.getBrands());
+//        product_flag.setQuantityDetails(Box);
+//        productRepository.save(product_flag);
+//        return product_flag;
+//    }
 
     public ProductResponse updateProduct(ProductDtos request) {
         var totalQuantity = 0;
@@ -238,6 +237,7 @@ public class ProductService {
         }
 
         product_flag.setImages(productImagesBox);
+        product_flag.setTotalQuantity(totalQuantity);
         product_flag.setQuantityDetails(Box);
         List<FavouriteProduct> favouriteList = favouriteProductRepository.findFavouriteByIAndIdentification(product_flag.getName());
         List<Integer> favouriteListRe = new ArrayList<>();
@@ -250,6 +250,7 @@ public class ProductService {
                 .brands(request.getBrands())
                 .sizes(sizes)
                 .colours(colors)
+                .totalQuantity(totalQuantity)
                 .name(product_flag.getName())
                 .description(product_flag.getDescription())
                 .quantity(product_flag.getQuantityDetails())
@@ -312,6 +313,7 @@ public class ProductService {
                     .brands(x.getBrand())
                     .sizes(sizesListRe)
                     .colours(colorsListRe)
+                    .totalQuantity(x.getTotalQuantity())
                     .description(x.getDescription())
                     .quantity(quantityDetailsList)
                     .category(x.getCategory())
@@ -373,7 +375,7 @@ public class ProductService {
                 .rating(rating)
                 .nRating(nRating)
                 .favourite(favouriteListRe)
-
+                .totalQuantity(boxItem.get().getTotalQuantity())
                 .originalPrice(boxItem.get().getOriginalPrice())
                 .saleDiscountPercent(boxItem.get().getSaleDiscountPercent())
                 .finalPrice(boxItem.get().getFinalPrice())
@@ -515,7 +517,7 @@ public class ProductService {
                         .rating(rating)
                         .nRating(nRating)
                         .favourite(favouriteListRe)
-
+                        .totalQuantity(x.getTotalQuantity())
                         .originalPrice(x.getOriginalPrice())
                         .saleDiscountPercent(x.getSaleDiscountPercent())
                         .finalPrice(x.getFinalPrice())
@@ -629,10 +631,14 @@ public class ProductService {
                     .colours(colorsListRe)
                     .name(x.getName())
                     .description(x.getDescription())
+
                     .quantity(quantityDetailsList)
+                    .totalQuantity(x.getTotalQuantity())
+
                     .category(x.getCategory())
                     .rating(rating)
                     .nRating(nRating)
+
                     .favourite(favouriteListRe)
                     .originalPrice(x.getOriginalPrice())
                     .saleDiscountPercent(x.getSaleDiscountPercent())
@@ -661,9 +667,23 @@ public class ProductService {
                 return flag;
             }
         }
-        System.out.println(quantityDetailsList);
         return SubQuantityResponse.builder()
                 .quantity(-1)
+                .message("ERROR to get Quantity bcs Color or Size is wrong")
+                .build();
+    }
+
+    public SubBrandsResponse getbrands(){
+        List<String> boxBrands = new ArrayList<>();
+        var boxItem = productRepository.findAll();
+        for (var x_0: boxItem) {
+            if(!boxBrands.contains(x_0.getBrand())){
+                boxBrands.add(x_0.getBrand());
+            }
+
+        }
+        return SubBrandsResponse.builder()
+                .brands(boxBrands)
                 .message("ERROR to get Quantity bcs Color or Size is wrong")
                 .build();
     }

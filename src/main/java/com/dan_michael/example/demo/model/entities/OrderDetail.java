@@ -29,9 +29,4 @@ public class OrderDetail {
     private String color;
 
     private Float subTotal;
-    private Float shippingFee;
-    private Float taxFee;
-
-    private Float totalAmountOrderDetail;
-
 }

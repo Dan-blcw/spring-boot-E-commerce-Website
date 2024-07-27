@@ -1,6 +1,7 @@
 package com.dan_michael.example.demo.controller;
 
 //import com.dan_michael.example.demo.exception.*;
+import com.dan_michael.example.demo.model.dto.ob.OrderDtos;
 import com.dan_michael.example.demo.model.response.ResponsePayPal;
 import com.dan_michael.example.demo.service.Payment.PaymentPaypalService;
 import com.dan_michael.example.demo.model.dto.global.PaymentVNPayDTO;
@@ -69,8 +70,8 @@ public class PaymentController {
 
 //-----------------------------------------------------------------------------------------------------
     @PostMapping("/paypal-payment")
-    public String doPost(@RequestBody ItemDetailDto itemDetailDto) throws PayPalRESTException {
-        String approvalLink = paypalService.authorizePayment(itemDetailDto);
+    public String doPost(@RequestBody OrderDtos orderDtos) throws PayPalRESTException {
+        String approvalLink = paypalService.authorizePayment(orderDtos);
         return approvalLink;
     }
     //https://developer.paypal.com/tools/sandbox/card-testing/

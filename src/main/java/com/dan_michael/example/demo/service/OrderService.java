@@ -1,10 +1,14 @@
 package com.dan_michael.example.demo.service;
 
 import com.dan_michael.example.demo.model.dto.ob.OrderDtos;
+import com.dan_michael.example.demo.model.dto.ob.sub.SubQuantityResponse;
 import com.dan_michael.example.demo.model.entities.Order;
 import com.dan_michael.example.demo.model.entities.OrderDetail;
+import com.dan_michael.example.demo.model.entities.SubEn.QuantityDetail;
 import com.dan_michael.example.demo.repositories.OrderDetailRepository;
 import com.dan_michael.example.demo.repositories.OrderRepository;
+import com.dan_michael.example.demo.repositories.ProductRepository;
+import com.dan_michael.example.demo.repositories.SupRe.QuantityDetailRepository;
 import com.dan_michael.example.demo.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +28,10 @@ public class OrderService {
 
     private final OrderDetailRepository orderDetailRepository;
 
+    private final QuantityDetailRepository quantityDetailRepository;
+
+    private final ProductRepository productRepository;
+
 //--------------------------Order----------------------------------
     public List<Order> getAllOrders() {
         var flag = orderRepository.findAll();
@@ -39,6 +47,7 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(OrderDtos request) {
+        var totalQuantity = 0;
         var totalAmountOrder = 0.0F;
         var subAmountOrder = 0.0F;
         var user = userRepository.findById_create(request.getUserId());
@@ -58,33 +67,48 @@ public class OrderService {
 
         order.setShippingStatus("ĐANG CHUẨN BỊ HÀNG");
         order.setCreatedAt(new Date());
+
         var y = orderRepository.save(order);
         List<OrderDetail> box = new ArrayList<>();
         for (ItemDetailDto x : request.getOrderDetails()) {
             OrderDetail detail = new OrderDetail();
             detail.setProduct_id(x.getProduct_id());
 
+            var product = productRepository.findByID_(x.getProduct_id());
+            var quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(product.getName());
+            for (var x_0: quantityDetailsList) {
+                if(x_0.getColor().toLowerCase().equals(x.getColors().toLowerCase())
+                        && x_0.getSize().toLowerCase().equals(x.getSize().toLowerCase())
+                ){
+                    var quantityNow = x_0.getQuantity() - x.getQuantity();
+                    x_0.setQuantity(quantityNow);
+                    totalQuantity += quantityNow;
+                    quantityDetailRepository.save(x_0);
+                }
+            }
+            product.setQuantityDetails(quantityDetailsList);
+            product.setTotalQuantity(totalQuantity);
+            productRepository.save(product);
+
             detail.setQuantity(x.getQuantity());
             detail.setColor(x.getColors());
             detail.setSize(x.getSize());
+
             detail.setIdentification_order(y.getId());
 
             detail.setSubTotal(x.getSubTotal());
-            detail.setShippingFee(x.getShippingFee());
-            detail.setTaxFee(x.getTaxFee());
 
             var subdetail = x.getSubTotal() ;
             subAmountOrder += subdetail;
-            detail.setTotalAmountOrderDetail(x.getSubTotal() + x.getTaxFee() + x.getShippingFee());
             box.add(detail);
             createOrderDetail(detail);
         }
         y.setOrderDetails(box);
-        y.setShippingFee(request.getOrderDetails().get(0).getShippingFee());
-        y.setTaxFee(request.getOrderDetails().get(0).getTaxFee());
+        y.setShippingFee(request.getShippingFee());
+        y.setTaxFee(request.getTaxFee());
         y.setSubTotal(subAmountOrder);
-        y.setTotalAmountOrder(subAmountOrder +request.getOrderDetails().get(0).getShippingFee()+request.getOrderDetails().get(0).getTaxFee());
-        order.setTotalAmountOrder(totalAmountOrder);
+        totalAmountOrder = subAmountOrder + request.getShippingFee() + request.getTaxFee();
+        y.setTotalAmountOrder(totalAmountOrder);
         return orderRepository.save(y);
     }
 

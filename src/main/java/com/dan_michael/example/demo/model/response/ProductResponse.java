@@ -32,6 +32,7 @@ public class ProductResponse {
     private String description;
 
     private List<QuantityDetail> quantity;
+    private Integer totalQuantity;
     private String category;
     private Float rating;
     private Integer nRating;

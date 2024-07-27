@@ -21,5 +21,10 @@ public class OrderDtos {
     private String PaymentMethods;
     private Integer paymentStatus;
 
+    private Float subTotal;
+    private Float shippingFee;
+    private Float taxFee;
+
+    private Float total;
     private Integer orderStatus;
 }

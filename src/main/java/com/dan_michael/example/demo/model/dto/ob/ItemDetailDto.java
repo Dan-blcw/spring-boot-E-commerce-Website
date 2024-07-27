@@ -19,13 +19,10 @@ public class ItemDetailDto {
 
     @JsonProperty("quantity")
     private Integer quantity;
-
     private String size;
     private String colors;
 
     private Float subTotal;
-    private Float shippingFee;
-    private Float taxFee;
 
     private Float total;
 }
