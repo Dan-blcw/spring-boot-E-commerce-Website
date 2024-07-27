@@ -1,6 +1,5 @@
 package com.dan_michael.example.demo.repositories.SupRe;
 
-import com.dan_michael.example.demo.model.entities.SubEn.Brands;
 import com.dan_michael.example.demo.model.entities.SubEn.FavouriteProduct;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

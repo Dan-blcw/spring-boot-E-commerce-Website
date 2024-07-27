@@ -17,7 +17,4 @@ public interface ProductImgRepository extends JpaRepository<ProductImg, Integer>
     List<ProductImg> findProductImgByProductId(@Param("identification_pro") String identification_pro);
 
 
-//    @Query(value = "select t from ProductImg t inner join t.product u where u.id = :id")
-//    List<ProductImg> findAllImgsByProduct(@Param("id") Integer id);
-
 }

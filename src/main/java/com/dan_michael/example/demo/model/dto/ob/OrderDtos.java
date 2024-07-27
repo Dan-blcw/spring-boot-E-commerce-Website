@@ -18,7 +18,7 @@ public class OrderDtos {
     private String phoneNumber;
     private String emailAddress;
 
-    private String PaymentMethods;
+    private String paymentMethods;
     private Integer paymentStatus;
 
     private Float subTotal;

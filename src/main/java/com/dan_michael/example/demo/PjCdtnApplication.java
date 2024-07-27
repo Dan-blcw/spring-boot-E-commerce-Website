@@ -55,7 +55,7 @@ public class PjCdtnApplication {
 					.password("password")
 					.build();
 			System.out.println("User token: " + service.register(user).getJwt());
-
+//			System.out.println("User token: " + service.register(user).getUser());
 			SubQuantity sub0 = SubQuantity.builder()
 					.color("Red")
 					.size("Small")

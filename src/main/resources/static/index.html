@@ -1,23 +1,284 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <link rel="stylesheet" href="css/main.css">-->
+<!--    <title>Chat Application</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<h2>One to One Chat | Spring boot & Websocket | By Alibou</h2>-->
+
+<!--<div class="userTest-form" id="username-page">-->
+<!--    <h2>Enter Chatroom</h2>-->
+<!--    <form id="usernameForm">-->
+<!--        <label for="nickname">Nickname:</label>-->
+<!--        <input type="text" id="nickname" name="nickname" required>-->
+
+<!--        <label for="fullname">Real Name:</label>-->
+<!--        <input type="text" id="fullname" name="realname" required>-->
+
+<!--        <button type="submit">Enter Chatroom</button>-->
+<!--    </form>-->
+<!--</div>-->
+
+<!--<div class="chat-container hidden" id="chat-page">-->
+<!--    <div class="users-list">-->
+<!--        <div class="users-list-container">-->
+<!--            <h2>Online Users</h2>-->
+<!--            <ul id="connectedUsers">-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <p id="connected-userTest-fullname"></p>-->
+<!--            <a class="logout" href="javascript:void(0)" id="logout">Logout</a>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="chat-area">-->
+<!--        <div class="chat-area" id="chat-messages">-->
+<!--        </div>-->
+
+<!--        <form id="messageForm" name="messageForm" class="hidden">-->
+<!--            <div class="message-input">-->
+<!--                <input autocomplete="off" type="text" id="message" placeholder="Type your message...">-->
+<!--                <button>Send</button>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>-->
+<!--<script src="/js/main.js"></script>-->
+<!--</body>-->
+<!--</html>-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/main.css">
+<!--    <link rel="stylesheet" href="css/main.css">-->
+    <style>body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        flex-direction: column;
+    }
+
+    .chat-container {
+        display: flex;
+        max-width: 800px;
+        min-width: 800px;
+        min-height: 600px;
+        max-height: 600px;
+        margin: 20px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .users-list {
+        flex: 1;
+        border-right: 1px solid #ccc;
+        padding: 20px;
+        box-sizing: border-box;
+        background-color: #3498db;
+        color: #fff;
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .users-list-container {
+        height: 100%;
+        overflow-y: scroll;
+    }
+
+    .users-list h2 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+
+    .users-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .user-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        cursor: pointer;
+    }
+
+    .user-item.active {
+        background-color: #cdebff;
+        color: #4f4f4f;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .user-item img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .user-item span {
+        font-weight: bold;
+    }
+
+    .separator {
+        height: 1px;
+        background-color: #ccc;
+        margin: 10px 0;
+    }
+
+    .chat-area {
+        flex: 3;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        box-sizing: border-box;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+    }
+
+    .message {
+        margin-bottom: 5px;
+        border-radius: 5px;
+    }
+
+    #chat-messages {
+        display: flex;
+        flex-direction: column;
+        overflow-y: scroll;
+    }
+
+    .message p {
+        padding: 0 12px;
+        border-radius: 15px;
+        word-wrap: break-word;
+    }
+
+    .user-item span.nbr-msg {
+        margin-left: 10px;
+        background-color: #f8fa6f;
+        color: white;
+        padding: 5px;
+        width: 10px;
+        border-radius: 50%;
+        height: 10px;
+    }
+
+    .sender {
+        background-color: #3498db;
+        color: #fff;
+        align-self: flex-end;
+    }
+
+    .receiver {
+        background-color: #ecf0f1;
+        color: #333;
+        align-self: flex-start;
+    }
+
+    .message-input {
+        margin-top: auto;
+        display: flex;
+    }
+
+    .message-input input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-right: 10px;
+    }
+
+    .message-input button {
+        padding: 10px;
+        border: none;
+        background-color: #3498db;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .user-form {
+        max-width: 400px;
+        padding: 40px;
+        box-sizing: border-box;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .user-form h2 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .user-form label {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .user-form input {
+        width: 100%;
+        padding: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .user-form button {
+        padding: 12px;
+        border: none;
+        background-color: #3498db;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    a.logout {
+        color: #fff;
+        text-decoration: none;
+    }
+    </style>
     <title>Chat Application</title>
 </head>
 <body>
 
 <h2>One to One Chat | Spring boot & Websocket | By Alibou</h2>
 
-<div class="user-form" id="username-page">
+<div class="userTest-form" id="login-page">
     <h2>Enter Chatroom</h2>
-    <form id="usernameForm">
-        <label for="nickname">Nickname:</label>
-        <input type="text" id="nickname" name="nickname" required>
+    <form id="loginForm">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
 
-        <label for="fullname">Real Name:</label>
-        <input type="text" id="fullname" name="realname" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
 
         <button type="submit">Enter Chatroom</button>
     </form>
@@ -31,7 +292,7 @@
             </ul>
         </div>
         <div>
-            <p id="connected-user-fullname"></p>
+            <p id="connected-userTest-fullname"></p>
             <a class="logout" href="javascript:void(0)" id="logout">Logout</a>
         </div>
     </div>
@@ -51,6 +312,248 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-<script src="/js/main.js"></script>
+<!--<script src="/js/main.js"></script>-->
+<script>
+    'use strict';
+
+    const loginPage = document.querySelector('#login-page');
+    const chatPage = document.querySelector('#chat-page');
+    const loginForm = document.querySelector('#loginForm');
+    const messageForm = document.querySelector('#messageForm');
+    const messageInput = document.querySelector('#message');
+    const connectingElement = document.querySelector('.connecting');
+    const chatArea = document.querySelector('#chat-messages');
+    const logout = document.querySelector('#logout');
+
+    let stompClient = null;
+    let nickname = null;
+    let fullname = null;
+    let selectedUserId = null;
+async function login(event) {
+        event.preventDefault();
+
+        const email = document.querySelector('#email').value.trim();
+        const password = document.querySelector('#password').value.trim();
+        if (email && password) {
+            const requestBody = {
+                email: email,
+                password: password
+            };
+
+            try {
+                const response = await fetch('http://localhost:8080/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                console.log(requestBody);
+                const data = await response.json();
+
+                if (data.jwt) {
+                    localStorage.setItem('jwt', data.jwt);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+
+                    nickname = data.user.name;
+                    fullname = data.user.name;
+
+                    loginPage.classList.add('hidden');
+                    chatPage.classList.remove('hidden');
+
+                    connect();
+                } else {
+                    alert('Login failed!');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    }
+
+
+    async function connect() {
+        const socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+
+        const token = localStorage.getItem('jwt');
+
+        stompClient.connect({ Authorization: `Bearer ${token}` }, onConnected, onError);
+    }
+
+    function onConnected() {
+        stompClient.subscribe(`/user/${nickname}/queue/messages`, onMessageReceived);
+        stompClient.subscribe(`/user/topic`, onMessageReceived);
+
+        // register the connected user
+        stompClient.send("/app/user.addUser",
+            { Authorization: `Bearer ${localStorage.getItem('jwt')}` },
+            JSON.stringify({nickName: nickname, fullName: fullname, status: 'ONLINE'})
+        );
+        document.querySelector('#connected-user-fullname').textContent = name;
+        findAndDisplayConnectedUsers().then();
+    }
+
+    async function findAndDisplayConnectedUsers() {
+        const token = localStorage.getItem('jwt');
+
+        const connectedUsersResponse = await fetch('/users', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        let connectedUsers = await connectedUsersResponse.json();
+        connectedUsers = connectedUsers.filter(user => user.nickName !== nickname);
+        const connectedUsersList = document.getElementById('connectedUsers');
+        connectedUsersList.innerHTML = '';
+
+        connectedUsers.forEach(user => {
+            appendUserElement(user, connectedUsersList);
+            if (connectedUsers.indexOf(user) < connectedUsers.length - 1) {
+                const separator = document.createElement('li');
+                separator.classList.add('separator');
+                connectedUsersList.appendChild(separator);
+            }
+        });
+    }
+
+    function appendUserElement(user, connectedUsersList) {
+        const listItem = document.createElement('li');
+        listItem.classList.add('user-item');
+        listItem.id = user.nickName;
+
+        const userImage = document.createElement('img');
+        userImage.src = 'user_icon.png';
+        userImage.alt = user.fullName;
+
+        const usernameSpan = document.createElement('span');
+        usernameSpan.textContent = user.fullName;
+
+        const receivedMsgs = document.createElement('span');
+        receivedMsgs.textContent = '0';
+        receivedMsgs.classList.add('nbr-msg', 'hidden');
+
+        listItem.appendChild(userImage);
+        listItem.appendChild(usernameSpan);
+        listItem.appendChild(receivedMsgs);
+
+        listItem.addEventListener('click', userItemClick);
+
+        connectedUsersList.appendChild(listItem);
+    }
+
+    function userItemClick(event) {
+        document.querySelectorAll('.user-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        messageForm.classList.remove('hidden');
+
+        const clickedUser = event.currentTarget;
+        clickedUser.classList.add('active');
+
+        selectedUserId = clickedUser.getAttribute('id');
+        fetchAndDisplayUserChat().then();
+
+        const nbrMsg = clickedUser.querySelector('.nbr-msg');
+        nbrMsg.classList.add('hidden');
+        nbrMsg.textContent = '0';
+
+    }
+
+    function displayMessage(senderId, content) {
+        const messageContainer = document.createElement('div');
+        messageContainer.classList.add('message');
+        if (senderId === nickname) {
+            messageContainer.classList.add('sender');
+        } else {
+            messageContainer.classList.add('receiver');
+        }
+        const message = document.createElement('p');
+        message.textContent = content;
+        messageContainer.appendChild(message);
+        chatArea.appendChild(messageContainer);
+    }
+
+    async function fetchAndDisplayUserChat() {
+        const token = localStorage.getItem('jwt');
+
+        const userChatResponse = await fetch(`/api/v1/chatbox/messages/${nickname}/${selectedUserId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const userChat = await userChatResponse.json();
+        chatArea.innerHTML = '';
+        userChat.forEach(chat => {
+            displayMessage(chat.senderId, chat.content);
+        });
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+
+    function onError() {
+        connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
+        connectingElement.style.color = 'red';
+    }
+
+
+    function sendMessage(event) {
+        const messageContent = messageInput.value.trim();
+        if (messageContent && stompClient) {
+            const chatMessage = {
+                id:null,
+                senderId: nickname,
+                recipientId: selectedUserId,
+                content: messageInput.value.trim(),
+                timestamp: new Date()
+            };
+            stompClient.send("/app/chat", {}, JSON.stringify(chatMessage));
+            displayMessage(nickname, messageInput.value.trim());
+            messageInput.value = '';
+        }
+        chatArea.scrollTop = chatArea.scrollHeight;
+        event.preventDefault();
+    }
+
+
+    async function onMessageReceived(payload) {
+        await findAndDisplayConnectedUsers();
+        console.log('Message received', payload);
+        const message = JSON.parse(payload.body);
+        if (selectedUserId && selectedUserId === message.senderId) {
+            displayMessage(message.senderId, message.content);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        if (selectedUserId) {
+            document.querySelector(`#${selectedUserId}`).classList.add('active');
+        } else {
+            messageForm.classList.add('hidden');
+        }
+
+        const notifiedUser = document.querySelector(`#${message.senderId}`);
+        if (notifiedUser && !notifiedUser.classList.contains('active')) {
+            const nbrMsg = notifiedUser.querySelector('.nbr-msg');
+            nbrMsg.classList.remove('hidden');
+            nbrMsg.textContent = '';
+        }
+    }
+
+    function onLogout() {
+        stompClient.send("/app/user.disconnectUser",
+            {},
+            JSON.stringify({nickName: nickname, fullName: fullname, status: 'OFFLINE'})
+        );
+        window.location.reload();
+    }
+
+    loginForm.addEventListener('submit', login, true);
+    messageForm.addEventListener('submit', sendMessage, true);
+    logout.addEventListener('click', onLogout, true);
+    window.onbeforeunload = () => onLogout();
+
+</script>
 </body>
 </html>

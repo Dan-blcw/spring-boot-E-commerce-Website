@@ -37,13 +37,8 @@ public class ProductService {
 
     private final ProductImgRepository productImgRepository;
 
-//    private final ColorsRepository colorsRepository;
-
-    private final BrandRepository brandRepository;
-
     private final QuantityDetailRepository quantityDetailRepository;
 
-//    private final SizeRepository sizeRepository;
 
     private final FavouriteProductRepository favouriteProductRepository;
 //-------------------Product-----------------------------------

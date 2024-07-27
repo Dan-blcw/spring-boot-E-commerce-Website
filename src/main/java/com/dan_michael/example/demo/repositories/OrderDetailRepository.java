@@ -12,10 +12,6 @@ import java.util.List;
 
 
 public interface OrderDetailRepository  extends JpaRepository<OrderDetail, Integer> {
-    List<OrderDetail> findByOrder(Order order);
-
-    @Query("SELECT pi FROM OrderDetail pi WHERE pi.id = :id")
-    OrderDetail findById_handmade(@Param("id") Integer id);
     @Transactional
     @Modifying
     @Query("DELETE FROM OrderDetail od WHERE od.identification_order = :identificationOrder")

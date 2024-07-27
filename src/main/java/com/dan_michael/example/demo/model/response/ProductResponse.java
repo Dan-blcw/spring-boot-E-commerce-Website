@@ -2,18 +2,11 @@ package com.dan_michael.example.demo.model.response;
 
 import com.dan_michael.example.demo.model.entities.Comment;
 import com.dan_michael.example.demo.model.entities.ProductImg;
-import com.dan_michael.example.demo.model.entities.SubEn.Brands;
-import com.dan_michael.example.demo.model.entities.SubEn.Colors;
 import com.dan_michael.example.demo.model.entities.SubEn.QuantityDetail;
-import com.dan_michael.example.demo.model.entities.SubEn.Sizes;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.util.Date;
 import java.util.List;

@@ -5,6 +5,7 @@ package com.dan_michael.example.demo.repositories;
  import org.springframework.data.jpa.repository.Query;
  import org.springframework.data.repository.query.Param;
 
+ import java.util.List;
  import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
@@ -14,4 +15,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
   User findByEmail_(@Param("email")String email);
   @Query("SELECT pi FROM User pi WHERE pi.id = :id")
   User findById_create(@Param("id")Integer id);
+
+  @Query("SELECT pi FROM User pi WHERE pi.is_active = :is_active")
+  List<User> findAllByIs_active(@Param("is_active")Integer is_active);
 }

@@ -39,7 +39,12 @@ public class SecurityConfiguration {
             "/api/v1/product/**",
             "/configuration/ui",
             "/configuration/security",
-
+            "/api/v1/chatbox/**",
+            "/index.html",
+            "/app/**",
+            "/user/**",
+            "/ws/**",
+            "/messages/**",
     };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
@@ -51,7 +56,7 @@ public class SecurityConfiguration {
                 .cors(cors -> {
                     cors.configurationSource(request -> {
                         CorsConfiguration configuration = new CorsConfiguration();
-                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:5555"));
                         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE","PATCH"));
                         configuration.setAllowCredentials(true);
                         configuration.addAllowedHeader("*");
