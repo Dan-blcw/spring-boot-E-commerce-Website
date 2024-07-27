@@ -77,7 +77,7 @@ public class OrderService {
             var product = productRepository.findByID_(x.getProduct_id());
             var quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(product.getName());
             for (var x_0: quantityDetailsList) {
-                if(x_0.getColor().toLowerCase().equals(x.getColors().toLowerCase())
+                if(x_0.getColor().toLowerCase().equals(x.getColor().toLowerCase())
                         && x_0.getSize().toLowerCase().equals(x.getSize().toLowerCase())
                 ){
                     var quantityNow = x_0.getQuantity() - x.getQuantity();
@@ -91,7 +91,7 @@ public class OrderService {
             productRepository.save(product);
 
             detail.setQuantity(x.getQuantity());
-            detail.setColor(x.getColors());
+            detail.setColor(x.getColor());
             detail.setSize(x.getSize());
 
             detail.setIdentification_order(y.getId());
@@ -151,23 +151,23 @@ public class OrderService {
 //    public Optional<OrderDetail> getOrderDetailById(Integer id) {
 //        return orderDetailRepository.findById(id);
 //    }
-    @Transactional
-    public List<OrderDetail> updateOrderDetail(List<ItemDetailDto> request, List<OrderDetail> rightnow) {
-        List<OrderDetail> for_save = new ArrayList<>();
-        for (ItemDetailDto y : request ){
-            for (OrderDetail x : rightnow){
-                if(x.getId() == y.getId()){
-                    x.setProduct_id(y.getProduct_id());
-                    x.setQuantity(y.getQuantity());
-                    x.setColor(y.getColors());
-                    x.setSize(y.getSize());
-                    for_save.add(x);
-                    orderDetailRepository.save(x);
-                }
-            }
-        }
-        return for_save;
-    }
+//    @Transactional
+//    public List<OrderDetail> updateOrderDetail(List<ItemDetailDto> request, List<OrderDetail> rightnow) {
+//        List<OrderDetail> for_save = new ArrayList<>();
+//        for (ItemDetailDto y : request ){
+//            for (OrderDetail x : rightnow){
+//                if(x.getId() == y.getId()){
+//                    x.setProduct_id(y.getProduct_id());
+//                    x.setQuantity(y.getQuantity());
+//                    x.setColor(y.getColor());
+//                    x.setSize(y.getSize());
+//                    for_save.add(x);
+//                    orderDetailRepository.save(x);
+//                }
+//            }
+//        }
+//        return for_save;
+//    }
 
     public boolean deleteOrderDetail(Integer id) {
         return orderDetailRepository.findById(id).map(orderDetail -> {

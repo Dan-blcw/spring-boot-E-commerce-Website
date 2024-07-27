@@ -30,20 +30,10 @@ public class CartController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<?> createCart(
-            @RequestBody CartDtos request
-    ) {
-        Cart response = cartService.createCart(request);
-        if(response != null){
-            return ResponseEntity.ok(response);
-        }else {
-            return ResponseEntity.badRequest().body(ResponseMessageDtos.builder().message("This Category already exist").status(400).build());
-        }
-    }
-
-    @PutMapping("/{id}/details")
-    public ResponseEntity<Cart> addCartDetail(@PathVariable Integer id, @RequestBody CartDtos cartDetails) {
+    @PostMapping("/add-details")
+    public ResponseEntity<Cart> createCartAndadd(
+            @RequestBody CartDtos cartDetails) {
+        var id = cartService.createOrGetCart(cartDetails);
         Optional<Cart> updatedCart = cartService.addCartDetail(id, cartDetails);
         if (updatedCart.isPresent()) {
             return ResponseEntity.ok(updatedCart.get());
@@ -53,20 +43,20 @@ public class CartController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCart(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteCart(@PathVariable Integer id) {
         if (cartService.deleteCart(id)) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok().body("Delete Cart Successfully !!!");
         } else {
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.status(404).body("Delete Cart Failure !!!");
         }
     }
 
-    @DeleteMapping("/details/{detailId}")
-    public ResponseEntity<Void> deleteCartDetail(@PathVariable Integer detailId) {
-        if (cartService.deleteCartDetail(detailId)) {
-            return ResponseEntity.noContent().build();
+    @DeleteMapping("/details/{detail_Id}")
+    public ResponseEntity<?> deleteCartDetail(@PathVariable Integer detail_Id) {
+        if (cartService.deleteCartDetail(detail_Id)) {
+            return ResponseEntity.ok().body("Delete Cart Successfully !!!");
         } else {
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.status(404).body("Delete Cart Item Failure !!!");
         }
     }
 }

@@ -31,6 +31,8 @@ public class CartDetail {
     private Integer identification_cart;
     private Integer identification_product;
     private int quantity;
-    private String colors;
+    private String color;
     private String size;
+    private Float subTotal;
+    private Float total;
 }

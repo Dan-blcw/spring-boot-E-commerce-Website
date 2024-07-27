@@ -83,39 +83,33 @@ public class CartService {
         return flag;
     }
     @Transactional
-    public Cart createCart(CartDtos request) {
+    public Integer createOrGetCart(CartDtos request) {
         var user = userRepository.findById_create(request.getUserId());
         if(user == null){
-            return new Cart();
+            return null;
         }
-        Cart flag = new Cart();
-
-        flag.setIdentification_user(user.getId());
-        flag.setCreatedAt(new Date());
-        var y = cartRepository.save(flag);
-        var item = CartDetail.builder()
-                .identification_product(request.getCart_item().getProduct_id())
-                .size(request.getCart_item().getSize())
-                .quantity(request.getCart_item().getQuantity())
-                .identification_cart(y.getId())
-                .build();
-        List<CartDetail> box = new ArrayList<>();
-        box.add(item);
-        cartDetailRepository.save(item);
-        y.setCartDetails(box);
-        return y;
+        if(request.getCart_id() == null){
+            Cart flag = new Cart();
+            flag.setIdentification_user(user.getId());
+            flag.setCreatedAt(new Date());
+            var y = cartRepository.save(flag);
+            return y.getId();
+        }
+        var cart = cartRepository.findById(request.getCart_id());
+        return cart.get().getId();
     }
-
+    @Transactional
     public Optional<Cart> addCartDetail(Integer id, CartDtos request) {
-        var flag = cartRepository.findById(id);
         var box = cartDetailRepository.findByIdentification_cart(id);
         return cartRepository.findById(id).map(cart -> {
 //          Tạo detailItem
             var additem = CartDetail.builder()
                     .identification_cart(id)
                     .identification_product(request.getCart_item().getProduct_id())
-                    .colors(request.getCart_item().getColors())
+                    .color(request.getCart_item().getColor())
                     .size(request.getCart_item().getSize())
+                    .subTotal(request.getCart_item().getSubTotal())
+                    .total(request.getCart_item().getTotal())
                     .quantity(request.getCart_item().getQuantity())
                     .build();
             cart.setIdentification_user(request.getUserId());
