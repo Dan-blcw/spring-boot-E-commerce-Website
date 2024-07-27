@@ -1,65 +1,8 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <link rel="stylesheet" href="css/main.css">-->
-<!--    <title>Chat Application</title>-->
-<!--</head>-->
-<!--<body>-->
-
-<!--<h2>One to One Chat | Spring boot & Websocket | By Alibou</h2>-->
-
-<!--<div class="userTest-form" id="username-page">-->
-<!--    <h2>Enter Chatroom</h2>-->
-<!--    <form id="usernameForm">-->
-<!--        <label for="nickname">Nickname:</label>-->
-<!--        <input type="text" id="nickname" name="nickname" required>-->
-
-<!--        <label for="fullname">Real Name:</label>-->
-<!--        <input type="text" id="fullname" name="realname" required>-->
-
-<!--        <button type="submit">Enter Chatroom</button>-->
-<!--    </form>-->
-<!--</div>-->
-
-<!--<div class="chat-container hidden" id="chat-page">-->
-<!--    <div class="users-list">-->
-<!--        <div class="users-list-container">-->
-<!--            <h2>Online Users</h2>-->
-<!--            <ul id="connectedUsers">-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--        <div>-->
-<!--            <p id="connected-userTest-fullname"></p>-->
-<!--            <a class="logout" href="javascript:void(0)" id="logout">Logout</a>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    <div class="chat-area">-->
-<!--        <div class="chat-area" id="chat-messages">-->
-<!--        </div>-->
-
-<!--        <form id="messageForm" name="messageForm" class="hidden">-->
-<!--            <div class="message-input">-->
-<!--                <input autocomplete="off" type="text" id="message" placeholder="Type your message...">-->
-<!--                <button>Send</button>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--    </div>-->
-<!--</div>-->
-
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>-->
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>-->
-<!--<script src="/js/main.js"></script>-->
-<!--</body>-->
-<!--</html>-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!--    <link rel="stylesheet" href="css/main.css">-->
     <style>body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         margin: 0;
@@ -74,12 +17,12 @@
 
     .chat-container {
         display: flex;
-        max-width: 800px;
-        min-width: 800px;
+        max-width: 1200px;
+        min-width: 1200px;
         min-height: 600px;
         max-height: 600px;
         margin: 20px;
-        border: 1px solid #ccc;
+        border: 1px solid #939393;
         background-color: #fff;
         overflow: hidden;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -91,18 +34,19 @@
         border-right: 1px solid #ccc;
         padding: 20px;
         box-sizing: border-box;
-        background-color: #3498db;
+        background-color: #99540c;
         color: #fff;
         border-top-left-radius: 8px;
         border-bottom-left-radius: 8px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+
     }
 
     .users-list-container {
         height: 100%;
-        overflow-y: scroll;
+        overflow-y: hidden;
     }
 
     .users-list h2 {
@@ -124,7 +68,7 @@
     }
 
     .user-item.active {
-        background-color: #cdebff;
+        background-color: #eeb297;
         color: #4f4f4f;
         padding: 10px;
         border-radius: 5px;
@@ -165,7 +109,7 @@
     #chat-messages {
         display: flex;
         flex-direction: column;
-        overflow-y: scroll;
+        overflow-y: hidden;
     }
 
     .message p {
@@ -179,13 +123,13 @@
         background-color: #f8fa6f;
         color: white;
         padding: 5px;
-        width: 10px;
+        width: 4px;
         border-radius: 50%;
-        height: 10px;
+        height: 4px;
     }
 
     .sender {
-        background-color: #3498db;
+        background-color: #99540c;
         color: #fff;
         align-self: flex-end;
     }
@@ -212,7 +156,7 @@
     .message-input button {
         padding: 10px;
         border: none;
-        background-color: #3498db;
+        background-color: #99540c;
         color: #fff;
         border-radius: 5px;
         cursor: pointer;
@@ -249,7 +193,7 @@
     .user-form button {
         padding: 12px;
         border: none;
-        background-color: #3498db;
+        background-color: #99540c;
         color: #fff;
         border-radius: 5px;
         cursor: pointer;
@@ -269,10 +213,8 @@
 </head>
 <body>
 
-<h2>One to One Chat | Spring boot & Websocket | By Alibou</h2>
-
 <div class="userTest-form" id="login-page">
-    <h2>Enter Chatroom</h2>
+    <h2>Login To Chatroom</h2>
     <form id="loginForm">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
@@ -287,7 +229,7 @@
 <div class="chat-container hidden" id="chat-page">
     <div class="users-list">
         <div class="users-list-container">
-            <h2>Online Users</h2>
+            <h2>Online.....</h2>
             <ul id="connectedUsers">
             </ul>
         </div>
@@ -312,7 +254,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-<!--<script src="/js/main.js"></script>-->
 <script>
     'use strict';
 
@@ -424,7 +365,7 @@ async function login(event) {
         listItem.id = user.nickName;
 
         const userImage = document.createElement('img');
-        userImage.src = 'user_icon.png';
+        userImage.src = 'user.png';
         userImage.alt = user.fullName;
 
         const usernameSpan = document.createElement('span');

@@ -45,6 +45,7 @@ public class SecurityConfiguration {
             "/user/**",
             "/ws/**",
             "/messages/**",
+            "user.png"
     };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
