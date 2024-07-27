@@ -1,7 +1,9 @@
 package com.dan_michael.example.demo.model.dto.ob;
 
+import com.dan_michael.example.demo.model.dto.ob.sub.SubQuantity;
 import com.dan_michael.example.demo.model.entities.Comment;
 import com.dan_michael.example.demo.model.entities.ProductImg;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,11 +21,15 @@ public class ProductDtos {
     private String name;
     private String description;
 
-    private Integer quantity;
+    private List<SubQuantity> quantityDetail;
     private String category;
-    private List<String> colours;
-    private List<String> sizes;
-    private List<String> brands;
+
+//    @JsonProperty("colours")
+//    private List<String> colours;
+//    @JsonProperty("sizes")
+//    private List<String> sizes;
+//    @JsonProperty("brands")
+    private String brands;
 
     private Boolean favourite;
 

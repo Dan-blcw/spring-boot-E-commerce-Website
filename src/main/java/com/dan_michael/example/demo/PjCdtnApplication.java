@@ -3,13 +3,11 @@ package com.dan_michael.example.demo;
 import com.dan_michael.example.demo.model.dto.global.RegisterDtos;
 import com.dan_michael.example.demo.model.dto.ob.CommentDto;
 import com.dan_michael.example.demo.model.dto.ob.ProductDtos;
+import com.dan_michael.example.demo.model.dto.ob.sub.SubQuantity;
 import com.dan_michael.example.demo.model.entities.Comment;
 import com.dan_michael.example.demo.model.entities.Product;
 import com.dan_michael.example.demo.model.entities.ProductImg;
-import com.dan_michael.example.demo.model.entities.SubEn.Brands;
-import com.dan_michael.example.demo.model.entities.SubEn.Colors;
-import com.dan_michael.example.demo.model.entities.SubEn.FavouriteProduct;
-import com.dan_michael.example.demo.model.entities.SubEn.Sizes;
+import com.dan_michael.example.demo.model.entities.SubEn.*;
 import com.dan_michael.example.demo.service.AuthenticationService;
 import com.dan_michael.example.demo.service.ProductService;
 import org.springframework.boot.SpringApplication;
@@ -58,14 +56,49 @@ public class PjCdtnApplication {
 					.build();
 			System.out.println("User token: " + service.register(user).getJwt());
 
+			SubQuantity sub0 = SubQuantity.builder()
+					.color("Red")
+					.size("Small")
+					.quantity(5).build();
+			SubQuantity sub1 = SubQuantity.builder()
+					.color("Red")
+					.size("Medium")
+					.quantity(12).build();
+			SubQuantity sub2 = SubQuantity.builder()
+					.color("Red")
+					.size("Large")
+					.quantity(6).build();
+			SubQuantity sub3 = SubQuantity.builder()
+					.color("Blue")
+					.size("Small")
+					.quantity(50).build();
+			SubQuantity sub4 = SubQuantity.builder()
+					.color("Blue")
+					.size("Medium")
+					.quantity(10).build();
+			SubQuantity sub5 = SubQuantity.builder()
+					.color("Blue")
+					.size("Large")
+					.quantity(80).build();
+			List<SubQuantity> listsub1 = new ArrayList<>();
+			List<SubQuantity> listsub2 = new ArrayList<>();
+			listsub1.add(sub0);
+			listsub1.add(sub1);
+			listsub1.add(sub2);
+			listsub1.add(sub3);
+			listsub1.add(sub4);
+			listsub1.add(sub5);
+
+			listsub2.add(sub0);
+			listsub2.add(sub1);
+			listsub2.add(sub2);
+
 			var pro0 = ProductDtos.builder()
 					.name("Product DTO 1")
 					.description("Description for product DTO 1")
-					.quantity(100)
+					.quantityDetail(listsub1)
 					.category("Category 1")
-					.colours(List.of("Red", "Blue"))
-					.sizes(List.of("S", "M", "L"))
-					.brands(List.of("Brand A", "Brand B"))
+					.brands("BrandA")
 					.favourite(true)
 					.originalPrice(100.0f)
 					.saleDiscountPercent(10.0f)
@@ -76,11 +109,9 @@ public class PjCdtnApplication {
 			var pro1 = ProductDtos.builder()
 					.name("Product DTO 2")
 					.description("Description for product DTO 2")
-					.quantity(200)
+					.quantityDetail(listsub2)
 					.category("Category 2")
-					.colours(List.of("Green", "Yellow"))
-					.sizes(List.of("M", "L", "XL"))
-					.brands(List.of("Brand C", "Brand D"))
+					.brands("BrandC")
 					.favourite(false)
 					.originalPrice(200.0f)
 					.saleDiscountPercent(20.0f)

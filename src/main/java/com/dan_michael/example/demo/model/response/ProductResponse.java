@@ -4,6 +4,7 @@ import com.dan_michael.example.demo.model.entities.Comment;
 import com.dan_michael.example.demo.model.entities.ProductImg;
 import com.dan_michael.example.demo.model.entities.SubEn.Brands;
 import com.dan_michael.example.demo.model.entities.SubEn.Colors;
+import com.dan_michael.example.demo.model.entities.SubEn.QuantityDetail;
 import com.dan_michael.example.demo.model.entities.SubEn.Sizes;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -26,11 +27,11 @@ public class ProductResponse {
     private List<ProductImg> images;
     private List<String> colours;
     private List<String> sizes;
-    private List<String> brands;
+    private String brands;
     private String name;
     private String description;
 
-    private Integer quantity;
+    private List<QuantityDetail> quantity;
     private String category;
     private Float rating;
     private Integer nRating;

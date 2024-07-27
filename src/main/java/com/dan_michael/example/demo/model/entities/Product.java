@@ -1,9 +1,6 @@
 package com.dan_michael.example.demo.model.entities;
 
-import com.dan_michael.example.demo.model.entities.SubEn.Brands;
-import com.dan_michael.example.demo.model.entities.SubEn.Colors;
-import com.dan_michael.example.demo.model.entities.SubEn.FavouriteProduct;
-import com.dan_michael.example.demo.model.entities.SubEn.Sizes;
+import com.dan_michael.example.demo.model.entities.SubEn.*;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,15 +30,17 @@ public class Product {
     @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<ProductImg> images;
+//    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
+//    @JsonManagedReference
+//    private List<Colors> colours;
+//    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
+//    @JsonManagedReference
+//    private List<Sizes> sizes;
     @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
     @JsonManagedReference
-    private List<Colors> colours;
-    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<Sizes> sizes;
-    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<Brands> brands;
+    private List<QuantityDetail> quantityDetails;
+
+    private Integer totalQuantity;
 
     @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
     @JsonManagedReference
@@ -51,8 +50,8 @@ public class Product {
     @Column(length = 10485760)
     private String description;
 
-    private Integer quantity;
     private String category;
+    private String brand;
 
     private Float rating;
     private Integer nRating;
