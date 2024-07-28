@@ -18,19 +18,19 @@ public class UserAccountInfoController {
 
     private final UserAccountInfoService userService;
 
-    @MessageMapping("/user.addUser")
-    @SendTo("/user/topic")
+    @MessageMapping("/addUser")
+    @SendTo("/user/queue/public")
     public UserAccountInfo addUser(
             @Payload UserAccountInfo userTest
-    ) {
+    ) throws IllegalArgumentException{
         userService.saveUser(userTest);
         return userTest;
     }
-    @MessageMapping("/user.disconnectUser")
-    @SendTo("/user/topic")
+    @MessageMapping("/disconnectUser")
+    @SendTo("/user/queue/public")
     public UserAccountInfo disconnectUser(
             @Payload UserAccountInfo userTest
-    ) {
+    ) throws IllegalArgumentException {
         userService.disconnect(userTest);
         return userTest;
     }

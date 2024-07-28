@@ -3,19 +3,21 @@ package com.dan_michael.example.demo.chatbot.controller;
 import java.util.List;
 
 import com.dan_michael.example.demo.chatbot.entities.QuestionAnswer;
+import com.dan_michael.example.demo.chatbot.entities.RequestMessageChatBotDtos;
 import com.dan_michael.example.demo.chatbot.service.ChatbotService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 @RestController
-@RequestMapping("/rest")
+@RequiredArgsConstructor
+@RequestMapping("api/v1/rest")
 public class ChatRestController {
 
-    @Autowired
-    private ChatbotService chatBotService;
+    private final ChatbotService chatBotService;
     
     // get responses for your questions
     @PostMapping("/chat")
-    public String chat(@RequestBody String message) {
+    public String chat(@RequestBody RequestMessageChatBotDtos message) {
     	return chatBotService.handleInput(message);
     }
     

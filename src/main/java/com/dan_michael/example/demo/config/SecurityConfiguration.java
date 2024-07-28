@@ -39,15 +39,17 @@ public class SecurityConfiguration {
             "/api/v1/product/**",
             "/configuration/ui",
             "/configuration/security",
-            "/api/v1/chatbox/**",
+            "/api/v1/chat-box/**",
             "/index.html",
             "/app/**",
             "/user/**",
+            "/addUser",
             "/ws/**",
             "/messages/**",
             "user.png",
             "/api/v1/images/**",
-            "/media/images/**"
+            "/media/images/**",
+            "api/v1/rest"
     };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;

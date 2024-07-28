@@ -103,8 +103,6 @@ public class CategoryService {
             if(x.getStatus() == 1){
                 List<String> check = new ArrayList<>();
                 var brands = brandRepository.findBrandsByIAndIdentification(x.getName());
-                System.out.println(brands);
-//                x.setBrand(brands);
                 for (var y: brands) {
                     if(!check.contains(y.getBrand())){
                         check.add(y.getBrand());

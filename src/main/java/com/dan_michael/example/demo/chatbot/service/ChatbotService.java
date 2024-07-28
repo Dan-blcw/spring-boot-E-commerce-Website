@@ -1,21 +1,27 @@
 package com.dan_michael.example.demo.chatbot.service;
 
+import java.text.Normalizer;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.dan_michael.example.demo.chatbot.entities.QuestionAnswer;
+import com.dan_michael.example.demo.chatbot.entities.RequestMessageChatBotDtos;
 import com.dan_michael.example.demo.chatbot.resository.QuestionAnswerRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ChatbotService {
 
-    @Autowired
-    private QuestionAnswerRepository questionAnswerRepository;
+    private final QuestionAnswerRepository questionAnswerRepository;
 
-    public String handleInput(String input) {
-        QuestionAnswer qa = questionAnswerRepository.findByQuestion(input.toLowerCase());
+    public String handleInput(RequestMessageChatBotDtos message) {
+        System.out.println(removeDiacritics(message.getMessage().toLowerCase()));
+        QuestionAnswer qa = questionAnswerRepository.findByQuestion(removeDiacritics(message.getMessage().toLowerCase()));
+        System.out.println(qa);
         if (qa != null) {
             return qa.getAnswer();
         } else {
@@ -24,6 +30,7 @@ public class ChatbotService {
     }
     
     public QuestionAnswer createQuestionAnswer(QuestionAnswer qa) {
+        qa.setQuestion(removeDiacritics(qa.getQuestion().toLowerCase()));
         return questionAnswerRepository.save(qa);
     }
     
@@ -46,5 +53,12 @@ public class ChatbotService {
     public List<String> getAllQuestions() {
     	return questionAnswerRepository.findAll().stream()
                 .map(QuestionAnswer::getQuestion)
-                .collect(Collectors.toList());    }
+                .collect(Collectors.toList());
     }
+    public static String removeDiacritics(String input) {
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(normalized).replaceAll("");
+    }
+
+}

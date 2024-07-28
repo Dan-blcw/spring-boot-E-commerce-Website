@@ -234,7 +234,7 @@
             </ul>
         </div>
         <div>
-            <p id="connected-userTest-fullname"></p>
+            <p id="connected-user-fullname"></p>
             <a class="logout" href="javascript:void(0)" id="logout">Logout</a>
         </div>
     </div>
@@ -323,11 +323,11 @@ async function login(event) {
     }
 
     function onConnected() {
-        stompClient.subscribe(`/user/${nickname}/queue/messages`, onMessageReceived);
-        stompClient.subscribe(`/user/topic`, onMessageReceived);
+        stompClient.subscribe(`/user/${nickname}/queue/messages`, onMessageReceived); //check
+        stompClient.subscribe(`/user/queue/public`, onMessageReceived); //check
 
         // register the connected user
-        stompClient.send("/app/user.addUser",
+        stompClient.send("/app/addUser",
             { Authorization: `Bearer ${localStorage.getItem('jwt')}` },
             JSON.stringify({nickName: nickname, fullName: fullname, status: 'ONLINE'})
         );
@@ -419,7 +419,7 @@ async function login(event) {
     async function fetchAndDisplayUserChat() {
         const token = localStorage.getItem('jwt');
 
-        const userChatResponse = await fetch(`/api/v1/chatbox/messages/${nickname}/${selectedUserId}`, {
+        const userChatResponse = await fetch(`/api/v1/chat-box/messages/${nickname}/${selectedUserId}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -444,7 +444,6 @@ async function login(event) {
         const messageContent = messageInput.value.trim();
         if (messageContent && stompClient) {
             const chatMessage = {
-                id:null,
                 senderId: nickname,
                 recipientId: selectedUserId,
                 content: messageInput.value.trim(),
@@ -483,7 +482,7 @@ async function login(event) {
     }
 
     function onLogout() {
-        stompClient.send("/app/user.disconnectUser",
+        stompClient.send("/app/disconnectUser",
             {},
             JSON.stringify({nickName: nickname, fullName: fullname, status: 'OFFLINE'})
         );
