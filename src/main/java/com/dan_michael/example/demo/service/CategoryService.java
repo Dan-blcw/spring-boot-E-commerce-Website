@@ -6,6 +6,7 @@ import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.dto.ob.CategoryDtos;
 import com.dan_michael.example.demo.model.entities.Category;
 import com.dan_michael.example.demo.repositories.CategoryRepository;
+import com.dan_michael.example.demo.repositories.ProductRepository;
 import com.dan_michael.example.demo.repositories.SupRe.BrandRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,8 @@ import java.util.Optional;
 public class CategoryService {
 
     private final CategoryRepository repository;
+
+    private final ProductRepository productRepository;
 
     private final BrandRepository brandRepository;
     public SubCategoryResponse createCategory(CategoryDtos request) {
@@ -147,6 +150,7 @@ public class CategoryService {
         var flag = repository.findById(id);
         if(flag.isPresent()){
             brandRepository.deleteByIdentification(flag.get().getName());
+            productRepository.deleteByCategory(flag.get().getName());
             repository.deleteById(id);
             return ResponseMessageDtos.builder().status(200).message("Delete Category successfully !!").build();
         }else {
