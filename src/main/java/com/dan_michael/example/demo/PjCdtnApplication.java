@@ -1,14 +1,14 @@
 package com.dan_michael.example.demo;
 
 import com.dan_michael.example.demo.model.dto.global.RegisterDtos;
+import com.dan_michael.example.demo.model.dto.ob.CategoryDtos;
 import com.dan_michael.example.demo.model.dto.ob.CommentDto;
 import com.dan_michael.example.demo.model.dto.ob.ProductDtos;
+
 import com.dan_michael.example.demo.model.dto.ob.sub.SubQuantity;
-import com.dan_michael.example.demo.model.entities.Comment;
-import com.dan_michael.example.demo.model.entities.Product;
-import com.dan_michael.example.demo.model.entities.ProductImg;
-import com.dan_michael.example.demo.model.entities.SubEn.*;
+
 import com.dan_michael.example.demo.service.AuthenticationService;
+import com.dan_michael.example.demo.service.CategoryService;
 import com.dan_michael.example.demo.service.ProductService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,13 +16,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.CommandLineRunner;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.web.bind.annotation.GetMapping;
+
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @EnableScheduling
@@ -37,7 +35,8 @@ public class PjCdtnApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(
 			AuthenticationService service,
-			ProductService productService
+			ProductService productService,
+			CategoryService categoryService
 	) {
 		return args -> {
 
@@ -55,7 +54,35 @@ public class PjCdtnApplication {
 					.password("password")
 					.build();
 			System.out.println("User token: " + service.register(user).getJwt());
-//			System.out.println("User token: " + service.register(user).getUser());
+
+
+			List<String> brands0 = new ArrayList<>();
+			brands0.add("BrandA");
+			brands0.add("BrandB");
+			brands0.add("BrandC");
+			brands0.add("BrandD");
+
+			List<String> brands1 = new ArrayList<>();
+			brands1.add("BrandC");
+			brands1.add("BrandD");
+			brands1.add("BrandE");
+			brands1.add("BrandF");
+			CategoryDtos category0 = CategoryDtos.builder()
+					.sku("JDFH6725")
+					.categoryName("Category 2")
+					.brands(brands1)
+					.status(1)
+					.build();
+
+			CategoryDtos category1 = CategoryDtos.builder()
+					.sku("576842548")
+					.categoryName("Sample Category")
+					.brands(brands1)
+					.status(1)
+					.build();
+			categoryService.createCategory(category0);
+			categoryService.createCategory(category1);
+
 			SubQuantity sub0 = SubQuantity.builder()
 					.color("Red")
 					.size("Small")
@@ -97,7 +124,7 @@ public class PjCdtnApplication {
 					.name("Product DTO 1")
 					.description("Description for product DTO 1")
 					.quantityDetail(listsub1)
-					.category("Category 1")
+					.category("Sample Category")
 					.brand("BrandA")
 					.favourite(true)
 					.originalPrice(100.0f)

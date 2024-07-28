@@ -22,10 +22,14 @@ public class AuthenticationController {
 
     private final LogoutService logoutService;
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationDtos> register(
+    public ResponseEntity<?> register(
             @RequestBody RegisterDtos request
     ) {
-        return ResponseEntity.ok(service.register(request));
+        var response = service.register(request);
+        if(response == null){
+            return ResponseEntity.badRequest().body("This email has been registered, please enter another email !!");
+        }
+        return ResponseEntity.ok(response);
     }
     @PostMapping("/login")
     public ResponseEntity<AuthenticationDtos> login(

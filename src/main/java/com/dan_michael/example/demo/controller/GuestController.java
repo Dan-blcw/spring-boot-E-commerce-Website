@@ -111,11 +111,13 @@ public class GuestController {
         return ResponseEntity.ok(response);
     }
 //--------------------------Brands----------------------------------
-    @GetMapping(value = "/list-ob/get-all-brands")
-    public ResponseEntity<?> getAllBrands() {
-        var response = service.getbrands();
-        return ResponseEntity.ok(response);
-    }
+//    @GetMapping(value = "/list-ob/get-all-brands")
+//    public ResponseEntity<?> getAllBrands() {
+//        var response = service.getbrands();
+//        return ResponseEntity.ok(response);
+//    }
+
+
 //
 //@GetMapping("/{filename}")
 //public ResponseEntity<Resource> getImageByFilename(@PathVariable String filename) {

@@ -1,6 +1,7 @@
 package com.dan_michael.example.demo.model.dto.ob;
 
 import com.dan_michael.example.demo.model.entities.ProductImg;
+import com.dan_michael.example.demo.model.entities.SubEn.Brand;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -16,8 +17,9 @@ import java.util.List;
 @Setter
 @Builder
 public class CategoryDtos {
+    private List<String> brands;
     public String categoryName;
-    public String description;
+    public String sku;
     public Integer status;
-    private MultipartFile image;
+//    private MultipartFile image;
 }

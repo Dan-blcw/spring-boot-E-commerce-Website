@@ -11,6 +11,4 @@ public interface QuantityDetailRepository extends JpaRepository<QuantityDetail, 
     @Query("SELECT pi FROM QuantityDetail pi WHERE pi.identification = :identification")
     List<QuantityDetail> findQuantityDetailsByIAndIdentification(@Param("identification") String identification);
 
-//    @Query("SELECT pi FROM QuantityDetail pi WHERE pi.id = :id")
-//    List<QuantityDetail> findQuantityDetailsByID_(@Param("id") Integer id);
 }

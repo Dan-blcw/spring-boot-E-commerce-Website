@@ -1,7 +1,7 @@
 package com.dan_michael.example.demo.service;
 
-import com.dan_michael.example.demo.model.dto.ob.sub.SubBrandsResponse;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubQuantityResponse;
+import com.dan_michael.example.demo.model.entities.Category;
 import com.dan_michael.example.demo.model.entities.SubEn.*;
 import com.dan_michael.example.demo.model.response.ProductImgResponse;
 import com.dan_michael.example.demo.model.response.ProductResponse;
@@ -41,6 +41,7 @@ public class ProductService {
 
     private final QuantityDetailRepository quantityDetailRepository;
 
+//    private final Category quantityDetailRepository;
 
     private final FavouriteProductRepository favouriteProductRepository;
 //-------------------Product-----------------------------------
@@ -710,18 +711,18 @@ public class ProductService {
                 .build();
     }
 
-    public SubBrandsResponse getbrands(){
-        List<String> boxBrands = new ArrayList<>();
-        var boxItem = productRepository.findAll();
-        for (var x_0: boxItem) {
-            if(!boxBrands.contains(x_0.getBrand())){
-                boxBrands.add(x_0.getBrand());
-            }
-
-        }
-        return SubBrandsResponse.builder()
-                .brands(boxBrands)
-                .message("ERROR to get Quantity bcs Color or Size is wrong")
-                .build();
-    }
+//    public SubBrandsResponse getbrands(){
+//        List<String> boxBrands = new ArrayList<>();
+//        var boxItem = productRepository.findAll();
+//        for (var x_0: boxItem) {
+//            if(!boxBrands.contains(x_0.getBrand())){
+//                boxBrands.add(x_0.getBrand());
+//            }
+//
+//        }
+//        return SubBrandsResponse.builder()
+//                .brands(boxBrands)
+//                .message("ERROR to get Quantity bcs Color or Size is wrong")
+//                .build();
+//    }
 }

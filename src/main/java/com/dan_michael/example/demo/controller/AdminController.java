@@ -1,6 +1,8 @@
 package com.dan_michael.example.demo.controller;
 
 import com.dan_michael.example.demo.model.dto.ob.PaymentMethodsDtos;
+import com.dan_michael.example.demo.model.dto.ob.sub.SubBrandsResponse;
+import com.dan_michael.example.demo.model.dto.ob.sub.SubCategoryResponse;
 import com.dan_michael.example.demo.model.entities.PaymentMethods;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.dto.ob.CategoryDtos;
@@ -82,23 +84,39 @@ public class AdminController {
         }
     }
 
-//---------------------------Category---------------------------------------
+//---------------------------Category And Brand---------------------------------------
+    @GetMapping(value = "/list-brands")
+    public SubBrandsResponse findBrandsBy(
+            @RequestParam Integer category_id
+    ){
+        var response = categoryService.findBrandByCategoryID(category_id);
+        if(response == null){
+            return SubBrandsResponse.builder()
+                    .brands(response)
+                    .message("Fetch data failed")
+                    .build();
+        }
+        return SubBrandsResponse.builder()
+                .brands(response)
+                .message("Data fetched successfully")
+                .build();
+    }
     @GetMapping(value = "/list-category")
-    public List<Category> listCategory(@ModelAttribute CategoryDtos request){
+    public List<SubCategoryResponse> listCategory(@ModelAttribute CategoryDtos request){
         return categoryService.listCategory();
     }
     @GetMapping(value = "/detail-category/{id}")
-    public Optional<Category> detailCategory(
+    public SubCategoryResponse detailCategory(
             @PathVariable Integer id
     ){
         var detailCategory = categoryService.detailCategory(id);
         return detailCategory;
     }
-    @PostMapping(value = "/add-category",consumes = { "multipart/form-data" })
+    @PostMapping(value = "/add-category")
     public ResponseEntity<?> createCategory(
-            @ModelAttribute CategoryDtos request
+            @RequestBody CategoryDtos request
     ) {
-        Category response = categoryService.createCategory(request);
+        SubCategoryResponse response = categoryService.createCategory(request);
         if(response != null){
             return ResponseEntity.ok(response);
         }else {
@@ -106,11 +124,11 @@ public class AdminController {
         }
     }
 
-    @PutMapping(value = "/update-category",consumes = { "multipart/form-data" })
+    @PutMapping(value = "/update-category")
     public ResponseEntity<?> updateCategory(
-            @ModelAttribute CategoryDtos request
+            @RequestBody CategoryDtos request
     ) {
-        Category response = categoryService.updateCategory(request);
+        SubCategoryResponse response = categoryService.updateCategory(request);
         if(response != null){
             return ResponseEntity.ok(response);
         }else {

@@ -29,6 +29,10 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationDtos register(RegisterDtos request) {
+        var user_flag = repository.findByEmail(request.getEmail());
+        if(user_flag.isPresent()){
+            return null;
+        }
         var user = User.builder()
                 .name(request.getName())
                 .username(request.getName())
