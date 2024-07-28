@@ -43,13 +43,14 @@ public class SecurityConfiguration {
             "/index.html",
             "/app/**",
             "/user/**",
-            "/addUser",
+            "/users",
             "/ws/**",
             "/messages/**",
             "user.png",
             "/api/v1/images/**",
             "/media/images/**",
-            "api/v1/rest"
+            "api/v1/rest",
+            "chat-bot"
     };
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;

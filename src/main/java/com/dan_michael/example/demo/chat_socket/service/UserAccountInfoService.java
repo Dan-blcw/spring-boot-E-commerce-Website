@@ -60,4 +60,9 @@ public class UserAccountInfoService {
     public List<UserAccountInfo> findConnectedUsers() {
         return repository.findAllByStatus(Status.ONLINE);
     }
+
+    public UserAccountInfo findChatBot() {
+        return repository.findUserTestByName("Chat Bot Support");
+    }
+
 }

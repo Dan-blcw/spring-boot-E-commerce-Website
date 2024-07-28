@@ -19,7 +19,6 @@ public class ChatbotService {
     private final QuestionAnswerRepository questionAnswerRepository;
 
     public String handleInput(RequestMessageChatBotDtos message) {
-        System.out.println(removeDiacritics(message.getMessage().toLowerCase()));
         QuestionAnswer qa = questionAnswerRepository.findByQuestion(removeDiacritics(message.getMessage().toLowerCase()));
         System.out.println(qa);
         if (qa != null) {
@@ -35,7 +34,7 @@ public class ChatbotService {
     }
     
     public QuestionAnswer updateQuestionAnswer(String question, String newAnswer) {
-        QuestionAnswer qa = questionAnswerRepository.findByQuestion(question.toLowerCase());
+        QuestionAnswer qa = questionAnswerRepository.findByQuestion(removeDiacritics(question.toLowerCase()));
         if(qa != null){
             qa.setAnswer(newAnswer);
             questionAnswerRepository.save(qa);
@@ -43,11 +42,13 @@ public class ChatbotService {
         return qa;
     }
     
-    public void deleteQuestionAnswer(String question) {
-        QuestionAnswer qa = questionAnswerRepository.findByQuestion(question.toLowerCase());
+    public Boolean deleteQuestionAnswer(String question) {
+        QuestionAnswer qa = questionAnswerRepository.findByQuestion(removeDiacritics(question.toLowerCase()));
         if(qa != null){
             questionAnswerRepository.delete(qa);
+            return true;
         }
+        return false;
     }
     
     public List<String> getAllQuestions() {

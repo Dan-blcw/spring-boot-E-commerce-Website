@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>body {
+    <style>
+
+    body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         margin: 0;
         padding: 0;
@@ -266,6 +268,7 @@
     const chatArea = document.querySelector('#chat-messages');
     const logout = document.querySelector('#logout');
 
+    let CHAT_BOT_NAME = "Chat Bot Support";
     let stompClient = null;
     let nickname = null;
     let fullname = null;
@@ -323,6 +326,7 @@ async function login(event) {
     }
 
     function onConnected() {
+        stompClient.subscribe(`/user/${CHAT_BOT_NAME}/queue/messages`, onMessageReceived); //check
         stompClient.subscribe(`/user/${nickname}/queue/messages`, onMessageReceived); //check
         stompClient.subscribe(`/user/queue/public`, onMessageReceived); //check
 
@@ -358,6 +362,7 @@ async function login(event) {
             }
         });
     }
+
 
     function appendUserElement(user, connectedUsersList) {
         const listItem = document.createElement('li');
@@ -440,7 +445,7 @@ async function login(event) {
     }
 
 
-    function sendMessage(event) {
+    async function sendMessage(event) {
         const messageContent = messageInput.value.trim();
         if (messageContent && stompClient) {
             const chatMessage = {
@@ -450,6 +455,7 @@ async function login(event) {
                 timestamp: new Date()
             };
             stompClient.send("/app/chat", {}, JSON.stringify(chatMessage));
+
             displayMessage(nickname, messageInput.value.trim());
             messageInput.value = '';
         }
@@ -457,6 +463,10 @@ async function login(event) {
         event.preventDefault();
     }
 
+    // async function onMessageReceivedChatbot(payload) {
+    //     await findAndDisplayConnectedUsers();
+    //     console.log('Message received', payload);
+    // }
 
     async function onMessageReceived(payload) {
         await findAndDisplayConnectedUsers();
