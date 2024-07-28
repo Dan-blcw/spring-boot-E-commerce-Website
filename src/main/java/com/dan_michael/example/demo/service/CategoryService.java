@@ -95,29 +95,29 @@ public class CategoryService {
 
     public List<SubCategoryResponse> listCategory() {
         List<SubCategoryResponse> list = new ArrayList<>();
-        List<String> check = new ArrayList<>();
         var categoryList = repository.findAll();
         for (var x:categoryList) {
             if(x.getStatus() == 1){
+                List<String> check = new ArrayList<>();
                 var brands = brandRepository.findBrandsByIAndIdentification(x.getName());
-                x.setBrand(brands);
+                System.out.println(brands);
+//                x.setBrand(brands);
                 for (var y: brands) {
                     if(!check.contains(y.getBrand())){
                         check.add(y.getBrand());
                     }
                 }
-
+                list.add(SubCategoryResponse.builder()
+                        .id(x.getId())
+                        .sku(x.getSku())
+                        .name(x.getName())
+                        .brands(check)
+                        .date(x.getCreatedDate())
+                        .status(x.getStatus())
+                        .build());
             }else{
                 categoryList.remove(x);
             }
-            list.add(SubCategoryResponse.builder()
-                    .id(x.getId())
-                    .sku(x.getSku())
-                    .name(x.getName())
-                    .brands(check)
-                    .date(x.getCreatedDate())
-                    .status(x.getStatus())
-                    .build());
         }
         return list;
     }

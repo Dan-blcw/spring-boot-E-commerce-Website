@@ -110,35 +110,6 @@ public class GuestController {
         var response = service.getQuantityByColorAndSize(product_id,color,size);
         return ResponseEntity.ok(response);
     }
-//--------------------------Brands----------------------------------
-//    @GetMapping(value = "/list-ob/get-all-brands")
-//    public ResponseEntity<?> getAllBrands() {
-//        var response = service.getbrands();
-//        return ResponseEntity.ok(response);
-//    }
-
-
-//
-//@GetMapping("/{filename}")
-//public ResponseEntity<Resource> getImageByFilename(@PathVariable String filename) {
-//    Optional<ProductImg> image = repository.findProductImgByimgurl(filename);
-//    if (image.isPresent()) {
-//        try {
-//            Path file = Paths.get("media/images").resolve(filename);
-//            Resource resource = new UrlResource(file.toUri());
-//            if (resource.exists() || resource.isReadable()) {
-//                return ResponseEntity.ok()
-//                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
-//                        .body(resource);
-//            } else {
-//                throw new RuntimeException("Could not read the file!");
-//            }
-//        } catch (Exception e) {
-//            throw new RuntimeException("Could not read the file!", e);
-//        }
-//    }
-//    return ResponseEntity.notFound().build();
-//}
     @GetMapping("/media/images/{filename}")
     public ResponseEntity<ByteArrayResource> getImageByFilename(@PathVariable String filename) throws IOException {
         Optional<ProductImg> image = repository.findProductImgByimageName(filename);

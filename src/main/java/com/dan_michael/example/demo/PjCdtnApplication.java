@@ -77,7 +77,7 @@ public class PjCdtnApplication {
 			CategoryDtos category1 = CategoryDtos.builder()
 					.sku("576842548")
 					.categoryName("Sample Category")
-					.brands(brands1)
+					.brands(brands0)
 					.status(1)
 					.build();
 			categoryService.createCategory(category0);
