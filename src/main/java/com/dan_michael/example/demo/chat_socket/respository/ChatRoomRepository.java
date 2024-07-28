@@ -1,6 +1,6 @@
-package com.dan_michael.example.demo.chat.respository;
+package com.dan_michael.example.demo.chat_socket.respository;
 
-import com.dan_michael.example.demo.chat.entities.ChatRoom;
+import com.dan_michael.example.demo.chat_socket.entities.ChatRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

@@ -1,7 +1,7 @@
-package com.dan_michael.example.demo.chat.respository;
+package com.dan_michael.example.demo.chat_socket.respository;
 
-import com.dan_michael.example.demo.chat.entities.Status;
-import com.dan_michael.example.demo.chat.entities.UserAccountInfo;
+import com.dan_michael.example.demo.chat_socket.entities.Status;
+import com.dan_michael.example.demo.chat_socket.entities.UserAccountInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

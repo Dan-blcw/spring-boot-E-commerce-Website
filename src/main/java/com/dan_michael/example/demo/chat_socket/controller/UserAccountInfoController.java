@@ -1,7 +1,7 @@
-package com.dan_michael.example.demo.chat.controller;
+package com.dan_michael.example.demo.chat_socket.controller;
 
-import com.dan_michael.example.demo.chat.service.UserAccountInfoService;
-import com.dan_michael.example.demo.chat.entities.UserAccountInfo;
+import com.dan_michael.example.demo.chat_socket.service.UserAccountInfoService;
+import com.dan_michael.example.demo.chat_socket.entities.UserAccountInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;

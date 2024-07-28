@@ -1,4 +1,4 @@
-package com.dan_michael.example.demo.chat;
+package com.dan_michael.example.demo.chat_socket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Configuration;

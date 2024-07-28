@@ -2,17 +2,22 @@ package com.dan_michael.example.demo.controller;
 
 
 import com.dan_michael.example.demo.model.dto.global.PaginationDto;
-import com.dan_michael.example.demo.model.dto.ob.ProductDtos;
 import com.dan_michael.example.demo.model.dto.ob.ProductListDtos;
-import com.dan_michael.example.demo.model.dto.ob.sub.SubQuantityResponse;
+import com.dan_michael.example.demo.model.entities.ProductImg;
 import com.dan_michael.example.demo.model.response.ProductResponse;
+import com.dan_michael.example.demo.repositories.ProductImgRepository;
 import com.dan_michael.example.demo.service.ProductService;
 import com.dan_michael.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/global")
@@ -20,6 +25,8 @@ import java.util.List;
 public class GuestController {
 
     private final ProductService service;
+
+    private final ProductImgRepository repository;
 
     private final UserService Change_service;
 
@@ -109,5 +116,38 @@ public class GuestController {
         var response = service.getbrands();
         return ResponseEntity.ok(response);
     }
-
+//
+//@GetMapping("/{filename}")
+//public ResponseEntity<Resource> getImageByFilename(@PathVariable String filename) {
+//    Optional<ProductImg> image = repository.findProductImgByimgurl(filename);
+//    if (image.isPresent()) {
+//        try {
+//            Path file = Paths.get("media/images").resolve(filename);
+//            Resource resource = new UrlResource(file.toUri());
+//            if (resource.exists() || resource.isReadable()) {
+//                return ResponseEntity.ok()
+//                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
+//                        .body(resource);
+//            } else {
+//                throw new RuntimeException("Could not read the file!");
+//            }
+//        } catch (Exception e) {
+//            throw new RuntimeException("Could not read the file!", e);
+//        }
+//    }
+//    return ResponseEntity.notFound().build();
+//}
+    @GetMapping("/media/images/{filename}")
+    public ResponseEntity<ByteArrayResource> getImageByFilename(@PathVariable String filename) throws IOException {
+        Optional<ProductImg> image = repository.findProductImgByimageName(filename);
+        if (image.isPresent()) {
+            byte[] imageBytes = image.get().getImage();
+            ByteArrayResource resource = new ByteArrayResource(imageBytes);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(resource);
+        }
+        return ResponseEntity.notFound().build();
+    }
 }

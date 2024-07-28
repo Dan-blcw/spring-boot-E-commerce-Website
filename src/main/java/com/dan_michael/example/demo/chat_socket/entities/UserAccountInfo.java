@@ -1,4 +1,4 @@
-package com.dan_michael.example.demo.chat.entities;
+package com.dan_michael.example.demo.chat_socket.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;

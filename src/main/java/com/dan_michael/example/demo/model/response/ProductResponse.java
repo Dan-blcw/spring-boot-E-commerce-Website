@@ -17,10 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 public class ProductResponse {
     private Integer id;
-    private List<ProductImg> images;
+    private List<ProductImgResponse> images;
     private List<String> colours;
     private List<String> sizes;
-    private String brands;
+    private String brand;
     private String name;
     private String description;
 

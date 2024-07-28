@@ -3,6 +3,7 @@ package com.dan_michael.example.demo.service;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubBrandsResponse;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubQuantityResponse;
 import com.dan_michael.example.demo.model.entities.SubEn.*;
+import com.dan_michael.example.demo.model.response.ProductImgResponse;
 import com.dan_michael.example.demo.model.response.ProductResponse;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.dto.ob.CommentDto;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.*;
@@ -65,7 +67,7 @@ public class ProductService {
         var finalPrice = request.getOriginalPrice() - request.getOriginalPrice()* (request.getSaleDiscountPercent()/100);
         product_flag.setFinalPrice(finalPrice);
         product_flag.setSaleStatus(request.getSaleStatus());
-        product_flag.setBrand(request.getBrands());
+        product_flag.setBrand(request.getBrand());
         product_flag.setNewStatus(true);
         product_flag.setFavourite(null);
 
@@ -93,7 +95,9 @@ public class ProductService {
             }
         }
 
-        List<ProductImg> productImagesBox = new ArrayList<>();
+
+        List<ProductImgResponse> productImagesBox = new ArrayList<>();
+        List<ProductImg> productImagesBox_0 = new ArrayList<>();
         if (request.getImages() != null && request.getImages().size() > 0) {
             for (MultipartFile imageFile : request.getImages()) {
                 ProductImg productImg = new ProductImg();
@@ -104,14 +108,26 @@ public class ProductService {
                     // Handle exception
                 }
                 productImg.setIdentification(product_flag.getName()); // Set the product reference
-                productImagesBox.add(productImg);
+                productImg.setImageName(imageFile.getOriginalFilename());
+                productImg.setImg_url(ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path("/api/v1/global/media/images/")
+                        .path(imageFile.getOriginalFilename())
+                        .toUriString());
                 productImgRepository.save(productImg);
+                ProductImgResponse response = ProductImgResponse.builder()
+                        .id(productImg.getId())
+                        .img_url(productImg.getImg_url())
+                        .imageName(productImg.getImageName())
+                        .identification(productImg.getIdentification())
+                        .build();
+                productImagesBox.add(response);
+                productImagesBox_0.add(productImg);
             }
         }
 
         product_flag.setQuantityDetails(Box);
         product_flag.setTotalQuantity(totalQuantity);
-        product_flag.setImages(productImagesBox);
+        product_flag.setImages(productImagesBox_0);
 
         productRepository.save(product_flag);
         var productResponse = ProductResponse.builder()
@@ -119,7 +135,7 @@ public class ProductService {
                 .images(productImagesBox)
                 .colours(colors)
                 .sizes(sizes)
-                .brands(request.getBrands())
+                .brand(request.getBrand())
                 .name(product_flag.getName())
                 .description(product_flag.getDescription())
                 .quantity(product_flag.getQuantityDetails())
@@ -142,34 +158,6 @@ public class ProductService {
         return productResponse;
     }
 
-//    public Product test(Test request) {
-//        var ob = productRepository.findByName(request.getName());
-//
-//        if(ob.isPresent()){
-//            return null;
-//        }
-//        var product_flag = new Product();
-//        product_flag.setName(request.getName());
-//        product_flag.setNewStatus(true);
-//        product_flag.setCreateDate(new Date());
-//        List<QuantityDetail> Box = new ArrayList<>();
-//        if (request.getQuantityDetails() != null && request.getQuantityDetails().size() > 0) {
-//            for (var x : request.getQuantityDetails()) {
-//                QuantityDetail Item = new QuantityDetail();
-//                Item.setColor(x.getColor());
-//                Item.setSize(x.getSize());
-//                Item.setQuantity(x.getQuantity());
-//                Item.setIdentification(product_flag.getName());
-//                Box.add(Item);
-//                quantityDetailRepository.save(Item);
-//            }
-//        }
-//        product_flag.setBrand(request.getBrands());
-//        product_flag.setQuantityDetails(Box);
-//        productRepository.save(product_flag);
-//        return product_flag;
-//    }
-
     public ProductResponse updateProduct(ProductDtos request) {
         var totalQuantity = 0;
         List<String> sizes = new ArrayList<>();
@@ -181,7 +169,7 @@ public class ProductService {
             product_flag.setDescription(request.getDescription());
 
             product_flag.setCategory(request.getCategory());
-            product_flag.setBrand(request.getBrands());
+            product_flag.setBrand(request.getBrand());
             product_flag.setNRating(0);
 
             product_flag.setOriginalPrice(request.getOriginalPrice());
@@ -215,7 +203,8 @@ public class ProductService {
                 quantityDetailRepository.save(Item);
             }
         }
-        List<ProductImg> productImagesBox = new ArrayList<>();
+        List<ProductImgResponse> productImagesBox = new ArrayList<>();
+        List<ProductImg> productImagesBox_0 = new ArrayList<>();
         if (request.getImages() != null && request.getImages().size() > 0) {
             for (MultipartFile imageFile : request.getImages()) {
                 ProductImg productImg = new ProductImg();
@@ -226,12 +215,25 @@ public class ProductService {
                     // Handle exception
                 }
                 productImg.setIdentification(product_flag.getName()); // Set the product reference
-                productImagesBox.add(productImg);
+                productImg.setImageName(imageFile.getOriginalFilename());
+                productImg.setImg_url(ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path("/api/v1/global/media/images/")
+                        .path(imageFile.getOriginalFilename())
+                        .toUriString());
                 productImgRepository.save(productImg);
+                ProductImgResponse response = ProductImgResponse.builder()
+                        .id(productImg.getId())
+                        .img_url(productImg.getImg_url())
+                        .imageName(productImg.getImageName())
+                        .identification(productImg.getIdentification())
+                        .build();
+                productImagesBox.add(response);
+                productImagesBox_0.add(productImg);
             }
         }
 
-        product_flag.setImages(productImagesBox);
+
+        product_flag.setImages(productImagesBox_0);
         product_flag.setTotalQuantity(totalQuantity);
         product_flag.setQuantityDetails(Box);
         List<FavouriteProduct> favouriteList = favouriteProductRepository.findFavouriteByIAndIdentification(product_flag.getName());
@@ -242,7 +244,7 @@ public class ProductService {
         var productResponse = ProductResponse.builder()
                 .id(product_flag.getId())
                 .images(productImagesBox)
-                .brands(request.getBrands())
+                .brand(request.getBrand())
                 .sizes(sizes)
                 .colours(colors)
                 .totalQuantity(totalQuantity)
@@ -283,6 +285,7 @@ public class ProductService {
             List<QuantityDetail> quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(x.getName());
             List<FavouriteProduct> favouriteList = favouriteProductRepository.findFavouriteByIAndIdentification(x.getName());
 
+            List<ProductImgResponse> productImagesBox = new ArrayList<>();
             List<Integer> favouriteListRe = new ArrayList<>();
             List<String> colorsListRe = new ArrayList<>();
             List<String> sizesListRe = new ArrayList<>();
@@ -301,11 +304,21 @@ public class ProductService {
                     sizesListRe.add(x_0.getSize());
                 }
             }
+            for (var x_0: imgs) {
+                ProductImgResponse response = ProductImgResponse.builder()
+                        .id(x_0.getId())
+                        .img_url(x_0.getImg_url())
+                        .imageName(x_0.getImageName())
+                        .identification(x_0.getIdentification())
+                        .build();
+                productImagesBox.add(response);
+            }
+
             var y = ProductResponse.builder()
                     .id(x.getId())
-                    .images(imgs)
+                    .images(productImagesBox)
                     .name(x.getName())
-                    .brands(x.getBrand())
+                    .brand(x.getBrand())
                     .sizes(sizesListRe)
                     .colours(colorsListRe)
                     .totalQuantity(x.getTotalQuantity())
@@ -336,6 +349,8 @@ public class ProductService {
         List<Comment> commentsList = commentRepository.findCommentByIAndIdentification_pro(boxItem.get().getName());
         List<QuantityDetail> quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(boxItem.get().getName());
         List<FavouriteProduct> favouriteList = favouriteProductRepository.findFavouriteByIAndIdentification(boxItem.get().getName());
+
+        List<ProductImgResponse> productImagesBox = new ArrayList<>();
         List<String> colorsListRe = new ArrayList<>();
         List<String> sizesListRe = new ArrayList<>();
         for (var x_0: quantityDetailsList) {
@@ -354,14 +369,22 @@ public class ProductService {
         }
         rating = rating/nRating;
         for (var x_0: favouriteList) { favouriteListRe.add(x_0.getUser_id());}
-
+        for (var x_0: imgs) {
+            ProductImgResponse response = ProductImgResponse.builder()
+                    .id(x_0.getId())
+                    .img_url(x_0.getImg_url())
+                    .imageName(x_0.getImageName())
+                    .identification(x_0.getIdentification())
+                    .build();
+            productImagesBox.add(response);
+        }
 
         var productResponse = ProductResponse.builder()
                 .id(boxItem.get().getId())
-                .images(imgs)
+                .images(productImagesBox)
                 .sizes(sizesListRe)
                 .colours(colorsListRe)
-                .brands(boxItem.get().getBrand())
+                .brand(boxItem.get().getBrand())
 
                 .name(boxItem.get().getName())
                 .description(boxItem.get().getDescription())
@@ -482,6 +505,8 @@ public class ProductService {
                 List<ProductImg> imgs = productImgRepository.findProductImgByProductId(x.getName());
                 List<Comment> commentsList = commentRepository.findCommentByIAndIdentification_pro(x.getName());
                 List<QuantityDetail> quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(x.getName());
+
+                List<ProductImgResponse> productImagesBox = new ArrayList<>();
                 List<String> colorsListRe = new ArrayList<>();
                 List<String> sizesListRe = new ArrayList<>();
                 for (var x_0: quantityDetailsList) {
@@ -498,13 +523,21 @@ public class ProductService {
                     rating += x_0.getRating();
                 }
                 rating = rating/nRating;
-
+                for (var x_0: imgs) {
+                    ProductImgResponse response = ProductImgResponse.builder()
+                            .id(x_0.getId())
+                            .img_url(x_0.getImg_url())
+                            .imageName(x_0.getImageName())
+                            .identification(x_0.getIdentification())
+                            .build();
+                    productImagesBox.add(response);
+                }
                 var productResponse = ProductResponse.builder()
                         .id(x.getId())
-                        .images(imgs)
+                        .images(productImagesBox)
                         .sizes(sizesListRe)
                         .colours(colorsListRe)
-                        .brands(x.getBrand())
+                        .brand(x.getBrand())
                         .name(x.getName())
                         .description(x.getDescription())
                         .quantity(quantityDetailsList)
@@ -595,6 +628,7 @@ public class ProductService {
 
             List<FavouriteProduct> favouriteList = favouriteProductRepository.findFavouriteByIAndIdentification(x.getName());
 
+            List<ProductImgResponse> productImagesBox = new ArrayList<>();
             List<Integer> favouriteListRe = new ArrayList<>();
             List<String> colorsListRe = new ArrayList<>();
             List<String> sizeListRe = new ArrayList<>();
@@ -616,12 +650,20 @@ public class ProductService {
             for (var x_0 : favouriteList) {
                 favouriteListRe.add(x_0.getUser_id());
             }
-
+            for (var x_0: imgs) {
+                ProductImgResponse response = ProductImgResponse.builder()
+                        .id(x_0.getId())
+                        .img_url(x_0.getImg_url())
+                        .imageName(x_0.getImageName())
+                        .identification(x_0.getIdentification())
+                        .build();
+                productImagesBox.add(response);
+            }
 
             var y = ProductResponse.builder()
                     .id(x.getId())
-                    .images(imgs)
-                    .brands(x.getBrand())
+                    .images(productImagesBox)
+                    .brand(x.getBrand())
                     .sizes(sizeListRe)
                     .colours(colorsListRe)
                     .name(x.getName())

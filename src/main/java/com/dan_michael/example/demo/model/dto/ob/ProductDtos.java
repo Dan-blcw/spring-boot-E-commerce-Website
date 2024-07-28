@@ -24,12 +24,7 @@ public class ProductDtos {
     private List<SubQuantity> quantityDetail;
     private String category;
 
-//    @JsonProperty("colours")
-//    private List<String> colours;
-//    @JsonProperty("sizes")
-//    private List<String> sizes;
-//    @JsonProperty("brands")
-    private String brands;
+    private String brand;
 
     private Boolean favourite;
 

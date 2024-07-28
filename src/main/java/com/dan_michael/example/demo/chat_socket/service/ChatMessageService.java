@@ -1,7 +1,7 @@
-package com.dan_michael.example.demo.chat.service;
+package com.dan_michael.example.demo.chat_socket.service;
 
-import com.dan_michael.example.demo.chat.entities.ChatMessage;
-import com.dan_michael.example.demo.chat.respository.ChatMessageRepository;
+import com.dan_michael.example.demo.chat_socket.entities.ChatMessage;
+import com.dan_michael.example.demo.chat_socket.respository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

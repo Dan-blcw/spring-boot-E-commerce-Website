@@ -1,9 +1,9 @@
-package com.dan_michael.example.demo.chat.service;
+package com.dan_michael.example.demo.chat_socket.service;
 
 
-import com.dan_michael.example.demo.chat.entities.Status;
-import com.dan_michael.example.demo.chat.entities.UserAccountInfo;
-import com.dan_michael.example.demo.chat.respository.UserAccountInfoRepository;
+import com.dan_michael.example.demo.chat_socket.entities.Status;
+import com.dan_michael.example.demo.chat_socket.entities.UserAccountInfo;
+import com.dan_michael.example.demo.chat_socket.respository.UserAccountInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -30,12 +30,6 @@ public class Product {
     @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<ProductImg> images;
-//    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
-//    @JsonManagedReference
-//    private List<Colors> colours;
-//    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
-//    @JsonManagedReference
-//    private List<Sizes> sizes;
     @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<QuantityDetail> quantityDetails;

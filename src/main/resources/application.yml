@@ -54,3 +54,8 @@ payment:
     command: pay
     orderType: other
 
+chatbot:
+  secretkey: sk-None-bA9JWfwbSE2gRZFDz3aIT3BlbkFJBVKu04LpwDw4fvMisbGN
+  secretkey_0: sk-None-TIAZ4qcVfJ4stlNb74YzT3BlbkFJL8P9wqA9bbp9V0Em6ynI
+  secretkey_1: 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
+  secretkey_2: sk-proj-ZqNUKpLmDcBYAU4AojvzT3BlbkFJMBJ737FBkdBlTTZCwGwd
