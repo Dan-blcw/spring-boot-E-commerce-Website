@@ -49,8 +49,8 @@ public class PaymentMethodsService {
             category_flag.setDescription(request.getDescription());
             category_flag.setImage(request.getImage());
             category_flag.setStatus(request.getStatus());
+            repository.save(category_flag);
         }
-        repository.save(category_flag);
         return category_flag;
     }
 

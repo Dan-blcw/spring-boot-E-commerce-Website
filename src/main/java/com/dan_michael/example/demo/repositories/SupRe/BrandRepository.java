@@ -11,6 +11,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface BrandRepository extends JpaRepository<Brand, Integer> {
+    @Query("SELECT pi FROM Brand pi WHERE pi.brand = :brand")
+    Brand findBrandsByBrand(@Param("brand") String brand);
+
     @Query("SELECT pi FROM Brand pi WHERE pi.identification = :identification")
     List<Brand> findBrandsByIAndIdentification(@Param("identification") String identification);
 

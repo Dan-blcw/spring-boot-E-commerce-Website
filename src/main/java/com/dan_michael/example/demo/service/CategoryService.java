@@ -72,13 +72,16 @@ public class CategoryService {
         List<Brand> listBrands = new ArrayList<>();
         List<String> check = new ArrayList<>();
         if(category_flag != null){
+            brandRepository.deleteByIdentification(category_flag.getName());
             for (var x:request.getBrands()) {
                 if(!check.contains(x)){
                     check.add(x);
-                    listBrands.add(Brand.builder()
+                    var save = Brand.builder()
                             .brand(x)
                             .identification(request.getCategoryName())
-                            .build());
+                            .build();
+                    listBrands.add(save);
+                    brandRepository.save(save);
                 }
             }
             category_flag.setBrand(listBrands);
