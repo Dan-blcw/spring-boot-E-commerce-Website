@@ -113,9 +113,12 @@ public class GuestController {
         var response = service.getQuantityByColorAndSize(product_id,color,size);
         return ResponseEntity.ok(response);
     }
-    @GetMapping("/media/images/{filename}")
-    public ResponseEntity<ByteArrayResource> getImageByFilename(@PathVariable String filename) throws IOException {
-        var image = repository.findProductImgByimageName(filename);
+    @GetMapping("/media/images/{productname}/{filename}")
+    public ResponseEntity<ByteArrayResource> getImageByFilename(
+            @PathVariable String productname,
+            @PathVariable String filename
+    ) throws IOException {
+        var image = repository.findProductImgByimageName(filename,productname);
         if (image.isPresent()) {
             byte[] imageBytes = image.get().getImage();
             ByteArrayResource resource = new ByteArrayResource(imageBytes);

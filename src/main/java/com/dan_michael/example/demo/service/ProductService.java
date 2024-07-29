@@ -112,6 +112,7 @@ public class ProductService {
                 productImg.setImageName(imageFile.getOriginalFilename());
                 productImg.setImg_url(ServletUriComponentsBuilder.fromCurrentContextPath()
                         .path("/api/v1/global/media/images/")
+                        .path(product_flag.getName()+"/")
                         .path(imageFile.getOriginalFilename())
                         .toUriString());
                 productImgRepository.save(productImg);
@@ -219,6 +220,7 @@ public class ProductService {
                 productImg.setImageName(imageFile.getOriginalFilename());
                 productImg.setImg_url(ServletUriComponentsBuilder.fromCurrentContextPath()
                         .path("/api/v1/global/media/images/")
+                        .path(product_flag.getName()+"/")
                         .path(imageFile.getOriginalFilename())
                         .toUriString());
                 productImgRepository.save(productImg);
@@ -292,10 +294,14 @@ public class ProductService {
             List<String> sizesListRe = new ArrayList<>();
             Float rating = 0.0f;
             int nRating = commentsList.size();
-            for (var x_0: commentsList) {
-                rating += x_0.getRating();
+            if(nRating != 0.0f){
+                for (var x_0: commentsList) {
+                    rating += x_0.getRating();
+                }
+                rating = rating/nRating;
+            }else {
+                rating = 5.0f;
             }
-            rating = rating/nRating;
             for (var x_0: favouriteList) { favouriteListRe.add(x_0.getUser_id());}
             for (var x_0: quantityDetailsList) {
                 if(!colorsListRe.contains(x_0.getColor())){
@@ -314,7 +320,6 @@ public class ProductService {
                         .build();
                 productImagesBox.add(response);
             }
-
             var y = ProductResponse.builder()
                     .id(x.getId())
                     .images(productImagesBox)
@@ -365,10 +370,14 @@ public class ProductService {
         List<Integer> favouriteListRe = new ArrayList<>();
         Float rating = 0.0f;
         int nRating = commentsList.size();
-        for (var x_0: commentsList) {
-            rating += x_0.getRating();
+        if(nRating != 0.0f){
+            for (var x_0: commentsList) {
+                rating += x_0.getRating();
+            }
+            rating = rating/nRating;
+        }else {
+            rating = 5.0f;
         }
-        rating = rating/nRating;
         for (var x_0: favouriteList) { favouriteListRe.add(x_0.getUser_id());}
         for (var x_0: imgs) {
             ProductImgResponse response = ProductImgResponse.builder()

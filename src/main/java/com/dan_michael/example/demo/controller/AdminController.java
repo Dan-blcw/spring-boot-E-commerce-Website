@@ -49,17 +49,17 @@ public class AdminController {
         }
     }
 
-    @PostMapping(value = "/add-product-test-list")
-    public ResponseEntity<?> createProductTest(
-            @RequestBody ProductDtos request
-    ) {
-        var response = service.createProduct(request);
-        if(response != null){
-            return ResponseEntity.ok(response);
-        }else {
-            return ResponseEntity.badRequest().body(ResponseMessageDtos.builder().message("This Product already exist").status(400).build());
-        }
-    }
+//    @PostMapping(value = "/add-product-test-list")
+//    public ResponseEntity<?> createProductTest(
+//            @RequestBody ProductDtos request
+//    ) {
+//        var response = service.createProduct(request);
+//        if(response != null){
+//            return ResponseEntity.ok(response);
+//        }else {
+//            return ResponseEntity.badRequest().body(ResponseMessageDtos.builder().message("This Product already exist").status(400).build());
+//        }
+//    }
 //socket, chatbot, devops, livestream, Mã QR,
     @PutMapping(value = "/update-product",consumes = { "multipart/form-data" })
     public ResponseEntity<?> updateProduct(
