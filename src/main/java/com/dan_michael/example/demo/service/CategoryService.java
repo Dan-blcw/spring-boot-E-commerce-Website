@@ -84,6 +84,7 @@ public class CategoryService {
             category_flag.setBrand(listBrands);
             category_flag.setSku(request.getSku());
             category_flag.setStatus(request.getStatus());
+
         }
         repository.save(category_flag);
         return SubCategoryResponse.builder()
@@ -99,27 +100,24 @@ public class CategoryService {
     public List<SubCategoryResponse> listCategory() {
         List<SubCategoryResponse> list = new ArrayList<>();
         List<Category> categoryList = repository.findAll();
+        System.out.println(categoryList);
         for (int i = 0; i < categoryList.size(); i++) {
             var x = categoryList.get(i);
-            if(x.getStatus() == 1){
-                List<String> check = new ArrayList<>();
-                var brands = brandRepository.findBrandsByIAndIdentification(x.getName());
-                for (var y: brands) {
-                    if(!check.contains(y.getBrand())){
-                        check.add(y.getBrand());
-                    }
+            List<String> check = new ArrayList<>();
+            var brands = brandRepository.findBrandsByIAndIdentification(x.getName());
+            for (var y: brands) {
+                if(!check.contains(y.getBrand())){
+                    check.add(y.getBrand());
                 }
-                list.add(SubCategoryResponse.builder()
-                        .id(x.getId())
-                        .sku(x.getSku())
-                        .name(x.getName())
-                        .brands(check)
-                        .date(x.getCreatedDate())
-                        .status(x.getStatus())
-                        .build());
-            }else{
-                categoryList.remove(x);
             }
+            list.add(SubCategoryResponse.builder()
+                    .id(x.getId())
+                    .sku(x.getSku())
+                    .name(x.getName())
+                    .brands(check)
+                    .date(x.getCreatedDate())
+                    .status(x.getStatus())
+                    .build());
         }
         return list;
     }
