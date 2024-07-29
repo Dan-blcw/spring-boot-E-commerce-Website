@@ -9,7 +9,9 @@ import com.dan_michael.example.demo.repositories.CategoryRepository;
 import com.dan_michael.example.demo.repositories.PaymentMethodsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,20 +24,27 @@ public class PaymentMethodsService {
 
     public PaymentMethods createPaymentMethods(PaymentMethodsDtos request) {
 
-        var ob = repository.findPaymentMethodsByName(request.getPaymentMethodsName());
+        var ob = repository.findPaymentMethodsByName_(request.getPaymentMethodsName());
 
-        if(ob.isPresent()){
+        if(ob !=null){
             return null;
         }
-
-        var category_flag = PaymentMethods.builder()
-                .name(request.getPaymentMethodsName())
-                .image(request.getImage())
-                .description(request.getDescription())
-                .createdDate(new Date())
-                .status(1)
-                .build();
-
+        PaymentMethods category_flag = null;
+        try {
+            category_flag = PaymentMethods.builder()
+                    .name(request.getPaymentMethodsName())
+                    .image(request.getImage().getBytes())
+                    .description(request.getDescription())
+                    .image_url(ServletUriComponentsBuilder.fromCurrentContextPath()
+                            .path("/api/v1/global/media/images/")
+                            .path(request.getImage().getOriginalFilename())
+                            .toUriString())
+                    .createdDate(new Date())
+                    .status(1)
+                    .build();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         repository.save(category_flag);
         return category_flag;
     }
@@ -47,7 +56,15 @@ public class PaymentMethodsService {
         if(category_flag != null){
             category_flag.setName(request.getPaymentMethodsName());
             category_flag.setDescription(request.getDescription());
-            category_flag.setImage(request.getImage());
+            try {
+                category_flag.setImage(request.getImage().getBytes());
+                category_flag.setImage_url(ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path("/api/v1/global/media/images/")
+                        .path(request.getImage().getOriginalFilename())
+                        .toUriString());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             category_flag.setStatus(request.getStatus());
             repository.save(category_flag);
         }

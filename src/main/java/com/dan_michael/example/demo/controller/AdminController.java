@@ -188,7 +188,7 @@ public class AdminController {
         }
     }
 
-    @PostMapping(value = "/delete-payment-methods/{id}")
+    @DeleteMapping(value = "/delete-payment-methods/{id}")
     public ResponseMessageDtos DeletePaymentMethods(
             @PathVariable Integer id
     ) {

@@ -3,6 +3,7 @@ package com.dan_michael.example.demo.model.dto.ob;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -14,5 +15,5 @@ public class PaymentMethodsDtos {
     public String description;
     public Date createdDate;
     public Integer status;
-    private byte[] image;
+    private MultipartFile image;
 }
