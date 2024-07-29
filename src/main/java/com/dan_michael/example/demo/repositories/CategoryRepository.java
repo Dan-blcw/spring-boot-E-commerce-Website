@@ -11,6 +11,8 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
     Optional<Category> findCategoryByName(String name);
 
+    @Query("SELECT pi FROM Category pi WHERE pi.id = :id")
+    Category findCategoryById_(@Param("id") Integer id);
     @Query("SELECT pi FROM Category pi WHERE pi.name = :name")
     Category findCategoryByName_(@Param("name")String name);
 

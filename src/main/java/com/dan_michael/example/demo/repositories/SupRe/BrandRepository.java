@@ -18,4 +18,9 @@ public interface BrandRepository extends JpaRepository<Brand, Integer> {
     @Modifying
     @Query("DELETE FROM Brand od WHERE  od.identification = :identification")
     void deleteByIdentification(@Param("identification") String identification);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Brand od WHERE  od.brand = :brand")
+    void deleteBybrandName(@Param("brand") String brand);
 }

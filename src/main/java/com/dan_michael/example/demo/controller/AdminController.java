@@ -140,10 +140,19 @@ public class AdminController {
     public ResponseMessageDtos DeleteCategory(
             @PathVariable Integer id
     ) {
-        return categoryService.remove(id);
+        return categoryService.removeCategory(id);
     }
 
-//---------------------------PaymentMethods---------------------------------------
+    @DeleteMapping(value = "/delete-category/{category_id}/")
+    public ResponseMessageDtos DeleteBrand(
+            @PathVariable Integer category_id,
+            @RequestParam String brandName
+    ) {
+        return categoryService.removeBrand(category_id,brandName);
+    }
+
+
+    //---------------------------PaymentMethods---------------------------------------
     @GetMapping(value = "/list-payment-methods")
     public List<PaymentMethods> listPaymentMethods(){
         return paymentMethodsService.listPaymentMethods();

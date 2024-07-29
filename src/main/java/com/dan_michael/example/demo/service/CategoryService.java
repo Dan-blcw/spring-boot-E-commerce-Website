@@ -144,7 +144,7 @@ public class CategoryService {
     }
 
 
-    public ResponseMessageDtos remove(Integer id) {
+    public ResponseMessageDtos removeCategory(Integer id) {
         var flag = repository.findById(id);
         if(flag.isPresent()){
             brandRepository.deleteByIdentification(flag.get().getName());
@@ -155,6 +155,20 @@ public class CategoryService {
             return ResponseMessageDtos.builder().status(400).message("Delete Category fail !!").build();
         }
     }
+
+    public ResponseMessageDtos removeBrand(Integer category_id, String brandsName) {
+        var flag = repository.findCategoryById_(category_id);
+        if(flag != null){
+            brandRepository.deleteBybrandName(brandsName);
+            productRepository.deleteByBrands(brandsName);
+            flag.setBrand(brandRepository.findBrandsByIAndIdentification(flag.getName()));
+            repository.save(flag);
+            return ResponseMessageDtos.builder().status(200).message("Delete Brand successfully !!").build();
+        }else {
+            return ResponseMessageDtos.builder().status(400).message("Delete Brand fail !!").build();
+        }
+    }
+
     public List<String> findBrandByCategoryID(Integer id) {
         var categoryDetail = repository.findById(id);
         var brands = brandRepository.findBrandsByIAndIdentification(categoryDetail.get().getName());

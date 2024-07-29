@@ -8,12 +8,14 @@ import com.dan_michael.example.demo.chatbot.service.ChatbotService;
 import com.dan_michael.example.demo.model.dto.global.RegisterDtos;
 import com.dan_michael.example.demo.model.dto.ob.CategoryDtos;
 import com.dan_michael.example.demo.model.dto.ob.CommentDto;
+import com.dan_michael.example.demo.model.dto.ob.PaymentMethodsDtos;
 import com.dan_michael.example.demo.model.dto.ob.ProductDtos;
 
 import com.dan_michael.example.demo.model.dto.ob.sub.SubQuantity;
 
 import com.dan_michael.example.demo.service.AuthenticationService;
 import com.dan_michael.example.demo.service.CategoryService;
+import com.dan_michael.example.demo.service.PaymentMethodsService;
 import com.dan_michael.example.demo.service.ProductService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,6 +28,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @EnableScheduling
@@ -43,7 +46,8 @@ public class PjCdtnApplication {
 			ProductService productService,
 			CategoryService categoryService,
 			UserAccountInfoService userAccountInfoService,
-			ChatbotService chatbotService
+			ChatbotService chatbotService,
+			PaymentMethodsService paymentMethodsService
 	) {
 		return args -> {
 
@@ -214,31 +218,48 @@ public class PjCdtnApplication {
 				What is a customer loyalty program?
 				What is a product feed?
 			*/
-//----------------------Sản phẩm ..... ----------------------------------------------
+//----------------------Payment Method ..... ----------------------------------------------
+			var paymentMethod0 = PaymentMethodsDtos.builder()
+					.description("VNPay là một trong những cổng thanh toán trực tuyến hàng đầu tại Việt Nam, cung cấp dịch vụ thanh toán điện tử và chuyển tiền trực tuyến cho cả khách hàng cá nhân và doanh nghiệp. VNPay cung cấp nhiều giải pháp thanh toán đa dạng")
+					.status(1)
+					.paymentMethodsName("VNPay")
+					.createdDate(new Date())
+					.build();
+			var paymentMethod1 = PaymentMethodsDtos.builder()
+					.description("PayPal là một dịch vụ thanh toán trực tuyến quốc tế, cho phép các cá nhân và doanh nghiệp gửi và nhận tiền qua mạng Internet. Được thành lập vào năm 1998 và sau đó được mua lại bởi eBay vào năm 2002, PayPal đã trở thành một trong những phương thức thanh toán trực tuyến phổ biến và đáng tin cậy nhất trên thế giới.")
+					.status(1)
+					.paymentMethodsName("PayPal")
+					.createdDate(new Date())
+					.build();
+			paymentMethodsService.createPaymentMethods(paymentMethod0);
+			paymentMethodsService.createPaymentMethods(paymentMethod1);
+//----------------------Category - Brands----------------------------------------------
 			List<String> brands0 = new ArrayList<>();
-			brands0.add("BrandA");
-			brands0.add("BrandB");
 			brands0.add("BrandC");
 			brands0.add("BrandD");
+			brands0.add("BrandE");
+			brands0.add("BrandF");
 
 			List<String> brands1 = new ArrayList<>();
+			brands1.add("BrandA");
+			brands1.add("BrandB");
 			brands1.add("BrandC");
 			brands1.add("BrandD");
-			brands1.add("BrandE");
-			brands1.add("BrandF");
+
 			CategoryDtos category0 = CategoryDtos.builder()
+					.sku("576842548")
+					.categoryName("Sample Category")
+					.brands(brands0)
+					.status(1)
+					.build();
+
+			CategoryDtos category1 = CategoryDtos.builder()
 					.sku("JDFH6725")
 					.categoryName("Category 2")
 					.brands(brands1)
 					.status(1)
 					.build();
 
-			CategoryDtos category1 = CategoryDtos.builder()
-					.sku("576842548")
-					.categoryName("Sample Category")
-					.brands(brands0)
-					.status(1)
-					.build();
 			categoryService.createCategory(category0);
 			categoryService.createCategory(category1);
 
@@ -278,13 +299,13 @@ public class PjCdtnApplication {
 			listsub2.add(sub3);
 			listsub2.add(sub4);
 			listsub2.add(sub5);
-
+//----------------------Sản phẩm ..... ----------------------------------------------
 			var pro0 = ProductDtos.builder()
 					.name("Product DTO 1")
 					.description("Description for product DTO 1")
 					.quantityDetail(listsub1)
 					.category("Sample Category")
-					.brand("BrandA")
+					.brand("BrandC")
 					.favourite(true)
 					.originalPrice(100.0f)
 					.saleDiscountPercent(10.0f)
@@ -297,7 +318,7 @@ public class PjCdtnApplication {
 					.description("Description for product DTO 2")
 					.quantityDetail(listsub2)
 					.category("Category 2")
-					.brand("BrandC")
+					.brand("BrandA")
 					.favourite(false)
 					.originalPrice(200.0f)
 					.saleDiscountPercent(20.0f)

@@ -41,6 +41,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Modifying
     @Query("DELETE FROM Product od WHERE od.category = :category")
     void deleteByCategory(@Param("category") String category);
+
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Product od WHERE od.brand = :brand")
+    void deleteByBrands(@Param("brand") String brand);
 }
 
 

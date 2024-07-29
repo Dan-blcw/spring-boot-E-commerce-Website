@@ -23,6 +23,7 @@ public class PaymentMethods {
     public Integer id;
     @Column(unique = true)
     public String name;
+    @Column(length = 10485760)
     public String description;
     public Date createdDate;
     public Integer status;
