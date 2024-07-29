@@ -84,9 +84,8 @@ public class CategoryService {
             category_flag.setBrand(listBrands);
             category_flag.setSku(request.getSku());
             category_flag.setStatus(request.getStatus());
-
+            repository.save(category_flag);
         }
-        repository.save(category_flag);
         return SubCategoryResponse.builder()
                 .id(category_flag.getId())
                 .sku(category_flag.getSku())
