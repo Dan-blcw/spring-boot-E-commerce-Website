@@ -27,6 +27,7 @@ public class PaymentMethods {
     public String description;
     public Date createdDate;
     public Integer status;
-    private byte[] image;
-    private String image_url;
+//    private String name;
+//    private byte[] image;
+//    private String image_url;
 }

@@ -13,7 +13,7 @@ import java.util.Date;
 public class PaymentMethodsDtos {
     public String paymentMethodsName;
     public String description;
-    public Date createdDate;
+//    public Date createdDate;
     public Integer status;
-    private MultipartFile image;
+//    private MultipartFile image;
 }

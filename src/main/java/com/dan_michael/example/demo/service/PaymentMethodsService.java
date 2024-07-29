@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -26,25 +27,15 @@ public class PaymentMethodsService {
 
         var ob = repository.findPaymentMethodsByName_(request.getPaymentMethodsName());
 
-        if(ob !=null){
+        if (ob != null) {
             return null;
         }
-        PaymentMethods category_flag = null;
-        try {
-            category_flag = PaymentMethods.builder()
-                    .name(request.getPaymentMethodsName())
-                    .image(request.getImage().getBytes())
-                    .description(request.getDescription())
-                    .image_url(ServletUriComponentsBuilder.fromCurrentContextPath()
-                            .path("/api/v1/global/media/images/")
-                            .path(request.getImage().getOriginalFilename())
-                            .toUriString())
-                    .createdDate(new Date())
-                    .status(1)
-                    .build();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        PaymentMethods category_flag = PaymentMethods.builder()
+                .name(request.getPaymentMethodsName())
+                .description(request.getDescription())
+                .createdDate(new Date())
+                .status(request.getStatus())
+                .build();
         repository.save(category_flag);
         return category_flag;
     }
@@ -56,15 +47,6 @@ public class PaymentMethodsService {
         if(category_flag != null){
             category_flag.setName(request.getPaymentMethodsName());
             category_flag.setDescription(request.getDescription());
-            try {
-                category_flag.setImage(request.getImage().getBytes());
-                category_flag.setImage_url(ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path("/api/v1/global/media/images/")
-                        .path(request.getImage().getOriginalFilename())
-                        .toUriString());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
             category_flag.setStatus(request.getStatus());
             repository.save(category_flag);
         }

@@ -223,13 +223,11 @@ public class PjCdtnApplication {
 					.description("VNPay là một trong những cổng thanh toán trực tuyến hàng đầu tại Việt Nam, cung cấp dịch vụ thanh toán điện tử và chuyển tiền trực tuyến cho cả khách hàng cá nhân và doanh nghiệp. VNPay cung cấp nhiều giải pháp thanh toán đa dạng")
 					.status(1)
 					.paymentMethodsName("VNPay")
-					.createdDate(new Date())
 					.build();
 			var paymentMethod1 = PaymentMethodsDtos.builder()
 					.description("PayPal là một dịch vụ thanh toán trực tuyến quốc tế, cho phép các cá nhân và doanh nghiệp gửi và nhận tiền qua mạng Internet. Được thành lập vào năm 1998 và sau đó được mua lại bởi eBay vào năm 2002, PayPal đã trở thành một trong những phương thức thanh toán trực tuyến phổ biến và đáng tin cậy nhất trên thế giới.")
 					.status(1)
 					.paymentMethodsName("PayPal")
-					.createdDate(new Date())
 					.build();
 			paymentMethodsService.createPaymentMethods(paymentMethod0);
 			paymentMethodsService.createPaymentMethods(paymentMethod1);

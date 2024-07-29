@@ -5,6 +5,7 @@ import com.dan_michael.example.demo.model.dto.global.PaginationDto;
 import com.dan_michael.example.demo.model.dto.ob.ProductListDtos;
 import com.dan_michael.example.demo.model.entities.ProductImg;
 import com.dan_michael.example.demo.model.response.ProductResponse;
+import com.dan_michael.example.demo.repositories.PaymentMethodsRepository;
 import com.dan_michael.example.demo.repositories.ProductImgRepository;
 import com.dan_michael.example.demo.service.ProductService;
 import com.dan_michael.example.demo.service.UserService;
@@ -27,6 +28,8 @@ public class GuestController {
     private final ProductService service;
 
     private final ProductImgRepository repository;
+
+    private final PaymentMethodsRepository paymentMethodsRepository;
 
     private final UserService Change_service;
 
@@ -112,7 +115,7 @@ public class GuestController {
     }
     @GetMapping("/media/images/{filename}")
     public ResponseEntity<ByteArrayResource> getImageByFilename(@PathVariable String filename) throws IOException {
-        Optional<ProductImg> image = repository.findProductImgByimageName(filename);
+        var image = repository.findProductImgByimageName(filename);
         if (image.isPresent()) {
             byte[] imageBytes = image.get().getImage();
             ByteArrayResource resource = new ByteArrayResource(imageBytes);

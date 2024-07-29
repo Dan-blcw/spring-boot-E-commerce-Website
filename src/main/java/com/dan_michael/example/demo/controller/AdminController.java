@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -164,10 +165,10 @@ public class AdminController {
         var paymentMethods = paymentMethodsService.detailPaymentMethods(id);
         return paymentMethods;
     }
-    @PostMapping(value = "/add-payment-methods",consumes = { "multipart/form-data" })
+    @PostMapping(value = "/add-payment-methods")
     public ResponseEntity<?> createPaymentMethods(
-            @ModelAttribute PaymentMethodsDtos request
-    ) {
+            @RequestBody PaymentMethodsDtos request
+    )  {
         var response = paymentMethodsService.createPaymentMethods(request);
         if(response != null){
             return ResponseEntity.ok(response);
@@ -176,9 +177,9 @@ public class AdminController {
         }
     }
 
-    @PutMapping(value = "/update-payment-methods",consumes = { "multipart/form-data" })
+    @PutMapping(value = "/update-payment-methods")
     public ResponseEntity<?> updatePaymentMethods(
-            @ModelAttribute PaymentMethodsDtos request
+            @RequestBody PaymentMethodsDtos request
     ) {
         var response = paymentMethodsService.updatePaymentMethods(request);
         if(response != null){
