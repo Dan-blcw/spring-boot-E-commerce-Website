@@ -98,8 +98,9 @@ public class CategoryService {
 
     public List<SubCategoryResponse> listCategory() {
         List<SubCategoryResponse> list = new ArrayList<>();
-        var categoryList = repository.findAll();
-        for (var x:categoryList) {
+        List<Category> categoryList = repository.findAll();
+        for (int i = 0; i < categoryList.size(); i++) {
+            var x = categoryList.get(i);
             if(x.getStatus() == 1){
                 List<String> check = new ArrayList<>();
                 var brands = brandRepository.findBrandsByIAndIdentification(x.getName());

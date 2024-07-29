@@ -102,7 +102,7 @@ public class AdminController {
                 .build();
     }
     @GetMapping(value = "/list-category")
-    public List<SubCategoryResponse> listCategory(@ModelAttribute CategoryDtos request){
+    public List<SubCategoryResponse> listCategory(){
         return categoryService.listCategory();
     }
     @GetMapping(value = "/detail-category/{id}")
