@@ -1,5 +1,7 @@
 package com.dan_michael.example.demo.model.entities;
 
+import com.dan_michael.example.demo.model.entities.img.UserImg;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,7 +40,11 @@ public class User implements UserDetails {
   private Date last_update;
   private Integer is_active;
 
-  private Integer useFirstDiscount;
+  private Boolean useFirstDiscount;
+
+  @OneToOne(mappedBy = "user",fetch = FetchType.EAGER)
+  @JsonBackReference
+  private UserImg userImg;
 
   @Enumerated(EnumType.STRING)
   private Role role;
@@ -81,5 +87,24 @@ public class User implements UserDetails {
   @Override
   public boolean isEnabled() {
     return true;
+  }
+  @Override
+  public String toString() {
+    return "User{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", username='" + username + '\'' +
+            ", email='" + email + '\'' +
+            ", password='" + (password != null ? "****" : null) + '\'' +  // Masking the password
+            ", companyName='" + companyName + '\'' +
+            ", address='" + address + '\'' +
+            ", phoneNumber='" + phoneNumber + '\'' +
+            ", dateJoined=" + date_joined +
+            ", lastLogin=" + last_login +
+            ", lastUpdate=" + last_update +
+            ", isActive=" + is_active +
+            ", useFirstDiscount=" + useFirstDiscount +
+            ", role=" + role +
+            '}';
   }
 }

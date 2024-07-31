@@ -1,23 +1,24 @@
 package com.dan_michael.example.demo.service;
 
 import com.dan_michael.example.demo.model.dto.ob.OrderDtos;
-import com.dan_michael.example.demo.model.dto.ob.sub.SubQuantityResponse;
+import com.dan_michael.example.demo.model.dto.ob.sub.SubColor;
+import com.dan_michael.example.demo.model.dto.ob.sub.SubSizeQuantity;
 import com.dan_michael.example.demo.model.entities.Order;
-import com.dan_michael.example.demo.model.entities.OrderDetail;
-import com.dan_michael.example.demo.model.entities.SubEn.QuantityDetail;
-import com.dan_michael.example.demo.repositories.OrderDetailRepository;
+import com.dan_michael.example.demo.model.entities.SubEn.OrderDetail;
+import com.dan_michael.example.demo.model.entities.SubEn.DetailSizeQuantity;
+import com.dan_michael.example.demo.repositories.SupRe.OrderDetailRepository;
 import com.dan_michael.example.demo.repositories.OrderRepository;
 import com.dan_michael.example.demo.repositories.ProductRepository;
+import com.dan_michael.example.demo.repositories.SupRe.DetailSizeQuantityRepository;
 import com.dan_michael.example.demo.repositories.SupRe.QuantityDetailRepository;
 import com.dan_michael.example.demo.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.dan_michael.example.demo.model.dto.ob.ItemDetailDto;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
+
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -29,6 +30,8 @@ public class OrderService {
     private final OrderDetailRepository orderDetailRepository;
 
     private final QuantityDetailRepository quantityDetailRepository;
+
+    private final DetailSizeQuantityRepository detailSizeQuantityRepository;
 
     private final ProductRepository productRepository;
 
@@ -76,15 +79,27 @@ public class OrderService {
 
             var product = productRepository.findByID_(x.getProduct_id());
             var quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(product.getName());
+            List<SubColor> BoxResponse = new ArrayList<>();
             for (var x_0: quantityDetailsList) {
-                if(x_0.getColor().toLowerCase().equals(x.getColor().toLowerCase())
-                        && x_0.getSize().toLowerCase().equals(x.getSize().toLowerCase())
-                ){
-                    var quantityNow = x_0.getQuantity() - x.getQuantity();
-                    x_0.setQuantity(quantityNow);
-                    totalQuantity += quantityNow;
-                    quantityDetailRepository.save(x_0);
+                List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor());
+                List<SubSizeQuantity> sizeQuantities = new ArrayList<>();
+                for (var y_0: detailSizeQuantities){
+                    if(y_0.getIdentification().equals(x.getColor())){
+                        if((y_0.getQuantity() > x.getQuantity()) && Objects.equals(x.getSize(), y_0.getSize())){
+                            sizeQuantities.add(SubSizeQuantity.builder()
+                                    .size(y_0.getSize())
+                                    .quantity(y_0.getQuantity())
+                                    .build());
+                            y_0.setQuantity(y_0.getQuantity()-x.getQuantity());
+                            detailSizeQuantityRepository.save(y_0);
+                        }
+                    }
                 }
+                BoxResponse.add(SubColor.builder()
+                        .color(x_0.getColor())
+                        .sizes(sizeQuantities)
+                        .build());
+                x_0.setSizeQuantities(detailSizeQuantities);
             }
             product.setQuantityDetails(quantityDetailsList);
             product.setTotalQuantity(totalQuantity);

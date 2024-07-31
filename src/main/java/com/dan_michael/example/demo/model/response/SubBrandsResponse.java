@@ -1,4 +1,4 @@
-package com.dan_michael.example.demo.model.dto.ob.sub;
+package com.dan_michael.example.demo.model.response;
 
 import lombok.Builder;
 import lombok.Getter;

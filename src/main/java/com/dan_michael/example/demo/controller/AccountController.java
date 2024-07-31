@@ -2,14 +2,12 @@ package com.dan_michael.example.demo.controller;
 
 import com.dan_michael.example.demo.model.dto.global.ChangePasswordDtos;
 import com.dan_michael.example.demo.model.dto.global.ChangeProfileDtos;
-import com.dan_michael.example.demo.service.ProductService;
 import com.dan_michael.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 
@@ -20,28 +18,27 @@ public class AccountController {
 
     private final UserService Change_service;
 
-    private final ProductService service;
-
-    @PatchMapping("/change-profile")
-    public ResponseEntity<?> changeProfile(
+    @PatchMapping(value = "/update-user-image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<?> updateUserImage(
+            @ModelAttribute MultipartFile image,
+            Principal connectedUser
+    ) {
+        return ResponseEntity.ok(Change_service.updateUserImage(image, connectedUser));
+    }
+    @PatchMapping(value = "/update-profile", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateProfile(
             @RequestBody ChangeProfileDtos request,
             Principal connectedUser
     ) {
-         Change_service.changeProfile(request, connectedUser);
-         return ResponseEntity.ok("changeProfile successfully !!!");
+         return ResponseEntity.ok(Change_service.updateProfile(request, connectedUser));
     }
 
-    @PatchMapping("/change-password")
-    public ResponseEntity<?> changePassword(
+    @PatchMapping("/update-password")
+    public ResponseEntity<?> updatePassword(
             @RequestBody ChangePasswordDtos request,
             Principal connectedUser
     ) {
-        var bol = Change_service.changePassword(request, connectedUser);
-        if(bol.equals("changePassword successfully !!!")){
-            return ResponseEntity.status(200).body("changePassword successfully !!!");
-        }else{
-            return ResponseEntity.status(405).body(bol);
-        }
+        return ResponseEntity.ok(Change_service.updatePassword(request, connectedUser));
     }
 
 }

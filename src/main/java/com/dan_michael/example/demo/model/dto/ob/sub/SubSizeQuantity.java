@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class SubQuantityResponse {
+public class SubSizeQuantity {
+    private String size;
     private Integer quantity;
-    private String message;
 }

@@ -7,6 +7,7 @@ import com.dan_michael.example.demo.model.entities.PaymentMethods;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.repositories.CategoryRepository;
 import com.dan_michael.example.demo.repositories.PaymentMethodsRepository;
+import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -65,9 +66,15 @@ public class PaymentMethodsService {
         var flag = repository.findById(id);
         if(flag.isPresent()){
             repository.deleteById(id);
-            return ResponseMessageDtos.builder().status(200).message("Delete Payment Methods successfully !!").build();
+            return ResponseMessageDtos.builder()
+                    .status(200)
+                    .message(Constants.Delete_Payment_Methods_Success)
+                    .build();
         }else {
-            return ResponseMessageDtos.builder().status(400).message("Delete Payment Methods fail !!").build();
+            return ResponseMessageDtos.builder()
+                    .status(400)
+                    .message(Constants.Delete_Payment_Methods_Fail)
+                    .build();
         }
     }
 }

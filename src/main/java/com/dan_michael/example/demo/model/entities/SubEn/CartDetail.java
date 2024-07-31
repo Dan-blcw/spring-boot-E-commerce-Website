@@ -1,5 +1,7 @@
-package com.dan_michael.example.demo.model.entities;
+package com.dan_michael.example.demo.model.entities.SubEn;
 
+import com.dan_michael.example.demo.model.entities.Cart;
+import com.dan_michael.example.demo.model.entities.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +19,7 @@ public class CartDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "cart_id")
@@ -34,5 +36,5 @@ public class CartDetail {
     private String color;
     private String size;
     private Float subTotal;
-    private Float total;
+//    private Float total;
 }

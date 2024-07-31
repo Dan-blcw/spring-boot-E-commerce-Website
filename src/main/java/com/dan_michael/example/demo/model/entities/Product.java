@@ -1,6 +1,7 @@
 package com.dan_michael.example.demo.model.entities;
 
 import com.dan_michael.example.demo.model.entities.SubEn.*;
+import com.dan_michael.example.demo.model.entities.img.ProductImg;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

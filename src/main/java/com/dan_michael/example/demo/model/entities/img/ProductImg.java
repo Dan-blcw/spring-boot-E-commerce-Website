@@ -1,5 +1,6 @@
-package com.dan_michael.example.demo.model.entities;
+package com.dan_michael.example.demo.model.entities.img;
 
+import com.dan_michael.example.demo.model.entities.Product;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

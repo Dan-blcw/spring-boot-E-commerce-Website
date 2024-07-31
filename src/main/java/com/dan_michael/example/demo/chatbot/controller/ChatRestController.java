@@ -2,6 +2,7 @@ package com.dan_michael.example.demo.chatbot.controller;
 
 import java.util.List;
 
+import com.dan_michael.example.demo.chatbot.entities.ManyQuestionAnswerDtos;
 import com.dan_michael.example.demo.chatbot.entities.QuestionAnswer;
 import com.dan_michael.example.demo.chatbot.entities.RequestMessageChatBotDtos;
 import com.dan_michael.example.demo.chatbot.service.ChatbotService;
@@ -32,6 +33,11 @@ public class ChatRestController {
     public QuestionAnswer createQuestionAnswer(@RequestBody QuestionAnswer qa) {
         return chatBotService.createQuestionAnswer(qa);
     }
+    @PostMapping("/many-qa")
+    public List<QuestionAnswer> createManyQuestionAnswer(@RequestBody ManyQuestionAnswerDtos qa) {
+        return chatBotService.createManyQuestionAnswer(qa);
+    }
+
     
     @PutMapping("/qa")
     public QuestionAnswer updateQuestionAnswer(@RequestBody QuestionAnswer request) {

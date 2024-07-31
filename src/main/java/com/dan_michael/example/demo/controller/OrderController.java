@@ -2,8 +2,9 @@ package com.dan_michael.example.demo.controller;
 
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.entities.Order;
-import com.dan_michael.example.demo.model.entities.OrderDetail;
+import com.dan_michael.example.demo.model.entities.SubEn.OrderDetail;
 import com.dan_michael.example.demo.service.OrderService;
+import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,17 +36,16 @@ public class OrderController {
             @RequestBody OrderDtos request
     ) {
         Order response = orderService.createOrder(request);
-        if(response != null){
-            return ResponseEntity.ok(response);
-        }else {
-            return ResponseEntity.badRequest().body(ResponseMessageDtos.builder().message("This Order already exist").status(400).build());
-        }
+        return ResponseEntity.ok(response);
     }
 
 
     // Update an existing order
     @PutMapping(value = "/{id}",consumes = { "application/json"})
-    public ResponseEntity<Order> updateOrder(@PathVariable Integer id, @RequestBody OrderDtos orderDetails) {
+    public ResponseEntity<Order> updateOrder(
+            @PathVariable Integer id,
+            @RequestBody OrderDtos orderDetails
+    ) {
         Optional<Order> updatedOrder = orderService.updateOrder(id, orderDetails);
         return updatedOrder.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -55,7 +55,11 @@ public class OrderController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteOrder(@PathVariable Integer id) {
         boolean isDeleted = orderService.deleteOrderAndOrderDetail(id);
-        return isDeleted ? ResponseEntity.ok().body(ResponseMessageDtos.builder().message("Delete Order successfully").status(200).build()) : ResponseEntity.notFound().build();
+        return isDeleted ? ResponseEntity.ok()
+                .body(ResponseMessageDtos.builder()
+                        .message(Constants.Delete_Cart_Item_Success)
+                        .status(200).build()
+                ) : ResponseEntity.notFound().build();
     }
 
 //--------------------------Order Detail----------------------------------
@@ -67,6 +71,10 @@ public class OrderController {
     @DeleteMapping("/order-detail/{id}")
     public ResponseEntity<?> deleteOrderDetail(@PathVariable Integer id) {
         boolean isDeleted = orderService.deleteOrderDetail(id);
-        return isDeleted ? ResponseEntity.ok().body(ResponseMessageDtos.builder().message("Delete Order Detail successfully").status(200).build()) : ResponseEntity.notFound().build();
+        return isDeleted ? ResponseEntity.ok().body(
+                ResponseMessageDtos.builder()
+                        .message(Constants.Delete_Order_Detail_Success)
+                        .status(200).build()
+        ) : ResponseEntity.notFound().build();
     }
 }

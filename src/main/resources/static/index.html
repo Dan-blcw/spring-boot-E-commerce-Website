@@ -19,8 +19,8 @@
 
     .chat-container {
         display: flex;
-        max-width: 1200px;
-        min-width: 1200px;
+        max-width: 1400px;
+        min-width: 1400px;
         min-height: 600px;
         max-height: 600px;
         margin: 20px;
@@ -210,6 +210,45 @@
         color: #fff;
         text-decoration: none;
     }
+    /*List option*/
+    .options-list {
+        flex: 1;
+        border-left: 1px solid #ccc;
+        padding: 20px;
+        box-sizing: border-box;
+        background-color: #f0f0f0;
+        color: #333;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        height: 100%; /* Adjust this as needed */
+        overflow-y: auto; /* Enable vertical scrolling */
+    }
+
+
+    .options-list h2 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+
+    .options-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .option-item {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+    .option-item:hover {
+        background-color: #ddd;
+    }
+
     </style>
     <title>Chat Application</title>
 </head>
@@ -252,6 +291,11 @@
             </div>
         </form>
     </div>
+    <div class="options-list hidden" id="options-list">
+        <h2>Options</h2>
+        <ul id="options-container"></ul>
+    </div>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
@@ -314,7 +358,36 @@ async function login(event) {
             }
         }
     }
+    async function fetchOptions() {
+        const optionsList = document.getElementById('options-list');
+        const token = localStorage.getItem('jwt');
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/rest/getAllQuestions', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const options = await response.json();
+            optionsList.classList.remove('hidden');
+            displayOptions(options);
+        } catch (error) {
+            console.error('Error fetching options:', error);
+        }
+    }
 
+    // Function to display options in the list
+    function displayOptions(options) {
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+        options.forEach(option => {
+            const optionItem = document.createElement('li');
+            optionItem.className = 'option-item';
+            optionItem.textContent = option;
+            optionsContainer.appendChild(optionItem);
+        });
+    }
 
     async function connect() {
         const socket = new SockJS('/ws');
@@ -422,6 +495,9 @@ async function login(event) {
     }
 
     async function fetchAndDisplayUserChat() {
+        if(selectedUserId === CHAT_BOT_NAME){
+            await fetchOptions();
+        }
         const token = localStorage.getItem('jwt');
 
         const userChatResponse = await fetch(`/api/v1/chat-box/messages/${nickname}/${selectedUserId}`, {
@@ -490,6 +566,31 @@ async function login(event) {
             nbrMsg.textContent = '';
         }
     }
+
+    // async function onMessageReceivedChatBot(payload) {
+    //     await fetchOptions();
+    //     await findAndDisplayConnectedUsers();
+    //     console.log('Message received', payload);
+    //     const message = JSON.parse(payload.body);
+    //     if (selectedUserId && selectedUserId === message.senderId) {
+    //         displayMessage(message.senderId, message.content);
+    //         chatArea.scrollTop = chatArea.scrollHeight;
+    //     }
+    //
+    //     if (selectedUserId) {
+    //         document.querySelector(`#${selectedUserId}`).classList.add('active');
+    //     } else {
+    //         messageForm.classList.add('hidden');
+    //     }
+    //
+    //     const notifiedUser = document.querySelector(`#${message.senderId}`);
+    //     if (notifiedUser && !notifiedUser.classList.contains('active')) {
+    //         const nbrMsg = notifiedUser.querySelector('.nbr-msg');
+    //         nbrMsg.classList.remove('hidden');
+    //         nbrMsg.textContent = '';
+    //     }
+    // }
+
 
     function onLogout() {
         stompClient.send("/app/disconnectUser",

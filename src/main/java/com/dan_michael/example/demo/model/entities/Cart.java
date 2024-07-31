@@ -1,5 +1,6 @@
 package com.dan_michael.example.demo.model.entities;
 
+import com.dan_michael.example.demo.model.entities.SubEn.CartDetail;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,7 +10,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 

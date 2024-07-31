@@ -11,6 +11,9 @@ package com.dan_michael.example.demo.repositories;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
   Optional<User> findByEmail(String email);
+
+    @Query("SELECT pi FROM User pi WHERE pi.id = :user_id")
+    User findByID_(@Param("user_id")Integer user_id);
   @Query("SELECT pi FROM User pi WHERE pi.email = :email")
   User findByEmail_(@Param("email")String email);
   @Query("SELECT pi FROM User pi WHERE pi.id = :id")
@@ -18,4 +21,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
   @Query("SELECT pi FROM User pi WHERE pi.is_active = :is_active")
   List<User> findAllByIs_active(@Param("is_active")Integer is_active);
+
+  @Query("SELECT pi FROM User pi WHERE pi.name = :name AND pi.email = :email")
+  User findByUserAndEmail(
+          @Param("name")String name,
+          @Param("email")String email);
 }

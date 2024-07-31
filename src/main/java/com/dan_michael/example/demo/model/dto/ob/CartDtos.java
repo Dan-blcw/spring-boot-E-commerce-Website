@@ -10,9 +10,6 @@ import java.util.List;
 @Setter
 @Builder
 public class CartDtos {
-
-    @JsonProperty("cart_id")
-    private Integer cart_id;
     @JsonProperty("user_id")
     private Integer userId;
     private ItemDetailDto cart_item;

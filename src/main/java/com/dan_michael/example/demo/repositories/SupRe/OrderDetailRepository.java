@@ -1,7 +1,6 @@
-package com.dan_michael.example.demo.repositories;
+package com.dan_michael.example.demo.repositories.SupRe;
 
-import com.dan_michael.example.demo.model.entities.Order;
-import com.dan_michael.example.demo.model.entities.OrderDetail;
+import com.dan_michael.example.demo.model.entities.SubEn.OrderDetail;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

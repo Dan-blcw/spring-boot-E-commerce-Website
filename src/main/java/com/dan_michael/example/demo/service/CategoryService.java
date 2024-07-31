@@ -1,6 +1,6 @@
 package com.dan_michael.example.demo.service;
 
-import com.dan_michael.example.demo.model.dto.ob.sub.SubCategoryResponse;
+import com.dan_michael.example.demo.model.response.SubCategoryResponse;
 import com.dan_michael.example.demo.model.entities.SubEn.Brand;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.dto.ob.CategoryDtos;
@@ -8,14 +8,13 @@ import com.dan_michael.example.demo.model.entities.Category;
 import com.dan_michael.example.demo.repositories.CategoryRepository;
 import com.dan_michael.example.demo.repositories.ProductRepository;
 import com.dan_michael.example.demo.repositories.SupRe.BrandRepository;
+import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -151,9 +150,15 @@ public class CategoryService {
             brandRepository.deleteByIdentification(flag.get().getName());
             productRepository.deleteByCategory(flag.get().getName());
             repository.deleteById(id);
-            return ResponseMessageDtos.builder().status(200).message("Delete Category successfully !!").build();
+            return ResponseMessageDtos.builder()
+                    .status(200)
+                    .message(Constants.Delete_Category_Success)
+                    .build();
         }else {
-            return ResponseMessageDtos.builder().status(400).message("Delete Category fail !!").build();
+            return ResponseMessageDtos.builder()
+                    .status(400)
+                    .message(Constants.Delete_Category_Fail)
+                    .build();
         }
     }
 
@@ -164,9 +169,15 @@ public class CategoryService {
             productRepository.deleteByBrands(brandsName);
             flag.setBrand(brandRepository.findBrandsByIAndIdentification(flag.getName()));
             repository.save(flag);
-            return ResponseMessageDtos.builder().status(200).message("Delete Brand successfully !!").build();
+            return ResponseMessageDtos.builder()
+                    .status(200)
+                    .message(Constants.Delete_Brand_Success)
+                    .build();
         }else {
-            return ResponseMessageDtos.builder().status(400).message("Delete Brand fail !!").build();
+            return ResponseMessageDtos.builder()
+                    .status(400)
+                    .message(Constants.Delete_Brand_Fail)
+                    .build();
         }
     }
 

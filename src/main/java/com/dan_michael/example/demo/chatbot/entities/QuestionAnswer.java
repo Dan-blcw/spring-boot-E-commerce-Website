@@ -19,9 +19,9 @@ public class QuestionAnswer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
+    @Column(length = 10485760)
     private String question;
 
-    @Column
+    @Column(length = 10485760)
     private String answer;
 }

@@ -45,7 +45,7 @@ public class AuthenticationService {
                 .date_joined(new Date())
                 .last_login(null)
                 .is_active(1)
-                .useFirstDiscount(0)
+                .useFirstDiscount(false)
                 .build();
 
         var savedUser = repository.save(user);
@@ -70,7 +70,7 @@ public class AuthenticationService {
                 .date_joined(new Date())
                 .last_login(null)
                 .is_active(1)
-                .useFirstDiscount(0)
+                .useFirstDiscount(false)
                 .build();
         var savedUser = repository.save(Admin);
         var jwtToken = jwtService.generateToken(Admin);
@@ -94,7 +94,7 @@ public class AuthenticationService {
                 .date_joined(new Date())
                 .last_login(null)
                 .is_active(1)
-                .useFirstDiscount(0)
+                .useFirstDiscount(false)
                 .build();
         var savedUser = repository.save(manage);
         var jwtToken = jwtService.generateToken(manage);
@@ -130,7 +130,7 @@ public class AuthenticationService {
                 .address(user.getAddress())
                 .phoneNumber(user.getPhoneNumber())
                 .date_joined(user.getDate_joined())
-                .last_login(user.getLast_login())
+                .last_login(new Date())
                 .last_update(user.getLast_update())
                 .is_active(user.getIs_active())
                 .useFirstDiscount(user.getUseFirstDiscount())

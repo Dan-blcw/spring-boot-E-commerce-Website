@@ -1,5 +1,6 @@
 package com.dan_michael.example.demo.model.entities;
 
+import com.dan_michael.example.demo.model.entities.SubEn.OrderDetail;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,8 +12,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 import java.util.List;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @Builder

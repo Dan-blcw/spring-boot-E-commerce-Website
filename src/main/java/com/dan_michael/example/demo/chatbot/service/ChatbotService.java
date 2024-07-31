@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.dan_michael.example.demo.chatbot.entities.ManyQuestionAnswerDtos;
 import com.dan_michael.example.demo.chatbot.entities.QuestionAnswer;
 import com.dan_michael.example.demo.chatbot.entities.RequestMessageChatBotDtos;
 import com.dan_michael.example.demo.chatbot.resository.QuestionAnswerRepository;
@@ -31,6 +32,14 @@ public class ChatbotService {
     public QuestionAnswer createQuestionAnswer(QuestionAnswer qa) {
         qa.setQuestion(removeDiacritics(qa.getQuestion().toLowerCase()));
         return questionAnswerRepository.save(qa);
+    }
+
+    public List<QuestionAnswer> createManyQuestionAnswer(ManyQuestionAnswerDtos qa) {
+        for(var x : qa.getData()){
+            x.setQuestion(removeDiacritics(x.getQuestion().toLowerCase()));
+            questionAnswerRepository.save(x);
+        }
+        return qa.getData();
     }
     
     public QuestionAnswer updateQuestionAnswer(String question, String newAnswer) {

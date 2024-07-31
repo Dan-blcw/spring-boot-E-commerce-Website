@@ -8,6 +8,7 @@ import com.dan_michael.example.demo.model.dto.global.PaymentVNPayDTO;
 import com.dan_michael.example.demo.model.dto.ob.ItemDetailDto;
 import com.dan_michael.example.demo.model.response.ResponseObject;
 import com.dan_michael.example.demo.service.Payment.PaymentVNPayService;
+import com.dan_michael.example.demo.util.Constants;
 import com.dan_michael.example.demo.util.VNPayUtil;
 import com.google.gson.Gson;
 import com.mservice.allinone.models.*;
@@ -51,16 +52,31 @@ public class PaymentController {
     private final PaymentVNPayService vnPayService;
     @GetMapping("/vn-pay")
     public ResponseObject<PaymentVNPayDTO.VNPayResponse> pay(HttpServletRequest request) {
-        return new ResponseObject<>(HttpStatus.OK, "Success", vnPayService.createVnPayPayment(request));
+        return new ResponseObject<>(
+                HttpStatus.OK,
+                Constants.VnPayStatus_Success,
+                vnPayService.createVnPayPayment(request));
     }
     @GetMapping("/vn-pay-callback")
     public ResponseObject<PaymentVNPayDTO.VNPayResponse> payCallbackHandler(HttpServletRequest request, @RequestParam String vnp_ResponseCode) {
     //http://localhost:8080/api/v1/payment/vn-pay-callback?vnp_Amount=27000000&vnp_BankCode=NCB&vnp_BankTranNo=VNP14530123&vnp_CardType=ATM&vnp_OrderInfo=Thanh+toan+don+hang%3A52809020&vnp_PayDate=20240725003857&vnp_ResponseCode=00&vnp_TmnCode=58X4B4HP&vnp_TransactionNo=14530123&vnp_TransactionStatus=00&vnp_TxnRef=49871732&vnp_SecureHash=2eab4b879ba583e1a8687583416da734437828061225a9402a453c5b6f4ab20c8e45e2d8f0bf2dded13ffeb4bf6f97590f5a26e00af5549798c3d6d77899eb7f
     //        String status = vnp_ResponseCode);
         if (vnp_ResponseCode.equals("00")) {
-            return new ResponseObject<>(HttpStatus.OK, "Success", new PaymentVNPayDTO.VNPayResponse("00", "Success", ""));
+            return new ResponseObject<>(
+                    HttpStatus.OK,
+                    Constants.VnPayStatus_Success,
+                    new PaymentVNPayDTO.VNPayResponse(
+                            Constants.VnPay_Code_00,
+                            Constants.VnPayStatus_Success,
+                            ""
+                    )
+            );
         } else {
-            return new ResponseObject<>(HttpStatus.BAD_REQUEST, "Failed", null);
+            return new ResponseObject<>(
+                    HttpStatus.BAD_REQUEST,
+                    Constants.VnPayStatus_Fail,
+                    null
+            );
         }
     }
     //(vnp_TmnCode): CGXZLS0Z

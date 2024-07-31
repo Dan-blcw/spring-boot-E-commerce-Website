@@ -71,7 +71,7 @@ public class EmailSenderService {
         if(user == null){
             return "User does not exist";
         }
-        if(user.getUseFirstDiscount() == 1){
+        if(user.getUseFirstDiscount() == true){
             return "This account has already used the first discount promotion!!!";
         }
         try {
@@ -115,7 +115,7 @@ public class EmailSenderService {
 
             mailSender.send(message);
             System.out.println("Mail Sent Successfully !!!");
-            user.setUseFirstDiscount(1);
+            user.setUseFirstDiscount(true);
             userRepository.save(user);
             return "Mail Sent Successfully !!!";
         } catch (MessagingException e) {

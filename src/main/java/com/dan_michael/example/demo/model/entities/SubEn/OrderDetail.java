@@ -1,5 +1,6 @@
-package com.dan_michael.example.demo.model.entities;
+package com.dan_michael.example.demo.model.entities.SubEn;
 
+import com.dan_michael.example.demo.model.entities.Order;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,7 @@ public class OrderDetail {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = true)
+    @JoinColumn(name = "orders_id", nullable = true)
     private Order order;
 
     private Integer identification_order;

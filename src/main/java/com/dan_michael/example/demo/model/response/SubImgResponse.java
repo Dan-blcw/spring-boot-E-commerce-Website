@@ -1,18 +1,15 @@
 package com.dan_michael.example.demo.model.response;
 
-import com.dan_michael.example.demo.model.entities.Product;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductImgResponse {
+public class SubImgResponse {
 
     private Integer id;
     private String identification;

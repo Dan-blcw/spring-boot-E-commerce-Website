@@ -11,12 +11,14 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class ProductDtos {
+public class ProductUpdateDtos {
     private List<MultipartFile> images;
     private String name;
     private String description;
 
     private List<SubColor> quantityDetails;
+    private List<String> colors;
+    private List<String> sizes;
     private String category;
 
     private String brand;

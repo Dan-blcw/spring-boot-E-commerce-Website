@@ -6,13 +6,12 @@ import com.dan_michael.example.demo.chat_socket.service.UserAccountInfoService;
 import com.dan_michael.example.demo.chatbot.entities.QuestionAnswer;
 import com.dan_michael.example.demo.chatbot.service.ChatbotService;
 import com.dan_michael.example.demo.model.dto.global.RegisterDtos;
-import com.dan_michael.example.demo.model.dto.ob.CategoryDtos;
-import com.dan_michael.example.demo.model.dto.ob.CommentDto;
-import com.dan_michael.example.demo.model.dto.ob.PaymentMethodsDtos;
-import com.dan_michael.example.demo.model.dto.ob.ProductDtos;
+import com.dan_michael.example.demo.model.dto.ob.*;
 
-import com.dan_michael.example.demo.model.dto.ob.sub.SubQuantity;
+import com.dan_michael.example.demo.model.dto.ob.sub.SubColor;
 
+import com.dan_michael.example.demo.model.dto.ob.sub.SubSizeQuantity;
+import com.dan_michael.example.demo.model.entities.SubEn.DetailSizeQuantity;
 import com.dan_michael.example.demo.service.AuthenticationService;
 import com.dan_michael.example.demo.service.CategoryService;
 import com.dan_michael.example.demo.service.PaymentMethodsService;
@@ -28,7 +27,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @EnableScheduling
@@ -233,27 +231,27 @@ public class PjCdtnApplication {
 			paymentMethodsService.createPaymentMethods(paymentMethod1);
 //----------------------Category - Brands----------------------------------------------
 			List<String> brands0 = new ArrayList<>();
-			brands0.add("BrandC");
-			brands0.add("BrandD");
-			brands0.add("BrandE");
-			brands0.add("BrandF");
+			brands0.add("Netstripes");
+			brands0.add("Maze");
+			brands0.add("Born");
+			brands0.add("Tropical");
 
 			List<String> brands1 = new ArrayList<>();
-			brands1.add("BrandA");
-			brands1.add("BrandB");
-			brands1.add("BrandC");
-			brands1.add("BrandD");
+			brands1.add("Devipock");
+			brands1.add("Match");
+			brands1.add("Floral");
+			brands1.add("Sleeves");
 
 			CategoryDtos category0 = CategoryDtos.builder()
 					.sku("576842548")
-					.categoryName("Sample Category")
+					.categoryName("Áo Sơ Mi")
 					.brands(brands0)
 					.status(1)
 					.build();
 
 			CategoryDtos category1 = CategoryDtos.builder()
 					.sku("JDFH6725")
-					.categoryName("Category 2")
+					.categoryName("Quần short")
 					.brands(brands1)
 					.status(1)
 					.build();
@@ -261,69 +259,95 @@ public class PjCdtnApplication {
 			categoryService.createCategory(category0);
 			categoryService.createCategory(category1);
 
-			SubQuantity sub0 = SubQuantity.builder()
-					.color("Red")
-					.size("Small")
-					.quantity(5).build();
-			SubQuantity sub1 = SubQuantity.builder()
-					.color("Red")
-					.size("Medium")
+//			size & Quantity
+			List<SubSizeQuantity> subSizeQuantityList0 = new ArrayList<>();
+			List<SubSizeQuantity> subSizeQuantityList1 = new ArrayList<>();
+			List<SubSizeQuantity> subSizeQuantityList2 = new ArrayList<>();
+//			Red
+			SubSizeQuantity subSizeQuantity0 = SubSizeQuantity.builder()
+					.size("small")
+					.quantity(56)
+					.build();
+			SubSizeQuantity subSizeQuantity1 = SubSizeQuantity.builder()
+					.size("medium")
 					.quantity(12).build();
-			SubQuantity sub2 = SubQuantity.builder()
-					.color("Red")
-					.size("Large")
-					.quantity(6).build();
-			SubQuantity sub3 = SubQuantity.builder()
-					.color("Blue")
-					.size("Small")
+//			blue
+			SubSizeQuantity subSizeQuantity2 = SubSizeQuantity.builder()
+					.size("large")
+					.quantity(60).build();
+			SubSizeQuantity subSizeQuantity3 = SubSizeQuantity.builder()
+					.size("superSmall")
 					.quantity(50).build();
-			SubQuantity sub4 = SubQuantity.builder()
-					.color("Blue")
-					.size("Medium")
+//			black
+			SubSizeQuantity subSizeQuantity4 = SubSizeQuantity.builder()
+					.size("superMedium")
 					.quantity(10).build();
-			SubQuantity sub5 = SubQuantity.builder()
-					.color("Blue")
-					.size("Large")
+			SubSizeQuantity subSizeQuantity5 = SubSizeQuantity.builder()
+					.size("superLarge")
 					.quantity(80).build();
-			List<SubQuantity> listsub1 = new ArrayList<>();
-			List<SubQuantity> listsub2 = new ArrayList<>();
+
+			subSizeQuantityList0.add(subSizeQuantity0);
+			subSizeQuantityList0.add(subSizeQuantity1);
+
+			subSizeQuantityList1.add(subSizeQuantity4);
+			subSizeQuantityList1.add(subSizeQuantity5);
+
+			subSizeQuantityList2.add(subSizeQuantity2);
+			subSizeQuantityList2.add(subSizeQuantity3);
+//			Color & SubSizeQuantity
+			SubColor sub0 = SubColor.builder()
+					.color("red")
+					.sizes(subSizeQuantityList0)
+					.build();
+//			red medium - 12
+			SubColor sub1 = SubColor.builder()
+					.color("blue")
+					.sizes(subSizeQuantityList1)
+					.build();
+
+			SubColor sub2 = SubColor.builder()
+					.color("black")
+					.sizes(subSizeQuantityList2)
+					.build();
+
+
+			List<SubColor> listsub1 = new ArrayList<>();
+			List<SubColor> listsub2 = new ArrayList<>();
+
 			listsub1.add(sub0);
 			listsub1.add(sub1);
-			listsub1.add(sub2);
-			listsub1.add(sub3);
-			listsub1.add(sub4);
-			listsub1.add(sub5);
 
-			listsub2.add(sub3);
-			listsub2.add(sub4);
-			listsub2.add(sub5);
+			listsub2.add(sub2);
 //----------------------Sản phẩm ..... ----------------------------------------------
+
+
 			var pro0 = ProductDtos.builder()
-					.name("Product DTO 1")
-					.description("Description for product DTO 1")
-					.quantityDetail(listsub1)
-					.category("Sample Category")
-					.brand("BrandC")
+					.name("Áo Sơ Mi Cuban Netstripes")
+					.description("Áo sơ mi Cuban Netstripes là một kiểu áo sơ mi phổ biến có nguồn gốc từ Cuba, được biết đến với phong cách đặc trưng và thoải mái.")
+					.quantityDetails(listsub1)
+					.category("Áo Sơ Mi")
+					.brand("Netstripes")
 					.favourite(true)
-					.originalPrice(100.0f)
+					.originalPrice(1000000.0f)
 					.saleDiscountPercent(10.0f)
 					.saleStatus(true)
 					.newStatus(true)
 					.createdByUserid(1)
 					.build();
 			var pro1 = ProductDtos.builder()
-					.name("Product DTO 2")
-					.description("Description for product DTO 2")
-					.quantityDetail(listsub2)
-					.category("Category 2")
-					.brand("BrandA")
+					.name("Quần short Slim Denim Back Devipock")
+					.description("Quần short Slim Denim Back Devipock là một sản phẩm thời trang hiện đại, kết hợp giữa sự thoải mái và phong cách.")
+					.quantityDetails(listsub2)
+					.category("Quần short")
+					.brand("Devipock")
 					.favourite(false)
-					.originalPrice(200.0f)
+					.originalPrice(800000.0f)
 					.saleDiscountPercent(20.0f)
 					.saleStatus(true)
 					.newStatus(false)
 					.createdByUserid(2)
 					.build();
+
 
 			var comment0 = CommentDto.builder()
 					.content("This is a great product!")
@@ -345,6 +369,9 @@ public class PjCdtnApplication {
 					.build();
 			var pro0Response =productService.createProduct(pro0);
 			var pro1Response = productService.createProduct(pro1);
+
+//			var pro0Response =productService.createProduct(pro0);
+//			var pro1Response = productService.createProduct(pro1);
 
 			productService.createComment(comment0,pro0Response.getId());
 			productService.createComment(comment1,pro0Response.getId());

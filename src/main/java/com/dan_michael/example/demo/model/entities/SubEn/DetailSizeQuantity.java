@@ -2,7 +2,6 @@ package com.dan_michael.example.demo.model.entities.SubEn;
 
 import com.dan_michael.example.demo.model.entities.Product;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,19 +17,15 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class QuantityDetail {
+public class DetailSizeQuantity {
     @Id
     @GeneratedValue
     private Integer id;
-    private String color;
-    @OneToMany(mappedBy = "quantityDetail",fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<DetailSizeQuantity> sizeQuantities;
-
+    private String size;
+    private Integer quantity;
     private String identification;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "quantity_detail_id")
     @JsonBackReference
-    private Product product;
-
+    private QuantityDetail quantityDetail;
 }

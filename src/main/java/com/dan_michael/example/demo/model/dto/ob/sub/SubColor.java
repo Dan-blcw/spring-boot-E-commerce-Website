@@ -4,11 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
-public class SubQuantity {
+public class SubColor {
     private String color;
-    private String size;
-    private Integer quantity;
+    List<SubSizeQuantity> sizes;
 }

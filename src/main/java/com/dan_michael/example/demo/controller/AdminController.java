@@ -1,24 +1,19 @@
 package com.dan_michael.example.demo.controller;
 
-import com.dan_michael.example.demo.model.dto.ob.PaymentMethodsDtos;
-import com.dan_michael.example.demo.model.dto.ob.sub.SubBrandsResponse;
-import com.dan_michael.example.demo.model.dto.ob.sub.SubCategoryResponse;
+import com.dan_michael.example.demo.model.dto.ob.*;
+import com.dan_michael.example.demo.model.response.SubBrandsResponse;
+import com.dan_michael.example.demo.model.response.SubCategoryResponse;
 import com.dan_michael.example.demo.model.entities.PaymentMethods;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
-import com.dan_michael.example.demo.model.dto.ob.CategoryDtos;
-import com.dan_michael.example.demo.model.dto.ob.ProductDtos;
-import com.dan_michael.example.demo.model.dto.ob.Test;
-import com.dan_michael.example.demo.model.entities.Category;
-import com.dan_michael.example.demo.model.entities.Product;
 import com.dan_michael.example.demo.service.CategoryService;
 import com.dan_michael.example.demo.service.PaymentMethodsService;
 import com.dan_michael.example.demo.service.ProductService;
+import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,21 +40,30 @@ public class AdminController {
         if(response != null){
             return ResponseEntity.ok(response);
         }else {
-            return ResponseEntity.badRequest().body(ResponseMessageDtos.builder().message("This Product already exist").status(400).build());
+            return ResponseEntity.badRequest().body(
+                    ResponseMessageDtos.builder()
+                            .message(Constants.Product_ARD_Exist)
+                            .status(400)
+                            .build()
+            );
         }
     }
 
-//    @PostMapping(value = "/add-product-test-list")
-//    public ResponseEntity<?> createProductTest(
-//            @RequestBody ProductDtos request
-//    ) {
-//        var response = service.createProduct(request);
-//        if(response != null){
-//            return ResponseEntity.ok(response);
-//        }else {
-//            return ResponseEntity.badRequest().body(ResponseMessageDtos.builder().message("This Product already exist").status(400).build());
-//        }
-//    }
+    @PostMapping(value = "/add-product-test-list")
+    public ResponseEntity<?> createProductTest(
+            @RequestBody ProductDtos request
+    ) {
+        var response = service.createProduct(request);
+        if(response != null){
+            return ResponseEntity.ok(response);
+        }else {
+            return ResponseEntity.badRequest().body(
+                    ResponseMessageDtos.builder()
+                            .message(Constants.Product_ARD_Exist)
+                            .status(400).build()
+            );
+        }
+    }
 //socket, chatbot, devops, livestream, Mã QR,
     @PutMapping(value = "/update-product",consumes = { "multipart/form-data" })
     public ResponseEntity<?> updateProduct(
@@ -69,7 +73,28 @@ public class AdminController {
         if(response != null){
             return ResponseEntity.ok(response);
         }else {
-            return ResponseEntity.badRequest().body(ResponseMessageDtos.builder().message("ERROR! From Update Product").status(400).build());
+            return ResponseEntity.badRequest().body(
+                    ResponseMessageDtos.builder()
+                            .message(Constants.Product_Update_Fail)
+                            .status(400)
+                            .build()
+            );
+        }
+    }
+    @PutMapping(value = "/update-product-test")
+    public ResponseEntity<?> updateProductTest(
+            @RequestBody ProductDtos request
+    ) {
+        var response = service.updateProduct(request);
+        if(response != null){
+            return ResponseEntity.ok(response);
+        }else {
+            return ResponseEntity.badRequest().body(
+                    ResponseMessageDtos.builder()
+                            .message(Constants.Product_Update_Fail)
+                            .status(400)
+                            .build()
+            );
         }
     }
 
@@ -94,12 +119,12 @@ public class AdminController {
         if(response == null){
             return SubBrandsResponse.builder()
                     .brands(response)
-                    .message("Fetch data failed")
+                    .message(Constants.Fetch_Data_Brand_Fail)
                     .build();
         }
         return SubBrandsResponse.builder()
                 .brands(response)
-                .message("Data fetched successfully")
+                .message(Constants.Fetch_Data_Brand_Success)
                 .build();
     }
     @GetMapping(value = "/list-category")
@@ -121,7 +146,12 @@ public class AdminController {
         if(response != null){
             return ResponseEntity.ok(response);
         }else {
-            return ResponseEntity.badRequest().body(ResponseMessageDtos.builder().message("This Category already exist").status(400).build());
+            return ResponseEntity.badRequest().body(
+                    ResponseMessageDtos.builder()
+                            .message(Constants.Category_ARD_Exist)
+                            .status(400)
+                            .build()
+            );
         }
     }
 
@@ -133,7 +163,11 @@ public class AdminController {
         if(response != null){
             return ResponseEntity.ok(response);
         }else {
-            return ResponseEntity.badRequest().body(ResponseMessageDtos.builder().message("This Category already exist").status(400).build());
+            return ResponseEntity.badRequest().body(
+                    ResponseMessageDtos.builder()
+                            .message(Constants.Category_ARD_Exist)
+                            .status(400).build()
+            );
         }
     }
 
@@ -173,7 +207,11 @@ public class AdminController {
         if(response != null){
             return ResponseEntity.ok(response);
         }else {
-            return ResponseEntity.badRequest().body(ResponseMessageDtos.builder().message("This PaymentMethods already exist").status(400).build());
+            return ResponseEntity.badRequest().body(
+                    ResponseMessageDtos.builder()
+                            .message(Constants.Payment_Methods_ARD_Exist)
+                            .status(400).build()
+            );
         }
     }
 
@@ -185,7 +223,11 @@ public class AdminController {
         if(response != null){
             return ResponseEntity.ok(response);
         }else {
-            return ResponseEntity.badRequest().body(ResponseMessageDtos.builder().message("This PaymentMethods already exist").status(400).build());
+            return ResponseEntity.badRequest().body(
+                    ResponseMessageDtos.builder()
+                            .message(Constants.Payment_Methods_ARD_Exist)
+                            .status(400).build()
+            );
         }
     }
 

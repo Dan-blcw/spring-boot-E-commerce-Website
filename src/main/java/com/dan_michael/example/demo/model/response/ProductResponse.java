@@ -1,7 +1,7 @@
 package com.dan_michael.example.demo.model.response;
 
+import com.dan_michael.example.demo.model.dto.ob.sub.SubColor;
 import com.dan_michael.example.demo.model.entities.Comment;
-import com.dan_michael.example.demo.model.entities.ProductImg;
 import com.dan_michael.example.demo.model.entities.SubEn.QuantityDetail;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,14 +17,14 @@ import java.util.List;
 @NoArgsConstructor
 public class ProductResponse {
     private Integer id;
-    private List<ProductImgResponse> images;
+    private List<SubImgResponse> images;
     private List<String> colours;
     private List<String> sizes;
     private String brand;
     private String name;
     private String description;
 
-    private List<QuantityDetail> quantity;
+    private List<SubColor> quantityDetails;
     private Integer totalQuantity;
     private String category;
     private Float rating;
