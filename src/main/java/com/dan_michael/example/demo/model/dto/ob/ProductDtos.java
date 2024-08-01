@@ -20,16 +20,11 @@ public class ProductDtos {
     @JsonDeserialize(using = SubColorListDeserializer.class)
     private List<SubColor> quantityDetails;
     private String category;
-
     private String brand;
-
-    private Boolean favourite;
 
     private Float originalPrice ;
     private Float saleDiscountPercent ;
-    private Boolean saleStatus;
 
     private Boolean newStatus;
-
     private Integer createdByUserid;
 }

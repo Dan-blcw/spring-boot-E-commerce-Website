@@ -57,12 +57,18 @@ public class ProductService {
 
         product_flag.setRating(5.0f);
         product_flag.setNRating(0);
-
-        product_flag.setOriginalPrice(request.getOriginalPrice());
-        product_flag.setSaleDiscountPercent(request.getSaleDiscountPercent());
-        var finalPrice = request.getOriginalPrice() - request.getOriginalPrice()* (request.getSaleDiscountPercent()/100);
+        var finalPrice = 0.0f;
+        if(request.getSaleDiscountPercent() > 0){
+            product_flag.setSaleStatus(true);
+            product_flag.setOriginalPrice(request.getOriginalPrice());
+            product_flag.setSaleDiscountPercent(request.getSaleDiscountPercent());
+            finalPrice = request.getOriginalPrice() - request.getOriginalPrice()* (request.getSaleDiscountPercent()/100);
+        }else{
+            product_flag.setSaleStatus(false);
+            finalPrice = request.getOriginalPrice();
+        }
         product_flag.setFinalPrice(finalPrice);
-        product_flag.setSaleStatus(request.getSaleStatus());
+
         product_flag.setBrand(request.getBrand());
         product_flag.setNewStatus(true);
         product_flag.setFavourite(null);
@@ -194,15 +200,20 @@ public class ProductService {
             product_flag.setBrand(request.getBrand());
             product_flag.setNRating(0);
 
-            product_flag.setOriginalPrice(request.getOriginalPrice());
-            product_flag.setSaleDiscountPercent(request.getSaleDiscountPercent());
-            var finalPrice = request.getOriginalPrice() - request.getOriginalPrice()* (request.getSaleDiscountPercent()/100);
+            var finalPrice = 0.0f;
+            if(request.getSaleDiscountPercent() > 0){
+                product_flag.setSaleStatus(true);
+                product_flag.setOriginalPrice(request.getOriginalPrice());
+                product_flag.setSaleDiscountPercent(request.getSaleDiscountPercent());
+                finalPrice = request.getOriginalPrice() - request.getOriginalPrice()* (request.getSaleDiscountPercent()/100);
+            }else{
+                product_flag.setSaleStatus(false);
+                finalPrice = request.getOriginalPrice();
+            }
             product_flag.setFinalPrice(finalPrice);
-            product_flag.setSaleStatus(request.getSaleStatus());
 
-            product_flag.setNewStatus(true);
-
-            product_flag.setCreateDate(new Date());
+            product_flag.setNewStatus(false);
+            product_flag.setUpdateDate(new Date());
             product_flag.setCreatedByUserid(request.getCreatedByUserid());
         }
 //        Update có sẵn

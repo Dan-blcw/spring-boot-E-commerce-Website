@@ -70,6 +70,13 @@ public class Product {
     )
     private Date createDate;
 
+    @CreatedDate
+    @Column(
+            nullable = false,
+            updatable = false
+    )
+    private Date updateDate;
+
     @CreatedBy
     @Column(
             nullable = false,
