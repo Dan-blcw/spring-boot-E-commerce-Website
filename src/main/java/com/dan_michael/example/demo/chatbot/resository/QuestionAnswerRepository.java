@@ -11,11 +11,5 @@ public interface QuestionAnswerRepository extends JpaRepository<QuestionAnswer, 
     @Query("SELECT pi FROM QuestionAnswer pi WHERE pi.question = :question")
     QuestionAnswer findByQuestion(@Param("question") String question);
 
-
-//    @Query("SELECT pi FROM QuestionAnswer pi WHERE pi.answer = null ")
-//    List<QuestionAnswer> findQuestionOfGuest();
-
-//    @Query("SELECT pi FROM QuestionAnswer pi WHERE pi.question = :question AND pi.answer != null ")
-//    QuestionAnswer findExit(@Param("question") String question);
 }
 

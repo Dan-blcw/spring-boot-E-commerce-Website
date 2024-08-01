@@ -133,6 +133,7 @@ public class AuthenticationService {
                 .userImg(user_img)
                 .password(user.getPassword())
                 .role(user.getRole())
+                .userImgUrl(user.getUserImgUrl())
                 .address(user.getAddress())
                 .companyName(user.getCompanyName())
                 .address(user.getAddress())

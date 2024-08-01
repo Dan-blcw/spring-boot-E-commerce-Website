@@ -89,6 +89,7 @@ public class UserService {
                 .path(user.getName()+"/")
                 .path(file.getOriginalFilename())
                 .toUriString());
+        userImgRepository.deleteByIdentification(user.getName());
         userImgRepository.save(userImg);
 //        user.setUserImg(userImg);
         user.setUserImgUrl(userImg.getImg_url());

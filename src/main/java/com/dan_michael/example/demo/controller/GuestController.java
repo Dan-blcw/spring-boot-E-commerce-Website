@@ -160,7 +160,6 @@ public class GuestController {
 
     @GetMapping("/media/images/{name}/get-user-img")
     public String getUserImg_Url(@PathVariable String name) {
-        var user = userRepository.findByName_(name);
         var image_user = userImgRepository.findUserImgByUserName(name);
         if (image_user != null) {
             return image_user.getImg_url();

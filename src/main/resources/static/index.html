@@ -378,7 +378,7 @@
     let img_Url_Chat_bot = "https://i.pinimg.com/564x/4f/b5/e6/4fb5e6fc1eb937458849bcbe6a2b3807.jpg";
     let img_Url_User = "";
     let selectedUserId = null;
-async function login(event) {
+    async function login(event) {
         event.preventDefault();
 
         const email = document.querySelector('#email').value.trim();
@@ -405,7 +405,10 @@ async function login(event) {
 
                     name = data.user.name;
                     fullname = data.user.name;
-                    // img_Url_User = data.user.userImgUrl;
+                    const response = await fetch(`http://localhost:8080/api/v1/global/media/images/${name}/get-user-img`);
+                    if (response.ok) {
+                        img_Url_User = await response.text();
+                    }
                     loginPage.classList.add('hidden');
                     chatPage.classList.remove('hidden');
                     connect();
@@ -417,54 +420,6 @@ async function login(event) {
             }
         }
     }
-    async function fetchOptions() {
-        const optionsList = document.getElementById('options-list');
-        const token = localStorage.getItem('jwt');
-        try {
-            const response = await fetch('http://localhost:8080/api/v1/rest/getAllQuestions', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            const options = await response.json();
-            showOptions(); // Hiển thị danh sách tùy chọn
-            displayOptions(options);
-        } catch (error) {
-            console.error('Error fetching options:', error);
-        }
-    }
-
-    // Hiển thị tùy chọn trong danh sách
-    function displayOptions(options) {
-        const optionsContainer = document.getElementById('options-container');
-        optionsContainer.innerHTML = '';
-        options.forEach(option => {
-            const optionItem = document.createElement('li');
-            optionItem.className = 'option-item';
-            optionItem.textContent = option;
-            optionItem.addEventListener('click', () => {
-                const messageInput = document.getElementById('message');
-                messageInput.value = option; // Cập nhật nội dung tin nhắn với tùy chọn đã chọn
-                // hiddenOptions(); // Xóa và ẩn tất cả tùy chọn
-            });
-            optionsContainer.appendChild(optionItem);
-        });
-    }
-
-    // Hiển thị danh sách tùy chọn
-    function showOptions() {
-        document.getElementById('options-list').classList.remove('hidden');
-    }
-
-    // Hàm ẩn tùy chọn
-    function hiddenOptions() {
-        const optionsContainer = document.getElementById('options-container');
-        optionsContainer.innerHTML = ''; // Xóa tất cả các phần tử bên trong optionsContainer
-        document.getElementById('options-list').classList.add('hidden'); // Ẩn danh sách tùy chọn
-    }
-
     async function connect() {
         const socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
@@ -597,13 +552,83 @@ async function login(event) {
         });
         chatArea.scrollTop = chatArea.scrollHeight;
     }
+    async function fetchOptions() {
+        const token = localStorage.getItem('jwt');
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/rest/getAllQuestions', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const options = await response.json();
+            showOptions(); // Hiển thị danh sách tùy chọn
+            displayOptions(options);
+        } catch (error) {
+            console.error('Error fetching options:', error);
+        }
+    }
+
+    // Hiển thị tùy chọn trong danh sách
+    function displayOptions(options) {
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+        options.forEach(option => {
+            const optionItem = document.createElement('li');
+            optionItem.className = 'option-item';
+            optionItem.textContent = option;
+            optionItem.addEventListener('click', () => {
+                const messageInput = document.getElementById('message');
+                messageInput.value = option; // Cập nhật nội dung tin nhắn với tùy chọn đã chọn
+                // hiddenOptions(); // Xóa và ẩn tất cả tùy chọn
+            });
+            optionsContainer.appendChild(optionItem);
+        });
+    }
+
+    // Hiển thị danh sách tùy chọn
+    function showOptions() {
+        document.getElementById('options-list').classList.remove('hidden');
+    }
+
+    // Hàm ẩn tùy chọn
+    function hiddenOptions() {
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = ''; // Xóa tất cả các phần tử bên trong optionsContainer
+        document.getElementById('options-list').classList.add('hidden'); // Ẩn danh sách tùy chọn
+    }
 
 
     function onError() {
         connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
         connectingElement.style.color = 'red';
     }
+    // async function getUserImage() {
+    //     const username = document.getElementById('username').value;
+    //     const response = await fetch(`/media/images/${username}/get-user-img`);
+    //
+    //     if (response.ok) {
+    //         const imageUrl = await response.text();
+    //         displayImage(imageUrl);
+    //     } else {
+    //         console.error('Failed to fetch image');
+    //     }
+    // }
 
+    // function displayImage(url) {
+    //     const imageContainer = document.getElementById('imageContainer');
+    //     imageContainer.innerHTML = '';
+    //
+    //     if (url) {
+    //         const img = document.createElement('img');
+    //         img.src = url;
+    //         img.alt = 'User Image';
+    //         imageContainer.appendChild(img);
+    //     } else {
+    //         imageContainer.textContent = 'No image found for the user.';
+    //     }
+    // }
     async function sendMessage(event) {
         const messageContent = messageInput.value.trim();
         if (messageContent && stompClient) {
