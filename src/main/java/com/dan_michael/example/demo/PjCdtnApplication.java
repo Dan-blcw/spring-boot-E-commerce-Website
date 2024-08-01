@@ -342,8 +342,6 @@ public class PjCdtnApplication {
 					.brand("Netstripes")
 					.originalPrice(1000000.0f)
 					.saleDiscountPercent(10.0f)
-					.saleStatus(true)
-					.newStatus(true)
 					.createdByUserid(1)
 					.build();
 			var pro1 = ProductDtos.builder()
@@ -354,8 +352,6 @@ public class PjCdtnApplication {
 					.brand("Devipock")
 					.originalPrice(800000.0f)
 					.saleDiscountPercent(20.0f)
-					.saleStatus(true)
-					.newStatus(false)
 					.createdByUserid(2)
 					.build();
 
