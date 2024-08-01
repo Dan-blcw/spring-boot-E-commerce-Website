@@ -8,12 +8,12 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface QuestionAnswerRepository extends JpaRepository<QuestionAnswer, Integer> {
-    @Query("SELECT pi FROM QuestionAnswer pi WHERE pi.question = :question AND pi.answer != null ")
+    @Query("SELECT pi FROM QuestionAnswer pi WHERE pi.question = :question")
     QuestionAnswer findByQuestion(@Param("question") String question);
 
 
-    @Query("SELECT pi FROM QuestionAnswer pi WHERE pi.answer = null ")
-    List<QuestionAnswer> findQuestionOfGuest();
+//    @Query("SELECT pi FROM QuestionAnswer pi WHERE pi.answer = null ")
+//    List<QuestionAnswer> findQuestionOfGuest();
 
 //    @Query("SELECT pi FROM QuestionAnswer pi WHERE pi.question = :question AND pi.answer != null ")
 //    QuestionAnswer findExit(@Param("question") String question);

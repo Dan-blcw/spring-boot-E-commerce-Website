@@ -71,14 +71,14 @@
 
     .user-item.active {
         background-color: #eeb297;
-        color: #4f4f4f;
+        color: #1e1e1e;
         padding: 10px;
         border-radius: 5px;
     }
 
     .user-item img {
-        width: 40px;
-        height: 40px;
+        width: 50px;
+        height: 50px;
         border-radius: 50%;
         margin-right: 10px;
     }
@@ -156,13 +156,16 @@
     }
 
     .message-input button {
-        padding: 10px;
+        /*flex: 1;*/
+        padding: 8px;
         border: none;
         background-color: #99540c;
         color: #fff;
         border-radius: 5px;
         cursor: pointer;
+        margin-right: 8px;
     }
+
 
     .user-form {
         max-width: 400px;
@@ -248,6 +251,54 @@
     .option-item:hover {
         background-color: #ddd;
     }
+    /*#emoji-picker {*/
+    /*    display: none;*/
+    /*}*/
+
+    /*!* CSS để hiển thị emoji-picker khi cần *!*/
+    /*#emoji-picker.show {*/
+    /*    display: block;*/
+    /*}*/
+
+    /*!* Thêm một số kiểu cho nút kích hoạt emoji-picker *!*/
+    /*.emoji-btn {*/
+    /*    cursor: pointer;*/
+    /*    background-color: #f0f0f0;*/
+    /*    border: 1px solid #ddd;*/
+    /*    padding: 5px 5px;*/
+    /*    border-radius: 5px;*/
+    /*}*/
+    #emoji-picker {
+        display: none;
+        position: absolute;
+        bottom: 0; /* Canh dưới */
+        right: 0; /* Canh phải */
+        z-index: 1000; /* Đảm bảo nó nằm trên các phần tử khác */
+        background: white; /* Màu nền để dễ nhìn */
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ để nổi bật */
+        border-radius: 10px; /* Bo tròn góc */
+        padding-bottom: 15px;
+        margin-bottom: 50px;
+    }
+
+    /* CSS để hiển thị emoji-picker khi cần */
+    #emoji-picker.show {
+        display: block;
+    }
+
+    /* Thêm một số kiểu cho nút kích hoạt emoji-picker */
+    .emoji-btn {
+        cursor: pointer;
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    /* Đảm bảo form là relative để emoji-picker canh đúng */
+    #messageForm {
+        position: relative;
+    }
 
     </style>
     <title>Chat Application</title>
@@ -285,8 +336,12 @@
         </div>
 
         <form id="messageForm" name="messageForm" class="hidden">
+            <emoji-picker id="emoji-picker" style="margin-right: auto"></emoji-picker>
             <div class="message-input">
                 <input autocomplete="off" type="text" id="message" placeholder="Type your message...">
+
+                <button type="button" id="emoji-btn" class="emoji-btn" style="">🌤</button>
+
                 <button>Send</button>
             </div>
         </form>
@@ -297,7 +352,9 @@
     </div>
 
 </div>
-
+<script type="module">
+    import emojiPickerElement from 'https://cdn.jsdelivr.net/npm/emoji-picker-element@1.22.0/+esm'
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script>
@@ -311,12 +368,15 @@
     const connectingElement = document.querySelector('.connecting');
     const chatArea = document.querySelector('#chat-messages');
     const logout = document.querySelector('#logout');
-
-    let CHAT_BOT_NAME = "Chat Bot Support";
+    const buttonEmoji = document.querySelector('#emoji-btn');
+    let CHAT_BOT_NAME = "Aza Chōbei Assistant";
+    let ADMIN_NAME = "Admin";
     let stompClient = null;
     let name = null;
     let fullname = null;
     let img_Url = "https://i.pinimg.com/564x/85/b4/c5/85b4c564f9e2446706e3d4fc037eff12.jpg";
+    let img_Url_Chat_bot = "https://i.pinimg.com/564x/4f/b5/e6/4fb5e6fc1eb937458849bcbe6a2b3807.jpg";
+    let img_Url_User = "";
     let selectedUserId = null;
 async function login(event) {
         event.preventDefault();
@@ -339,16 +399,15 @@ async function login(event) {
                 });
                 console.log(requestBody);
                 const data = await response.json();
-
                 if (data.jwt) {
                     localStorage.setItem('jwt', data.jwt);
                     localStorage.setItem('user', JSON.stringify(data.user));
 
                     name = data.user.name;
                     fullname = data.user.name;
+                    // img_Url_User = data.user.userImgUrl;
                     loginPage.classList.add('hidden');
                     chatPage.classList.remove('hidden');
-
                     connect();
                 } else {
                     alert('Login failed!');
@@ -370,14 +429,14 @@ async function login(event) {
                 }
             });
             const options = await response.json();
-            optionsList.classList.remove('hidden');
+            showOptions(); // Hiển thị danh sách tùy chọn
             displayOptions(options);
         } catch (error) {
             console.error('Error fetching options:', error);
         }
     }
 
-    // Function to display options in the list
+    // Hiển thị tùy chọn trong danh sách
     function displayOptions(options) {
         const optionsContainer = document.getElementById('options-container');
         optionsContainer.innerHTML = '';
@@ -387,11 +446,23 @@ async function login(event) {
             optionItem.textContent = option;
             optionItem.addEventListener('click', () => {
                 const messageInput = document.getElementById('message');
-                messageInput.value = option; // Update message-input with selected option
-                document.getElementById('options-list').classList.add('hidden'); // Hide options list
+                messageInput.value = option; // Cập nhật nội dung tin nhắn với tùy chọn đã chọn
+                // hiddenOptions(); // Xóa và ẩn tất cả tùy chọn
             });
             optionsContainer.appendChild(optionItem);
         });
+    }
+
+    // Hiển thị danh sách tùy chọn
+    function showOptions() {
+        document.getElementById('options-list').classList.remove('hidden');
+    }
+
+    // Hàm ẩn tùy chọn
+    function hiddenOptions() {
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = ''; // Xóa tất cả các phần tử bên trong optionsContainer
+        document.getElementById('options-list').classList.add('hidden'); // Ẩn danh sách tùy chọn
     }
 
     async function connect() {
@@ -410,9 +481,9 @@ async function login(event) {
         // register the connected user
         stompClient.send("/app/addUser",
             { Authorization: `Bearer ${localStorage.getItem('jwt')}` },
-            JSON.stringify({name: name, fullName: fullname,img_url:img_Url, status: 'ONLINE'})
+            JSON.stringify({name: name, fullName: fullname,img_url:img_Url_User, status: 'ONLINE'})
         );
-        document.querySelector('#connected-user-fullname').textContent = "Account: " + name ;
+        document.querySelector('#connected-user-fullname').textContent = "Account - " + name ;
         findAndDisplayConnectedUsers().then();
     }
 
@@ -447,10 +518,11 @@ async function login(event) {
         listItem.id = user.name;
 
         const userImage = document.createElement('img');
-        userImage.src = img_Url ? user.img_url : 'user.png';
+        userImage.src = user.img_url ? user.img_url : 'user.png';
         userImage.alt = user.fullName;
+
         if(user.name === CHAT_BOT_NAME){
-            userImage.src = 'user.png';
+            userImage.src = img_Url_Chat_bot;
         }
 
         const usernameSpan = document.createElement('span');
@@ -488,6 +560,7 @@ async function login(event) {
     }
 
     function displayMessage(senderId, content) {
+        // setTimeout(() => {
         const messageContainer = document.createElement('div');
         messageContainer.classList.add('message');
         if (senderId === name) {
@@ -499,11 +572,16 @@ async function login(event) {
         message.textContent = content;
         messageContainer.appendChild(message);
         chatArea.appendChild(messageContainer);
+        // }, 100);
     }
 
     async function fetchAndDisplayUserChat() {
         if(selectedUserId === CHAT_BOT_NAME){
             await fetchOptions();
+            buttonEmoji.classList.add('hidden');
+        }else{
+            hiddenOptions()
+            buttonEmoji.classList.remove('hidden');
         }
         const token = localStorage.getItem('jwt');
 
@@ -536,8 +614,10 @@ async function login(event) {
                 timestamp: new Date()
             };
             stompClient.send("/app/chat", {}, JSON.stringify(chatMessage));
-
             displayMessage(name, messageInput.value.trim());
+            if(selectedUserId === CHAT_BOT_NAME){
+                fetchAndDisplayUserChat().then();
+            }
             messageInput.value = '';
         }
         chatArea.scrollTop = chatArea.scrollHeight;
@@ -558,7 +638,6 @@ async function login(event) {
         } else {
             messageForm.classList.add('hidden');
         }
-
         const notifiedUser = document.querySelector(`#${message.senderId}`);
         if (notifiedUser && !notifiedUser.classList.contains('active')) {
             const nbrMsg = notifiedUser.querySelector('.nbr-msg');
@@ -568,11 +647,13 @@ async function login(event) {
     }
 
     function onLogout() {
-        stompClient.send("/app/disconnectUser",
-            {},
-            JSON.stringify({name: name, fullName: fullname,img_url:img_Url ,status: 'OFFLINE'})
-        );
-        window.location.reload();
+        if(name !== CHAT_BOT_NAME){
+            stompClient.send("/app/disconnectUser",
+                {},
+                JSON.stringify({name: name, fullName: fullname,img_url:img_Url_User ,status: 'OFFLINE'})
+            );
+            window.location.reload();
+        }
     }
 
     loginForm.addEventListener('submit', login, true);
@@ -580,6 +661,26 @@ async function login(event) {
     logout.addEventListener('click', onLogout, true);
     window.onbeforeunload = () => onLogout();
 
+    const emojiPicker = document.querySelector('#emoji-picker');
+    const emojiBtn = document.querySelector('#emoji-btn');
+    emojiBtn.addEventListener('click', () => {
+        if (emojiPicker.classList.contains('show')) {
+            emojiPicker.classList.remove('show');
+        } else {
+            emojiPicker.classList.add('show');
+        }
+    });
+
+    emojiPicker.addEventListener('emoji-click', event => {
+        const messageInput = document.querySelector('#message');
+        messageInput.focus();
+        emojiPicker.classList.remove('show'); // Ẩn emoji-picker sau khi chọn emoji
+    });
+
+    document.querySelector('#emoji-picker').addEventListener('emoji-click', (event) => {
+        const messageInput = document.querySelector('#message');
+        messageInput.value += event.detail.unicode;
+    });
 </script>
 </body>
 </html>

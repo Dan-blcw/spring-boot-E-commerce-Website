@@ -31,7 +31,7 @@ public class ChatRestController {
 
     @PostMapping("/chat")
     public String chat(@RequestBody RequestMessageChatBotDtos message) {
-    	return chatBotService.handleInput(message);
+    	return chatBotService.handleInput(message.getMessage());
     }
     @PostMapping("/qa")
     public QuestionAnswer createQuestionAnswer(@RequestBody QuestionAnswer qa) {

@@ -91,6 +91,7 @@ public class UserService {
                 .toUriString());
         userImgRepository.save(userImg);
 //        user.setUserImg(userImg);
+        user.setUserImgUrl(userImg.getImg_url());
         repository.save(user);
         return SubImgResponse.builder()
                 .id(userImg.getId())

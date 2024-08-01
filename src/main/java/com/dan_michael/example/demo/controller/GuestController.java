@@ -20,6 +20,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -42,6 +43,10 @@ public class GuestController {
 
     private final ChatbotService chatBotService;
 //--------------------------Quest of Guess----------------------------------
+    @GetMapping("/")
+    public String getResponse(@RequestParam String question) {
+        return chatBotService.handleInput(question);
+    }
     @PostMapping("/chat")
     public ResponseMessageDtos createQuestionForGuest(@RequestBody QuestionOfGuestInfoDtos request) {
         return chatBotService.createQuestionForGuest(request);

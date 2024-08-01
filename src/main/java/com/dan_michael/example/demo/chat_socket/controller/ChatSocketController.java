@@ -36,7 +36,7 @@ public class ChatSocketController {
                         savedMsg.getContent()
                 )
         );
-        if(savedMsg.getRecipientId().equals("Chat Bot Support")){
+        if(savedMsg.getRecipientId().equals("Aza Chōbei Assistant")){
             var chatMessageResponse = ChatMessage.builder()
                     .chatId(savedMsg.getChatId())
                     .senderId(savedMsg.getRecipientId())
@@ -61,9 +61,13 @@ public class ChatSocketController {
         }
     }
 
-    @GetMapping("/chat-bot")
     public String getResponse(@Payload RequestMessageChatBotDtos message) {
-        return chatBotService.handleInput(message);
+        return chatBotService.handleInput(message.getMessage());
+    }
+
+    @GetMapping("/chat/{senderId}")
+    public String getResponsec(@PathVariable String senderId) {
+        return chatBotService.handleInput(senderId);
     }
 
     @GetMapping("/messages/{senderId}/{recipientId}")
@@ -73,4 +77,5 @@ public class ChatSocketController {
         return ResponseEntity
                 .ok(chatMessageService.findChatMessages(senderId, recipientId));
     }
+
 }

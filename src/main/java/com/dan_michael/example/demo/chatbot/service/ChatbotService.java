@@ -28,10 +28,11 @@ public class ChatbotService {
     private final QuestionOfGuestRepository questionOfGuestRepository;
 
     private final UserRepository userRepository;
-    public String handleInput(RequestMessageChatBotDtos message) {
-        QuestionAnswer qa = questionAnswerRepository.findByQuestion(removeDiacritics(message.getMessage().toLowerCase()));
+    public String handleInput(String message) {
+        System.out.println(message);
+        QuestionAnswer qa = questionAnswerRepository.findByQuestion(removeDiacritics(message.toLowerCase()));
         System.out.println(qa);
-        if (qa != null) {
+        if (qa != null && qa.getAnswer() != null) {
             return qa.getAnswer();
         } else {
             return "I'm sorry, I didn't understand that. Could you please rephrase?";

@@ -65,14 +65,14 @@ public class PjCdtnApplication {
 			System.out.println("User token: " + service.register(user).getJwt());
 //----------------------Tạo Tài Khoản ChatBot ----------------------------------------------
 			var chatbot = RegisterDtos.builder()
-					.email("chat-bot@@mail.com")
-					.name("Chat Bot Support")
+					.email("chatbot@mail.com")
+					.name("Aza Chōbei Assistant")
 					.password("0")
 					.build();
 			service.createAdmin(chatbot);
 			userAccountInfoService.saveUser(UserAccountInfo.builder()
-					.name("Chat Bot Support")
-					.fullName("Chat Bot Support")
+					.name("Aza Chōbei Assistant")
+					.fullName("Aza Chōbei Assistant")
 					.status(Status.ONLINE)
 					.build());
 

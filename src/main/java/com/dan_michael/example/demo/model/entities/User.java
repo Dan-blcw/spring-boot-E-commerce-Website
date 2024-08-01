@@ -46,6 +46,7 @@ public class User implements UserDetails {
 //  @JsonBackReference
   private UserImg userImg;
 
+  private String userImgUrl;
   @Enumerated(EnumType.STRING)
   private Role role;
 
