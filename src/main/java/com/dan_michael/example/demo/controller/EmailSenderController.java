@@ -30,7 +30,8 @@ public class EmailSenderController {
 //
 //            return "Email sent successfully!";
 //        }
-    @PostMapping("/send-email")
+
+    @PostMapping("/answer-guest-quest")
     public String sendEmail(@RequestBody EmailSenderDtos request) {
         String toEmail = request.getEmail();
         String subject = request.getSubject();
@@ -38,10 +39,22 @@ public class EmailSenderController {
         String body = request.getBody();
         String discountCode = request.getDiscountCode();
         String logoPath = "D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img.png";
-        var response = emailService.sendEmail(toEmail, subject, name,body, logoPath, discountCode);
+        var response = emailService.sendEmailAnswer(toEmail, subject, name,body, logoPath, discountCode);
 
         return response;
     }
+
+//    @PostMapping("/send-email")
+//    public String sendEmail(@RequestBody EmailSenderDtos request) {
+//        String toEmail = request.getEmail();
+//        String subject = request.getSubject();
+//        String name = request.getName();
+//        String body = request.getBody();
+//        String logoPath = "D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img.png";
+//        var response = emailService.sendEmail(toEmail, subject, name,body, logoPath);
+//
+//        return response;
+//    }
 
 
     @PostMapping("/get-discount-code")

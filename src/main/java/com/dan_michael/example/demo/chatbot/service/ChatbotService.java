@@ -7,10 +7,16 @@ import java.util.stream.Collectors;
 
 import com.dan_michael.example.demo.chatbot.entities.ManyQuestionAnswerDtos;
 import com.dan_michael.example.demo.chatbot.entities.QuestionAnswer;
-import com.dan_michael.example.demo.chatbot.entities.RequestMessageChatBotDtos;
+import com.dan_michael.example.demo.chatbot.entities.QuestionForGuest;
+import com.dan_michael.example.demo.chatbot.entities.dtos.QuestionOfGuestInfoDtos;
+import com.dan_michael.example.demo.chatbot.entities.dtos.RequestMessageChatBotDtos;
 import com.dan_michael.example.demo.chatbot.resository.QuestionAnswerRepository;
+import com.dan_michael.example.demo.chatbot.resository.QuestionOfGuestRepository;
+import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
+import com.dan_michael.example.demo.repositories.UserRepository;
+import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +25,9 @@ public class ChatbotService {
 
     private final QuestionAnswerRepository questionAnswerRepository;
 
+    private final QuestionOfGuestRepository questionOfGuestRepository;
+
+    private final UserRepository userRepository;
     public String handleInput(RequestMessageChatBotDtos message) {
         QuestionAnswer qa = questionAnswerRepository.findByQuestion(removeDiacritics(message.getMessage().toLowerCase()));
         System.out.println(qa);
@@ -33,7 +42,67 @@ public class ChatbotService {
         qa.setQuestion(removeDiacritics(qa.getQuestion().toLowerCase()));
         return questionAnswerRepository.save(qa);
     }
+    public ResponseMessageDtos createQuestionAnswerForGuest(QuestionAnswer request) {
+        var question_of_guest = questionOfGuestRepository.findByQuestionForAnwser(request.getQuestion());
+        if(question_of_guest == null){
+            return ResponseMessageDtos.builder()
+                    .status(404)
+                    .message(Constants.Question_Does_Not_Exists)
+                    .build();
+        }
+        if(question_of_guest.getAnswer() != null){
+            return ResponseMessageDtos.builder()
+                    .status(404)
+                    .message(Constants.Answer_Exists)
+                    .build();
+        }
+        var user = userRepository.findByEmail_(question_of_guest.getEmail());
+        if(user==null){
+            return ResponseMessageDtos.builder()
+                    .status(404)
+                    .message(Constants.Create_QuestionAnswer_For_Guest_Fail)
+                    .build();
+        }
+        question_of_guest.setAnswer(request.getAnswer());
+        questionOfGuestRepository.save(question_of_guest);
+        questionAnswerRepository.save(
+                QuestionAnswer.builder()
+                        .question(question_of_guest.getQuestion())
+                        .answer(request.getAnswer())
+                .build());
+        return ResponseMessageDtos.builder()
+                .status(200)
+                .message(Constants.Create_QuestionAnswer_For_Guest_Success)
+                .build();
+    }
 
+    public ResponseMessageDtos createQuestionForGuest(QuestionOfGuestInfoDtos request) {
+        var question_of_guest = questionOfGuestRepository.findByQuestionForAnwser(request.getQuestion());
+        if(question_of_guest != null){
+            return ResponseMessageDtos.builder()
+                    .status(404)
+                    .message(Constants.Create_QuestionAnswer_For_Guest_Fail)
+                    .build();
+        }
+        var user = userRepository.findByEmail_(request.getEmail());
+        if(user==null){
+            return ResponseMessageDtos.builder()
+                    .status(404)
+                    .message(Constants.Create_Question_For_Guest_Fail)
+                    .build();
+        }
+        var qa = QuestionForGuest.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .phone(request.getPhone())
+                .question(request.getQuestion())
+                .build();
+        questionOfGuestRepository.save(qa);
+        return ResponseMessageDtos.builder()
+                .status(200)
+                .message(Constants.Create_Question_For_Guest_Success)
+                .build();
+    }
     public List<QuestionAnswer> createManyQuestionAnswer(ManyQuestionAnswerDtos qa) {
         for(var x : qa.getData()){
             x.setQuestion(removeDiacritics(x.getQuestion().toLowerCase()));
@@ -63,6 +132,12 @@ public class ChatbotService {
     public List<String> getAllQuestions() {
     	return questionAnswerRepository.findAll().stream()
                 .map(QuestionAnswer::getQuestion)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getAllQuestionsOfGuest() {
+        return questionOfGuestRepository.findAll().stream()
+                .map(QuestionForGuest::getQuestion)
                 .collect(Collectors.toList());
     }
     public static String removeDiacritics(String input) {

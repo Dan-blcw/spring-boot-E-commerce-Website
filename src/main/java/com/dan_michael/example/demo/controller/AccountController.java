@@ -18,14 +18,17 @@ public class AccountController {
 
     private final UserService Change_service;
 
-    @PatchMapping(value = "/update-user-image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PatchMapping(value = "/update-user-image",
+            consumes = { MediaType.MULTIPART_FORM_DATA_VALUE
+    })
     public ResponseEntity<?> updateUserImage(
             @ModelAttribute MultipartFile image,
             Principal connectedUser
     ) {
         return ResponseEntity.ok(Change_service.updateUserImage(image, connectedUser));
     }
-    @PatchMapping(value = "/update-profile", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/update-profile",
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateProfile(
             @RequestBody ChangeProfileDtos request,
             Principal connectedUser

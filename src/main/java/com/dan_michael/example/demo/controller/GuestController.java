@@ -1,12 +1,16 @@
 package com.dan_michael.example.demo.controller;
 
 
+import com.dan_michael.example.demo.chatbot.entities.dtos.QuestionOfGuestInfoDtos;
+import com.dan_michael.example.demo.chatbot.entities.dtos.RequestMessageChatBotDtos;
+import com.dan_michael.example.demo.chatbot.service.ChatbotService;
 import com.dan_michael.example.demo.model.dto.global.ChangeForgetPasswordDtos;
 import com.dan_michael.example.demo.model.dto.global.ForgetPasswordDtos;
 import com.dan_michael.example.demo.model.dto.global.PaginationDto;
 import com.dan_michael.example.demo.model.dto.ob.ProductListDtos;
 import com.dan_michael.example.demo.model.response.ProductResponse;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
+import com.dan_michael.example.demo.repositories.UserRepository;
 import com.dan_michael.example.demo.repositories.image.ProductImgRepository;
 import com.dan_michael.example.demo.repositories.image.UserImgRepository;
 import com.dan_michael.example.demo.service.ProductService;
@@ -30,10 +34,18 @@ public class GuestController {
 
     private final ProductImgRepository productImgRepository;
 
+    private final UserRepository userRepository;
+
     private final UserImgRepository userImgRepository;
 
     private final UserService userService;
 
+    private final ChatbotService chatBotService;
+//--------------------------Quest of Guess----------------------------------
+    @PostMapping("/chat")
+    public ResponseMessageDtos createQuestionForGuest(@RequestBody QuestionOfGuestInfoDtos request) {
+        return chatBotService.createQuestionForGuest(request);
+    }
 //--------------------------Forget Password----------------------------------
     @GetMapping(value = "/check-forget-password")
     public ResponseMessageDtos checkForgetPassword(
@@ -70,76 +82,86 @@ public class GuestController {
                         .build());
     }
 //--------------------------favorite----------------------------------
-    @GetMapping(value = "/favorite-products")
-    public ResponseEntity<?> getFavoriteByUser_id(
-            @RequestParam (required = false)Integer use_id
-
-    ) {
-        var ob = service.findbyFavouriteByUserID(use_id);
-        return ResponseEntity.ok(ob);
-    }
-    @PostMapping(value = "/add-favorite")
-    public ResponseEntity<?> addFavorite(
-            @RequestParam (required = false)String Product_name,
-            @RequestParam (required = false)Integer use_id
-    ) {
-        var response = service.addFavourite(Product_name,use_id);
-        return ResponseEntity.ok(response);
-    }
-
-    @DeleteMapping(value = "/delete-favorite")
-    public ResponseEntity<?> deleteFavorite(
-            @RequestParam (required = false)String Product_name,
-            @RequestParam (required = false)Integer use_id
-    ) {
-        var response = service.deleteFavourite(Product_name,use_id);
-        return ResponseEntity.ok(response);
-    }
+//    @GetMapping(value = "/favorite-products")
+//    public ResponseEntity<?> getFavoriteByUser_id(
+//            @RequestParam (required = false)Integer use_id
+//
+//    ) {
+//        var ob = service.findbyFavouriteByUserID(use_id);
+//        return ResponseEntity.ok(ob);
+//    }
+//    @PostMapping(value = "/add-favorite")
+//    public ResponseEntity<?> addFavorite(
+//            @RequestParam (required = false)String Product_name,
+//            @RequestParam (required = false)Integer use_id
+//    ) {
+//        var response = service.addFavourite(Product_name,use_id);
+//        return ResponseEntity.ok(response);
+//    }
+//
+//    @DeleteMapping(value = "/delete-favorite")
+//    public ResponseEntity<?> deleteFavorite(
+//            @RequestParam (required = false)String Product_name,
+//            @RequestParam (required = false)Integer use_id
+//    ) {
+//        var response = service.deleteFavourite(Product_name,use_id);
+//        return ResponseEntity.ok(response);
+//    }
 //--------------------------QuantityDetail----------------------------------
 
-    @GetMapping(value = "/delete-favorite")
-    public ResponseEntity<?> getDetail(
-            @RequestParam (required = false)String Product_name,
-            @RequestParam (required = false)Integer use_id
-    ) {
-        var response = service.deleteFavourite(Product_name,use_id);
-        return ResponseEntity.ok(response);
-    }
+//    @GetMapping(value = "/delete-favorite")
+//    public ResponseEntity<?> getDetail(
+//            @RequestParam (required = false)String Product_name,
+//            @RequestParam (required = false)Integer use_id
+//    ) {
+//        var response = service.deleteFavourite(Product_name,use_id);
+//        return ResponseEntity.ok(response);
+//    }
 
 //--------------------------Search----------------------------------
-    @GetMapping(value = "/list-search",produces = "application/json")
-    public ResponseEntity<?> global_search(
-            @RequestParam (required = false)List<String> brands,
-            @RequestParam (required = false)Boolean isPromotion,
-            @RequestParam (required = false)Boolean isReleased,
-            @RequestParam (required = false)Integer ratingGte,
-            @RequestParam (required = false)Integer price_gte,
-            @RequestParam (required = false)Integer price_lte,
-            @RequestParam Integer _limit,
-            @RequestParam Integer _page,
-            @RequestParam (required = false)String _sort
-    ) {
-        List<ProductResponse> list = service.search_all(brands,isPromotion,isReleased,ratingGte,price_gte,price_lte,_sort);
-        return ResponseEntity.ok(ProductListDtos.builder().data(list).paginationDto(new PaginationDto(list.size(),_limit)).build());
-    }
+//    @GetMapping(value = "/list-search",produces = "application/json")
+//    public ResponseEntity<?> global_search(
+//            @RequestParam (required = false)List<String> brands,
+//            @RequestParam (required = false)Boolean isPromotion,
+//            @RequestParam (required = false)Boolean isReleased,
+//            @RequestParam (required = false)Integer ratingGte,
+//            @RequestParam (required = false)Integer price_gte,
+//            @RequestParam (required = false)Integer price_lte,
+//            @RequestParam Integer _limit,
+//            @RequestParam Integer _page,
+//            @RequestParam (required = false)String _sort
+//    ) {
+//        List<ProductResponse> list = service.search_all(brands,isPromotion,isReleased,ratingGte,price_gte,price_lte,_sort);
+//        return ResponseEntity.ok(ProductListDtos.builder().data(list).paginationDto(new PaginationDto(list.size(),_limit)).build());
+//    }
 //--------------------------GetQuantityDetail----------------------------------
-    @GetMapping(value = "/detail-product/{product_name}/get-color-detail")
-    public ResponseEntity<?> getColorDetail(
-            @PathVariable String product_name,
-            @RequestParam (required = false)String color
-    ) {
-        var response = service.getSizeQuantityByColorAndproductname(product_name,color);
-        return ResponseEntity.ok(response);
-    }
+//    @GetMapping(value = "/detail-product/{product_name}/get-color-detail")
+//    public ResponseEntity<?> getColorDetail(
+//            @PathVariable String product_name,
+//            @RequestParam (required = false)String color
+//    ) {
+//        var response = service.getSizeQuantityByColorAndproductname(product_name,color);
+//        return ResponseEntity.ok(response);
+//    }
 
-    @GetMapping(value = "/detail-product/{product_name}/get-quantitys-total")
-    public ResponseEntity<?> getDetailQuantity(
-            @PathVariable String product_name
-    ) {
-        var response = service.getQuantityTotal(product_name);
-        return ResponseEntity.ok(response);
-    }
+//    @GetMapping(value = "/detail-product/{product_name}/get-quantitys-total")
+//    public ResponseEntity<?> getDetailQuantity(
+//            @PathVariable String product_name
+//    ) {
+//        var response = service.getQuantityTotal(product_name);
+//        return ResponseEntity.ok(response);
+//    }
 //--------------------------load File File name----------------------------------
+
+    @GetMapping("/media/images/{name}/get-user-img")
+    public String getUserImg_Url(@PathVariable String name) {
+        var user = userRepository.findByName_(name);
+        var image_user = userImgRepository.findUserImgByUserName(name);
+        if (image_user != null) {
+            return image_user.getImg_url();
+        }
+        return "";
+    }
     @GetMapping("/media/images/{name}/{filename}")
     public ResponseEntity<ByteArrayResource> getImageByFilename(
             @PathVariable String name,

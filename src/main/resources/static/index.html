@@ -270,12 +270,12 @@
 <div class="chat-container hidden" id="chat-page">
     <div class="users-list">
         <div class="users-list-container">
+            <p id="connected-user-fullname"></p>
             <h2>Online.....</h2>
             <ul id="connectedUsers">
             </ul>
         </div>
         <div>
-            <p id="connected-user-fullname"></p>
             <a class="logout" href="javascript:void(0)" id="logout">Logout</a>
         </div>
     </div>
@@ -314,8 +314,9 @@
 
     let CHAT_BOT_NAME = "Chat Bot Support";
     let stompClient = null;
-    let nickname = null;
+    let name = null;
     let fullname = null;
+    let img_Url = "https://i.pinimg.com/564x/85/b4/c5/85b4c564f9e2446706e3d4fc037eff12.jpg";
     let selectedUserId = null;
 async function login(event) {
         event.preventDefault();
@@ -343,9 +344,8 @@ async function login(event) {
                     localStorage.setItem('jwt', data.jwt);
                     localStorage.setItem('user', JSON.stringify(data.user));
 
-                    nickname = data.user.name;
+                    name = data.user.name;
                     fullname = data.user.name;
-
                     loginPage.classList.add('hidden');
                     chatPage.classList.remove('hidden');
 
@@ -385,6 +385,11 @@ async function login(event) {
             const optionItem = document.createElement('li');
             optionItem.className = 'option-item';
             optionItem.textContent = option;
+            optionItem.addEventListener('click', () => {
+                const messageInput = document.getElementById('message');
+                messageInput.value = option; // Update message-input with selected option
+                document.getElementById('options-list').classList.add('hidden'); // Hide options list
+            });
             optionsContainer.appendChild(optionItem);
         });
     }
@@ -399,16 +404,15 @@ async function login(event) {
     }
 
     function onConnected() {
-        stompClient.subscribe(`/user/${CHAT_BOT_NAME}/queue/messages`, onMessageReceived); //check
-        stompClient.subscribe(`/user/${nickname}/queue/messages`, onMessageReceived); //check
+        stompClient.subscribe(`/user/${name}/queue/messages`, onMessageReceived); //check
         stompClient.subscribe(`/user/queue/public`, onMessageReceived); //check
 
         // register the connected user
         stompClient.send("/app/addUser",
             { Authorization: `Bearer ${localStorage.getItem('jwt')}` },
-            JSON.stringify({nickName: nickname, fullName: fullname, status: 'ONLINE'})
+            JSON.stringify({name: name, fullName: fullname,img_url:img_Url, status: 'ONLINE'})
         );
-        document.querySelector('#connected-user-fullname').textContent = name;
+        document.querySelector('#connected-user-fullname').textContent = "Account: " + name ;
         findAndDisplayConnectedUsers().then();
     }
 
@@ -422,7 +426,7 @@ async function login(event) {
         });
 
         let connectedUsers = await connectedUsersResponse.json();
-        connectedUsers = connectedUsers.filter(user => user.nickName !== nickname);
+        connectedUsers = connectedUsers.filter(user => user.name !== name);
         const connectedUsersList = document.getElementById('connectedUsers');
         connectedUsersList.innerHTML = '';
 
@@ -440,11 +444,14 @@ async function login(event) {
     function appendUserElement(user, connectedUsersList) {
         const listItem = document.createElement('li');
         listItem.classList.add('user-item');
-        listItem.id = user.nickName;
+        listItem.id = user.name;
 
         const userImage = document.createElement('img');
-        userImage.src = 'user.png';
+        userImage.src = img_Url ? user.img_url : 'user.png';
         userImage.alt = user.fullName;
+        if(user.name === CHAT_BOT_NAME){
+            userImage.src = 'user.png';
+        }
 
         const usernameSpan = document.createElement('span');
         usernameSpan.textContent = user.fullName;
@@ -483,7 +490,7 @@ async function login(event) {
     function displayMessage(senderId, content) {
         const messageContainer = document.createElement('div');
         messageContainer.classList.add('message');
-        if (senderId === nickname) {
+        if (senderId === name) {
             messageContainer.classList.add('sender');
         } else {
             messageContainer.classList.add('receiver');
@@ -500,12 +507,11 @@ async function login(event) {
         }
         const token = localStorage.getItem('jwt');
 
-        const userChatResponse = await fetch(`/api/v1/chat-box/messages/${nickname}/${selectedUserId}`, {
+        const userChatResponse = await fetch(`/api/v1/chat-box/messages/${name}/${selectedUserId}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         });
-
         const userChat = await userChatResponse.json();
         chatArea.innerHTML = '';
         userChat.forEach(chat => {
@@ -520,29 +526,23 @@ async function login(event) {
         connectingElement.style.color = 'red';
     }
 
-
     async function sendMessage(event) {
         const messageContent = messageInput.value.trim();
         if (messageContent && stompClient) {
             const chatMessage = {
-                senderId: nickname,
+                senderId: name,
                 recipientId: selectedUserId,
                 content: messageInput.value.trim(),
                 timestamp: new Date()
             };
             stompClient.send("/app/chat", {}, JSON.stringify(chatMessage));
 
-            displayMessage(nickname, messageInput.value.trim());
+            displayMessage(name, messageInput.value.trim());
             messageInput.value = '';
         }
         chatArea.scrollTop = chatArea.scrollHeight;
         event.preventDefault();
     }
-
-    // async function onMessageReceivedChatbot(payload) {
-    //     await findAndDisplayConnectedUsers();
-    //     console.log('Message received', payload);
-    // }
 
     async function onMessageReceived(payload) {
         await findAndDisplayConnectedUsers();
@@ -567,35 +567,10 @@ async function login(event) {
         }
     }
 
-    // async function onMessageReceivedChatBot(payload) {
-    //     await fetchOptions();
-    //     await findAndDisplayConnectedUsers();
-    //     console.log('Message received', payload);
-    //     const message = JSON.parse(payload.body);
-    //     if (selectedUserId && selectedUserId === message.senderId) {
-    //         displayMessage(message.senderId, message.content);
-    //         chatArea.scrollTop = chatArea.scrollHeight;
-    //     }
-    //
-    //     if (selectedUserId) {
-    //         document.querySelector(`#${selectedUserId}`).classList.add('active');
-    //     } else {
-    //         messageForm.classList.add('hidden');
-    //     }
-    //
-    //     const notifiedUser = document.querySelector(`#${message.senderId}`);
-    //     if (notifiedUser && !notifiedUser.classList.contains('active')) {
-    //         const nbrMsg = notifiedUser.querySelector('.nbr-msg');
-    //         nbrMsg.classList.remove('hidden');
-    //         nbrMsg.textContent = '';
-    //     }
-    // }
-
-
     function onLogout() {
         stompClient.send("/app/disconnectUser",
             {},
-            JSON.stringify({nickName: nickname, fullName: fullname, status: 'OFFLINE'})
+            JSON.stringify({name: name, fullName: fullname,img_url:img_Url ,status: 'OFFLINE'})
         );
         window.location.reload();
     }

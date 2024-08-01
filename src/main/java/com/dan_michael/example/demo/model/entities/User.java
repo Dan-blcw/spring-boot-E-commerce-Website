@@ -43,7 +43,7 @@ public class User implements UserDetails {
   private Boolean useFirstDiscount;
 
   @OneToOne(mappedBy = "user",fetch = FetchType.EAGER)
-  @JsonBackReference
+//  @JsonBackReference
   private UserImg userImg;
 
   @Enumerated(EnumType.STRING)

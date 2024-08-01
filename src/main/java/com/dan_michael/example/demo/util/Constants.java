@@ -70,12 +70,28 @@ public final class Constants {
     public static final String Delete_Order_Fail =  "Delete Order Failure !!!";
     public static final String Delete_Order_Detail_Success = "Delete Order Detail Successfully";
     public static final String Delete_Order_Detail_Fail =  "Delete Order Detail Failure !!!";
-
+//  Order Shipping Status
+    public static final String Order_Status_Wait =  "Chờ Lấy Hàng";
+    public static final String Order_Status_Take_Process_ =  "Đang Đi Lấy";
+    public static final String Order_Status_Delivery_Process =  "Đang Giao Hàng";
+    public static final String Order_Status_Delivered =  "Đã Giao Hàng";
+    public static final String Order_Status_Refund =  "Chuyển hoàn";
+    public static final String Order_Status_No_Customer_Contact =  "Không gặp khách";
+    public static final String Order_Status_Unfinished =  "Chưa hoàn thành";
 //  VNPay response
     public static final String VnPayStatus_Success =  "Success";
     public static final String VnPayStatus_Fail =  "Failed";
-
-
     public static final String VnPay_Code_00=  "00";
+//  ChatBot Email response
+    public static final String Create_QuestionAnswer_For_Guest_Fail =  "Created A Response To The Customer Failed And Sent an Email To The Customer Unsuccessfully";
+    public static final String Create_QuestionAnswer_For_Guest_Success =  "Successfully created A Response For The Customer And Sent An Email To The Customer.";
+    public static final String Create_Question_For_Guest_Fail =  "Create Successful Questions For Customers Failure, Please Check Information Of Your Email";
+    public static final String Create_Question_For_Guest_Success =  "Create Successful Questions For Customers Successfully, Please Wait For A Reply From Customer Service Soon.";
+    public static final String Answer_Exists =  "The question has been answered by the administrator, you can ask Chatbot for help on this issue.";
+    public static final String Question_Does_Not_Exists =  "Question does not exist, answer update failed !";
+
+    public static final String Question_Exists =  "The question already exists in the repository, you can ask Chatbot for help with this issue.";
+    public static final String Logo_Path =  "D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img.png";
+    public static final String Subject_Answer_Question =  "Thank You for Your Question - Our Response Inside!";
 
 }

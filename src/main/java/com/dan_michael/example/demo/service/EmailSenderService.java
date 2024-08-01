@@ -2,6 +2,7 @@ package com.dan_michael.example.demo.service;
 
 import com.dan_michael.example.demo.model.entities.User;
 import com.dan_michael.example.demo.repositories.UserRepository;
+import com.dan_michael.example.demo.util.Constants;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +19,11 @@ public class EmailSenderService {
 
     private final UserRepository userRepository;
 //---------------------------------Done-------------------------------------------------------------------
-    public String sendEmail(String toEmail, String subject, String name,String body, String logoPath,String discountCode) {
+    public String sendEmailAnswer(String toEmail, String subject, String name,String question,String answer, String logoPath) {
         MimeMessage message = mailSender.createMimeMessage();
         var user = userRepository.findByEmail_(toEmail);
         if(user == null){
-            return "User does not exist";
+            return Constants.User_Not_Found;
         }
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -31,16 +32,23 @@ public class EmailSenderService {
             helper.setSubject(subject);
             String htmlBody = "<div style='text-align: center; font-family: Arial, sans-serif; font-size: 15px;'>"
                     + "<img src='cid:image_logo' style='display: block; margin: 0 auto; max-width: 400px;' />"
-                    + "<h1>Hi "+ name+ "!</h1>"
-                    + "<p>"+ body + "</p>"
+                    + "<h1>Hi " + name + "!</h1>"
+                    + "<p>Thank you for reaching out to us with your question! We truly appreciate your interest and value the opportunity to assist you.</p>"
+                    + "<p><strong>Your Question:</strong></p>"
+                    + "<p style='font-style: italic;'>" + question + "</p>"
+                    + "<p><strong>Our Answer:</strong></p>"
+                    + "<p>" + answer + "</p>"
+                    + "<p>If you have any further questions or need additional assistance, please don't hesitate to reach out to us. We are here to help and ensure you have the best experience possible.</p>"
                     + "<div>"
                     + "<a href='http://www.facebook.com'><img src='cid:image_fb' style='width: 28px; height: 28px; margin: 0 5px;' /></a>"
                     + "<a href='http://www.linkedin.com'><img src='cid:image_li' style='width: 28px; height: 28px; margin: 0 5px;' /></a>"
                     + "<a href='http://www.youtube.com'><img src='cid:image_yt' style='width: 28px; height: 28px; margin: 0 5px;' /></a>"
                     + "<a href='http://www.pinterest.com'><img src='cid:image_pin' style='width: 28px; height: 28px; margin: 0 5px;' /></a>"
-                    + "<p>The E-commerce Team (Dan - Michael)</p>"
                     + "</div>"
+                    + "<p>Best regards,</p>"
+                    + "<p>The E-commerce Team (Dan - Michael)</p>"
                     + "</div>";
+
 
             helper.setText(htmlBody, true);
 

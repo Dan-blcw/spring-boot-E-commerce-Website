@@ -9,11 +9,16 @@ import com.dan_michael.example.demo.service.CategoryService;
 import com.dan_michael.example.demo.service.PaymentMethodsService;
 import com.dan_michael.example.demo.service.ProductService;
 import com.dan_michael.example.demo.util.Constants;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.InvalidPropertyException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,25 +36,37 @@ public class AdminController {
     private final PaymentMethodsService paymentMethodsService;
 
 //--------------------------- Product(CUD - R in GuestController) ---------------------------------------
-
-    @PostMapping(value = "/add-product",consumes = { "multipart/form-data" })
+//        Kiểm tra định dạng JsonDtos gửi từ front End có đúng không
+//        System.out.println("Incoming ProductDtos: " + request);
+//        request.getQuantityDetails().forEach(subColor -> {
+//        System.out.println("Color: " + subColor.getColor());
+//        subColor.getSizes().forEach(sizeQuantity -> {
+//            System.out.println("Size: " + sizeQuantity.getSize());
+//            System.out.println("Quantity: " + sizeQuantity.getQuantity());
+//        });
+//    });
+//    System.out.println("Quantity: " + images.get(0).getOriginalFilename());
+    @PostMapping(value = "/add-product", consumes = { "multipart/form-data" })
     public ResponseEntity<?> createProduct(
-            @ModelAttribute ProductDtos request
-    ) {
+        @RequestPart("productDtos") String productDtosJson,
+        @RequestPart("images") List<MultipartFile> images) throws IOException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        ProductDtos request = mapper.readValue(productDtosJson, ProductDtos.class);
+        request.setImages(images);
         var response = service.createProduct(request);
-        if(response != null){
+        if (response != null) {
             return ResponseEntity.ok(response);
-        }else {
+        } else {
             return ResponseEntity.badRequest().body(
                     ResponseMessageDtos.builder()
                             .message(Constants.Product_ARD_Exist)
                             .status(400)
-                            .build()
-            );
+                            .build());
         }
-    }
+}
 
-    @PostMapping(value = "/add-product-test-list")
+    @PostMapping(value = "/add-product-json")
     public ResponseEntity<?> createProductTest(
             @RequestBody ProductDtos request
     ) {
@@ -65,10 +82,15 @@ public class AdminController {
         }
     }
 //socket, chatbot, devops, livestream, Mã QR,
-    @PutMapping(value = "/update-product",consumes = { "multipart/form-data" })
+    @PostMapping(value = "/update-product", consumes = { "multipart/form-data" })
     public ResponseEntity<?> updateProduct(
-            @ModelAttribute ProductDtos request
-    ) {
+            @RequestPart("productDtos") String productDtosJson,
+            @RequestPart("images") List<MultipartFile> images) throws IOException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        ProductDtos request = mapper.readValue(productDtosJson, ProductDtos.class);
+        System.out.println("Quantity: " + images.get(0).getOriginalFilename());
+        request.setImages(images);
         var response = service.updateProduct(request);
         if(response != null){
             return ResponseEntity.ok(response);
@@ -81,7 +103,8 @@ public class AdminController {
             );
         }
     }
-    @PutMapping(value = "/update-product-test")
+
+    @PutMapping(value = "/update-product-json")
     public ResponseEntity<?> updateProductTest(
             @RequestBody ProductDtos request
     ) {

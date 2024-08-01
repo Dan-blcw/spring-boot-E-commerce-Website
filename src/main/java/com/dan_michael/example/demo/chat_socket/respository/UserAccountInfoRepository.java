@@ -12,6 +12,6 @@ import java.util.List;
 public interface UserAccountInfoRepository extends JpaRepository<UserAccountInfo, String> {
     List<UserAccountInfo> findAllByStatus(Status status);
 
-    @Query("SELECT pi FROM UserAccountInfo pi WHERE pi.nickName = :name")
+    @Query("SELECT pi FROM UserAccountInfo pi WHERE pi.name = :name")
     UserAccountInfo findUserTestByName(@Param("name")String name);
 }

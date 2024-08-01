@@ -1,13 +1,13 @@
 package com.dan_michael.example.demo.model.dto.ob.sub;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SubSizeQuantity {
-    private String size;
-    private Integer quantity;
+    public String size;
+    public Integer quantity;
 }

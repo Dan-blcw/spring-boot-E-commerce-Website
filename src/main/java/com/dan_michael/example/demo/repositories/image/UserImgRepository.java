@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface UserImgRepository extends JpaRepository<UserImg, Integer> {
     @Transactional
-    @Query("SELECT pi FROM UserImg pi WHERE pi.identification = :identification_pro")
-    UserImg findUserImgByUserName(@Param("identification_pro") String identification_pro);
+    @Query("SELECT pi FROM UserImg pi WHERE pi.identification = :identification")
+    UserImg findUserImgByUserName(@Param("identification") String identification);
 
     @Transactional
     @Query("SELECT pi FROM UserImg pi WHERE pi.imageName = :imageName AND pi.identification = :name")

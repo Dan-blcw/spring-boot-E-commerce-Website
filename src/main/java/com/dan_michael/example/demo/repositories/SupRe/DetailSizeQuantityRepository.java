@@ -11,8 +11,11 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface DetailSizeQuantityRepository extends JpaRepository<DetailSizeQuantity, Integer> {
-    @Query("SELECT pi FROM DetailSizeQuantity pi WHERE pi.identification = :identification")
-    List<DetailSizeQuantity> findDetailSizeQuantityByIdentification(@Param("identification") String identification);
+    @Query("SELECT pi FROM DetailSizeQuantity pi WHERE pi.identification = :identification AND  pi.identification_pro = :identification_pro")
+    List<DetailSizeQuantity> findDetailSizeQuantityByIdentification(
+            @Param("identification") String identification,
+            @Param("identification_pro") String identification_pro
+    );
 
     @Transactional
     @Modifying

@@ -4,6 +4,7 @@ import com.dan_michael.example.demo.chat_socket.entities.Status;
 import com.dan_michael.example.demo.chat_socket.entities.UserAccountInfo;
 import com.dan_michael.example.demo.chat_socket.service.UserAccountInfoService;
 import com.dan_michael.example.demo.chatbot.entities.QuestionAnswer;
+import com.dan_michael.example.demo.chatbot.entities.dtos.QuestionOfGuestInfoDtos;
 import com.dan_michael.example.demo.chatbot.service.ChatbotService;
 import com.dan_michael.example.demo.model.dto.global.RegisterDtos;
 import com.dan_michael.example.demo.model.dto.ob.*;
@@ -52,25 +53,25 @@ public class PjCdtnApplication {
 			var admin = RegisterDtos.builder()
 					.email("admin@mail.com")
 					.name("Admin")
-					.password("password")
+					.password("0")
 					.build();
 			System.out.println("Admin token: " + service.createAdmin(admin));
 
 			var user = RegisterDtos.builder()
 					.email("phuhuong646@gmail.com")
 					.name("Dan")
-					.password("password")
+					.password("0")
 					.build();
 			System.out.println("User token: " + service.register(user).getJwt());
 //----------------------Tạo Tài Khoản ChatBot ----------------------------------------------
 			var chatbot = RegisterDtos.builder()
 					.email("chat-bot@@mail.com")
 					.name("Chat Bot Support")
-					.password("password")
+					.password("0")
 					.build();
 			service.createAdmin(chatbot);
 			userAccountInfoService.saveUser(UserAccountInfo.builder()
-					.nickName("Chat Bot Support")
+					.name("Chat Bot Support")
 					.fullName("Chat Bot Support")
 					.status(Status.ONLINE)
 					.build());
@@ -216,6 +217,20 @@ public class PjCdtnApplication {
 				What is a customer loyalty program?
 				What is a product feed?
 			*/
+			var Question0 = QuestionOfGuestInfoDtos.builder()
+					.question("Câu Hỏi Cho Khách Hàng 0?")
+					.name("Dan")
+					.email("phuhuong646@gmail.com")
+					.phone("54645")
+					.build();
+			var Question1 = QuestionOfGuestInfoDtos.builder()
+					.question("Câu Hỏi Cho Khách Hàng 1?")
+					.name("Dan")
+					.email("phuhuong646@gmail.com")
+					.phone("54645")
+					.build();
+			chatbotService.createQuestionForGuest(Question0);
+			chatbotService.createQuestionForGuest(Question1);
 //----------------------Payment Method ..... ----------------------------------------------
 			var paymentMethod0 = PaymentMethodsDtos.builder()
 					.description("VNPay là một trong những cổng thanh toán trực tuyến hàng đầu tại Việt Nam, cung cấp dịch vụ thanh toán điện tử và chuyển tiền trực tuyến cho cả khách hàng cá nhân và doanh nghiệp. VNPay cung cấp nhiều giải pháp thanh toán đa dạng")
@@ -319,8 +334,6 @@ public class PjCdtnApplication {
 
 			listsub2.add(sub2);
 //----------------------Sản phẩm ..... ----------------------------------------------
-
-
 			var pro0 = ProductDtos.builder()
 					.name("Áo Sơ Mi Cuban Netstripes")
 					.description("Áo sơ mi Cuban Netstripes là một kiểu áo sơ mi phổ biến có nguồn gốc từ Cuba, được biết đến với phong cách đặc trưng và thoải mái.")
@@ -369,9 +382,6 @@ public class PjCdtnApplication {
 					.build();
 			var pro0Response =productService.createProduct(pro0);
 			var pro1Response = productService.createProduct(pro1);
-
-//			var pro0Response =productService.createProduct(pro0);
-//			var pro1Response = productService.createProduct(pro1);
 
 			productService.createComment(comment0,pro0Response.getId());
 			productService.createComment(comment1,pro0Response.getId());

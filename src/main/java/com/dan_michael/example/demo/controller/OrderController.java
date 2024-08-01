@@ -31,14 +31,14 @@ public class OrderController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 //     Create a new order
-    @PostMapping
-    public ResponseEntity<?> createOrder(
-            @RequestBody OrderDtos request
-    ) {
-        Order response = orderService.createOrder(request);
-        return ResponseEntity.ok(response);
-    }
-
+//    @PostMapping
+//    public ResponseEntity<?> createOrder(
+//            @RequestBody OrderDtos request
+//    ) {
+//        Order response = orderService.createOrder(request);
+//        return ResponseEntity.ok(response);
+//    }
+//
 
     // Update an existing order
     @PutMapping(value = "/{id}",consumes = { "application/json"})

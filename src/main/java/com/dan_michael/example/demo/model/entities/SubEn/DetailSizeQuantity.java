@@ -24,6 +24,7 @@ public class DetailSizeQuantity {
     private String size;
     private Integer quantity;
     private String identification;
+    private String identification_pro;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quantity_detail_id")
     @JsonBackReference

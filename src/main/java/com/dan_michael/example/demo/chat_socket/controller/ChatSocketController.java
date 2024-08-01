@@ -3,7 +3,7 @@ package com.dan_michael.example.demo.chat_socket.controller;
 import com.dan_michael.example.demo.chat_socket.entities.ChatMessage;
 import com.dan_michael.example.demo.chat_socket.service.ChatMessageService;
 import com.dan_michael.example.demo.chat_socket.entities.ChatNotification;
-import com.dan_michael.example.demo.chatbot.entities.RequestMessageChatBotDtos;
+import com.dan_michael.example.demo.chatbot.entities.dtos.RequestMessageChatBotDtos;
 import com.dan_michael.example.demo.chatbot.service.ChatbotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

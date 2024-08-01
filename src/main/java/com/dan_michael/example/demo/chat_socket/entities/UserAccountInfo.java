@@ -15,7 +15,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class UserAccountInfo {
     @Id
-    private String nickName;
+    private String name;
     private String fullName;
+    private String img_url;
     private Status status;
 }

@@ -1,15 +1,15 @@
 package com.dan_michael.example.demo.model.dto.ob.sub;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SubColor {
-    private String color;
-    List<SubSizeQuantity> sizes;
+    public String color;
+    public List<SubSizeQuantity> sizes;
 }

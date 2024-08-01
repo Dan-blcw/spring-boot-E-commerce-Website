@@ -12,6 +12,7 @@ import com.dan_michael.example.demo.repositories.ProductRepository;
 import com.dan_michael.example.demo.repositories.SupRe.DetailSizeQuantityRepository;
 import com.dan_michael.example.demo.repositories.SupRe.QuantityDetailRepository;
 import com.dan_michael.example.demo.repositories.UserRepository;
+import com.dan_michael.example.demo.util.Constants;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -68,7 +69,7 @@ public class OrderService {
 
         order.setOrderStatus(request.getOrderStatus());
 
-        order.setShippingStatus("ĐANG CHUẨN BỊ HÀNG");
+        order.setShippingStatus(Constants.Order_Status_Wait);
         order.setCreatedAt(new Date());
 
         var y = orderRepository.save(order);
@@ -81,7 +82,7 @@ public class OrderService {
             var quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(product.getName());
             List<SubColor> BoxResponse = new ArrayList<>();
             for (var x_0: quantityDetailsList) {
-                List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor());
+                List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor(),x_0.getIdentification());
                 List<SubSizeQuantity> sizeQuantities = new ArrayList<>();
                 for (var y_0: detailSizeQuantities){
                     if(y_0.getIdentification().equals(x.getColor())){

@@ -9,6 +9,7 @@ import com.dan_michael.example.demo.model.entities.TokenType;
 import com.dan_michael.example.demo.model.entities.User;
 import com.dan_michael.example.demo.repositories.TokenRepository;
 import com.dan_michael.example.demo.repositories.UserRepository;
+import com.dan_michael.example.demo.repositories.image.UserImgRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,9 +24,15 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepository repository;
+
+    private final UserImgRepository userImgRepository;
+
     private final TokenRepository tokenRepository;
+
     private final PasswordEncoder passwordEncoder;
+
     private final JwtService jwtService;
+
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationDtos register(RegisterDtos request) {
@@ -37,6 +44,7 @@ public class AuthenticationService {
                 .name(request.getName())
                 .username(request.getName())
                 .email(request.getEmail())
+                .userImg(null)
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .companyName(null)
@@ -112,17 +120,17 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
-
+        var user_img = userImgRepository.findUserImgByUserName(user.getName());
         var user1 = User.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .username(user.getUsername())
                 .email(user.getEmail())
+                .userImg(user_img)
                 .password(user.getPassword())
                 .role(user.getRole())
                 .address(user.getAddress())

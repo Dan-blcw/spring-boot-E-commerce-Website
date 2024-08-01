@@ -22,7 +22,6 @@ public class ProductUpdateDtos {
     private String category;
 
     private String brand;
-
     private Boolean favourite;
 
     private Float originalPrice ;

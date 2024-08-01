@@ -24,5 +24,5 @@ public class ItemDetailDto {
 
     private Float subTotal;
 
-    private Float total;
+//    private Float total;
 }

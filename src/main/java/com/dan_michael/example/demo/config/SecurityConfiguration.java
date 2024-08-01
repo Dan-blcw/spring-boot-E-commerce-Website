@@ -47,6 +47,7 @@ public class SecurityConfiguration {
             "/ws/**",
             "/messages/**",
             "user.png",
+            "img_4.png",
             "/api/v1/images/**",
             "/media/images/**",
             "api/v1/rest",

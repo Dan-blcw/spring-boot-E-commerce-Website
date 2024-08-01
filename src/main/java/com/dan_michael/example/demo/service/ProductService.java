@@ -58,7 +58,6 @@ public class ProductService {
         product_flag.setRating(5.0f);
         product_flag.setNRating(0);
 
-
         product_flag.setOriginalPrice(request.getOriginalPrice());
         product_flag.setSaleDiscountPercent(request.getSaleDiscountPercent());
         var finalPrice = request.getOriginalPrice() - request.getOriginalPrice()* (request.getSaleDiscountPercent()/100);
@@ -74,7 +73,7 @@ public class ProductService {
         List<QuantityDetail> Box = new ArrayList<>();
         List<SubColor> BoxResponse = new ArrayList<>();
 
-        if (request.getQuantityDetails() != null && request.getQuantityDetails().size() > 0) {
+        if (request.getQuantityDetails() != null && !request.getQuantityDetails().isEmpty()) {
             for (var x : request.getQuantityDetails()) {
                 QuantityDetail Item = new QuantityDetail();
                 List<SubSizeQuantity> sizeQuantities = new ArrayList<>();
@@ -87,6 +86,7 @@ public class ProductService {
                     detailSizeQuantity.setSize(y.getSize());
                     detailSizeQuantity.setQuantity(y.getQuantity());
                     detailSizeQuantity.setIdentification(x.getColor());
+                    detailSizeQuantity.setIdentification_pro(product_flag.getName());
                     detailSizeQuantityRepository.save(detailSizeQuantity);
                     totalQuantity += y.getQuantity();
                     if(!sizes.contains(y.getSize())){
@@ -110,7 +110,7 @@ public class ProductService {
 
         List<SubImgResponse> productImagesBox = new ArrayList<>();
         List<ProductImg> productImagesBox_0 = new ArrayList<>();
-        if (request.getImages() != null && request.getImages().size() > 0) {
+        if (request.getImages() != null && !request.getImages().isEmpty()) {
             for (MultipartFile imageFile : request.getImages()) {
                 ProductImg productImg = new ProductImg();
                 try {
@@ -140,12 +140,12 @@ public class ProductService {
 
         product_flag.setQuantityDetails(Box);
         product_flag.setTotalQuantity(totalQuantity);
-        product_flag.setImages(productImagesBox_0);
+//        product_flag.setImages(productImagesBox_0);
 
         productRepository.save(product_flag);
-        var productResponse = ProductResponse.builder()
+        return ProductResponse.builder()
                 .id(product_flag.getId())
-                .images(productImagesBox)
+//                .images(productImagesBox)
                 .colours(colors)
                 .sizes(sizes)
                 .brand(request.getBrand())
@@ -168,7 +168,6 @@ public class ProductService {
                 .createDate(product_flag.getCreateDate())
                 .createdByUserid(product_flag.getCreatedByUserid())
                 .build();
-        return productResponse;
     }
 
     public ProductResponse updateProduct(ProductDtos request) {
@@ -221,7 +220,7 @@ public class ProductService {
                             if (!colors.contains(x.getColor())) {
                                 colors.add(x.getColor());
                             }
-                            var detailSizeQuantitys = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x.getColor());
+                            var detailSizeQuantitys = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x.getColor(),product_flag.getName());
                             if (detailSizeQuantitys.size() < x.getSizes().size()) {
                                 for (var y : x.getSizes()) {
                                     System.out.println(y.getSize());
@@ -288,7 +287,7 @@ public class ProductService {
                             if (!colors.contains(x_0.getColor())) {
                                 colors.add(x_0.getColor());
                             }
-                            var detailSizeQuantitys = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x.getColor());
+                            var detailSizeQuantitys = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x.getColor(), x.getIdentification());
                             if (detailSizeQuantitys.size() < x_0.getSizes().size()) {
                                 for (var y : x_0.getSizes()) {
                                     for (var y_0 : detailSizeQuantitys) {
@@ -361,7 +360,7 @@ public class ProductService {
             if ((xoaColor || xoaSize)) {
                 if (request.getQuantityDetails() != null && !request.getQuantityDetails().isEmpty()) {
                     for (var x : quantityDetailsList) {
-                        var detailSizeQuantitys = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x.getColor());
+                        var detailSizeQuantitys = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x.getColor(),x.getIdentification());
                         if (colorchange.contains(x.getColor()) && xoaColor) {
                             quantityDetailRepository.deleteByIdentificationAndColor(product_flag.getName(), x.getColor());
                             for (var y : detailSizeQuantitys) {
@@ -421,65 +420,65 @@ public class ProductService {
             }
         }
 //      Thêm Ảnh mới
-        List<SubImgResponse> productImagesBox = new ArrayList<>();
-        List<String> boxSend = new ArrayList<>();
-        List<String> boxSave = new ArrayList<>();
-        List<String> boxOldImage = new ArrayList<>();
-        List<ProductImg> productImagesBox_0 = productImgRepository.findProductImgByProductName(product_flag.getName());
-        for (var x :productImagesBox_0){
-            boxOldImage.add(x.getImageName());
-        }
-        if (request.getImages() != null && request.getImages().size() > 0) {
-            for (MultipartFile imageFile : request.getImages()) {
-                boxSave.add(imageFile.getOriginalFilename());
-                ProductImg productImg = new ProductImg();
-                if(boxOldImage.contains(imageFile.getOriginalFilename())){
-                    var saveImg = productImgRepository.findProductImgByimageName_(imageFile.getOriginalFilename(),product_flag.getName());
-                    SubImgResponse response = SubImgResponse.builder()
-                            .id(saveImg.getId())
-                            .img_url(saveImg.getImg_url())
-                            .imageName(saveImg.getImageName())
-                            .identification(saveImg.getIdentification())
-                            .build();
+//        List<SubImgResponse> productImagesBox = new ArrayList<>();
+//        List<String> boxSend = new ArrayList<>();
+//        List<String> boxSave = new ArrayList<>();
+//        List<String> boxOldImage = new ArrayList<>();
+//        List<ProductImg> productImagesBox_0 = productImgRepository.findProductImgByProductName(product_flag.getName());
+//        for (var x :productImagesBox_0){
+//            boxOldImage.add(x.getImageName());
+//        }
+//        if (request.getImages() != null && request.getImages().size() > 0) {
+//            for (MultipartFile imageFile : request.getImages()) {
+//                boxSave.add(imageFile.getOriginalFilename());
+//                ProductImg productImg = new ProductImg();
+//                if(boxOldImage.contains(imageFile.getOriginalFilename())){
+//                    var saveImg = productImgRepository.findProductImgByimageName_(imageFile.getOriginalFilename(),product_flag.getName());
+//                    SubImgResponse response = SubImgResponse.builder()
+//                            .id(saveImg.getId())
+//                            .img_url(saveImg.getImg_url())
+//                            .imageName(saveImg.getImageName())
+//                            .identification(saveImg.getIdentification())
+//                            .build();
+//
+//                    if(!productImagesBox.contains(response)){
+//                        productImagesBox.add(response);
+//                    }
+//                    continue;
+//                }
+//                boxSend.add(imageFile.getOriginalFilename());
+//                try {
+//                    productImg.setImage(imageFile.getBytes()); // Save image bytes
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                    // Handle exception
+//                }
+//                productImg.setIdentification(product_flag.getName()); // Set the product reference
+//                productImg.setImageName(imageFile.getOriginalFilename());
+//                productImg.setImg_url(ServletUriComponentsBuilder.fromCurrentContextPath()
+//                        .path("/api/v1/global/media/images/")
+//                        .path(product_flag.getName()+"/")
+//                        .path(imageFile.getOriginalFilename())
+//                        .toUriString());
+//                productImgRepository.save(productImg);
+//                SubImgResponse response = SubImgResponse.builder()
+//                        .id(productImg.getId())
+//                        .img_url(productImg.getImg_url())
+//                        .imageName(productImg.getImageName())
+//                        .identification(productImg.getIdentification())
+//                        .build();
+//                productImagesBox.add(response);
+//                productImagesBox_0.add(productImg);
+//            }
+//        }
+////        Xóa Đi Ảnh Cũ nếu có
+//        List<String> boxNewSave = valueadd(boxSave,boxSend);
+//        for(var x : valueadd(boxNewSave,boxOldImage)){
+//
+//            productImgRepository.deleteByIdentificationAndImageName(product_flag.getName(),x);
+//        }
 
-                    if(!productImagesBox.contains(response)){
-                        productImagesBox.add(response);
-                    }
-                    continue;
-                }
-                boxSend.add(imageFile.getOriginalFilename());
-                try {
-                    productImg.setImage(imageFile.getBytes()); // Save image bytes
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    // Handle exception
-                }
-                productImg.setIdentification(product_flag.getName()); // Set the product reference
-                productImg.setImageName(imageFile.getOriginalFilename());
-                productImg.setImg_url(ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path("/api/v1/global/media/images/")
-                        .path(product_flag.getName()+"/")
-                        .path(imageFile.getOriginalFilename())
-                        .toUriString());
-                productImgRepository.save(productImg);
-                SubImgResponse response = SubImgResponse.builder()
-                        .id(productImg.getId())
-                        .img_url(productImg.getImg_url())
-                        .imageName(productImg.getImageName())
-                        .identification(productImg.getIdentification())
-                        .build();
-                productImagesBox.add(response);
-                productImagesBox_0.add(productImg);
-            }
-        }
-//        Xóa Đi Ảnh Cũ nếu có
-        List<String> boxNewSave = valueadd(boxSave,boxSend);
-        for(var x : valueadd(boxNewSave,boxOldImage)){
-
-            productImgRepository.deleteByIdentificationAndImageName(product_flag.getName(),x);
-        }
-
-        product_flag.setImages(productImagesBox_0);
+//        product_flag.setImages(productImagesBox_0);
         product_flag.setTotalQuantity(totalQuantity);
         product_flag.setQuantityDetails(quantityDetailsList);
         List<FavouriteProduct> favouriteList = favouriteProductRepository.findFavouriteByIdentification(product_flag.getName());
@@ -492,7 +491,7 @@ public class ProductService {
         List<SubColor> BoxResponse = new ArrayList<>();
         for(var x :quantityDetailsList){
             List<SubSizeQuantity> sizeQuantities = new ArrayList<>();
-            var details =detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x.getColor());
+            var details =detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x.getColor(),x.getIdentification());
             for (var y :details){
                 sizeQuantities.add(SubSizeQuantity.builder()
                         .size(y.getSize())
@@ -507,7 +506,7 @@ public class ProductService {
         }
         var productResponse = ProductResponse.builder()
                 .id(product_flag.getId())
-                .images(productImagesBox)
+//                .images(productImagesBox)
                 .brand(request.getBrand())
                 .sizes(valuesave(sizesadd,sizes))
                 .colours(valuesave(colorsadd,colors))
@@ -593,7 +592,7 @@ public class ProductService {
             }
             for (var x_0: favouriteList) { favouriteListRe.add(x_0.getUser_id());}
             for (var x_0: quantityDetailsList) {
-                List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor());
+                List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor(),x_0.getIdentification());
                 if(!colorsListRe.contains(x_0.getColor())){
                     colorsListRe.add(x_0.getColor());
                 }
@@ -677,7 +676,7 @@ public class ProductService {
         }
         for (var x_0: favouriteList) { favouriteListRe.add(x_0.getUser_id());}
         for (var x_0: quantityDetailsList) {
-            List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor());
+            List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor(),x_0.getIdentification());
             if(!colorsListRe.contains(x_0.getColor())){
                 colorsListRe.add(x_0.getColor());
             }
@@ -747,7 +746,7 @@ public class ProductService {
         commentRepository.deleteByIdentification(boxItem.get().getName());
         List<QuantityDetail> quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(boxItem.get().getName());
         for (var x_0: quantityDetailsList) {
-            List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor());
+            List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor(),x_0.getIdentification());
             for (var y_0: detailSizeQuantities){
                 if(y_0.getIdentification().equals(x_0.getColor())){
                     detailSizeQuantityRepository.deleteByIdentification(x_0.getColor());
@@ -881,7 +880,7 @@ public class ProductService {
                 List<String> colorsListRe = new ArrayList<>();
                 List<String> sizesListRe = new ArrayList<>();
                 for (var x_0: quantityDetailsList) {
-                    List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor());
+                    List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor(),x_0.getIdentification());
                     if(!colorsListRe.contains(x_0.getColor())){
                         colorsListRe.add(x_0.getColor());
                     }
@@ -1031,7 +1030,7 @@ public class ProductService {
             List<String> sizeListRe = new ArrayList<>();
             List<SubColor> subColors = new ArrayList<>();
             for (var x_0: quantityDetailsList) {
-                List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor());
+                List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor(),x_0.getIdentification());
                 if(!colorsListRe.contains(x_0.getColor())){
                     colorsListRe.add(x_0.getColor());
                 }
@@ -1109,7 +1108,7 @@ public class ProductService {
                     .message(Constants.Color_Detail_Not_Found)
                     .build();
         }
-        List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(boxListColor.getColor());
+        List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(boxListColor.getColor(),boxListColor.getIdentification());
         if(detailSizeQuantities == null){
             return SubColorDetailResponse.builder()
                     .color(color)
@@ -1143,7 +1142,7 @@ public class ProductService {
         }
         List<SubColor> subColors = new ArrayList<>();
         for (var x_0: quantityDetailsList) {
-            List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor());
+            List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor(),x_0.getIdentification());
             if(detailSizeQuantities == null){
                 return SubQuantityTotalResponse.builder()
                         .quantityDetails(null)

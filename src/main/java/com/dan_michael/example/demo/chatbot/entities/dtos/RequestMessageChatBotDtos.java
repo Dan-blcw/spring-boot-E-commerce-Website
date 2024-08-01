@@ -1,4 +1,4 @@
-package com.dan_michael.example.demo.chatbot.entities;
+package com.dan_michael.example.demo.chatbot.entities.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
