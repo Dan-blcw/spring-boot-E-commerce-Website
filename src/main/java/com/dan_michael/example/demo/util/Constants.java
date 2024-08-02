@@ -2,7 +2,7 @@ package com.dan_michael.example.demo.util;
 
 public final class Constants {
 //    Authentication
-    public static final String Authentication = "Authentication";
+    public static final String Authorization = "Authorization";
     public static final String Bearer = "Bearer";
     public static final String Front_Host_5555 = "http://localhost:5555";
     public static final String Front_Host_8888 = "http://localhost:8888";
@@ -129,11 +129,11 @@ public final class Constants {
     public static final String Chat_Bot_No_Answer =  "I'm Sorry, I Didn't Understand That. Could You Please Rephrase?";
     public static final String Delete_Answer_Question_AI_Success =  "Delete Question Answer AI Successfully";
     public static final String Delete_Answer_Question_AI_Fail =  "Delete Question Answer AI Failure !";
-    public static final String Already_Use_First_Discount =  "TThis account has already used the first discount promotion !";
+    public static final String Already_Use_First_Discount =  "TThis Account Has Already Used The First Discount Promotion !";
     public static final String Subject_Answer_Question =  "Thank You for Your Question - Our Response Inside !";
     public static final String Send_Mail_Answer_Success =  "Send Email To Answer Customer's Questions Successfully";
-    public static final String Send_Mail_Get_Discount_Success =  "Send Email To Answer Customer's Questions Successfully";
+    public static final String Send_Mail_Get_Discount_Success =  "Send Email To Customer's For Get The First Discount Promotion Successfully";
     public static final String Send_Mail_Answer_Fail =  "Send Email To Answer Customer's Questions Failure !";
-    public static final String Send_Mail_Get_Discount_Fail =  "Send Email To Answer Customer's Questions Failure !";
+    public static final String Send_Mail_Get_Discount_Fail =  "Send Email To Customer's For Get The First Discount Promotion Failure !";
 
 }

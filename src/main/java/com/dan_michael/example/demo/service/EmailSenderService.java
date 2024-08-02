@@ -35,7 +35,7 @@ public class EmailSenderService {
             helper.setTo(toEmail);
             helper.setSubject(subject);
             String htmlBody = "<div style='text-align: center; font-family: Arial, sans-serif; font-size: 15px;'>"
-                    + "<img src='cid:image_logo' style='display: block; margin: 0 auto; max-width: 400px; border-radius: 50%;' />"
+                    + "<img src='cid:image_logo' style='display: block; margin: 0 auto; max-width: 360px; border-radius: 50%;' />"
                     + "<h1>Hi " + name + "!</h1>"
                     + "<p>Thank you for reaching out to us with your question!</p>"
                     + "<p>We truly appreciate your interest and value the opportunity to assist you.</p>"
@@ -102,11 +102,11 @@ public class EmailSenderService {
         }
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setFrom("ecommercedemo47@gmail.com");
+            helper.setFrom(Constants.Email_Of_Company);
             helper.setTo(toEmail);
             helper.setSubject(subject);
             String htmlBody = "<div style='text-align: center; font-family: Arial, sans-serif; font-size: 15px;'>"
-                    + "<img src='cid:image_logo' style='display: block; margin: 0 auto; max-width: 400px;' />"
+                    + "<img src='cid:image_logo' style='display: block; margin: 0 auto; max-width: 360px; border-radius: 50%;' />"
                     + "<h1>Hi "+ name+ "!</h1>"
                     + "<p>Thanks for signing up with our E-commerce platform! You're about to join the largest online community of enthusiastic shoppers.</p>"
                     + "<p>As a welcome gift, enjoy a discount on your first order!</p>"
@@ -143,7 +143,7 @@ public class EmailSenderService {
             user.setUseFirstDiscount(true);
             userRepository.save(user);
             return ResponseMessageDtos.builder()
-                    .status(404)
+                    .status(200)
                     .message(Constants.Send_Mail_Get_Discount_Success)
                     .build();
         } catch (MessagingException e) {

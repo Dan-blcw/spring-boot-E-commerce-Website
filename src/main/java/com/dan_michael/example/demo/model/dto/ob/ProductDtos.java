@@ -25,6 +25,6 @@ public class ProductDtos {
     private Float originalPrice ;
     private Float saleDiscountPercent ;
 
-//    private Boolean newStatus;
+    private String imageMain;
     private Integer createdByUserid;
 }

@@ -28,7 +28,7 @@ public class LogoutService implements LogoutHandler{
           HttpServletRequest request,
           HttpServletResponse response,
           Authentication authentication) {
-    final String authHeader = request.getHeader(Constants.Authentication);
+    final String authHeader = request.getHeader(Constants.Authorization);
     final String jwt;
     if (
             authHeader == null ||

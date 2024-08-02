@@ -133,6 +133,9 @@ public class ProductService {
                         .path(imageFile.getOriginalFilename())
                         .toUriString());
                 productImgRepository.save(productImg);
+                if(productImg.getImageName() == product_flag.getImageMain()){
+                    product_flag.setImageMain(productImg.getImg_url());
+                }
                 SubImgResponse response = SubImgResponse.builder()
                         .id(productImg.getId())
                         .img_url(productImg.getImg_url())
@@ -146,12 +149,12 @@ public class ProductService {
 
         product_flag.setQuantityDetails(Box);
         product_flag.setTotalQuantity(totalQuantity);
-//        product_flag.setImages(productImagesBox_0);
+        product_flag.setImages(productImagesBox_0);
 
         productRepository.save(product_flag);
         return ProductResponse.builder()
                 .id(product_flag.getId())
-//                .images(productImagesBox)
+                .images(productImagesBox)
                 .colours(colors)
                 .sizes(sizes)
                 .brand(request.getBrand())
