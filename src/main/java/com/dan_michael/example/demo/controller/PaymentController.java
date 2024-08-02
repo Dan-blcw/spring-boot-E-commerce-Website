@@ -5,23 +5,16 @@ import com.dan_michael.example.demo.model.dto.ob.OrderDtos;
 import com.dan_michael.example.demo.model.response.ResponsePayPal;
 import com.dan_michael.example.demo.service.Payment.PaymentPaypalService;
 import com.dan_michael.example.demo.model.dto.global.PaymentVNPayDTO;
-import com.dan_michael.example.demo.model.dto.ob.ItemDetailDto;
 import com.dan_michael.example.demo.model.response.ResponseObject;
 import com.dan_michael.example.demo.service.Payment.PaymentVNPayService;
+import com.dan_michael.example.demo.service.Payment.PaymentMethodsService;
 import com.dan_michael.example.demo.util.Constants;
-import com.dan_michael.example.demo.util.VNPayUtil;
-import com.google.gson.Gson;
 import com.mservice.allinone.models.*;
-import com.mservice.allinone.models.PaymentResponse;
 import com.mservice.allinone.processor.allinone.*;
-import com.mservice.pay.models.*;
-import com.mservice.pay.processor.notallinone.*;
-import com.mservice.shared.constants.Parameter;
 //import com.mservice.shared.sharedmodels.Environment;
 //import com.mservice.shared.sharedmodels.PartnerInfo;
 import com.mservice.shared.sharedmodels.Environment;
 import com.mservice.shared.sharedmodels.PartnerInfo;
-import com.mservice.shared.utils.Encoder;
 import com.paypal.api.payments.PayerInfo;
 import com.paypal.api.payments.Payment;
 import com.paypal.api.payments.ShippingAddress;
@@ -33,15 +26,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 //import com.momo.partner.api.response.AppPayResponse;
 //import com.mservice.shared.constants.RequestType;
 
-import java.net.SocketTimeoutException;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.mservice.allinone.AllInOne.generateRSA;
 
 @RestController
 @RequestMapping("/api/v1/payments")
@@ -49,7 +38,14 @@ import static com.mservice.allinone.AllInOne.generateRSA;
 public class PaymentController {
 
     private final PaymentPaypalService paypalService;
+
     private final PaymentVNPayService vnPayService;
+
+    private final PaymentMethodsService paymentMethodsService;
+    @GetMapping(value = "/payments-methods-name")
+    public List<String> listPaymentMethods(){
+        return paymentMethodsService.listPaymentMethodsName();
+    }
     @GetMapping("/vn-pay")
     public ResponseObject<PaymentVNPayDTO.VNPayResponse> pay(HttpServletRequest request) {
         return new ResponseObject<>(

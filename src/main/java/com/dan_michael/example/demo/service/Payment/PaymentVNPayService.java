@@ -2,7 +2,7 @@ package com.dan_michael.example.demo.service.Payment;
 
 import com.dan_michael.example.demo.config.VNPAYConfig;
 import com.dan_michael.example.demo.model.dto.global.PaymentVNPayDTO;
-import com.dan_michael.example.demo.util.VNPayUtil;
+import com.dan_michael.example.demo.config.VNPayUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -2,6 +2,7 @@ package com.dan_michael.example.demo.config;
 
 import com.dan_michael.example.demo.repositories.TokenRepository;
 import com.dan_michael.example.demo.service.JwtService;
+import com.dan_michael.example.demo.util.Constants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,14 +34,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        if (request.getServletPath().contains("/api/v1/auth") || request.getServletPath().contains("/api/v1/global")) {
+        if (
+                request.getServletPath().contains(Constants.Login_Out_Path) ||
+                request.getServletPath().contains(Constants.Global_Path))
+        {
             filterChain.doFilter(request, response);
             return;
         }
-        final String authHeader = request.getHeader("Authorization");
+        final String authHeader = request.getHeader(Constants.Authentication);
         final String jwt;
         final String userEmail;
-        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+        if (authHeader == null ||!authHeader.startsWith(Constants.Bearer)) {
             filterChain.doFilter(request, response);
             return;
         }

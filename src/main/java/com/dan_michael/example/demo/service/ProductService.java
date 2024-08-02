@@ -128,7 +128,7 @@ public class ProductService {
                 productImg.setIdentification(product_flag.getName()); // Set the product reference
                 productImg.setImageName(imageFile.getOriginalFilename());
                 productImg.setImg_url(ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path("/api/v1/global/media/images/")
+                        .path(Constants.Global_Image_Path)
                         .path(product_flag.getName()+"/")
                         .path(imageFile.getOriginalFilename())
                         .toUriString());
@@ -469,7 +469,7 @@ public class ProductService {
                 productImg.setIdentification(product_flag.getName()); // Set the product reference
                 productImg.setImageName(imageFile.getOriginalFilename());
                 productImg.setImg_url(ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path("/api/v1/global/media/images/")
+                        .path(Constants.Global_Image_Path)
                         .path(product_flag.getName()+"/")
                         .path(imageFile.getOriginalFilename())
                         .toUriString());
@@ -487,7 +487,6 @@ public class ProductService {
 //        Xóa Đi Ảnh Cũ nếu có
         List<String> boxNewSave = valueadd(boxSave,boxSend);
         for(var x : valueadd(boxNewSave,boxOldImage)){
-
             productImgRepository.deleteByIdentificationAndImageName(product_flag.getName(),x);
         }
 

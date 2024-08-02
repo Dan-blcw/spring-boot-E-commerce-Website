@@ -51,16 +51,16 @@ public class ChatRestController {
     
     @DeleteMapping("/qa")
     public ResponseMessageDtos deleteQuestionAnswer(@RequestBody RequestMessageChatBotDtos question) {
-        var flag = chatBotService.deleteQuestionAnswer(question.getMessage());
-        if(flag){
+        var response = chatBotService.deleteQuestionAnswer(question.getMessage());
+        if(response){
             return ResponseMessageDtos.builder()
                     .status(200)
-                    .message("Delete Question Answer AI Successfully !!!")
+                    .message(Constants.Delete_Answer_Question_AI_Success)
                     .build();
         }
         return ResponseMessageDtos.builder()
                 .status(400)
-                .message("Delete Question Answer AI Failure !!!")
+                .message(Constants.Delete_Answer_Question_AI_Fail)
                 .build();
     }
 //---------------------------------Guest-------------------------------------------
@@ -82,7 +82,7 @@ public class ChatRestController {
                     question_.getName(),
                     question_.getQuestion(),
                     question_.getAnswer(),
-                    Constants.Logo_Path
+                    Constants.Logo_Path_0
             );
         }
         return save;

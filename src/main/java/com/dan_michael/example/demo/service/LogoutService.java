@@ -4,6 +4,7 @@ import com.dan_michael.example.demo.model.dto.global.AuthenticationDtos;
 import com.dan_michael.example.demo.model.entities.User;
 import com.dan_michael.example.demo.repositories.TokenRepository;
 import com.dan_michael.example.demo.repositories.UserRepository;
+import com.dan_michael.example.demo.util.Constants;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -27,17 +28,17 @@ public class LogoutService implements LogoutHandler{
           HttpServletRequest request,
           HttpServletResponse response,
           Authentication authentication) {
-    final String authHeader = request.getHeader("Authorization");
+    final String authHeader = request.getHeader(Constants.Authentication);
     final String jwt;
-    if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+    if (
+            authHeader == null ||
+            !authHeader.startsWith(Constants.Bearer)
+    ) {
       return;
     }
     jwt = authHeader.substring(7);
     var storedToken = tokenRepository.findByToken(jwt)
         .orElse(null);
-//    var user = repository.findByID_(storedToken.getUser().getId());
-//    user.setLast_login(new Date());
-    System.out.println(storedToken);
     if (storedToken != null) {
       storedToken.setExpired(true);
       storedToken.setRevoked(true);

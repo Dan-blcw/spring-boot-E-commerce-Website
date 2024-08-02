@@ -1,5 +1,6 @@
 package com.dan_michael.example.demo.config;
 
+import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,7 +64,7 @@ public class SecurityConfiguration {
                 .cors(cors -> {
                     cors.configurationSource(request -> {
                         CorsConfiguration configuration = new CorsConfiguration();
-                        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5555", "http://localhost:8888"));
+                        configuration.setAllowedOrigins(Arrays.asList(Constants.Front_Host_5555, Constants.Front_Host_8888));
                         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE","PATCH"));
                         configuration.setAllowCredentials(true);
                         configuration.addAllowedHeader("*");
@@ -74,11 +75,12 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
-                                .requestMatchers("/api/v1/admin/**").hasAnyRole(ADMIN.name())
-                                .requestMatchers(GET, "/api/v1/admin/**").hasAnyAuthority(ADMIN_READ.name())
-                                .requestMatchers(POST, "/api/v1/admin/**").hasAnyAuthority(ADMIN_CREATE.name())
-                                .requestMatchers(PUT, "/api/v1/admin/**").hasAnyAuthority(ADMIN_UPDATE.name())
-                                .requestMatchers(DELETE, "/api/v1/admin/**").hasAnyAuthority(ADMIN_DELETE.name())
+                                .requestMatchers(Constants.Admin_Config_Path).hasAnyRole(ADMIN.name())
+                                .requestMatchers(GET, Constants.Admin_Config_Path).hasAnyAuthority(ADMIN_READ.name())
+                                .requestMatchers(POST, Constants.Admin_Config_Path).hasAnyAuthority(ADMIN_CREATE.name())
+                                .requestMatchers(PUT, Constants.Admin_Config_Path).hasAnyAuthority(ADMIN_UPDATE.name())
+                                .requestMatchers(PATCH, Constants.Admin_Config_Path).hasAnyAuthority(ADMIN_UPDATE.name())
+                                .requestMatchers(DELETE, Constants.Admin_Config_Path).hasAnyAuthority(ADMIN_DELETE.name())
                                 .anyRequest()
                                 .authenticated()
                 )
@@ -86,7 +88,7 @@ public class SecurityConfiguration {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout ->
-                        logout.logoutUrl("/api/v1/auth/logout")
+                        logout.logoutUrl(Constants.Logout_Config_Path)
                         .addLogoutHandler(logoutHandler)
                         .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()))
         ;

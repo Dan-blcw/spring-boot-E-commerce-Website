@@ -85,7 +85,7 @@ public class UserService {
         userImg.setIdentification(user.getName()); // Set the product reference
         userImg.setImageName(file.getOriginalFilename());
         userImg.setImg_url(ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/v1/global/media/images/")
+                .path(Constants.Global_Image_Path)
                 .path(user.getName()+"/")
                 .path(file.getOriginalFilename())
                 .toUriString());

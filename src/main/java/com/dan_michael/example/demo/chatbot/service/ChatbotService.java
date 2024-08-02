@@ -35,7 +35,7 @@ public class ChatbotService {
         if (qa != null && qa.getAnswer() != null) {
             return qa.getAnswer();
         } else {
-            return "I'm sorry, I didn't understand that. Could you please rephrase?";
+            return Constants.Chat_Bot_No_Answer;
         }
     }
     
@@ -137,7 +137,7 @@ public class ChatbotService {
     }
 
     public List<String> getAllQuestionsOfGuest() {
-        return questionOfGuestRepository.findAll().stream()
+        return questionOfGuestRepository.findByQuestionUnAnswered().stream()
                 .map(QuestionForGuest::getQuestion)
                 .collect(Collectors.toList());
     }

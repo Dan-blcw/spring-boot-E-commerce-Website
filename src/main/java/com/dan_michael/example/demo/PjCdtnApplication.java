@@ -12,10 +12,9 @@ import com.dan_michael.example.demo.model.dto.ob.*;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubColor;
 
 import com.dan_michael.example.demo.model.dto.ob.sub.SubSizeQuantity;
-import com.dan_michael.example.demo.model.entities.SubEn.DetailSizeQuantity;
 import com.dan_michael.example.demo.service.AuthenticationService;
 import com.dan_michael.example.demo.service.CategoryService;
-import com.dan_michael.example.demo.service.PaymentMethodsService;
+import com.dan_michael.example.demo.service.Payment.PaymentMethodsService;
 import com.dan_michael.example.demo.service.ProductService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -233,17 +232,29 @@ public class PjCdtnApplication {
 			chatbotService.createQuestionForGuest(Question1);
 //----------------------Payment Method ..... ----------------------------------------------
 			var paymentMethod0 = PaymentMethodsDtos.builder()
+					.description("Thanh toán khi nhận hàng là hình thức mà người mua hàng sẽ thanh toán trực tiếp cho nhân viên giao hàng hoặc người bán tại thời điểm nhận hàng. Điều này có nghĩa là người mua không cần phải trả tiền trước khi hàng hóa được giao đến")
+					.status(1)
+					.paymentMethodsName("Thanh Toán Khi Nhận Hàng (COD)")
+					.build();
+			var paymentMethod1 = PaymentMethodsDtos.builder()
+					.description("Quét mã QR là phương thức thanh toán trong đó người mua sử dụng ứng dụng ngân hàng hoặc ví điện tử để quét mã QR của người bán và thực hiện thanh toán trực tiếp.")
+					.status(1)
+					.paymentMethodsName("Quét Mã QR")
+					.build();
+			var paymentMethod2 = PaymentMethodsDtos.builder()
 					.description("VNPay là một trong những cổng thanh toán trực tuyến hàng đầu tại Việt Nam, cung cấp dịch vụ thanh toán điện tử và chuyển tiền trực tuyến cho cả khách hàng cá nhân và doanh nghiệp. VNPay cung cấp nhiều giải pháp thanh toán đa dạng")
 					.status(1)
 					.paymentMethodsName("VNPay")
 					.build();
-			var paymentMethod1 = PaymentMethodsDtos.builder()
+			var paymentMethod3 = PaymentMethodsDtos.builder()
 					.description("PayPal là một dịch vụ thanh toán trực tuyến quốc tế, cho phép các cá nhân và doanh nghiệp gửi và nhận tiền qua mạng Internet. Được thành lập vào năm 1998 và sau đó được mua lại bởi eBay vào năm 2002, PayPal đã trở thành một trong những phương thức thanh toán trực tuyến phổ biến và đáng tin cậy nhất trên thế giới.")
 					.status(1)
 					.paymentMethodsName("PayPal")
 					.build();
 			paymentMethodsService.createPaymentMethods(paymentMethod0);
 			paymentMethodsService.createPaymentMethods(paymentMethod1);
+			paymentMethodsService.createPaymentMethods(paymentMethod2);
+			paymentMethodsService.createPaymentMethods(paymentMethod3);
 //----------------------Category - Brands----------------------------------------------
 			List<String> brands0 = new ArrayList<>();
 			brands0.add("Netstripes");

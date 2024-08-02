@@ -1,4 +1,4 @@
-package com.dan_michael.example.demo.util;
+package com.dan_michael.example.demo.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 

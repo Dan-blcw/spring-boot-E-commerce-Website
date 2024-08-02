@@ -102,6 +102,7 @@ public class OrderService {
                         .build());
                 x_0.setSizeQuantities(detailSizeQuantities);
             }
+            // cập nhập quantity product
             product.setQuantityDetails(quantityDetailsList);
             product.setTotalQuantity(totalQuantity);
             productRepository.save(product);
@@ -109,9 +110,7 @@ public class OrderService {
             detail.setQuantity(x.getQuantity());
             detail.setColor(x.getColor());
             detail.setSize(x.getSize());
-
             detail.setIdentification_order(y.getId());
-
             detail.setSubTotal(x.getSubTotal());
 
             var subdetail = x.getSubTotal() ;
@@ -123,7 +122,13 @@ public class OrderService {
         y.setShippingFee(request.getShippingFee());
         y.setTaxFee(request.getTaxFee());
         y.setSubTotal(subAmountOrder);
-        totalAmountOrder = subAmountOrder + request.getShippingFee() + request.getTaxFee();
+        y.setPercentDiscount(request.getPercentDiscount());
+        if(request.getPercentDiscount() > 0){
+            totalAmountOrder = (subAmountOrder + request.getShippingFee() + request.getTaxFee());
+            totalAmountOrder = totalAmountOrder - totalAmountOrder*(request.getPercentDiscount()/100);
+        }else {
+            totalAmountOrder = subAmountOrder + request.getShippingFee() + request.getTaxFee();
+        }
         y.setTotalAmountOrder(totalAmountOrder);
         return orderRepository.save(y);
     }

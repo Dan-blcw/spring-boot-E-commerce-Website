@@ -1,4 +1,4 @@
-package com.dan_michael.example.demo.service;
+package com.dan_michael.example.demo.service.Payment;
 
 import com.dan_michael.example.demo.model.dto.ob.CategoryDtos;
 import com.dan_michael.example.demo.model.dto.ob.PaymentMethodsDtos;
@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +53,15 @@ public class PaymentMethodsService {
 
     public List<PaymentMethods> listPaymentMethods() {
         return repository.findAll();
+    }
+
+    public List<String> listPaymentMethodsName() {
+        List<String> save = new ArrayList<>();
+        var all = repository.findAllMethodsActive();
+        for (var x: all){
+            save.add(x.getName());
+        }
+        return save;
     }
 
     public Optional<PaymentMethods> detailPaymentMethods(Integer id) {

@@ -1,6 +1,7 @@
 package com.dan_michael.example.demo.config;
 import com.dan_michael.example.demo.auditing.ApplicationAuditAware;
 import com.dan_michael.example.demo.repositories.UserRepository;
+import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +23,7 @@ public class ApplicationConfig {
   @Bean
   public UserDetailsService userDetailsService() {
     return username -> repository.findByEmail(username)
-        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        .orElseThrow(() -> new UsernameNotFoundException(Constants.User_Not_Found));
   }
   @Bean
   public AuthenticationProvider authenticationProvider() {

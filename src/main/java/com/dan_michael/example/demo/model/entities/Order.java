@@ -48,6 +48,7 @@ public class Order {
     private Float shippingFee;
     private Float taxFee;
 
+    private Integer percentDiscount;
     private Float TotalAmountOrder;
 
     private Integer orderStatus;

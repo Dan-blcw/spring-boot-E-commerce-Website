@@ -31,14 +31,13 @@ public class OrderController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 //     Create a new order
-//    @PostMapping
-//    public ResponseEntity<?> createOrder(
-//            @RequestBody OrderDtos request
-//    ) {
-//        Order response = orderService.createOrder(request);
-//        return ResponseEntity.ok(response);
-//    }
-//
+    @PostMapping
+    public ResponseEntity<?> createOrder(
+            @RequestBody OrderDtos request
+    ) {
+        Order response = orderService.createOrder(request);
+        return ResponseEntity.ok(response);
+    }
 
     // Update an existing order
     @PutMapping(value = "/{id}",consumes = { "application/json"})
@@ -50,7 +49,6 @@ public class OrderController {
         return updatedOrder.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
     // Delete an order
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteOrder(@PathVariable Integer id) {
@@ -61,7 +59,6 @@ public class OrderController {
                         .status(200).build()
                 ) : ResponseEntity.notFound().build();
     }
-
 //--------------------------Order Detail----------------------------------
     @GetMapping("/order-detail/{id}")
     public ResponseEntity<?> getOrderDetailsByOrderId(@PathVariable Integer id) {

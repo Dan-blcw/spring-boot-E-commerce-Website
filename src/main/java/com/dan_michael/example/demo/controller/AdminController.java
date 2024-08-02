@@ -6,13 +6,11 @@ import com.dan_michael.example.demo.model.response.SubCategoryResponse;
 import com.dan_michael.example.demo.model.entities.PaymentMethods;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.service.CategoryService;
-import com.dan_michael.example.demo.service.PaymentMethodsService;
+import com.dan_michael.example.demo.service.Payment.PaymentMethodsService;
 import com.dan_michael.example.demo.service.ProductService;
 import com.dan_michael.example.demo.util.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.InvalidPropertyException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -134,7 +132,7 @@ public class AdminController {
     }
 
 //---------------------------Category And Brand---------------------------------------
-    @GetMapping(value = "/list-brands")
+    @GetMapping(value = "/brands")
     public SubBrandsResponse findBrandsBy(
             @RequestParam Integer category_id
     ){
@@ -150,7 +148,7 @@ public class AdminController {
                 .message(Constants.Fetch_Data_Brand_Success)
                 .build();
     }
-    @GetMapping(value = "/list-category")
+    @GetMapping(value = "/categorys")
     public List<SubCategoryResponse> listCategory(){
         return categoryService.listCategory();
     }
@@ -211,7 +209,7 @@ public class AdminController {
 
 
     //---------------------------PaymentMethods---------------------------------------
-    @GetMapping(value = "/list-payment-methods")
+    @GetMapping(value = "/payments-methods")
     public List<PaymentMethods> listPaymentMethods(){
         return paymentMethodsService.listPaymentMethods();
     }

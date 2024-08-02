@@ -1,6 +1,7 @@
 package com.dan_michael.example.demo.service;
 
 import com.dan_michael.example.demo.model.entities.User;
+import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.repositories.UserRepository;
 import com.dan_michael.example.demo.util.Constants;
 import jakarta.mail.MessagingException;
@@ -19,26 +20,32 @@ public class EmailSenderService {
 
     private final UserRepository userRepository;
 //---------------------------------Done-------------------------------------------------------------------
-    public String sendEmailAnswer(String toEmail, String subject, String name,String question,String answer, String logoPath) {
+    public ResponseMessageDtos sendEmailAnswer(String toEmail, String subject, String name, String question, String answer, String logoPath) {
         MimeMessage message = mailSender.createMimeMessage();
         var user = userRepository.findByEmail_(toEmail);
         if(user == null){
-            return Constants.User_Not_Found;
+            return ResponseMessageDtos.builder()
+                    .status(404)
+                    .message(Constants.User_Not_Found)
+                    .build();
         }
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setFrom("ecommercedemo47@gmail.com");
+            helper.setFrom(Constants.Email_Of_Company);
             helper.setTo(toEmail);
             helper.setSubject(subject);
             String htmlBody = "<div style='text-align: center; font-family: Arial, sans-serif; font-size: 15px;'>"
-                    + "<img src='cid:image_logo' style='display: block; margin: 0 auto; max-width: 400px;' />"
+                    + "<img src='cid:image_logo' style='display: block; margin: 0 auto; max-width: 400px; border-radius: 50%;' />"
                     + "<h1>Hi " + name + "!</h1>"
-                    + "<p>Thank you for reaching out to us with your question! We truly appreciate your interest and value the opportunity to assist you.</p>"
+                    + "<p>Thank you for reaching out to us with your question!</p>"
+                    + "<p>We truly appreciate your interest and value the opportunity to assist you.</p>"
                     + "<p><strong>Your Question:</strong></p>"
                     + "<p style='font-style: italic;'>" + question + "</p>"
                     + "<p><strong>Our Answer:</strong></p>"
                     + "<p>" + answer + "</p>"
-                    + "<p>If you have any further questions or need additional assistance, please don't hesitate to reach out to us. We are here to help and ensure you have the best experience possible.</p>"
+                    + "<p>If you have any further questions or need additional assistance, please don't hesitate to reach out to us.</p>"
+                    + "<p>We are here to help and ensure you have the best experience possible.</p>"
+
                     + "<div>"
                     + "<a href='http://www.facebook.com'><img src='cid:image_fb' style='width: 28px; height: 28px; margin: 0 5px;' /></a>"
                     + "<a href='http://www.linkedin.com'><img src='cid:image_li' style='width: 28px; height: 28px; margin: 0 5px;' /></a>"
@@ -46,7 +53,7 @@ public class EmailSenderService {
                     + "<a href='http://www.pinterest.com'><img src='cid:image_pin' style='width: 28px; height: 28px; margin: 0 5px;' /></a>"
                     + "</div>"
                     + "<p>Best regards,</p>"
-                    + "<p>The E-commerce Team (Dan - Michael)</p>"
+                    + "<p>"+Constants.Team_Name +"</p>"
                     + "</div>";
 
 
@@ -55,10 +62,10 @@ public class EmailSenderService {
             File logo = new File(logoPath);
             helper.addInline("image_logo", logo);
 
-            File fbIcon = new File("D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_1.png");
-            File liIcon = new File("D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_2.png");
-            File ytIcon = new File("D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_3.png");
-            File pinIcon = new File("D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_4.png");
+            File fbIcon = new File(Constants.Logo_Path_1);
+            File liIcon = new File(Constants.Logo_Path_2);
+            File ytIcon = new File(Constants.Logo_Path_3);
+            File pinIcon = new File(Constants.Logo_Path_4);
 
             helper.addInline("image_fb", fbIcon);
             helper.addInline("image_li", liIcon);
@@ -66,21 +73,32 @@ public class EmailSenderService {
             helper.addInline("image_pin", pinIcon);
 
             mailSender.send(message);
-            System.out.println("Mail Sent Successfully !!!");
-            return "Mail Sent Successfully !!!";
+            return ResponseMessageDtos.builder()
+                    .status(200)
+                    .message(Constants.Send_Mail_Answer_Success)
+                    .build();
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-        return "Mail Sent Failure !!!";
+        return ResponseMessageDtos.builder()
+                .status(404)
+                .message(Constants.Send_Mail_Answer_Fail)
+                .build();
 }
-    public String getDiscountCode(String toEmail, String subject, String name, String logoPath,String discountCode) {
+    public ResponseMessageDtos getDiscountCode(String toEmail, String subject, String name, String logoPath,String discountCode) {
         MimeMessage message = mailSender.createMimeMessage();
         var user = userRepository.findByEmail_(toEmail);
         if(user == null){
-            return "User does not exist";
+            return ResponseMessageDtos.builder()
+                    .status(404)
+                    .message(Constants.User_Not_Found)
+                    .build();
         }
         if(user.getUseFirstDiscount() == true){
-            return "This account has already used the first discount promotion!!!";
+            return ResponseMessageDtos.builder()
+                    .status(404)
+                    .message(Constants.Already_Use_First_Discount)
+                    .build();
         }
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -111,10 +129,10 @@ public class EmailSenderService {
             File logo = new File(logoPath);
             helper.addInline("image_logo", logo);
 
-            File fbIcon = new File("D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_1.png");
-            File liIcon = new File("D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_2.png");
-            File ytIcon = new File("D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_3.png");
-            File pinIcon = new File("D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_4.png");
+            File fbIcon = new File(Constants.Logo_Path_1);
+            File liIcon = new File(Constants.Logo_Path_2);
+            File ytIcon = new File(Constants.Logo_Path_3);
+            File pinIcon = new File(Constants.Logo_Path_4);
 
             helper.addInline("image_fb", fbIcon);
             helper.addInline("image_li", liIcon);
@@ -122,14 +140,19 @@ public class EmailSenderService {
             helper.addInline("image_pin", pinIcon);
 
             mailSender.send(message);
-            System.out.println("Mail Sent Successfully !!!");
             user.setUseFirstDiscount(true);
             userRepository.save(user);
-            return "Mail Sent Successfully !!!";
+            return ResponseMessageDtos.builder()
+                    .status(404)
+                    .message(Constants.Send_Mail_Get_Discount_Success)
+                    .build();
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-        return "Mail Sent Failure !!!";
+        return ResponseMessageDtos.builder()
+                .status(404)
+                .message(Constants.Send_Mail_Get_Discount_Fail)
+                .build();
     }
 //----------------------------------Demo-------------------------------------------------------------
 //    public void setMailSender(

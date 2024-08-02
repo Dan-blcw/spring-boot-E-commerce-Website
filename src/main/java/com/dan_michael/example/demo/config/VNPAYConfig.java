@@ -1,6 +1,6 @@
 package com.dan_michael.example.demo.config;
 
-import com.dan_michael.example.demo.util.VNPayUtil;
+import com.dan_michael.example.demo.util.Constants;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -27,22 +27,22 @@ public class VNPAYConfig {
 
     public Map<String, String> getVNPayConfig() {
         Map<String, String> vnpParamsMap = new HashMap<>();
-        vnpParamsMap.put("vnp_Version", this.vnp_Version);
-        vnpParamsMap.put("vnp_Command", this.vnp_Command);
-        vnpParamsMap.put("vnp_TmnCode", this.vnp_TmnCode);
-        vnpParamsMap.put("vnp_CurrCode", "VND");
-        vnpParamsMap.put("vnp_TxnRef",  VNPayUtil.getRandomNumber(8));
-        vnpParamsMap.put("vnp_OrderInfo", "Thanh toan don hang:" +  VNPayUtil.getRandomNumber(8));
-        vnpParamsMap.put("vnp_OrderType", this.orderType);
-        vnpParamsMap.put("vnp_Locale", "vn");
-        vnpParamsMap.put("vnp_ReturnUrl", this.vnp_ReturnUrl);
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        vnpParamsMap.put(Constants.Vnp_Version, this.vnp_Version);
+        vnpParamsMap.put(Constants.Vnp_Command, this.vnp_Command);
+        vnpParamsMap.put(Constants.Vnp_TmnCode, this.vnp_TmnCode);
+        vnpParamsMap.put(Constants.Vnp_CurrCode, Constants.VND_Uppercase);
+        vnpParamsMap.put(Constants.Vnp_TxnRef,  VNPayUtil.getRandomNumber(8));
+        vnpParamsMap.put(Constants.Vnp_OrderInfo, Constants.Payment_Orders +  VNPayUtil.getRandomNumber(8));
+        vnpParamsMap.put(Constants.Vnp_OrderType, this.orderType);
+        vnpParamsMap.put(Constants.Vnp_Locale, Constants.Vnp_Locale_RN);
+        vnpParamsMap.put(Constants.Vnp_ReturnUrl, this.vnp_ReturnUrl);
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(Constants.Time_Zone));
+        SimpleDateFormat formatter = new SimpleDateFormat(Constants.Time_Format);
         String vnpCreateDate = formatter.format(calendar.getTime());
-        vnpParamsMap.put("vnp_CreateDate", vnpCreateDate);
+        vnpParamsMap.put(Constants.Vnp_CreateDate, vnpCreateDate);
         calendar.add(Calendar.MINUTE, 15);
         String vnp_ExpireDate = formatter.format(calendar.getTime());
-        vnpParamsMap.put("vnp_ExpireDate", vnp_ExpireDate);
+        vnpParamsMap.put(Constants.Vnp_ExpireDate, vnp_ExpireDate);
         return vnpParamsMap;
     }
 }
