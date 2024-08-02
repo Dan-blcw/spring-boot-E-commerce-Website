@@ -289,6 +289,12 @@ public class PjCdtnApplication {
 			List<SubSizeQuantity> subSizeQuantityList0 = new ArrayList<>();
 			List<SubSizeQuantity> subSizeQuantityList1 = new ArrayList<>();
 			List<SubSizeQuantity> subSizeQuantityList2 = new ArrayList<>();
+			List<SubSizeQuantity> subSizeQuantityList3 = new ArrayList<>();
+			List<SubSizeQuantity> subSizeQuantityList4 = new ArrayList<>();
+			List<SubSizeQuantity> subSizeQuantityList5 = new ArrayList<>();
+			List<SubSizeQuantity> subSizeQuantityList6 = new ArrayList<>();
+			List<SubSizeQuantity> subSizeQuantityList7 = new ArrayList<>();
+			List<SubSizeQuantity> subSizeQuantityList8 = new ArrayList<>();
 //			Red
 			SubSizeQuantity subSizeQuantity0 = SubSizeQuantity.builder()
 					.size("small")
@@ -312,6 +318,29 @@ public class PjCdtnApplication {
 					.size("superLarge")
 					.quantity(80).build();
 
+			SubSizeQuantity subSizeQuantity6 = SubSizeQuantity.builder()
+					.size("small")
+					.quantity(4753)
+					.build();
+			SubSizeQuantity subSizeQuantity7 = SubSizeQuantity.builder()
+					.size("medium")
+					.quantity(43).build();
+//			blue
+			SubSizeQuantity subSizeQuantity8 = SubSizeQuantity.builder()
+					.size("large")
+					.quantity(87).build();
+			SubSizeQuantity subSizeQuantity9 = SubSizeQuantity.builder()
+					.size("superSmall")
+					.quantity(43).build();
+//			black
+			SubSizeQuantity subSizeQuantity10 = SubSizeQuantity.builder()
+					.size("superMedium")
+					.quantity(42).build();
+			SubSizeQuantity subSizeQuantity11 = SubSizeQuantity.builder()
+					.size("superLarge")
+					.quantity(42).build();
+
+
 			subSizeQuantityList0.add(subSizeQuantity0);
 			subSizeQuantityList0.add(subSizeQuantity1);
 
@@ -320,25 +349,46 @@ public class PjCdtnApplication {
 
 			subSizeQuantityList2.add(subSizeQuantity2);
 			subSizeQuantityList2.add(subSizeQuantity3);
+//
+//			subSizeQuantityList3.add(subSizeQuantity6);
+//			subSizeQuantityList4.add(subSizeQuantity7);
+//
+//			subSizeQuantityList5.add(subSizeQuantity8);
+//			subSizeQuantityList5.add(subSizeQuantity9);
+//
+//			subSizeQuantityList6.add(subSizeQuantity10);
+//			subSizeQuantityList6.add(subSizeQuantity11);
+
 //			Color & SubSizeQuantity
 			SubColor sub0 = SubColor.builder()
-					.color("red")
+					.color("Đỏ")
 					.sizes(subSizeQuantityList0)
 					.build();
 //			red medium - 12
 			SubColor sub1 = SubColor.builder()
-					.color("blue")
+					.color("Xanh Dương")
 					.sizes(subSizeQuantityList1)
 					.build();
 
 			SubColor sub2 = SubColor.builder()
-					.color("black")
+					.color("Đen")
 					.sizes(subSizeQuantityList2)
 					.build();
-
+//			Color & SubSizeQuantity
+			SubColor sub3 = SubColor.builder()
+					.color("Trắng")
+					.sizes(subSizeQuantityList3)
+					.build();
+//			red medium - 12
+			SubColor sub4 = SubColor.builder()
+					.color("blue")
+					.sizes(subSizeQuantityList4)
+					.build();
 
 			List<SubColor> listsub1 = new ArrayList<>();
 			List<SubColor> listsub2 = new ArrayList<>();
+
+
 
 			listsub1.add(sub0);
 			listsub1.add(sub1);
@@ -350,6 +400,7 @@ public class PjCdtnApplication {
 					.description("Áo sơ mi Cuban Netstripes là một kiểu áo sơ mi phổ biến có nguồn gốc từ Cuba, được biết đến với phong cách đặc trưng và thoải mái.")
 					.quantityDetails(listsub1)
 					.category("Áo")
+					.tradeMask("Áo Sơ Mi")
 					.brand("Netstripes")
 					.originalPrice(1000000.0f)
 					.saleDiscountPercent(10.0f)
@@ -360,12 +411,232 @@ public class PjCdtnApplication {
 					.description("Quần short Slim Denim Back Devipock là một sản phẩm thời trang hiện đại, kết hợp giữa sự thoải mái và phong cách.")
 					.quantityDetails(listsub2)
 					.category("Quần")
+					.tradeMask("Quần Short")
 					.brand("Devipock")
 					.originalPrice(800000.0f)
 					.saleDiscountPercent(20.0f)
 					.createdByUserid(2)
 					.build();
-
+			var pro2 = ProductDtos.builder()
+					.name("Áo sơ mi Denim Cloud Gray BTW")
+					.description("Áo sơ mi Denim Cloud Gray BTW là một sản phẩm thời trang phổ biến, thường được làm từ chất liệu vải denim chất lượng cao")
+					.tradeMask("Áo sơ mi")
+					.quantityDetails(listsub2)
+					.category("Áo")
+					.brand("BTW")
+					.originalPrice(8000000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro3 = ProductDtos.builder()
+					.name("Áo Sơ Mi Artemisia Basic")
+					.description("Áo sơ mi Artemisia Basic là một sản phẩm thời trang phổ biến với thiết kế đơn giản nhưng tinh tế.")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro4 = ProductDtos.builder()
+					.name("Product 4")
+					.description("description 4")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Thun")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro5 = ProductDtos.builder()
+					.name("Product 5")
+					.description("description 5")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro6 = ProductDtos.builder()
+					.name("Product 6")
+					.description("description 6")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro7 = ProductDtos.builder()
+					.name("Product 7")
+					.description("description 7")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro8 = ProductDtos.builder()
+					.name("Product 8")
+					.description("description 8")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro9 = ProductDtos.builder()
+					.name("Product 9")
+					.description("description 9")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro10 = ProductDtos.builder()
+					.name("Product 10")
+					.description("description 10")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro11 = ProductDtos.builder()
+					.name("Product 11")
+					.description("description 11")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro12 = ProductDtos.builder()
+					.name("Product 12")
+					.description("description 12")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro13 = ProductDtos.builder()
+					.name("Product 13")
+					.description("description 13")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro14 = ProductDtos.builder()
+					.name("Product 14")
+					.description("description 14")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro15 = ProductDtos.builder()
+					.name("Product 15")
+					.description("description 15")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro16 = ProductDtos.builder()
+					.name("Product 16")
+					.description("description 16")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro17 = ProductDtos.builder()
+					.name("Product 17")
+					.description("description 17")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro18 = ProductDtos.builder()
+					.name("Product 18")
+					.description("description 18")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro19 = ProductDtos.builder()
+					.name("Product 19")
+					.description("description 19")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro20 = ProductDtos.builder()
+					.name("Product 20")
+					.description("description 20")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
+			var pro21 = ProductDtos.builder()
+					.name("Product 21")
+					.description("description 21")
+					.quantityDetails(listsub1)
+					.category("Áo")
+					.brand("Artemisia")
+					.tradeMask("Áo Sơ Mi")
+					.originalPrice(23500000.0f)
+					.saleDiscountPercent(20.0f)
+					.createdByUserid(1)
+					.build();
 
 			var comment0 = CommentDto.builder()
 					.content("This is a great product!")
@@ -387,10 +658,55 @@ public class PjCdtnApplication {
 					.build();
 			var pro0Response =productService.createProduct(pro0);
 			var pro1Response = productService.createProduct(pro1);
+			var pro2Response = productService.createProduct(pro2);
+			var pro3Response = productService.createProduct(pro3);
+			var pro4Response = productService.createProduct(pro4);
+			var pro5Response = productService.createProduct(pro5);
+			var pro6Response = productService.createProduct(pro6);
+			var pro7Response = productService.createProduct(pro7);
+			var pro8Response = productService.createProduct(pro8);
+			var pro9Response = productService.createProduct(pro9);
+			var pro10Response = productService.createProduct(pro10);
+			var pro11Response = productService.createProduct(pro11);
+			var pro12Response = productService.createProduct(pro12);
+			var pro13Response = productService.createProduct(pro13);
+			var pro14Response = productService.createProduct(pro14);
+			var pro15Response = productService.createProduct(pro15);
+			var pro16Response = productService.createProduct(pro16);
+			var pro17Response = productService.createProduct(pro17);
+			var pro18Response = productService.createProduct(pro18);
+			var pro19Response = productService.createProduct(pro19);
+			var pro20Response = productService.createProduct(pro20);
+			var pro21Response = productService.createProduct(pro21);
 
 			productService.createComment(comment0,pro0Response.getId());
 			productService.createComment(comment1,pro0Response.getId());
 			productService.createComment(comment2,pro1Response.getId());
+			productService.createComment(comment1,pro3Response.getId());
+			productService.createComment(comment2,pro3Response.getId());
+			productService.createComment(comment0,pro4Response.getId());
+			productService.createComment(comment2,pro4Response.getId());
+			productService.createComment(comment1,pro5Response.getId());
+			productService.createComment(comment0,pro6Response.getId());
+			productService.createComment(comment2,pro7Response.getId());
+			productService.createComment(comment1,pro8Response.getId());
+			productService.createComment(comment1,pro8Response.getId());
+			productService.createComment(comment0,pro9Response.getId());
+			productService.createComment(comment2,pro10Response.getId());
+			productService.createComment(comment1,pro11Response.getId());
+			productService.createComment(comment2,pro11Response.getId());
+			productService.createComment(comment2,pro12Response.getId());
+			productService.createComment(comment1,pro13Response.getId());
+			productService.createComment(comment1,pro14Response.getId());
+			productService.createComment(comment0,pro15Response.getId());
+			productService.createComment(comment1,pro16Response.getId());
+			productService.createComment(comment2,pro16Response.getId());
+			productService.createComment(comment2,pro17Response.getId());
+			productService.createComment(comment1,pro18Response.getId());
+			productService.createComment(comment1,pro19Response.getId());
+			productService.createComment(comment0,pro20Response.getId());
+			productService.createComment(comment1,pro21Response.getId());
+			productService.createComment(comment2,pro21Response.getId());
 //---------------------------------------------------------------------------------------
 			var trademask_0 = TradeMaskDtos.builder()
 					.tradeMarkSku("NS-001")
