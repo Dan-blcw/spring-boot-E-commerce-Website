@@ -135,7 +135,7 @@ public class ProductService {
                         .path(imageFile.getOriginalFilename())
                         .toUriString());
                 productImgRepository.save(productImg);
-                if(productImg.getImageName() == product_flag.getImageMain()){
+                if(productImg.getImageName() == request.getImageMain()){
                     product_flag.setImageMain(productImg.getImg_url());
                 }
                 SubImgResponse response = SubImgResponse.builder()
