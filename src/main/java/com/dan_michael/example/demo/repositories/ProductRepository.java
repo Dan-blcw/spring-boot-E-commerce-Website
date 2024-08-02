@@ -24,12 +24,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT p FROM Product p " +
             "WHERE (:priceGte IS NULL OR p.finalPrice >= :priceGte) " +
             "AND (:priceLte IS NULL OR p.finalPrice <= :priceLte) " +
-            "AND (:brands IS NULL OR p.brand IN :brands) " +
+            "AND (:tradeMask IS NULL OR p.tradeMask IN :tradeMask) " +
             "AND (:isReleased IS NULL OR p.newStatus = :isReleased) " +
             "AND (:isPromotion IS NULL OR p.saleStatus = :isPromotion) " +
             "AND (:ratingLt IS NULL OR p.rating < :ratingLt) " +
             "AND (:ratingGte IS NULL OR p.rating >= :ratingGte) ")
-    List<Product> search_all(@Param("brands") String brands,
+    List<Product> search_all(@Param("tradeMask") String tradeMask,
                              @Param("isPromotion") Boolean isPromotion,
                              @Param("isReleased") Boolean isReleased,
                              @Param("ratingGte") Integer ratingGte,

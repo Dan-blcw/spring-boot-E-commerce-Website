@@ -126,7 +126,7 @@ public class GuestController {
 //--------------------------Search----------------------------------
     @GetMapping(value = "/list-search",produces = "application/json")
     public ResponseEntity<?> global_search(
-            @RequestParam (required = false)List<String> brands,
+            @RequestParam (required = false)List<String> tradeMask,
             @RequestParam (required = false)Boolean isPromotion,
             @RequestParam (required = false)Boolean isReleased,
             @RequestParam (required = false)Integer ratingGte,
@@ -136,7 +136,7 @@ public class GuestController {
             @RequestParam Integer _page,
             @RequestParam (required = false)String _sort
     ) {
-        List<ProductResponse> list = service.search_all(brands,isPromotion,isReleased,ratingGte,price_gte,price_lte,_sort);
+        List<ProductResponse> list = service.search_all(tradeMask,isPromotion,isReleased,ratingGte,price_gte,price_lte,_sort);
         return ResponseEntity.ok(ProductListDtos.builder().data(list).paginationDto(new PaginationDto(list.size(),_limit)).build());
     }
 //--------------------------GetQuantityDetail----------------------------------

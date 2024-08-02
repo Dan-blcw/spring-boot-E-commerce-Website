@@ -21,6 +21,7 @@ public class ProductDtos {
     private List<SubColor> quantityDetails;
     private String category;
     private String brand;
+    private String tradeMask;
 
     private Float originalPrice ;
     private Float saleDiscountPercent ;

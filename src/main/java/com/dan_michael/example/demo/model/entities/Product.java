@@ -48,6 +48,7 @@ public class Product {
     private String description;
 
     private String category;
+    private String tradeMask;
     private String brand;
 
     private Float rating;

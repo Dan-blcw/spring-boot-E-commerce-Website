@@ -57,7 +57,8 @@ public class ProductService {
         product_flag.setDescription(request.getDescription());
 
         product_flag.setCategory(request.getCategory());
-
+        product_flag.setBrand(request.getBrand());
+        product_flag.setTradeMask(request.getBrand());
         product_flag.setRating(5.0f);
         product_flag.setNRating(0);
         var finalPrice = 0.0f;
@@ -71,8 +72,6 @@ public class ProductService {
             finalPrice = request.getOriginalPrice();
         }
         product_flag.setFinalPrice(finalPrice);
-
-        product_flag.setBrand(request.getBrand());
         product_flag.setNewStatus(true);
         product_flag.setFavourite(null);
 
@@ -174,7 +173,7 @@ public class ProductService {
                 .saleDiscountPercent(product_flag.getSaleDiscountPercent())
                 .finalPrice(product_flag.getFinalPrice())
                 .saleStatus(product_flag.getSaleStatus())
-
+                .tradaMask(product_flag.getTradeMask())
                 .newStatus(product_flag.getNewStatus())
                 .comments(product_flag.getComments())
                 .createDate(product_flag.getCreateDate())
@@ -203,6 +202,7 @@ public class ProductService {
             product_flag.setDescription(request.getDescription());
 
             product_flag.setCategory(request.getCategory());
+            product_flag.setTradeMask(request.getBrand());
             product_flag.setBrand(request.getBrand());
             product_flag.setNRating(0);
 
@@ -534,6 +534,7 @@ public class ProductService {
                 .totalQuantity(totalQuantity)
                 .imageMain(product_flag.getImageMain())
                 .name(product_flag.getName())
+                .tradaMask(product_flag.getTradeMask())
                 .description(product_flag.getDescription())
                 .quantityDetails(BoxResponse)
                 .category(product_flag.getCategory())
@@ -659,7 +660,7 @@ public class ProductService {
                     .rating(rating)
                     .nRating(nRating)
                     .favourite(favouriteListRe)
-
+                    .tradaMask(x.getTradeMask())
                     .originalPrice(x.getOriginalPrice())
                     .saleDiscountPercent(x.getSaleDiscountPercent())
                     .finalPrice(x.getFinalPrice())
@@ -741,6 +742,7 @@ public class ProductService {
                 .quantityDetails(subColors)
                 .category(boxItem.get().getCategory())
                 .rating(rating)
+                .tradaMask(boxItem.get().getTradeMask())
                 .nRating(nRating)
                 .favourite(favouriteListRe)
                 .originalPrice(boxItem.get().getOriginalPrice())
@@ -946,6 +948,7 @@ public class ProductService {
                         .colours(colorsListRe)
                         .brand(x.getBrand())
                         .name(x.getName())
+                        .tradaMask(x.getTradeMask())
                         .description(x.getDescription())
                         .quantityDetails(subColors)
                         .category(x.getCategory())
@@ -1013,7 +1016,7 @@ public class ProductService {
     }
 //--------------------------------------Search--------------------------------------------------------------
     public List<ProductResponse> search_all(
-            List<String> brands,
+            List<String> tradeMask,
             Boolean isPromotion,
             Boolean isReleased,
             Integer ratingGte,
@@ -1025,7 +1028,7 @@ public class ProductService {
             ratingLt = ratingGte +  1;
         }
         List<Product> productList = new ArrayList<>();
-        for (var x : brands) {
+        for (var x : tradeMask) {
             List<Product> box = productRepository.search_all(x, isPromotion, isReleased, ratingGte,ratingLt, priceGte, priceLte);
             for (var y : box) {
                 if (!productList.contains(y)) {
@@ -1106,6 +1109,8 @@ public class ProductService {
                     .category(x.getCategory())
                     .rating(rating)
                     .nRating(nRating)
+                    .tradaMask(x.getTradeMask())
+                    .tradaMask(x.getTradeMask())
                     .favourite(favouriteListRe)
                     .originalPrice(x.getOriginalPrice())
                     .saleDiscountPercent(x.getSaleDiscountPercent())
