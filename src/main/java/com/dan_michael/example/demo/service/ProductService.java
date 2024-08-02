@@ -159,6 +159,7 @@ public class ProductService {
                 .images(productImagesBox)
                 .colours(colors)
                 .sizes(sizes)
+                .tradaMask(request.getTradeMask())
                 .subCategory(request.getSubCategory())
                 .name(product_flag.getName())
                 .description(product_flag.getDescription())
