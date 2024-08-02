@@ -257,27 +257,27 @@ public class PjCdtnApplication {
 			paymentMethodsService.createPaymentMethods(paymentMethod3);
 //----------------------Category - Brands----------------------------------------------
 			List<String> brands0 = new ArrayList<>();
-			brands0.add("Netstripes");
-			brands0.add("Maze");
-			brands0.add("Born");
-			brands0.add("Tropical");
+			brands0.add("Áo Sơ Mi");
+			brands0.add("Áo Sơ Thun");
+			brands0.add("Áo Khoác");
+			brands0.add("Áo Quần què");
 
 			List<String> brands1 = new ArrayList<>();
-			brands1.add("Devipock");
-			brands1.add("Match");
-			brands1.add("Floral");
-			brands1.add("Sleeves");
+			brands1.add("Quần short");
+			brands1.add("Quần short_1");
+			brands1.add("Quần short_2");
+			brands1.add("Quần short_3");
 
 			CategoryDtos category0 = CategoryDtos.builder()
 					.sku("576842548")
-					.categoryName("Áo Sơ Mi")
+					.categoryName("Áo")
 					.brands(brands0)
 					.status(1)
 					.build();
 
 			CategoryDtos category1 = CategoryDtos.builder()
 					.sku("JDFH6725")
-					.categoryName("Quần short")
+					.categoryName("Quần")
 					.brands(brands1)
 					.status(1)
 					.build();
@@ -349,7 +349,7 @@ public class PjCdtnApplication {
 					.name("Áo Sơ Mi Cuban Netstripes")
 					.description("Áo sơ mi Cuban Netstripes là một kiểu áo sơ mi phổ biến có nguồn gốc từ Cuba, được biết đến với phong cách đặc trưng và thoải mái.")
 					.quantityDetails(listsub1)
-					.category("Áo Sơ Mi")
+					.category("Áo")
 					.brand("Netstripes")
 					.originalPrice(1000000.0f)
 					.saleDiscountPercent(10.0f)
@@ -359,7 +359,7 @@ public class PjCdtnApplication {
 					.name("Quần short Slim Denim Back Devipock")
 					.description("Quần short Slim Denim Back Devipock là một sản phẩm thời trang hiện đại, kết hợp giữa sự thoải mái và phong cách.")
 					.quantityDetails(listsub2)
-					.category("Quần short")
+					.category("Quần")
 					.brand("Devipock")
 					.originalPrice(800000.0f)
 					.saleDiscountPercent(20.0f)
@@ -391,7 +391,27 @@ public class PjCdtnApplication {
 			productService.createComment(comment0,pro0Response.getId());
 			productService.createComment(comment1,pro0Response.getId());
 			productService.createComment(comment2,pro1Response.getId());
+//---------------------------------------------------------------------------------------
+			var trademask_0 = TradeMaskDtos.builder()
+					.tradeMarkSku("NS-001")
+					.tradeMarkName("Burberry")
+					.description("Burberry là thương hiệu thời trang cao cấp của Anh, nổi tiếng với các sản phẩm từ chất liệu cao cấp, bao gồm áo khoác trench, quần áo, túi xách và phụ kiện.")
+					.build();
+			var trademask_1 = TradeMaskDtos.builder()
+					.tradeMarkSku("DP-001")
+					.tradeMarkName("Devipock")
+					.description("Devipock là thương hiệu thời trang tiên phong, tập trung vào các thiết kế độc đáo và sáng tạo. Các sản phẩm của Devipock bao gồm quần áo, giày dép và phụ kiện với phong cách hiện đại và phá cách. Thương hiệu này cam kết sử dụng chất liệu cao cấp và thân thiện với môi trường, nhằm mang lại sự thoải mái và phong cách cho khách hàng.")
+					.build();
+			var trademask_2 = TradeMaskDtos.builder()
+					.tradeMarkSku("BU-001")
+					.tradeMarkName("Devipock")
+					.description("Devipock là thương hiệu thời trang tiên phong, tập trung vào các thiết kế độc đáo và sáng tạo. Các sản phẩm của Devipock bao gồm quần áo, giày dép và phụ kiện với phong cách hiện đại và phá cách. Thương hiệu này cam kết sử dụng chất liệu cao cấp và thân thiện với môi trường, nhằm mang lại sự thoải mái và phong cách cho khách hàng.")
+					.build();
+			productService.saveTrask(trademask_0);
+			productService.saveTrask(trademask_1);
+			productService.saveTrask(trademask_2);
 		};
+
 	}
 
 }

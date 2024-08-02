@@ -17,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ProductResponse {
     private Integer id;
+    private String imageMain;
     private List<SubImgResponse> images;
     private List<String> colours;
     private List<String> sizes;
@@ -36,6 +37,7 @@ public class ProductResponse {
     private Float saleDiscountPercent ;
     private Float finalPrice ;
     private Boolean saleStatus;
+
 
     private Boolean newStatus;
     private List<Comment> comments;

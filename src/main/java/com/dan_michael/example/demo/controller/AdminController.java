@@ -1,6 +1,7 @@
 package com.dan_michael.example.demo.controller;
 
 import com.dan_michael.example.demo.model.dto.ob.*;
+import com.dan_michael.example.demo.model.entities.TradeMark;
 import com.dan_michael.example.demo.model.response.SubBrandsResponse;
 import com.dan_michael.example.demo.model.response.SubCategoryResponse;
 import com.dan_michael.example.demo.model.entities.PaymentMethods;
@@ -258,4 +259,37 @@ public class AdminController {
     ) {
         return paymentMethodsService.remove(id);
     }
+//-------------------------------------------------------------------------------------------------------
+    @GetMapping("/tradeMask")
+    public List<TradeMark> getAllTradeMarks() {
+        return service.findAll();
+    }
+
+    @GetMapping("/tradeMask/{id}")
+    public ResponseEntity<TradeMark> getTradeMarkById(@PathVariable Integer id) {
+        Optional<TradeMark> tradeMark = service.findById(id);
+        return tradeMark.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/tradeMask")
+    public TradeMark createTradeMark(@RequestBody TradeMaskDtos tradeMark) {
+        return service.saveTrask(tradeMark);
+    }
+
+    @PutMapping("/tradeMask/{id}")
+    public ResponseEntity<TradeMark> updateTradeMark(@PathVariable Integer id, @RequestBody TradeMaskDtos tradeMarkDetails) {
+        Optional<TradeMark> tradeMark = service.findById(id);
+        if (tradeMark.isPresent()) {
+            return ResponseEntity.ok(service.saveTrask(tradeMarkDetails));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/tradeMask/{id}")
+    public ResponseEntity<Void> deleteTradeMark(@PathVariable Integer id) {
+        service.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
+

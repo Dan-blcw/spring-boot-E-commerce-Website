@@ -3,12 +3,14 @@ package com.dan_michael.example.demo.service;
 import com.dan_michael.example.demo.model.dto.ob.*;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubColor;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubSizeQuantity;
+import com.dan_michael.example.demo.model.entities.TradeMark;
 import com.dan_michael.example.demo.model.response.*;
 import com.dan_michael.example.demo.model.entities.SubEn.*;
 import com.dan_michael.example.demo.model.entities.Comment;
 import com.dan_michael.example.demo.model.entities.Product;
 import com.dan_michael.example.demo.model.entities.img.ProductImg;
 import com.dan_michael.example.demo.repositories.CommentRepository;
+import com.dan_michael.example.demo.repositories.TradeMarkRepository;
 import com.dan_michael.example.demo.repositories.image.ProductImgRepository;
 import com.dan_michael.example.demo.repositories.ProductRepository;
 import com.dan_michael.example.demo.repositories.SupRe.*;
@@ -37,7 +39,8 @@ public class ProductService {
     private final QuantityDetailRepository quantityDetailRepository;
 
     private final DetailSizeQuantityRepository detailSizeQuantityRepository;
-//    private final Category quantityDetailRepository;
+
+    private final TradeMarkRepository tradeMarkRepository;
 
     private final FavouriteProductRepository favouriteProductRepository;
 //-------------------Product-----------------------------------
@@ -166,7 +169,7 @@ public class ProductService {
                 .nRating(product_flag.getNRating())
                 .totalQuantity(totalQuantity)
                 .favourite(null)
-
+                .imageMain(product_flag.getImageMain())
                 .originalPrice(product_flag.getOriginalPrice())
                 .saleDiscountPercent(product_flag.getSaleDiscountPercent())
                 .finalPrice(product_flag.getFinalPrice())
@@ -477,6 +480,9 @@ public class ProductService {
                         .path(imageFile.getOriginalFilename())
                         .toUriString());
                 productImgRepository.save(productImg);
+                if(productImg.getImageName() == product_flag.getImageMain() || product_flag.getImageMain() != null){
+                    product_flag.setImageMain(productImg.getImg_url());
+                }
                 SubImgResponse response = SubImgResponse.builder()
                         .id(productImg.getId())
                         .img_url(productImg.getImg_url())
@@ -526,6 +532,7 @@ public class ProductService {
                 .sizes(valuesave(sizesadd,sizes))
                 .colours(valuesave(colorsadd,colors))
                 .totalQuantity(totalQuantity)
+                .imageMain(product_flag.getImageMain())
                 .name(product_flag.getName())
                 .description(product_flag.getDescription())
                 .quantityDetails(BoxResponse)
@@ -1184,4 +1191,28 @@ public class ProductService {
                 .message(Constants.Fetch_Data_Quantity_Total_Success)
                 .build();
     }
+//    ----------------------------------TradeMask
+        public List<TradeMark> findAll() {
+            return tradeMarkRepository.findAll();
+        }
+
+        public Optional<TradeMark> findById(Integer id) {
+            return tradeMarkRepository.findById(id);
+        }
+
+        public TradeMark saveTrask(TradeMaskDtos tradeMark) {
+            var save = TradeMark.builder()
+                    .tradeMarkSku(tradeMark.getTradeMarkSku())
+                    .tradeMarkName(tradeMark.getTradeMarkName())
+                    .description(tradeMark.getDescription())
+                    .createDate(new Date())
+                    .build();
+            return tradeMarkRepository.save(save);
+        }
+
+        public void deleteById(Integer id) {
+            tradeMarkRepository.deleteById(id);
+        }
+
+
 }
