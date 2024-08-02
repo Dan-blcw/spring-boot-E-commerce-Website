@@ -1,7 +1,6 @@
 package com.dan_michael.example.demo.model.entities.SubEn;
 
 import com.dan_michael.example.demo.model.entities.Category;
-import com.dan_michael.example.demo.model.entities.Product;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,11 +15,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Brand {
+public class SubCategory {
     @Id
     @GeneratedValue
     private Integer id;
-    private String brand;
+    private String subCategoryName;
     private String identification;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")

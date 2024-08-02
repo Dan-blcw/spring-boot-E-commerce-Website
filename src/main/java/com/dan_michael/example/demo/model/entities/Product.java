@@ -49,7 +49,7 @@ public class Product {
 
     private String category;
     private String tradeMask;
-    private String brand;
+    private String subCategory;
 
     private Float rating;
     private Integer nRating;

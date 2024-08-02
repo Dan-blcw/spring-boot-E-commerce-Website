@@ -21,7 +21,7 @@ public class ProductResponse {
     private List<SubImgResponse> images;
     private List<String> colours;
     private List<String> sizes;
-    private String brand;
+    private String subCategory;
     private String name;
     private String description;
 

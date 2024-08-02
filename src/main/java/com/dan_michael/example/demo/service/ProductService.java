@@ -57,8 +57,8 @@ public class ProductService {
         product_flag.setDescription(request.getDescription());
 
         product_flag.setCategory(request.getCategory());
-        product_flag.setBrand(request.getBrand());
-        product_flag.setTradeMask(request.getBrand());
+        product_flag.setSubCategory(request.getSubCategory());
+        product_flag.setTradeMask(request.getTradeMask());
         product_flag.setRating(5.0f);
         product_flag.setNRating(0);
         var finalPrice = 0.0f;
@@ -159,7 +159,7 @@ public class ProductService {
                 .images(productImagesBox)
                 .colours(colors)
                 .sizes(sizes)
-                .brand(request.getBrand())
+                .subCategory(request.getSubCategory())
                 .name(product_flag.getName())
                 .description(product_flag.getDescription())
                 .quantityDetails(BoxResponse)
@@ -202,8 +202,8 @@ public class ProductService {
             product_flag.setDescription(request.getDescription());
 
             product_flag.setCategory(request.getCategory());
-            product_flag.setTradeMask(request.getBrand());
-            product_flag.setBrand(request.getBrand());
+            product_flag.setTradeMask(request.getTradeMask());
+            product_flag.setSubCategory(request.getSubCategory());
             product_flag.setNRating(0);
 
             var finalPrice = 0.0f;
@@ -528,7 +528,7 @@ public class ProductService {
         var productResponse = ProductResponse.builder()
                 .id(product_flag.getId())
                 .images(productImagesBox)
-                .brand(request.getBrand())
+                .subCategory(request.getSubCategory())
                 .sizes(valuesave(sizesadd,sizes))
                 .colours(valuesave(colorsadd,colors))
                 .totalQuantity(totalQuantity)
@@ -652,7 +652,7 @@ public class ProductService {
                     .name(x.getName())
                     .sizes(sizesListRe)
                     .colours(colorsListRe)
-                    .brand(x.getBrand())
+                    .subCategory(x.getSubCategory())
                     .totalQuantity(x.getTotalQuantity())
                     .description(x.getDescription())
                     .quantityDetails(subColors)
@@ -736,7 +736,7 @@ public class ProductService {
                 .name(boxItem.get().getName())
                 .sizes(sizesListRe)
                 .colours(colorsListRe)
-                .brand(boxItem.get().getBrand())
+                .subCategory(boxItem.get().getSubCategory())
                 .totalQuantity(boxItem.get().getTotalQuantity())
                 .description(boxItem.get().getDescription())
                 .quantityDetails(subColors)
@@ -946,7 +946,7 @@ public class ProductService {
                         .images(productImagesBox)
                         .sizes(sizesListRe)
                         .colours(colorsListRe)
-                        .brand(x.getBrand())
+                        .subCategory(x.getSubCategory())
                         .name(x.getName())
                         .tradaMask(x.getTradeMask())
                         .description(x.getDescription())
@@ -1016,7 +1016,7 @@ public class ProductService {
     }
 //--------------------------------------Search--------------------------------------------------------------
     public List<ProductResponse> search_all(
-            List<String> tradeMask,
+            List<String> subCategoryName,
             Boolean isPromotion,
             Boolean isReleased,
             Integer ratingGte,
@@ -1028,7 +1028,7 @@ public class ProductService {
             ratingLt = ratingGte +  1;
         }
         List<Product> productList = new ArrayList<>();
-        for (var x : tradeMask) {
+        for (var x : subCategoryName) {
             List<Product> box = productRepository.search_all(x, isPromotion, isReleased, ratingGte,ratingLt, priceGte, priceLte);
             for (var y : box) {
                 if (!productList.contains(y)) {
@@ -1099,7 +1099,7 @@ public class ProductService {
             var y = ProductResponse.builder()
                     .id(x.getId())
                     .images(productImagesBox)
-                    .brand(x.getBrand())
+                    .subCategory(x.getSubCategory())
                     .sizes(sizeListRe)
                     .colours(colorsListRe)
                     .name(x.getName())

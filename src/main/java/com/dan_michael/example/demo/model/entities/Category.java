@@ -1,15 +1,12 @@
 package com.dan_michael.example.demo.model.entities;
 
-import com.dan_michael.example.demo.model.entities.SubEn.Brand;
+import com.dan_michael.example.demo.model.entities.SubEn.SubCategory;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.dan_michael.example.demo.model.entities.SubEn.Brand;
-
 
 
 import java.util.Date;
@@ -31,7 +28,7 @@ public class Category {
     private String sku;
 
     @OneToMany(mappedBy = "category",fetch = FetchType.EAGER)
-    private List<Brand> brand;
+    private List<SubCategory> brand;
 
     private Date createdDate;
     private Integer status;

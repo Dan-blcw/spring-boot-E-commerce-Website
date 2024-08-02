@@ -16,20 +16,18 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT p FROM Product p WHERE p.name = :name")
     Product findByName_(@Param("name")String name);
 
-    @Query("SELECT p FROM Product p WHERE  p.brand = :brands ")
-    List<Product> find_brand(@Param("brands") String brands);
     @Query("SELECT p FROM Product p WHERE p.id = :id")
     Product findByID_(@Param("id")Integer id);
 
     @Query("SELECT p FROM Product p " +
             "WHERE (:priceGte IS NULL OR p.finalPrice >= :priceGte) " +
             "AND (:priceLte IS NULL OR p.finalPrice <= :priceLte) " +
-            "AND (:tradeMask IS NULL OR p.tradeMask IN :tradeMask) " +
+            "AND (:subCategoryName IS NULL OR p.subCategory IN :subCategoryName) " +
             "AND (:isReleased IS NULL OR p.newStatus = :isReleased) " +
             "AND (:isPromotion IS NULL OR p.saleStatus = :isPromotion) " +
             "AND (:ratingLt IS NULL OR p.rating < :ratingLt) " +
             "AND (:ratingGte IS NULL OR p.rating >= :ratingGte) ")
-    List<Product> search_all(@Param("tradeMask") String tradeMask,
+    List<Product> search_all(@Param("subCategoryName") String subCategoryName,
                              @Param("isPromotion") Boolean isPromotion,
                              @Param("isReleased") Boolean isReleased,
                              @Param("ratingGte") Integer ratingGte,
@@ -45,8 +43,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM Product od WHERE od.brand = :brand")
-    void deleteByBrands(@Param("brand") String brand);
+    @Query("DELETE FROM Product od WHERE od.subCategory = :subCategory")
+    void deleteBySubCategorysName(@Param("subCategory") String subCategory);
 }
 
 

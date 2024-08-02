@@ -1,13 +1,13 @@
 package com.dan_michael.example.demo.service;
 
 import com.dan_michael.example.demo.model.response.SubCategoryResponse;
-import com.dan_michael.example.demo.model.entities.SubEn.Brand;
+import com.dan_michael.example.demo.model.entities.SubEn.SubCategory;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.dto.ob.CategoryDtos;
 import com.dan_michael.example.demo.model.entities.Category;
 import com.dan_michael.example.demo.repositories.CategoryRepository;
 import com.dan_michael.example.demo.repositories.ProductRepository;
-import com.dan_michael.example.demo.repositories.SupRe.BrandRepository;
+import com.dan_michael.example.demo.repositories.SupRe.SubCategoryRepository;
 import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class CategoryService {
 
     private final ProductRepository productRepository;
 
-    private final BrandRepository brandRepository;
+    private final SubCategoryRepository subCategoryRepository;
     public SubCategoryResponse createCategory(CategoryDtos request) {
 
         var ob = repository.findCategoryByName(request.getCategoryName());
@@ -32,17 +32,17 @@ public class CategoryService {
         if(ob.isPresent()){
             return null;
         }
-        List<Brand> listBrands = new ArrayList<>();
+        List<SubCategory> listBrands = new ArrayList<>();
         List<String> check = new ArrayList<>();
         for (var x:request.getBrands()) {
             if(!check.contains(x)){
                 check.add(x);
-                var save = Brand.builder()
-                        .brand(x)
+                var save = SubCategory.builder()
+                        .subCategoryName(x)
                         .identification(request.getCategoryName())
                         .build();
                 listBrands.add(save);
-                brandRepository.save(save);
+                subCategoryRepository.save(save);
             }
         }
         Category category_flag = Category.builder()
@@ -68,19 +68,19 @@ public class CategoryService {
     public SubCategoryResponse updateCategory(CategoryDtos request) {
 
         var category_flag = repository.findCategoryByName_(request.getCategoryName());
-        List<Brand> listBrands = new ArrayList<>();
+        List<SubCategory> listBrands = new ArrayList<>();
         List<String> check = new ArrayList<>();
         if(category_flag != null){
-            brandRepository.deleteByIdentification(category_flag.getName());
+            subCategoryRepository.deleteByIdentification(category_flag.getName());
             for (var x:request.getBrands()) {
                 if(!check.contains(x)){
                     check.add(x);
-                    var save = Brand.builder()
-                            .brand(x)
+                    var save = SubCategory.builder()
+                            .subCategoryName(x)
                             .identification(request.getCategoryName())
                             .build();
                     listBrands.add(save);
-                    brandRepository.save(save);
+                    subCategoryRepository.save(save);
                 }
             }
             category_flag.setBrand(listBrands);
@@ -105,10 +105,10 @@ public class CategoryService {
         for (int i = 0; i < categoryList.size(); i++) {
             var x = categoryList.get(i);
             List<String> check = new ArrayList<>();
-            var brands = brandRepository.findBrandsByIAndIdentification(x.getName());
+            var brands = subCategoryRepository.findBrandsByIAndIdentification(x.getName());
             for (var y: brands) {
-                if(!check.contains(y.getBrand())){
-                    check.add(y.getBrand());
+                if(!check.contains(y.getSubCategoryName())){
+                    check.add(y.getSubCategoryName());
                 }
             }
             list.add(SubCategoryResponse.builder()
@@ -125,12 +125,12 @@ public class CategoryService {
 
     public SubCategoryResponse detailCategory(Integer id) {
         var categoryDetail = repository.findById(id);
-        var brands = brandRepository.findBrandsByIAndIdentification(categoryDetail.get().getName());
+        var brands = subCategoryRepository.findBrandsByIAndIdentification(categoryDetail.get().getName());
         categoryDetail.get().setBrand(brands);
         List<String> check = new ArrayList<>();
         for (var y: brands) {
-            if(!check.contains(y.getBrand())){
-                check.add(y.getBrand());
+            if(!check.contains(y.getSubCategoryName())){
+                check.add(y.getSubCategoryName());
             }
         }
         return SubCategoryResponse.builder()
@@ -147,7 +147,7 @@ public class CategoryService {
     public ResponseMessageDtos removeCategory(Integer id) {
         var flag = repository.findById(id);
         if(flag.isPresent()){
-            brandRepository.deleteByIdentification(flag.get().getName());
+            subCategoryRepository.deleteByIdentification(flag.get().getName());
             productRepository.deleteByCategory(flag.get().getName());
             repository.deleteById(id);
             return ResponseMessageDtos.builder()
@@ -162,12 +162,12 @@ public class CategoryService {
         }
     }
 
-    public ResponseMessageDtos removeBrand(Integer category_id, String brandsName) {
+    public ResponseMessageDtos removeBrand(Integer category_id, String subCategorysName) {
         var flag = repository.findCategoryById_(category_id);
         if(flag != null){
-            brandRepository.deleteBybrandName(brandsName);
-            productRepository.deleteByBrands(brandsName);
-            flag.setBrand(brandRepository.findBrandsByIAndIdentification(flag.getName()));
+            subCategoryRepository.deleteBySubCategorysName(subCategorysName);
+            productRepository.deleteBySubCategorysName(subCategorysName);
+            flag.setBrand(subCategoryRepository.findBrandsByIAndIdentification(flag.getName()));
             repository.save(flag);
             return ResponseMessageDtos.builder()
                     .status(200)
@@ -183,12 +183,12 @@ public class CategoryService {
 
     public List<String> findBrandByCategoryID(Integer id) {
         var categoryDetail = repository.findById(id);
-        var brands = brandRepository.findBrandsByIAndIdentification(categoryDetail.get().getName());
+        var brands = subCategoryRepository.findBrandsByIAndIdentification(categoryDetail.get().getName());
         categoryDetail.get().setBrand(brands);
         List<String> check = new ArrayList<>();
         for (var y: brands) {
-            if(!check.contains(y.getBrand())){
-                check.add(y.getBrand());
+            if(!check.contains(y.getSubCategoryName())){
+                check.add(y.getSubCategoryName());
             }
         }
         return check;

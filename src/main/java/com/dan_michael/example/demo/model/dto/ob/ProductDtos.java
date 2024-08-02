@@ -20,7 +20,7 @@ public class ProductDtos {
     @JsonDeserialize(using = SubColorListDeserializer.class)
     private List<SubColor> quantityDetails;
     private String category;
-    private String brand;
+    private String subCategory;
     private String tradeMask;
 
     private Float originalPrice ;
