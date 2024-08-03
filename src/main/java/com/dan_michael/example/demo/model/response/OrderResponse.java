@@ -1,6 +1,7 @@
-package com.dan_michael.example.demo.model.entities;
+package com.dan_michael.example.demo.model.response;
 
 import com.dan_michael.example.demo.model.entities.SubEn.OrderDetail;
+import com.dan_michael.example.demo.model.entities.User;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,45 +16,27 @@ import java.util.List;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "orders")
-@EntityListeners(AuditingEntityListener.class)
-public class Order {
-    @Id
-    @GeneratedValue
-    private Integer id;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    private Integer identification_user;
-    @OneToMany(mappedBy = "order",fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<OrderDetail> orderDetails;
-
+@NoArgsConstructor
+public class OrderResponse {
+    private Integer order_id;
+    private Integer user_id;
+    private List<SubCart_OrderResponse> orderDetails;
     private String address;
     private String companyName;
     private String phoneNumber;
     private String emailAddress;
 
-    private String shippingStatus;
-
-    private String PaymentMethods;
+    private String paymentMethods;
     private Integer paymentStatus;
 
-//    private Float unitPrice;
-    private Float totalPrice;
+    private Float unitPrice;
     private Float shippingFee;
     private Float taxFee;
 
     private Integer percentDiscount;
-    private Float TotalAmountOrder;
+    private Float totalPayment;
+    private Integer totalQuantity;
 
     private Integer orderStatus;
-
-    @CreationTimestamp
-    private Date createdAt;
 }

@@ -1,7 +1,6 @@
 package com.dan_michael.example.demo.controller;
 
-//import com.dan_michael.example.demo.exception.*;
-import com.dan_michael.example.demo.model.dto.ob.OrderDtos;
+import com.dan_michael.example.demo.model.response.OrderResponse;
 import com.dan_michael.example.demo.model.response.ResponsePayPal;
 import com.dan_michael.example.demo.service.Payment.PaymentPaypalService;
 import com.dan_michael.example.demo.model.dto.global.PaymentVNPayDTO;
@@ -11,8 +10,6 @@ import com.dan_michael.example.demo.service.Payment.PaymentMethodsService;
 import com.dan_michael.example.demo.util.Constants;
 import com.mservice.allinone.models.*;
 import com.mservice.allinone.processor.allinone.*;
-//import com.mservice.shared.sharedmodels.Environment;
-//import com.mservice.shared.sharedmodels.PartnerInfo;
 import com.mservice.shared.sharedmodels.Environment;
 import com.mservice.shared.sharedmodels.PartnerInfo;
 import com.paypal.api.payments.PayerInfo;
@@ -26,10 +23,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-//import com.momo.partner.api.response.AppPayResponse;
-//import com.mservice.shared.constants.RequestType;
+
 
 
 @RestController
@@ -85,7 +80,7 @@ public class PaymentController {
 
 //-----------------------------------------------------------------------------------------------------
     @PostMapping("/paypal-payment")
-    public String doPost(@RequestBody OrderDtos orderDtos) throws PayPalRESTException {
+    public String doPost(@RequestBody OrderResponse orderDtos) throws PayPalRESTException {
         String approvalLink = paypalService.authorizePayment(orderDtos);
         return approvalLink;
     }

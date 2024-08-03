@@ -1,5 +1,6 @@
 package com.dan_michael.example.demo.controller;
 
+import com.dan_michael.example.demo.model.response.OrderResponse;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.entities.Order;
 import com.dan_michael.example.demo.model.entities.SubEn.OrderDetail;
@@ -35,7 +36,7 @@ public class OrderController {
     public ResponseEntity<?> createOrder(
             @RequestBody OrderDtos request
     ) {
-        Order response = orderService.createOrder(request);
+        OrderResponse response = orderService.createOrder(request);
         return ResponseEntity.ok(response);
     }
 

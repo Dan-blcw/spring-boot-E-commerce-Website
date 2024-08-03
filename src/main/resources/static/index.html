@@ -19,8 +19,8 @@
 
     .chat-container {
         display: flex;
-        max-width: 1400px;
-        min-width: 1400px;
+        max-width: 2000px;
+        min-width: 2000px;
         min-height: 600px;
         max-height: 600px;
         margin: 20px;
@@ -299,6 +299,109 @@
     #messageForm {
         position: relative;
     }
+    /* Định dạng cho các khung option */
+    /*.option-item-2 {*/
+    /*    display: flex;*/
+    /*    align-items: end;*/
+    /*    position: absolute;*/
+    /*    bottom: 0; !* Canh dưới *!*/
+    /*    right: 0; !* Canh phải *!*/
+    /*    border-bottom: 1px solid #ccc;*/
+    /*    cursor: pointer;*/
+    /*    background-color: #fff;*/
+    /*    width: 200px;*/
+    /*    border-radius: 5px;*/
+    /*    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+    /*    transition: background-color 0.3s ease;*/
+    /*    padding-bottom: 15px;*/
+    /*    margin-bottom: 50px;*/
+    /*}*/
+    .option-item-2 {
+        display: flex;
+        /*align-items: flex-end; !* Sử dụng flex-end để đảm bảo các phần tử con được canh dưới *!*/
+        /*position: absolute;*/
+        bottom: 0; /* Canh dưới */
+        right: 0; /* Canh phải */
+        border-bottom: 1px solid #ccc;
+        cursor: pointer;
+        background-color: #fff;
+        width: 350px;
+        /*font-size: 200px;*/
+        height: 100px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+        overflow-y: auto; /* Enable vertical scrolling */
+        padding: 15px 0 0 0; /* Đảm bảo padding chỉ ở trên */
+        margin: 0 5px 5px 0; /* Đặt margin để nó nằm đúng góc dưới cùng bên phải */
+    }
+
+    /*.option-item-2:hover {*/
+    /*    background-color: #f0f0f0;*/
+    /*    height: max-content;*/
+    /*    transform: translateY(5px); !* Move the item up by 5px *!*/
+    /*}*/
+    /*.option-item-2 {*/
+    /*    display: flex;*/
+    /*    align-items: center;*/
+    /*    padding: 10px;*/
+    /*    border: 1px solid #ccc;*/
+    /*    margin-bottom: 10px;*/
+    /*}*/
+
+    /*.option-item-2 img {*/
+    /*    max-width: 50px; !* Adjust the width as needed *!*/
+    /*    margin-right: 10px;*/
+    /*}*/
+
+    .option-text-2 {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /*.option-name-2,*/
+    /*.option-price-2 {*/
+    /*    margin: 0;*/
+    /*}*/
+    .option-item-2 img {
+        width: 80px;
+        height: 80px;
+        border-radius: 5px;
+        margin-right: 25px;
+    }
+
+    .option-item-2 .option-text-2 {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .option-item-2 .option-name-2 {
+        font-weight: bold;
+        font-size: 28px;
+        margin-bottom: 5px;
+    }
+
+    .option-item-2 .option-price-2 {
+        color: #555;
+        font-size: 24px;
+    }
+
+    #toggle-options-btn {
+        cursor: pointer;
+        background-color: #99540c;
+        border: 1px solid #ddd;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    #toggle-options-btn:hover {
+        background-color: #1a8cff;
+    }
+
+    #options-container {
+        list-style: none;
+        padding: 0;
+    }
 
     </style>
     <title>Chat Application</title>
@@ -336,10 +439,18 @@
         </div>
 
         <form id="messageForm" name="messageForm" class="hidden">
+<!--            <input type="text" id="searchInput hidden" placeholder="Search...">-->
+            <div class="options-list-2 hidden" id="options-list-2">
+<!--                <h2>Options</h2>-->
+                <ul id="options-container-2"></ul>
+            </div>
             <emoji-picker id="emoji-picker" style="margin-right: auto"></emoji-picker>
             <div class="message-input">
                 <input autocomplete="off" type="text" id="message" placeholder="Type your message...">
 
+                <button id="toggle-options-btn">Show Options</button>
+
+<!--                <input id="file" type="file" multiple />-->
                 <button type="button" id="emoji-btn" class="emoji-btn" style="">🌤</button>
 
                 <button>Send</button>
@@ -350,6 +461,7 @@
         <h2>Options</h2>
         <ul id="options-container"></ul>
     </div>
+
 
 </div>
 <script type="module">
@@ -369,7 +481,9 @@
     const chatArea = document.querySelector('#chat-messages');
     const logout = document.querySelector('#logout');
     const buttonEmoji = document.querySelector('#emoji-btn');
-    let CHAT_BOT_NAME = "Aza Chōbei Assistant";
+    // const file = document.querySelector('#file');
+    const buttonProduct = document.querySelector('#toggle-options-btn');
+    let CHAT_BOT_NAME = "Aza Assistant";
     let ADMIN_NAME = "Admin";
     let stompClient = null;
     let name = null;
@@ -378,6 +492,19 @@
     let img_Url_Chat_bot = "https://i.pinimg.com/564x/4f/b5/e6/4fb5e6fc1eb937458849bcbe6a2b3807.jpg";
     let img_Url_User = "";
     let selectedUserId = null;
+    const options2 = [
+        {
+            imageUrl: 'https://i.pinimg.com/564x/f3/3e/33/f33e332bb1b747785307e3033906c1e3.jpg',
+            name: 'Option 1',
+            price: '$10'
+        },
+        {
+            imageUrl: 'https://i.pinimg.com/564x/45/db/34/45db3435bbef4b22646e7a7538c78ae0.jpg',
+            name: 'Option 2',
+            price: '$20'
+        },
+        // Thêm các tùy chọn khác
+    ];
     async function login(event) {
         event.preventDefault();
 
@@ -533,10 +660,15 @@
     async function fetchAndDisplayUserChat() {
         if(selectedUserId === CHAT_BOT_NAME){
             await fetchOptions();
+            await fetchOptions2();
+            buttonProduct.classList.remove('hidden')
             buttonEmoji.classList.add('hidden');
+
         }else{
+            buttonProduct.classList.add('hidden')
             hiddenOptions()
             buttonEmoji.classList.remove('hidden');
+            hideOptions2()
         }
         const token = localStorage.getItem('jwt');
 
@@ -569,7 +701,6 @@
             console.error('Error fetching options:', error);
         }
     }
-
     // Hiển thị tùy chọn trong danh sách
     function displayOptions(options) {
         const optionsContainer = document.getElementById('options-container');
@@ -686,6 +817,7 @@
     logout.addEventListener('click', onLogout, true);
     window.onbeforeunload = () => onLogout();
 
+//-------------------Emoji----------------------------
     const emojiPicker = document.querySelector('#emoji-picker');
     const emojiBtn = document.querySelector('#emoji-btn');
     emojiBtn.addEventListener('click', () => {
@@ -706,6 +838,126 @@
         const messageInput = document.querySelector('#message');
         messageInput.value += event.detail.unicode;
     });
+// --------------------------------------Product-------------------------------------------------------
+    document.getElementById('toggle-options-btn').addEventListener('click', () => {
+        const optionsContainer = document.getElementById('options-container-2');
+        const toggleButton = document.getElementById('toggle-options-btn');
+
+        if (optionsContainer.style.display === 'none' || !optionsContainer.style.display) {
+            optionsContainer.style.display = 'block';
+            toggleButton.textContent = 'Hide Options';
+        } else {
+            optionsContainer.style.display = 'none';
+            toggleButton.textContent = 'Show Options';
+        }
+    });
+//--------------------------------------------------------------------------------------------------------
+    async function fetchOptions2() {
+        const token = localStorage.getItem('jwt');
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/rest/getAllQuestions', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            const options = await response.json();
+            showOptions2(); // Hiển thị danh sách tùy chọn
+            displayOption2(options2);
+
+            const optionsContainer = document.getElementById('options-container-2');
+            const toggleButton = document.getElementById('toggle-options-btn');
+            optionsContainer.style.display = 'block';
+            toggleButton.textContent = 'Hide Options';
+        } catch (error) {
+            console.error('Error fetching options:', error);
+        }
+    }
+
+    // Hiển thị tùy chọn trong danh sách
+    // function displayOption2(options2) {
+    //     const optionsContainer = document.getElementById('options-container-2');
+    //     optionsContainer.innerHTML = '';
+    //     options2.forEach(option => {
+    //         const optionItem = document.createElement('li');
+    //         optionItem.className = 'option-item-2';
+    //
+    //         const optionImage = document.createElement('img');
+    //         optionImage.src = option.imageUrl; // Đặt URL của ảnh vào đây
+    //
+    //         const optionTextContainer = document.createElement('div');
+    //         optionTextContainer.className = 'option-text-2';
+    //
+    //         const optionName = document.createElement('span');
+    //         optionName.className = 'option-name-2';
+    //         optionName.textContent = option.name; // Đặt tên của option vào đây
+    //
+    //         const optionPrice = document.createElement('span');
+    //         optionPrice.className = 'option-price-2';
+    //         optionPrice.textContent = option.price; // Đặt giá của option vào đây
+    //
+    //         optionTextContainer.appendChild(optionName);
+    //         optionTextContainer.appendChild(optionPrice);
+    //         optionItem.appendChild(optionImage);
+    //         optionItem.appendChild(optionTextContainer);
+    //
+    //         optionItem.addEventListener('click', () => {
+    //             const messageInput = document.getElementById('message');
+    //             messageInput.value = option.name; // Cập nhật nội dung tin nhắn với tùy chọn đã chọn
+    //             // hiddenOptions(); // Xóa và ẩn tất cả tùy chọn
+    //         });
+    //
+    //         optionsContainer.appendChild(optionItem);
+    //     });
+    // }
+    function displayOption2(options2) {
+        const optionsContainer = document.getElementById('options-container-2');
+        optionsContainer.innerHTML = '';
+        options2.forEach(option => {
+            const optionItem = document.createElement('li');
+            optionItem.className = 'option-item-2';
+
+            const optionImage = document.createElement('img');
+            optionImage.src = option.imageUrl; // Set image URL
+
+            const optionTextContainer = document.createElement('div');
+            optionTextContainer.className = 'option-text-2';
+
+            const optionName = document.createElement('span');
+            optionName.className = 'option-name-2';
+            optionName.textContent = option.name; // Set option name
+
+            const optionPrice = document.createElement('span');
+            optionPrice.className = 'option-price-2';
+            optionPrice.textContent = option.price; // Set option price
+
+            optionTextContainer.appendChild(optionName);
+            optionTextContainer.appendChild(optionPrice);
+            optionItem.appendChild(optionImage);
+            optionItem.appendChild(optionTextContainer);
+
+            optionItem.addEventListener('click', () => {
+                const messageInput = document.getElementById('message');
+                messageInput.value = option.name; // Update message input with selected option
+                // hiddenOptions(); // Remove and hide all options
+            });
+
+            optionsContainer.appendChild(optionItem);
+        });
+    }
+
+
+    function showOptions2() {
+        document.getElementById('options-list-2').classList.remove('hidden');
+    }
+
+    function hideOptions2() {
+        const optionsContainer2 = document.getElementById('options-container-2');
+        optionsContainer2.innerHTML = ''; // Xóa tất cả các phần tử bên trong optionsContainer2
+        document.getElementById('options-list-2').classList.add('hidden'); // Ẩn danh sách tùy chọn
+    }
+
 </script>
 </body>
 </html>

@@ -1017,6 +1017,7 @@ public class ProductService {
     }
 //--------------------------------------Search--------------------------------------------------------------
     public List<ProductResponse> search_all(
+            String categoryName,
             List<String> subCategoryName,
             Boolean isPromotion,
             Boolean isReleased,
@@ -1030,7 +1031,7 @@ public class ProductService {
         }
         List<Product> productList = new ArrayList<>();
         for (var x : subCategoryName) {
-            List<Product> box = productRepository.search_all(x, isPromotion, isReleased, ratingGte,ratingLt, priceGte, priceLte);
+            List<Product> box = productRepository.search_all(categoryName,x, isPromotion, isReleased, ratingGte,ratingLt, priceGte, priceLte);
             for (var y : box) {
                 if (!productList.contains(y)) {
                     productList.add(y);

@@ -106,7 +106,9 @@ package com.dan_michael.example.demo.service.Payment;
 
         import com.dan_michael.example.demo.model.dto.ob.ItemDetailDto;
         import com.dan_michael.example.demo.model.dto.ob.OrderDtos;
+        import com.dan_michael.example.demo.model.response.OrderResponse;
         import com.dan_michael.example.demo.repositories.ProductRepository;
+        import com.dan_michael.example.demo.util.Constants;
         import com.paypal.api.payments.*;
         import com.paypal.base.rest.APIContext;
         import com.paypal.base.rest.PayPalRESTException;
@@ -140,7 +142,7 @@ public class PaymentPaypalService {
 
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.00");
 
-    public String authorizePayment(OrderDtos orderDtos) throws PayPalRESTException {
+    public String authorizePayment(OrderResponse orderDtos) throws PayPalRESTException {
         logger.info("Authorizing payment for item detail: {}", orderDtos);
 
         Payer payer = getPayerInfo();
@@ -174,20 +176,21 @@ public class PaymentPaypalService {
         return approvalLink;
     }
 
-    private List<Transaction> getTransactionInfo(OrderDtos orderDtos) {
+    private List<Transaction> getTransactionInfo(OrderResponse orderDtos) {
+
         Details details = new Details();
         details.setShipping(formatAmount(orderDtos.getShippingFee()));
-        details.setSubtotal(formatAmount(orderDtos.getSubTotal()));
+        details.setSubtotal(formatAmount(orderDtos.getUnitPrice()));
         details.setTax(formatAmount(orderDtos.getTaxFee()));
 
         Amount amount = new Amount();
         amount.setCurrency("USD");
-        amount.setTotal(formatAmount(orderDtos.getTotal()));
+        amount.setTotal(formatAmount(orderDtos.getTotalPayment()));
         amount.setDetails(details);
 
         Transaction transaction = new Transaction();
         transaction.setAmount(amount);
-        transaction.setDescription("Description Paypal Product Name");
+        transaction.setDescription("Product Name");
 
         ItemList itemList = new ItemList();
         List<Item> items = new ArrayList<>();
@@ -195,15 +198,15 @@ public class PaymentPaypalService {
         for (var x: orderDtos.getOrderDetails()) {
             Item item = new Item();
             item.setCurrency("USD")
-                    .setName(productRepository.findByID_(x.getProduct_id()).getName())
-                    .setPrice(formatAmount(x.getSubTotal() / x.getQuantity())) // Ensure the price is per item
-                    .setTax(formatAmount(orderDtos.getTaxFee() / x.getQuantity())) // Ensure the tax is per item
+                    .setName(x.getName())
+                    .setPrice(formatAmount(x.getUnitPrice() )) // Ensure the price is per item
+//                    .setTax(formatAmount(orderDtos.getTaxFee())) // Ensure the tax is per item
                     .setQuantity(String.valueOf(x.getQuantity()));
+
             items.add(item);
         }
         itemList.setItems(items);
         transaction.setItemList(itemList);
-
         List<Transaction> list = new ArrayList<>();
         list.add(transaction);
 
@@ -211,8 +214,8 @@ public class PaymentPaypalService {
     }
 
     private String formatAmount(Float amount) {
-//        return DECIMAL_FORMAT.format(amount);
-        return String.valueOf(amount);
+        return DECIMAL_FORMAT.format(amount);
+//        return String.valueOf(amount);
     }
 
     private RedirectUrls getRedirectURLs() {
@@ -229,12 +232,12 @@ public class PaymentPaypalService {
 
     public Payer getPayerInfo() {
         Payer payer = new Payer();
-        payer.setPaymentMethod("paypal");
+        payer.setPaymentMethod(Constants.PayPal_Name);
 
         PayerInfo payerInfo = new PayerInfo();
-        payerInfo.setFirstName("ecommerce")
-                .setLastName("demo47")
-                .setEmail("ecommercedemo47@gmail.com");
+        payerInfo.setFirstName(Constants.First_Name_Of_Company)
+                .setLastName(Constants.First_Name_Of_Company)
+                .setEmail(Constants.Email_Of_Company);
         payer.setPayerInfo(payerInfo);
         return payer;
     }

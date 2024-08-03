@@ -25,9 +25,11 @@ public class OrderDetail {
 
     private Integer identification_order;
     private Integer product_id;
+    private String name;
     private Integer quantity;
     private String size;
     private String color;
 
-    private Float subTotal;
+    private Float unitPrice;
+    private Float totalPrice;
 }

@@ -5,6 +5,7 @@ import com.dan_michael.example.demo.chat_socket.service.ChatMessageService;
 import com.dan_michael.example.demo.chat_socket.entities.ChatNotification;
 import com.dan_michael.example.demo.chatbot.entities.dtos.RequestMessageChatBotDtos;
 import com.dan_michael.example.demo.chatbot.service.ChatbotService;
+import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -36,7 +37,7 @@ public class ChatSocketController {
                         savedMsg.getContent()
                 )
         );
-        if(savedMsg.getRecipientId().equals("Aza Chōbei Assistant")){
+        if(savedMsg.getRecipientId().equals(Constants.Chat_Bot_Name)){
             var chatMessageResponse = ChatMessage.builder()
                     .chatId(savedMsg.getChatId())
                     .senderId(savedMsg.getRecipientId())

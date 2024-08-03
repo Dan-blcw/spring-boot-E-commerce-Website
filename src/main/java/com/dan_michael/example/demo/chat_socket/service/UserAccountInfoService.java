@@ -34,7 +34,8 @@ public class UserAccountInfoService {
     }
 
     public List<UserAccountInfo> findConnectedUsers() {
-        return repository.findAllByStatus(Status.ONLINE);
+//        return repository.findAllByStatus(Status.ONLINE);
+        return repository.findAll_();
     }
 
     public UserAccountInfo findChatBot() {

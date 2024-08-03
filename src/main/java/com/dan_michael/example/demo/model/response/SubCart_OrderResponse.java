@@ -11,9 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SubCart_OrderResponse {
     private Integer itemDetail_id;
-    private Integer product_id;
-    private Integer quantity;
+    private String name;
+    private String image;
     private String color;
     private String size;
-    private Float subTotal;
+    private Integer quantity;
+    private Float unitPrice;
+    private Float totalPrice;
 }

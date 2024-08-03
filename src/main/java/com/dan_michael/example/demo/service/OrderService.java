@@ -6,6 +6,8 @@ import com.dan_michael.example.demo.model.dto.ob.sub.SubSizeQuantity;
 import com.dan_michael.example.demo.model.entities.Order;
 import com.dan_michael.example.demo.model.entities.SubEn.OrderDetail;
 import com.dan_michael.example.demo.model.entities.SubEn.DetailSizeQuantity;
+import com.dan_michael.example.demo.model.response.OrderResponse;
+import com.dan_michael.example.demo.model.response.SubCart_OrderResponse;
 import com.dan_michael.example.demo.repositories.SupRe.OrderDetailRepository;
 import com.dan_michael.example.demo.repositories.OrderRepository;
 import com.dan_michael.example.demo.repositories.ProductRepository;
@@ -50,28 +52,26 @@ public class OrderService {
     }
 
     @Transactional
-    public Order createOrder(OrderDtos request) {
-        var totalQuantity = 0;
+    public OrderResponse createOrder(OrderDtos request) {
+        var subtotalProduct = 0;
+        var totalQuantity_order = 0;
         var totalAmountOrder = 0.0F;
         var subAmountOrder = 0.0F;
         var user = userRepository.findById_create(request.getUserId());
+
         Order order = new Order();
-
         order.setIdentification_user(user.getId());
-
         order.setAddress(request.getAddress());
         order.setCompanyName(request.getCompanyName());
         order.setPhoneNumber(request.getPhoneNumber());
         order.setEmailAddress(request.getEmailAddress());
-
         order.setPaymentMethods(request.getPaymentMethods());
         order.setPaymentStatus(request.getPaymentStatus());
-
         order.setOrderStatus(request.getOrderStatus());
-
         order.setShippingStatus(Constants.Order_Status_Wait);
         order.setCreatedAt(new Date());
 
+        List<SubCart_OrderResponse> boxItem = new ArrayList<>();
         var y = orderRepository.save(order);
         List<OrderDetail> box = new ArrayList<>();
         for (ItemDetailDto x : request.getOrderDetails()) {
@@ -93,6 +93,7 @@ public class OrderService {
                                     .build());
                             y_0.setQuantity(y_0.getQuantity()-x.getQuantity());
                             detailSizeQuantityRepository.save(y_0);
+                            subtotalProduct += x.getQuantity();
                         }
                     }
                 }
@@ -102,35 +103,64 @@ public class OrderService {
                         .build());
                 x_0.setSizeQuantities(detailSizeQuantities);
             }
+            totalQuantity_order += x.getQuantity();
             // cập nhập quantity product
             product.setQuantityDetails(quantityDetailsList);
-            product.setTotalQuantity(totalQuantity);
+            product.setTotalQuantity(product.getTotalQuantity()-subtotalProduct);
             productRepository.save(product);
 
             detail.setQuantity(x.getQuantity());
             detail.setColor(x.getColor());
             detail.setSize(x.getSize());
             detail.setIdentification_order(y.getId());
-            detail.setSubTotal(x.getSubTotal());
-
-            var subdetail = x.getSubTotal() ;
-            subAmountOrder += subdetail;
+            detail.setUnitPrice(x.getUnitPrice());
+            detail.setTotalPrice(x.getTotalPrice());
+            var itemCart = SubCart_OrderResponse.builder()
+                    .itemDetail_id(y.getId())
+                    .name(x.getName())
+                    .size(x.getSize())
+                    .image(x.getImage())
+                    .color(x.getColor())
+                    .quantity(x.getQuantity())
+                    .unitPrice(x.getUnitPrice())
+                    .totalPrice(x.getTotalPrice())
+                    .build();
+            boxItem.add(itemCart);
+            subAmountOrder += x.getTotalPrice();
+            totalAmountOrder += x.getTotalPrice();
             box.add(detail);
             createOrderDetail(detail);
         }
         y.setOrderDetails(box);
         y.setShippingFee(request.getShippingFee());
         y.setTaxFee(request.getTaxFee());
-        y.setSubTotal(subAmountOrder);
         y.setPercentDiscount(request.getPercentDiscount());
         if(request.getPercentDiscount() > 0){
-            totalAmountOrder = (subAmountOrder + request.getShippingFee() + request.getTaxFee());
+            totalAmountOrder = (totalAmountOrder + request.getShippingFee() + request.getTaxFee());
             totalAmountOrder = totalAmountOrder - totalAmountOrder*(request.getPercentDiscount()/100);
         }else {
-            totalAmountOrder = subAmountOrder + request.getShippingFee() + request.getTaxFee();
+            totalAmountOrder = totalAmountOrder + request.getShippingFee() + request.getTaxFee();
         }
         y.setTotalAmountOrder(totalAmountOrder);
-        return orderRepository.save(y);
+        orderRepository.save(y);
+        return OrderResponse.builder()
+                .order_id(y.getId())
+                .user_id(y.getIdentification_user())
+                .orderDetails(boxItem)
+                .address(y.getAddress())
+                .companyName(y.getCompanyName())
+                .phoneNumber(y.getPhoneNumber())
+                .emailAddress(y.getEmailAddress())
+                .paymentMethods(y.getPaymentMethods())
+                .paymentStatus(y.getPaymentStatus())
+                .unitPrice(subAmountOrder)
+                .shippingFee(y.getShippingFee())
+                .taxFee(y.getTaxFee())
+                .percentDiscount(y.getPercentDiscount())
+                .totalPayment(totalAmountOrder)
+                .totalQuantity(totalQuantity_order)
+                .orderStatus(y.getOrderStatus())
+                .build();
     }
 
     @Transactional
@@ -141,9 +171,6 @@ public class OrderService {
             order.setPhoneNumber(request.getPhoneNumber());
             order.setEmailAddress(request.getEmailAddress());
             order.setOrderStatus(request.getOrderStatus());
-//            var a = orderDetailRepository.findByIdentification_order(id);
-//            var for_save = updateOrderDetail(request.getOrderDetails(),a);
-//            order.setOrderDetails(for_save);
             return orderRepository.save(order);
         });
     }
@@ -163,32 +190,6 @@ public class OrderService {
     public OrderDetail createOrderDetail(OrderDetail orderDetail) {
         return orderDetailRepository.save(orderDetail);
     }
-
-//--------------------------OrderDetail(chưa dùng)----------------------------------
-//        public List<OrderDetail> getAllOrderDetails() {
-//        return orderDetailRepository.findAll();
-//    }
-
-//    public Optional<OrderDetail> getOrderDetailById(Integer id) {
-//        return orderDetailRepository.findById(id);
-//    }
-//    @Transactional
-//    public List<OrderDetail> updateOrderDetail(List<ItemDetailDto> request, List<OrderDetail> rightnow) {
-//        List<OrderDetail> for_save = new ArrayList<>();
-//        for (ItemDetailDto y : request ){
-//            for (OrderDetail x : rightnow){
-//                if(x.getId() == y.getId()){
-//                    x.setProduct_id(y.getProduct_id());
-//                    x.setQuantity(y.getQuantity());
-//                    x.setColor(y.getColor());
-//                    x.setSize(y.getSize());
-//                    for_save.add(x);
-//                    orderDetailRepository.save(x);
-//                }
-//            }
-//        }
-//        return for_save;
-//    }
 
     public boolean deleteOrderDetail(Integer id) {
         return orderDetailRepository.findById(id).map(orderDetail -> {

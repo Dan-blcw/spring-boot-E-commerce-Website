@@ -4,6 +4,7 @@ public final class Constants {
 //    Authentication
     public static final String Authorization = "Authorization";
     public static final String Bearer = "Bearer";
+    public static final String Chat_Bot_Name = "Aza Assistant";
     public static final String Front_Host_5555 = "http://localhost:5555";
     public static final String Front_Host_8888 = "http://localhost:8888";
     public static final String Admin_Config_Path = "/api/v1/admin/**";
@@ -88,6 +89,8 @@ public final class Constants {
     public static final String Order_Status_Refund =  "Chuyển hoàn";
     public static final String Order_Status_No_Customer_Contact =  "Không gặp khách";
     public static final String Order_Status_Unfinished =  "Chưa hoàn thành";
+//  PayPal response
+    public static final String PayPal_Name =  "paypal";
 
 //  VNPay response
 
@@ -112,6 +115,8 @@ public final class Constants {
     public static final String VnPay_Code_00=  "00";
 
 //  ChatBot & Email response
+    public static final String First_Name_Of_Company =  "Ecommerce";
+    public static final String Last_Name_Of_Company =  "Chat bot";
     public static final String Email_Of_Company =  "ecommercedemo47@gmail.com";
     public static final String Team_Name =  "The E-commerce Team (Dan - Michael)";
     public static final String Create_QuestionAnswer_For_Guest_Fail =  "Created A Response To The Customer Failed And Sent an Email To The Customer Unsuccessfully";

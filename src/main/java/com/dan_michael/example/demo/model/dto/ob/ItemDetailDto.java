@@ -16,13 +16,14 @@ public class ItemDetailDto {
 
     @JsonProperty("product_id")
     private Integer product_id;
-
+    private String name;
+    private String image;
     @JsonProperty("quantity")
     private Integer quantity;
     private String size;
     private String color;
 
-    private Float subTotal;
+    private Float unitPrice;
 
-//    private Float total;
+    private Float totalPrice;
 }

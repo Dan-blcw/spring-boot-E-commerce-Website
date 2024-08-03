@@ -52,29 +52,34 @@ public class PjCdtnApplication {
 			var admin = RegisterDtos.builder()
 					.email("admin@mail.com")
 					.name("Admin")
-					.password("0")
+					.password("123456")
 					.build();
 			System.out.println("Admin token: " + service.createAdmin(admin));
 
 			var user = RegisterDtos.builder()
 					.email("phuhuong646@gmail.com")
 					.name("Dan")
-					.password("0")
+					.password("123456")
 					.build();
 			System.out.println("User token: " + service.register(user).getJwt());
 //----------------------Tạo Tài Khoản ChatBot ----------------------------------------------
 			var chatbot = RegisterDtos.builder()
 					.email("chatbot@mail.com")
 					.name("Aza Chōbei Assistant")
-					.password("0")
+					.password("123456")
 					.build();
 			service.createAdmin(chatbot);
-			userAccountInfoService.saveUser(UserAccountInfo.builder()
-					.name("Aza Chōbei Assistant")
-					.fullName("Aza Chōbei Assistant")
-					.status(Status.ONLINE)
-					.build());
 
+			userAccountInfoService.saveUser(UserAccountInfo.builder()
+					.name("Aza Assistant")
+					.fullName("Aza Assistant")
+					.build());
+			var AdminInfo = UserAccountInfo.builder()
+					.name("Admin")
+					.fullName("Admin")
+					.build();
+			userAccountInfoService.saveUser(AdminInfo);
+			userAccountInfoService.disconnect(AdminInfo);
 			var responseAI1 = QuestionAnswer.builder()
 					.question("What is e-commerce?")
 					.answer("E-commerce is the buying and selling of goods or services using the internet.")

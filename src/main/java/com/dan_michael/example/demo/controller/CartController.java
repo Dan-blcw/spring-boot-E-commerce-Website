@@ -1,4 +1,5 @@
 package com.dan_michael.example.demo.controller;
+import com.dan_michael.example.demo.model.response.CartResponse;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.dto.ob.CartDtos;
 import com.dan_michael.example.demo.service.CartService;
@@ -17,7 +18,7 @@ public class CartController {
 
     private final CartService cartService;
     @GetMapping
-    public List<Cart> getAllCarts() {
+    public List<CartResponse> getAllCarts() {
         return cartService.getAllCarts();
     }
 
@@ -25,9 +26,9 @@ public class CartController {
     public ResponseEntity<?> getCartByCart_Id(
             @PathVariable Integer cart_id
     ) {
-        Optional<Cart> cart = cartService.getCartById(cart_id);
-        if (cart.isPresent()) {
-            return ResponseEntity.ok(cart.get());
+        CartResponse cart = cartService.getCartById(cart_id);
+        if (cart != null) {
+            return ResponseEntity.ok(cart);
         }
         return ResponseEntity
                 .status(404)
@@ -38,7 +39,7 @@ public class CartController {
     public ResponseEntity<?> getCartByUser_Id(
             @RequestParam Integer user_id
     ) {
-        Cart cart = cartService.getCartByUserId(user_id);
+        CartResponse cart = cartService.getCartByUserId(user_id);
         if (cart !=null) {
             return ResponseEntity.ok(cart);
         }
@@ -78,7 +79,9 @@ public class CartController {
         return cartService.makeEmptyCart(id);
     }
     @DeleteMapping("/detail-cart/{detail_Id}")
-    public ResponseMessageDtos deleteCartDetail(@PathVariable Integer detail_Id) {
+    public ResponseMessageDtos deleteCartDetail(
+            @PathVariable Integer detail_Id
+    ) {
         return cartService.deleteCartItemDetail(detail_Id);
     }
 }

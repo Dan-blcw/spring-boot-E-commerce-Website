@@ -1,12 +1,15 @@
 package com.dan_michael.example.demo.chat_socket.entities;
 
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
+import jakarta.validation.constraints.Null;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import jakarta.persistence.Id;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -24,6 +27,8 @@ public class ChatMessage {
     private String senderId;
     private String recipientId;
     private String content;
+//    @Nullable
+//    private Byte[] file;
     private Date timestamp;
 }
 

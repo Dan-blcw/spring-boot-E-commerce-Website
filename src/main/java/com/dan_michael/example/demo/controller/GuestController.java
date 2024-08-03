@@ -75,7 +75,7 @@ public class GuestController {
         return ResponseEntity.ok(ob);
     }
     @GetMapping(value = "/products")
-    public ResponseEntity<?> get_detail(
+    public ResponseEntity<?> get_All(
             @RequestParam (required = false)Integer _limit,
         @RequestParam (required = false)Integer _total
     ) {
@@ -86,6 +86,19 @@ public class GuestController {
                         .paginationDto(new PaginationDto(_total,_limit))
                         .build());
     }
+
+//    @GetMapping(value = "/products")
+//    public ResponseEntity<?> get_All(
+//            @RequestParam (required = false)Integer _limit,
+//            @RequestParam (required = false)Integer _total
+//    ) {
+//        var list = service.findAllHander();
+//        return ResponseEntity.ok(
+//                ProductListDtos.builder()
+//                        .data(list)
+//                        .paginationDto(new PaginationDto(_total,_limit))
+//                        .build());
+//    }
 //--------------------------favorite----------------------------------
     @GetMapping(value = "/favorite-products")
     public ResponseEntity<?> getFavoriteByUser_id(
@@ -126,6 +139,7 @@ public class GuestController {
 //--------------------------Search----------------------------------
     @GetMapping(value = "/list-search",produces = "application/json")
     public ResponseEntity<?> global_search(
+            @RequestParam (required = false) String categoryName,
             @RequestParam (required = false)List<String> subCategoryName,
             @RequestParam (required = false)Boolean isPromotion,
             @RequestParam (required = false)Boolean isReleased,
@@ -136,7 +150,7 @@ public class GuestController {
             @RequestParam Integer _page,
             @RequestParam (required = false)String _sort
     ) {
-        List<ProductResponse> list = service.search_all(subCategoryName,isPromotion,isReleased,ratingGte,price_gte,price_lte,_sort);
+        List<ProductResponse> list = service.search_all(categoryName,subCategoryName,isPromotion,isReleased,ratingGte,price_gte,price_lte,_sort);
         return ResponseEntity.ok(ProductListDtos.builder().data(list).paginationDto(new PaginationDto(list.size(),_limit)).build());
     }
 //--------------------------GetQuantityDetail----------------------------------

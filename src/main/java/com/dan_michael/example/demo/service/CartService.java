@@ -30,22 +30,100 @@ public class CartService {
     private final UserRepository userRepository;
 
 //---------------------------Cart & cartDetail---------------------------------------
-    public List<Cart> getAllCarts() {
+    public List<CartResponse> getAllCarts() {
+        List<CartResponse> save = new ArrayList<>();
         var flag = cartRepository.findAll();
-        flag.forEach(x->x.setCartDetails(cartDetailRepository.findByIdentification_cart(x.getId())));
-        return flag;
+        for (var x: flag){
+            var tolalPay = 0.0f;
+            var totalQua = 0;
+            List<SubCart_OrderResponse> boxItem = new ArrayList<>();
+            var detail = cartDetailRepository.findByIdentification_cart(x.getId());
+            for(var y : detail){
+                var itemCart = SubCart_OrderResponse.builder()
+                        .itemDetail_id(y.getId())
+                        .name(y.getName())
+                        .size(y.getSize())
+                        .image(y.getImage())
+                        .color(y.getColor())
+                        .quantity(y.getQuantity())
+                        .unitPrice(y.getUnitPrice())
+                        .totalPrice(y.getTotalPrice())
+                        .build();
+                boxItem.add(itemCart);
+                tolalPay += y.getTotalPrice();
+                totalQua += y.getQuantity();
+            }
+            save.add(
+                    CartResponse.builder()
+                            .cart_id(x.getId())
+                            .user_id(x.getIdentification_user())
+                            .totalPayment(tolalPay)
+                            .totalQuantity(totalQua)
+                            .cartDetails(boxItem)
+                            .build()
+            );
+        }
+        return save;
     }
 
-    public Optional<Cart> getCartById(Integer id) {
+    public CartResponse getCartById(Integer id) {
         var flag = cartRepository.findById(id);
-        flag.get().setCartDetails(cartDetailRepository.findByIdentification_cart(id));
-        return flag;
+        var tolalPay = 0.0f;
+        var totalQua = 0;
+        List<SubCart_OrderResponse> boxItem = new ArrayList<>();
+        var detail = cartDetailRepository.findByIdentification_cart(flag.get().getId());
+        for(var y : detail){
+            var itemCart = SubCart_OrderResponse.builder()
+                    .itemDetail_id(y.getId())
+                    .name(y.getName())
+                    .size(y.getSize())
+                    .color(y.getColor())
+                    .image(y.getImage())
+                    .quantity(y.getQuantity())
+                    .unitPrice(y.getUnitPrice())
+                    .totalPrice(y.getTotalPrice())
+                    .build();
+            boxItem.add(itemCart);
+            tolalPay += y.getTotalPrice();
+            totalQua += y.getQuantity();
+        }
+        return CartResponse.builder()
+                        .cart_id(flag.get().getId())
+                        .user_id(flag.get().getIdentification_user())
+                        .totalPayment(tolalPay)
+                        .totalQuantity(totalQua)
+                        .cartDetails(boxItem)
+                        .build();
     }
 
-    public Cart getCartByUserId(Integer user_id) {
-        var cart_user = cartRepository.findByIdentification(user_id);
-        cart_user.setCartDetails(cartDetailRepository.findByIdentification_cart(cart_user.getId()));
-        return cart_user;
+    public CartResponse getCartByUserId(Integer user_id) {
+        var flag = cartRepository.findByIdentification(user_id);
+        var tolalPay = 0.0f;
+        var totalQua = 0;
+        List<SubCart_OrderResponse> boxItem = new ArrayList<>();
+        var detail = cartDetailRepository.findByIdentification_cart(flag.getId());
+        for(var y : detail){
+            var itemCart = SubCart_OrderResponse.builder()
+                    .itemDetail_id(y.getId())
+                    .name(y.getName())
+                    .size(y.getSize())
+                    .color(y.getColor())
+                    .image(y.getImage())
+                    .quantity(y.getQuantity())
+                    .unitPrice(y.getUnitPrice())
+                    .totalPrice(y.getTotalPrice())
+                    .build();
+            boxItem.add(itemCart);
+            tolalPay += y.getTotalPrice();
+            totalQua += y.getQuantity();
+        }
+        return CartResponse.builder()
+                .cart_id(flag.getId())
+                .user_id(flag.getIdentification_user())
+                .totalPayment(tolalPay)
+                .totalQuantity(totalQua)
+                .cartDetails(boxItem)
+                .build();
     }
     @Transactional
     public SubCart_OrderResponse updateQuantityItemCart(CartDtos request) {
@@ -61,18 +139,26 @@ public class CartService {
                 request.getCart_item().getSize()
         );
         box.setQuantity(request.getCart_item().getQuantity());
+        box.setUnitPrice(request.getCart_item().getUnitPrice());
+        box.setTotalPrice(request.getCart_item().getTotalPrice());
         cartDetailRepository.save(box);
         cartRepository.save(cart_user);
         return SubCart_OrderResponse.builder()
-                .product_id(box.getIdentification_product())
+                .itemDetail_id(box.getProduct_identification())
+                .name(box.getName())
                 .quantity(box.getQuantity())
+                .image(box.getImage())
                 .size(box.getSize())
                 .color(box.getColor())
+                .unitPrice(box.getUnitPrice())
+                .totalPrice(box.getTotalPrice())
                 .build();
     }
 
     @Transactional
     public CartResponse createOrAddCart(CartDtos request) {
+        Float totalPay = 0.0f;
+        var totalQua = 0;
         var user = userRepository.findById_create(request.getUserId());
         if(user == null){
             return null;
@@ -81,6 +167,7 @@ public class CartService {
         List<CartDetail> box = new ArrayList<>();
         List<SubCart_OrderResponse> boxItem = new ArrayList<>();
         if(cart_user == null){
+            System.out.println("Cart Not Null");
             Cart flag = new Cart();
             flag.setIdentification_user(user.getId());
             flag.setCreatedAt(new Date());
@@ -88,20 +175,27 @@ public class CartService {
             box = cartDetailRepository.findByIdentification_cart(flag.getId());
             var additem = CartDetail.builder()
                     .identification_cart(flag.getId())
-                    .identification_product(request.getCart_item().getProduct_id())
+                    .product_identification(request.getCart_item().getProduct_id())
+                    .name(request.getCart_item().getName())
                     .color(request.getCart_item().getColor())
                     .size(request.getCart_item().getSize())
-                    .subTotal(request.getCart_item().getSubTotal())
+                    .image(request.getCart_item().getImage())
+                    .unitPrice(request.getCart_item().getUnitPrice())
+                    .totalPrice(request.getCart_item().getTotalPrice())
                     .quantity(request.getCart_item().getQuantity())
                     .build();
             var additem_0 = cartDetailRepository.save(additem);
+            totalPay += additem_0.getTotalPrice();
+            totalQua += additem_0.getQuantity();
             var itemCart = SubCart_OrderResponse.builder()
                     .itemDetail_id(additem_0.getId())
-                    .product_id(additem_0.getIdentification_product())
+                    .name(additem_0.getName())
                     .size(additem_0.getSize())
                     .color(additem_0.getColor())
+                    .image(additem.getImage())
                     .quantity(additem.getQuantity())
-                    .subTotal(additem_0.getSubTotal())
+                    .unitPrice(additem_0.getUnitPrice())
+                    .totalPrice(additem.getTotalPrice())
                     .build();
             box.add(additem_0);
             boxItem.add(itemCart);
@@ -111,41 +205,56 @@ public class CartService {
             return CartResponse.builder()
                     .cart_id(additem_0.getIdentification_cart())
                     .user_id(user.getId())
+                    .totalPayment(totalPay)
+                    .totalQuantity(totalQua)
                     .cartDetails(boxItem)
                     .build();
         }else {
+            System.out.println("Cart Detail Not Null");
             box = cartDetailRepository.findByIdentification_cart(cart_user.getId());
+            var additem = CartDetail.builder()
+                    .identification_cart(cart_user.getId())
+                    .product_identification(request.getCart_item().getProduct_id())
+                    .name(request.getCart_item().getName())
+                    .color(request.getCart_item().getColor())
+                    .size(request.getCart_item().getSize())
+                    .image(request.getCart_item().getImage())
+                    .unitPrice(request.getCart_item().getUnitPrice())
+                    .totalPrice(request.getCart_item().getTotalPrice())
+                    .quantity(request.getCart_item().getQuantity())
+                    .build();
             for(var x : box){
-                var additem = CartDetail.builder()
-                        .identification_cart(cart_user.getId())
-                        .identification_product(request.getCart_item().getProduct_id())
-                        .color(request.getCart_item().getColor())
-                        .size(request.getCart_item().getSize())
-                        .subTotal(request.getCart_item().getSubTotal())
-                        .quantity(request.getCart_item().getQuantity())
-                        .build();
                 if(Objects.equals(x.getColor(), additem.getColor()) &&
                         Objects.equals(x.getSize(), additem.getSize()) &&
-                        Objects.equals(x.getIdentification_product(), additem.getIdentification_product())){
+                        Objects.equals(x.getProduct_identification(), additem.getProduct_identification())){
                     x.setQuantity(x.getQuantity()+additem.getQuantity());
+                    totalPay += x.getTotalPrice();
+                    totalQua += x.getQuantity();
                     cartDetailRepository.save(x);
                 }
             }
             for (var x: box) {
                 var itemCart = SubCart_OrderResponse.builder()
-                        .itemDetail_id(x.getId())
-                        .product_id(x.getIdentification_product())
+                        .itemDetail_id(x.getProduct_identification())
+                        .name(x.getName())
                         .size(x.getSize())
                         .color(x.getColor())
+                        .image(x.getImage())
                         .quantity(x.getQuantity())
-                        .subTotal(x.getSubTotal())
+                        .unitPrice(x.getUnitPrice())
+                        .totalPrice(x.getTotalPrice())
                         .build();
                 boxItem.add(itemCart);
+                totalPay += x.getTotalPrice();
+                totalQua += x.getQuantity();
             }
+            cartDetailRepository.save(additem);
             cart_user.setCartDetails(box);
             cartRepository.save(cart_user);
             return CartResponse.builder()
                     .cart_id(cart_user.getId())
+                    .totalPayment(totalPay)
+                    .totalQuantity(totalQua)
                     .user_id(user.getId())
                     .cartDetails(boxItem)
                     .build();
