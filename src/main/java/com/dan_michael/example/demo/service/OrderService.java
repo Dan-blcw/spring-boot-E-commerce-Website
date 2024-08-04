@@ -76,9 +76,9 @@ public class OrderService {
         List<OrderDetail> box = new ArrayList<>();
         for (ItemDetailDto x : request.getOrderDetails()) {
             OrderDetail detail = new OrderDetail();
-            detail.setProduct_id(x.getProduct_id());
+            detail.setProduct_id(x.getItemDetail_id());
 
-            var product = productRepository.findByID_(x.getProduct_id());
+            var product = productRepository.findByID_(x.getItemDetail_id());
             var quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(product.getName());
             List<SubColor> BoxResponse = new ArrayList<>();
             for (var x_0: quantityDetailsList) {

@@ -1,15 +1,14 @@
 package com.dan_michael.example.demo.controller;
+import com.dan_michael.example.demo.model.dto.ob.sub.CartDtos;
 import com.dan_michael.example.demo.model.response.CartResponse;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
-import com.dan_michael.example.demo.model.dto.ob.CartDtos;
+import com.dan_michael.example.demo.model.dto.ob.CartDetailDtos;
 import com.dan_michael.example.demo.service.CartService;
 import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
-import com.dan_michael.example.demo.model.entities.Cart;
 
 @RestController
 @RequiredArgsConstructor
@@ -51,7 +50,7 @@ public class CartController {
 
     @PostMapping("/add-details")
     public ResponseEntity<?> createCartOrAdd(
-            @RequestBody CartDtos cartDetails) {
+            @RequestBody CartDetailDtos cartDetails) {
         var cart = cartService.createOrAddCart(cartDetails);
         if (cart !=null) {
             return ResponseEntity.ok(cart);
@@ -63,9 +62,9 @@ public class CartController {
     }
 
     @PostMapping("/update-item-details")
-    public ResponseEntity<?> UpdateInforItemDetai(
+    public ResponseEntity<?> UpdateInfoItemDetai(
             @RequestBody CartDtos cartDetails) {
-        var cart = cartService.updateQuantityItemCart(cartDetails);
+        var cart = cartService.updateInfoItemCart(cartDetails);
         if (cart !=null) {
             return ResponseEntity.ok(cart);
         } else {

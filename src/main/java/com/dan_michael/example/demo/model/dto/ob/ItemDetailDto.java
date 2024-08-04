@@ -14,8 +14,8 @@ public class ItemDetailDto {
 
     private Integer id;
 
-    @JsonProperty("product_id")
-    private Integer product_id;
+    @JsonProperty("itemDetail_id")
+    private Integer itemDetail_id;
     private String name;
     private String image;
     @JsonProperty("quantity")

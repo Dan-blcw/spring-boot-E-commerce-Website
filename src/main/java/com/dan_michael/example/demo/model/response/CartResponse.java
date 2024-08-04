@@ -21,5 +21,5 @@ public class CartResponse {
     private Integer user_id;
     private Float totalPayment;
     private Integer totalQuantity;
-    private List<SubCart_OrderResponse> cartDetails;
+    private List<SubCart_OrderResponse> cart_items;
 }

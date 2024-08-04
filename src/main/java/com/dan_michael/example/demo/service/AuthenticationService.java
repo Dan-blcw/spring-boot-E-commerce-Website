@@ -3,10 +3,9 @@ package com.dan_michael.example.demo.service;
 import com.dan_michael.example.demo.model.dto.global.AuthenticationDtos;
 import com.dan_michael.example.demo.model.dto.global.RegisterDtos;
 import com.dan_michael.example.demo.model.dto.global.SignInDtos;
-import com.dan_michael.example.demo.model.entities.Role;
-import com.dan_michael.example.demo.model.entities.Token;
-import com.dan_michael.example.demo.model.entities.TokenType;
-import com.dan_michael.example.demo.model.entities.User;
+import com.dan_michael.example.demo.model.entities.*;
+import com.dan_michael.example.demo.repositories.CartRepository;
+import com.dan_michael.example.demo.repositories.SupRe.CartDetailRepository;
 import com.dan_michael.example.demo.repositories.TokenRepository;
 import com.dan_michael.example.demo.repositories.UserRepository;
 import com.dan_michael.example.demo.repositories.image.UserImgRepository;
@@ -35,6 +34,10 @@ public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
 
+    private final CartRepository cartRepository;
+
+    private final CartDetailRepository cartDetailRepository;
+
     public AuthenticationDtos register(RegisterDtos request) {
         var user_flag = repository.findByEmail(request.getEmail());
         if(user_flag.isPresent()){
@@ -58,6 +61,11 @@ public class AuthenticationService {
                 .build();
 
         var savedUser = repository.save(user);
+        cartRepository.save(Cart.builder()
+                .cartDetails(null)
+                .createdAt(new Date())
+                .identification_user(user.getId())
+                .build());
         var jwtToken = jwtService.generateToken(user);
         saveUserToken(savedUser, jwtToken);
         return AuthenticationDtos.builder()

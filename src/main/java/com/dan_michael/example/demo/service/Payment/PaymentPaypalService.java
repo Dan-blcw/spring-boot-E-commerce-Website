@@ -184,20 +184,20 @@ public class PaymentPaypalService {
         details.setTax(formatAmount(orderDtos.getTaxFee()));
 
         Amount amount = new Amount();
-        amount.setCurrency("USD");
+        amount.setCurrency("VND");
         amount.setTotal(formatAmount(orderDtos.getTotalPayment()));
         amount.setDetails(details);
 
         Transaction transaction = new Transaction();
         transaction.setAmount(amount);
-        transaction.setDescription("Product Name");
+        transaction.setDescription("Description of payment !");
 
         ItemList itemList = new ItemList();
         List<Item> items = new ArrayList<>();
 
         for (var x: orderDtos.getOrderDetails()) {
             Item item = new Item();
-            item.setCurrency("USD")
+            item.setCurrency("VND")
                     .setName(x.getName())
                     .setPrice(formatAmount(x.getUnitPrice() )) // Ensure the price is per item
 //                    .setTax(formatAmount(orderDtos.getTaxFee())) // Ensure the tax is per item
@@ -221,7 +221,7 @@ public class PaymentPaypalService {
     private RedirectUrls getRedirectURLs() {
         RedirectUrls redirectUrls = new RedirectUrls();
         redirectUrls.setCancelUrl("http://localhost:8080/api/v1/payment/cancel");
-        redirectUrls.setReturnUrl("http://localhost:8080/api/v1/payment/return");
+        redirectUrls.setReturnUrl("http://localhost:8080/api/v1/payments/paypal-review-payment");
         return redirectUrls;
     }
 
