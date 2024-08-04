@@ -5,6 +5,7 @@ public final class Constants {
     public static final String Authorization = "Authorization";
     public static final String Bearer = "Bearer";
     public static final String Chat_Bot_Name = "Aza Assistant";
+    public static final String Start_Answer_Chat_Bot_ = "Start Answer Chat Bot";
     public static final String Front_Host_5555 = "http://localhost:5555";
     public static final String Front_Host_8888 = "http://localhost:8888";
     public static final String Admin_Config_Path = "/api/v1/admin/**";

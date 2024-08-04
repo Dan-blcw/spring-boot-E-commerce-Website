@@ -16,6 +16,7 @@ import com.dan_michael.example.demo.service.AuthenticationService;
 import com.dan_michael.example.demo.service.CategoryService;
 import com.dan_michael.example.demo.service.Payment.PaymentMethodsService;
 import com.dan_michael.example.demo.service.ProductService;
+import com.dan_michael.example.demo.util.Constants;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -48,44 +49,10 @@ public class PjCdtnApplication {
 			PaymentMethodsService paymentMethodsService
 	) {
 		return args -> {
-
-			var admin = RegisterDtos.builder()
-					.email("admin@mail.com")
-					.name("Admin")
-					.img_url("https://i.pinimg.com/564x/70/7a/03/707a037459182e745e1914f5e0a171f4.jpg")
-					.password("123456")
+			var responseAI0 = QuestionAnswer.builder()
+					.question(Constants.Start_Answer_Chat_Bot_)
+					.answer("Chào bạn! \uD83D\uDC4B Tôi là "+ Constants.Chat_Bot_Name +", và tôi ở đây để giúp bạn tìm sản phẩm hoặc giải đáp bất kỳ thắc mắc nào. Bạn cần tìm kiếm sản phẩm nào hay có câu hỏi gì về dịch vụ của chúng tôi? Đừng ngần ngại cho tôi biết, tôi sẵn sàng hỗ trợ bạn!")
 					.build();
-			System.out.println("Admin token: " + service.createAdmin(admin));
-
-			var user = RegisterDtos.builder()
-					.email("phuhuong646@gmail.com")
-					.name("Dan")
-					.img_url("https://i.pinimg.com/564x/3c/58/6d/3c586dc294b2025366c1c8277b5d3eeb.jpg")
-					.password("123456")
-					.build();
-			System.out.println("User token: " + service.register(user).getJwt());
-//----------------------Tạo Tài Khoản ChatBot ----------------------------------------------
-			var chatbot = RegisterDtos.builder()
-					.email("chatbot@mail.com")
-					.img_url("https://i.pinimg.com/564x/4f/b5/e6/4fb5e6fc1eb937458849bcbe6a2b3807.jpg")
-					.name("Aza Chōbei Assistant")
-					.password("123456")
-					.build();
-			service.createAdmin(chatbot);
-
-			userAccountInfoService.saveUser(UserAccountInfo.builder()
-					.name("Aza Assistant")
-					.img_url(chatbot.getImg_url())
-					.fullName("Aza Assistant")
-					.build());
-			var AdminInfo = UserAccountInfo.builder()
-					.name("Admin")
-					.img_url(admin.getImg_url())
-					.fullName("Admin")
-					.build();
-
-			userAccountInfoService.saveUser(AdminInfo);
-			userAccountInfoService.disconnect(AdminInfo);
 
 			var responseAI1 = QuestionAnswer.builder()
 					.question("What is e-commerce?")
@@ -186,6 +153,7 @@ public class PjCdtnApplication {
 					.question("What is a product feed?")
 					.answer("A product feed is a file containing a list of products and their attributes used to provide information to e-commerce platforms and marketplaces.")
 					.build();
+			chatbotService.createQuestionAnswer(responseAI0);
 			chatbotService.createQuestionAnswer(responseAI1);
 			chatbotService.createQuestionAnswer(responseAI2);
 			chatbotService.createQuestionAnswer(responseAI3);
@@ -228,6 +196,44 @@ public class PjCdtnApplication {
 				What is a customer loyalty program?
 				What is a product feed?
 			*/
+			var admin = RegisterDtos.builder()
+					.email("admin@mail.com")
+					.name("Admin")
+					.img_url("https://i.pinimg.com/564x/70/7a/03/707a037459182e745e1914f5e0a171f4.jpg")
+					.password("123456")
+					.build();
+			System.out.println("Admin token: " + service.createAdmin(admin));
+
+			var user = RegisterDtos.builder()
+					.email("phuhuong646@gmail.com")
+					.name("Dan")
+					.img_url("https://i.pinimg.com/564x/3c/58/6d/3c586dc294b2025366c1c8277b5d3eeb.jpg")
+					.password("123456")
+					.build();
+			System.out.println("User token: " + service.register(user).getJwt());
+//----------------------Tạo Tài Khoản ChatBot ----------------------------------------------
+			var chatbot = RegisterDtos.builder()
+					.email("chatbot@mail.com")
+					.img_url("https://i.pinimg.com/564x/4f/b5/e6/4fb5e6fc1eb937458849bcbe6a2b3807.jpg")
+					.name("Aza Assistant")
+					.password("123456")
+					.build();
+			service.createAdmin(chatbot);
+
+			userAccountInfoService.saveUser(UserAccountInfo.builder()
+					.name("Aza Assistant")
+					.img_url(chatbot.getImg_url())
+					.fullName("Aza Assistant")
+					.build());
+			var AdminInfo = UserAccountInfo.builder()
+					.name("Admin")
+					.img_url(admin.getImg_url())
+					.fullName("Admin")
+					.build();
+
+			userAccountInfoService.saveUser(AdminInfo);
+			userAccountInfoService.disconnect(AdminInfo);
+
 			var Question0 = QuestionOfGuestInfoDtos.builder()
 					.question("Câu Hỏi Cho Khách Hàng 0?")
 					.name("Dan")

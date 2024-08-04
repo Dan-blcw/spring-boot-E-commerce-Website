@@ -16,17 +16,11 @@ public class ChatMessageService {
     private final ChatRoomService chatRoomService;
     private final UserImgRepository userImgRepository;
     public ChatMessage save(ChatMessage chatMessage) {
-//        var image_user = userImgRepository.findUserImgByUserName(chatMessage.getRecipientId());
-//        if (image_user != null) {
-//            chatMessage.setRecipientImage(image_user.getImg_url());
-//        }else {
-//            chatMessage.setRecipientImage("");
-//        }
         var chatId = chatRoomService
                 .getChatRoomId(chatMessage.getSenderId(), chatMessage.getRecipientId(), true)
                 .orElseThrow(); // You can create your own dedicated exception
         chatMessage.setChatId(chatId);
-        chatMessage.setRecipientImage(chatMessage.getRecipientImage());
+        chatMessage.setSenderImage(chatMessage.getSenderImage());
         repository.save(chatMessage);
         return chatMessage;
     }

@@ -3,8 +3,11 @@ package com.dan_michael.example.demo.chat_socket.controller;
 import com.dan_michael.example.demo.chat_socket.entities.ChatMessage;
 import com.dan_michael.example.demo.chat_socket.service.ChatMessageService;
 import com.dan_michael.example.demo.chat_socket.entities.ChatNotification;
+import com.dan_michael.example.demo.chatbot.entities.QuestionAnswer;
 import com.dan_michael.example.demo.chatbot.entities.dtos.RequestMessageChatBotDtos;
+import com.dan_michael.example.demo.chatbot.resository.QuestionAnswerRepository;
 import com.dan_michael.example.demo.chatbot.service.ChatbotService;
+import com.dan_michael.example.demo.repositories.UserRepository;
 import com.dan_michael.example.demo.repositories.image.UserImgRepository;
 import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
@@ -25,30 +28,31 @@ public class ChatSocketController {
     private final SimpMessagingTemplate messagingTemplate;
     private final ChatMessageService chatMessageService;
     private final ChatbotService chatBotService;
-    private final UserImgRepository userImgRepository;
+    private final UserRepository userRepository;
     @MessageMapping("/chat")
     public void processMessage(@Payload ChatMessage chatMessage) {
         ChatMessage savedMsg = chatMessageService.save(chatMessage);
-        System.out.println(savedMsg);
         messagingTemplate.convertAndSendToUser(
                 chatMessage.getRecipientId(), "/queue/messages",
                 new ChatNotification(
                         savedMsg.getId(),
                         savedMsg.getSenderId(),
+                        savedMsg.getSenderImage(),
                         savedMsg.getRecipientId(),
-//                        recipientImage,
                         savedMsg.getContent()
                 )
         );
-//        var image_Chatbot = userImgRepository.findUserImgByUserName(chatMessage.getSenderId());
-//        String recipientImage_chatbot= "";
-//        if(image_Chatbot!=null){
-//            recipientImage_chatbot= image_Chatbot.getImg_url();
-//        }
+        System.out.println(savedMsg);
+        var Chatbot = userRepository.findByName_(Constants.Chat_Bot_Name);
+        String recipientImage_chatbot= "";
+        if(Chatbot!=null){
+            recipientImage_chatbot= Chatbot.getUserImgUrl();
+        }
         if(savedMsg.getRecipientId().equals(Constants.Chat_Bot_Name)){
             var chatMessageResponse = ChatMessage.builder()
                     .chatId(savedMsg.getChatId())
                     .senderId(savedMsg.getRecipientId())
+                    .senderImage(recipientImage_chatbot)
                     .recipientId(savedMsg.getSenderId())
                     .content(
                             getResponse(RequestMessageChatBotDtos.builder()
@@ -63,8 +67,8 @@ public class ChatSocketController {
                     new ChatNotification(
                             savedResponse.getId(),
                             savedResponse.getSenderId(),
+                            savedResponse.getSenderImage(),
                             savedResponse.getRecipientId(),
-//                            recipientImage_chatbot,
                             savedResponse.getContent()
                     )
             );
