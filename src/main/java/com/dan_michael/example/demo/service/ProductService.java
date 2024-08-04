@@ -1030,8 +1030,17 @@ public class ProductService {
             ratingLt = ratingGte +  1;
         }
         List<Product> productList = new ArrayList<>();
-        for (var x : subCategoryName) {
-            List<Product> box = productRepository.search_all(categoryName,x, isPromotion, isReleased, ratingGte,ratingLt, priceGte, priceLte);
+        if(subCategoryName != null){
+            for (var x : subCategoryName) {
+                List<Product> box = productRepository.search_all(categoryName,x, isPromotion, isReleased, ratingGte,ratingLt, priceGte, priceLte);
+                for (var y : box) {
+                    if (!productList.contains(y)) {
+                        productList.add(y);
+                    }
+                }
+            }
+        }else {
+            List<Product> box = productRepository.search_all(categoryName,null, isPromotion, isReleased, ratingGte,ratingLt, priceGte, priceLte);
             for (var y : box) {
                 if (!productList.contains(y)) {
                     productList.add(y);

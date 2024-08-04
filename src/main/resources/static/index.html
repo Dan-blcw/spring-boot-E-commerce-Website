@@ -451,6 +451,7 @@
                 <button id="toggle-options-btn">Show Options</button>
 
 <!--                <input id="file" type="file" multiple />-->
+<!--                <emoji-picker id="emoji-picker" style="margin-right: auto"></emoji-picker>-->
                 <button type="button" id="emoji-btn" class="emoji-btn" style="">🌤</button>
 
                 <button>Send</button>
@@ -735,31 +736,6 @@
         connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
         connectingElement.style.color = 'red';
     }
-    // async function getUserImage() {
-    //     const username = document.getElementById('username').value;
-    //     const response = await fetch(`/media/images/${username}/get-user-img`);
-    //
-    //     if (response.ok) {
-    //         const imageUrl = await response.text();
-    //         displayImage(imageUrl);
-    //     } else {
-    //         console.error('Failed to fetch image');
-    //     }
-    // }
-
-    // function displayImage(url) {
-    //     const imageContainer = document.getElementById('imageContainer');
-    //     imageContainer.innerHTML = '';
-    //
-    //     if (url) {
-    //         const img = document.createElement('img');
-    //         img.src = url;
-    //         img.alt = 'User Image';
-    //         imageContainer.appendChild(img);
-    //     } else {
-    //         imageContainer.textContent = 'No image found for the user.';
-    //     }
-    // }
     async function sendMessage(event) {
         const messageContent = messageInput.value.trim();
         if (messageContent && stompClient) {

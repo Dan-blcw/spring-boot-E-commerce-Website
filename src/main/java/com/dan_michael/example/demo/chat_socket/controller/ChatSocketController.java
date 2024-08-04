@@ -5,6 +5,7 @@ import com.dan_michael.example.demo.chat_socket.service.ChatMessageService;
 import com.dan_michael.example.demo.chat_socket.entities.ChatNotification;
 import com.dan_michael.example.demo.chatbot.entities.dtos.RequestMessageChatBotDtos;
 import com.dan_michael.example.demo.chatbot.service.ChatbotService;
+import com.dan_michael.example.demo.repositories.image.UserImgRepository;
 import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class ChatSocketController {
     private final SimpMessagingTemplate messagingTemplate;
     private final ChatMessageService chatMessageService;
     private final ChatbotService chatBotService;
+    private final UserImgRepository userImgRepository;
     @MessageMapping("/chat")
     public void processMessage(@Payload ChatMessage chatMessage) {
         ChatMessage savedMsg = chatMessageService.save(chatMessage);
@@ -34,9 +36,15 @@ public class ChatSocketController {
                         savedMsg.getId(),
                         savedMsg.getSenderId(),
                         savedMsg.getRecipientId(),
+//                        recipientImage,
                         savedMsg.getContent()
                 )
         );
+//        var image_Chatbot = userImgRepository.findUserImgByUserName(chatMessage.getSenderId());
+//        String recipientImage_chatbot= "";
+//        if(image_Chatbot!=null){
+//            recipientImage_chatbot= image_Chatbot.getImg_url();
+//        }
         if(savedMsg.getRecipientId().equals(Constants.Chat_Bot_Name)){
             var chatMessageResponse = ChatMessage.builder()
                     .chatId(savedMsg.getChatId())
@@ -56,6 +64,7 @@ public class ChatSocketController {
                             savedResponse.getId(),
                             savedResponse.getSenderId(),
                             savedResponse.getRecipientId(),
+//                            recipientImage_chatbot,
                             savedResponse.getContent()
                     )
             );

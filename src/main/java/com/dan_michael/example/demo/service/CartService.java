@@ -211,6 +211,7 @@ public class CartService {
                     .build();
         }else {
             System.out.println("Cart Detail Not Null");
+            var check_trung = false;
             box = cartDetailRepository.findByIdentification_cart(cart_user.getId());
             var additem = CartDetail.builder()
                     .identification_cart(cart_user.getId())
@@ -224,14 +225,19 @@ public class CartService {
                     .quantity(request.getCart_item().getQuantity())
                     .build();
             for(var x : box){
-                if(Objects.equals(x.getColor(), additem.getColor()) &&
+                if(     Objects.equals(x.getProduct_identification(), additem.getProduct_identification()) &&
+                        Objects.equals(x.getName(), additem.getName()) &&
+                        Objects.equals(x.getColor(), additem.getColor()) &&
                         Objects.equals(x.getSize(), additem.getSize()) &&
                         Objects.equals(x.getProduct_identification(), additem.getProduct_identification())){
                     x.setQuantity(x.getQuantity()+additem.getQuantity());
                     totalPay += x.getTotalPrice();
                     totalQua += x.getQuantity();
                     cartDetailRepository.save(x);
+                    check_trung = true;
+                    break;
                 }
+                totalQua += x.getQuantity();
             }
             for (var x: box) {
                 var itemCart = SubCart_OrderResponse.builder()
@@ -246,9 +252,10 @@ public class CartService {
                         .build();
                 boxItem.add(itemCart);
                 totalPay += x.getTotalPrice();
-                totalQua += x.getQuantity();
             }
-            cartDetailRepository.save(additem);
+            if(!check_trung){
+                cartDetailRepository.save(additem);
+            }
             cart_user.setCartDetails(box);
             cartRepository.save(cart_user);
             return CartResponse.builder()

@@ -13,4 +13,7 @@ public class RegisterDtos {
     private String email;
     private String name;
     private String password;
+
+//  Demo Ảnh
+    private String img_url;
 }

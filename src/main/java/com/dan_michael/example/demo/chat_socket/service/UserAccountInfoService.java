@@ -17,6 +17,7 @@ public class UserAccountInfoService {
     public void saveUser(UserAccountInfo user) {
         var check = repository.findUserTestByName(user.getName());
         user.setStatus(Status.ONLINE);
+        user.setImg_url(user.getImg_url());
         if(check != null){
             check.setStatus(Status.ONLINE);
             repository.save(check);
