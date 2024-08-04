@@ -40,16 +40,7 @@ public class UserAccountInfoService {
             }
             var chatId = chatRoomService
                     .getChatRoomId(Constants.Chat_Bot_Name, user.getName(), true)
-                    .orElseThrow(); // You can create your own dedicated exception
-//            if(questionAnswerRepository.findByQuestion(Constants.Start_Answer_Chat_Bot_).getAnswer() != null){
-//                chatMessage = ChatMessage.builder()
-//                        .chatId(chatId)
-//                        .senderId(Constants.Chat_Bot_Name)
-//                        .senderImage(recipientImage_chatbot)
-//                        .recipientId(user.getName())
-//                        .content(questionAnswerRepository.findByQuestion(Constants.Start_Answer_Chat_Bot_).getAnswer())
-//                        .build();
-//            }else {
+                    .orElseThrow();
             ChatMessage chatMessage = ChatMessage.builder()
                         .chatId(chatId)
                         .senderId(Constants.Chat_Bot_Name)
@@ -57,7 +48,6 @@ public class UserAccountInfoService {
                         .recipientId(user.getName())
                         .content("Chào bạn! \uD83D\uDC4B Tôi là "+Constants.Chat_Bot_Name+", và tôi ở đây để giúp bạn tìm sản phẩm hoặc giải đáp bất kỳ thắc mắc nào. Bạn cần tìm kiếm sản phẩm nào hay có câu hỏi gì về dịch vụ của chúng tôi? Đừng ngần ngại cho tôi biết, tôi sẵn sàng hỗ trợ bạn!")
                         .build();
-//            }
             chatMessageRepository.save(chatMessage);
 
         }
