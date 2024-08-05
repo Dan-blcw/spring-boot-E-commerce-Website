@@ -52,7 +52,7 @@ public class SecurityConfiguration {
             "img_4.png",
             "/api/v1/images/**",
             "/media/images/**",
-            "api/v1/rest",
+            "api/v1/rest/**",
             "chat-bot"
     };
     private final JwtAuthenticationFilter jwtAuthFilter;

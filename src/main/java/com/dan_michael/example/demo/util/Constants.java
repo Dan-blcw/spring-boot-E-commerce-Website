@@ -133,6 +133,7 @@ public final class Constants {
     public static final String Logo_Path_3 =  "D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_3.png";
     public static final String Logo_Path_4 =  "D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_4.png";
     public static final String Chat_Bot_No_Answer =  "I'm Sorry, I Didn't Understand That. Could You Please Rephrase?";
+//    public static final String Chat_Bot_No_Answer =  "I'm Sorry, I Didn't Understand That. Could You Please Rephrase?";
     public static final String Delete_Answer_Question_AI_Success =  "Delete Question Answer AI Successfully";
     public static final String Delete_Answer_Question_AI_Fail =  "Delete Question Answer AI Failure !";
     public static final String Already_Use_First_Discount =  "TThis Account Has Already Used The First Discount Promotion !";

@@ -27,7 +27,7 @@ public class Product {
     @Id
     @GeneratedValue
     private Integer id;
-
+    private String skuQa;
     @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<ProductImg> images;

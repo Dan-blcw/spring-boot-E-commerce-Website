@@ -1,5 +1,7 @@
 package com.dan_michael.example.demo.service;
 
+import com.dan_michael.example.demo.chatbot.entities.QuestionAnswer;
+import com.dan_michael.example.demo.chatbot.resository.QuestionAnswerRepository;
 import com.dan_michael.example.demo.model.dto.ob.*;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubColor;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubSizeQuantity;
@@ -23,7 +25,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.*;
+
+import static com.dan_michael.example.demo.chatbot.service.ChatbotService.removeDiacritics;
 
 @Service
 @Transactional
@@ -43,6 +48,74 @@ public class ProductService {
     private final TradeMarkRepository tradeMarkRepository;
 
     private final FavouriteProductRepository favouriteProductRepository;
+
+    private final QuestionAnswerRepository questionAnswerRepository;
+
+//-------------------Product-----------------------------------
+    public String saveInfoChatBot(ProductResponse qa,List<String> sizes,List<String> colors,List<SubColor> boxResponse){
+        String save = "";
+        String saveSizes = "";
+        String saveColors = "";
+        for (var x =0 ;x < sizes.size() ; ++x) {
+            if(x < sizes.size()){
+                saveSizes +=  sizes.get(x) + ", ";
+            } else if (x == sizes.size()) {
+                saveSizes +=  sizes.get(x);
+            }
+        }
+        for (var x =0 ;x < colors.size() ; ++x) {
+            if(x < colors.size()){
+                saveColors +=  colors.get(x) + ", ";
+            } else if (x == colors.size()) {
+                saveColors +=  colors.get(x);
+            }
+        }
+        String saveDetail = "";
+        for (var x: boxResponse){
+            saveDetail +=  "sản phẩm màu " + x.getColor();
+            for(var y: x.getSizes()){
+                saveDetail += " có số lượng "+ y.quantity+ " cho kích thước "+ y.size +", ";
+            }
+            saveDetail += "Tiếp với ";
+        }
+        save =  "\n                                GIỚI THIỆU SẢN PHẨM                                \n" +
+                "\n     " +
+                "Chúng tôi xin giới thiệu sản phẩm " + qa.getName().toUpperCase() + " một lựa chọn tuyệt vời trong danh mục " + qa.getCategory().toUpperCase() + " và phân loại phụ " + qa.getSubCategory().toUpperCase() +
+                "\n     " +
+                "Sản phẩm này có màu sắc đa dạng, bao gồm "+saveColors.toUpperCase()+" cùng với các kích thước từ "+saveSizes.toUpperCase()+"." +
+                "\n     " +
+                "Với chi tiết số lượng phong phú, "+saveDetail.toUpperCase()+" Tổng số lượng sản phẩm hiện có là "+String.valueOf(qa.getTotalQuantity()).toUpperCase()+"." +
+                "\n     " +
+                "Sản phẩm này có giá gốc "+String.valueOf(qa.getOriginalPrice()).toUpperCase()+" VND, hiện đang được giảm giá "+String.valueOf(qa.getSaleDiscountPercent()).toUpperCase()
+                +"%, với giá cuối cùng là "+String.valueOf(qa.getFinalPrice()).toUpperCase()+" VND. Được đánh giá "+String.valueOf(qa.getRating()).toUpperCase()+" sao, "+ qa.getName() +" không chỉ có chất lượng xuất sắc mà còn mang đến giá trị tốt cho khách hàng." +
+                "\n     " +
+                "Tình trạng của sản phẩm hiện tại là có khuyến mãi và mới. Nhận xét từ các khách hàng cho biết sản phẩm mang lại giá trị rất tốt với chất lượng tuyệt vời." +
+                "\n     " +
+                "Hy vọng mẫu giới thiệu này đáp ứng được yêu cầu của bạn!";
+        return save;
+    }
+//-------------------Product-----------------------------------
+    public static String generateSku() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString().replace("-", "").toUpperCase().substring(0, 10);
+    }
+    public List<ProductChatBotResponse> findProduct_ChatBot() {
+        List<ProductChatBotResponse> save = new ArrayList<>();
+        var pros = productRepository.findAll();
+        pros.sort(Comparator.comparing(Product::getFinalPrice).reversed());
+        for (var x : pros) {
+            var y = ProductChatBotResponse.builder()
+                    .sku(x.getSkuQa())
+                    .name(x.getName())
+                    .imageMain(x.getImageMain())
+                    .originalPrice(x.getOriginalPrice())
+                    .finalPrice(x.getFinalPrice())
+                    .build();
+            save.add(y);
+        }
+        return save;
+    }
+
 //-------------------Product-----------------------------------
     public ProductResponse createProduct(ProductDtos request) {
         var totalQuantity = 0;
@@ -53,6 +126,8 @@ public class ProductService {
             return null;
         }
         var product_flag = new Product();
+        String sku = generateSku();
+        product_flag.setSkuQa(sku);
         product_flag.setName(request.getName());
         product_flag.setDescription(request.getDescription());
 
@@ -152,9 +227,11 @@ public class ProductService {
         product_flag.setQuantityDetails(Box);
         product_flag.setTotalQuantity(totalQuantity);
         product_flag.setImages(productImagesBox_0);
-
+        if(product_flag.getImageMain() == null){
+            product_flag.setImageMain(request.getImageMain());
+        }
         productRepository.save(product_flag);
-        return ProductResponse.builder()
+        var save =  ProductResponse.builder()
                 .id(product_flag.getId())
                 .images(productImagesBox)
                 .colours(colors)
@@ -180,6 +257,12 @@ public class ProductService {
                 .createDate(product_flag.getCreateDate())
                 .createdByUserid(product_flag.getCreatedByUserid())
                 .build();
+        QuestionAnswer qa = QuestionAnswer.builder()
+                .question(removeDiacritics(product_flag.getSkuQa().toLowerCase()))
+                .answer(saveInfoChatBot(save,sizes,colors,BoxResponse))
+                .build();
+        questionAnswerRepository.save(qa);
+        return save;
     }
 
     public ProductResponse updateProduct(ProductDtos request) {
@@ -201,7 +284,6 @@ public class ProductService {
         if(product_flag != null){
             product_flag.setName(request.getName());
             product_flag.setDescription(request.getDescription());
-
             product_flag.setCategory(request.getCategory());
             product_flag.setTradeMask(request.getTradeMask());
             product_flag.setSubCategory(request.getSubCategory());
@@ -526,7 +608,7 @@ public class ProductService {
                     .sizes(sizeQuantities)
                     .build());
         }
-        var productResponse = ProductResponse.builder()
+        var save = ProductResponse.builder()
                 .id(product_flag.getId())
                 .images(productImagesBox)
                 .subCategory(request.getSubCategory())
@@ -551,7 +633,12 @@ public class ProductService {
                 .createDate(product_flag.getCreateDate())
                 .createdByUserid(product_flag.getCreatedByUserid())
                 .build();
-        return productResponse;
+        QuestionAnswer qa = questionAnswerRepository.findByQuestion(product_flag.getSkuQa().toLowerCase());
+        if(qa !=null){
+            qa.setAnswer(saveInfoChatBot(save,valuesave(sizesadd,sizes),valuesave(colorsadd,colors),BoxResponse));
+        }
+        questionAnswerRepository.save(qa);
+        return save;
     }
     public List<String> valueadd(List<String>a , List<String>b){
         List<String> save = new ArrayList<>();

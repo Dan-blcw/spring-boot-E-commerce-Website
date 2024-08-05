@@ -184,7 +184,7 @@ public class PaymentPaypalService {
         details.setTax(formatAmount(orderDtos.getTaxFee()));
 
         Amount amount = new Amount();
-        amount.setCurrency("VND");
+        amount.setCurrency("USD");
         amount.setTotal(formatAmount(orderDtos.getTotalPayment()));
         amount.setDetails(details);
 
@@ -197,9 +197,9 @@ public class PaymentPaypalService {
 
         for (var x: orderDtos.getOrderDetails()) {
             Item item = new Item();
-            item.setCurrency("VND")
+            item.setCurrency("USD")
                     .setName(x.getName())
-                    .setPrice(formatAmount(x.getUnitPrice() )) // Ensure the price is per item
+                    .setPrice(formatAmount(x.getUnitPrice()) )// Ensure the price is per item
 //                    .setTax(formatAmount(orderDtos.getTaxFee())) // Ensure the tax is per item
                     .setQuantity(String.valueOf(x.getQuantity()));
 

@@ -1,5 +1,6 @@
 package com.dan_michael.example.demo.chat_socket.entities;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,5 +15,6 @@ public class ChatNotification {
     private String senderId;
     private String senderImage;
     private String recipientId;
+    @Column(length = 10485760)
     private String content;
 }

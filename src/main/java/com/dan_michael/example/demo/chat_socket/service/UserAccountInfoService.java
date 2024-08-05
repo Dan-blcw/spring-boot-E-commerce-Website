@@ -46,7 +46,7 @@ public class UserAccountInfoService {
                         .senderId(Constants.Chat_Bot_Name)
                         .senderImage(recipientImage_chatbot)
                         .recipientId(user.getName())
-                        .content("Chào bạn! \uD83D\uDC4B Tôi là "+Constants.Chat_Bot_Name+", và tôi ở đây để giúp bạn tìm sản phẩm hoặc giải đáp bất kỳ thắc mắc nào. Bạn cần tìm kiếm sản phẩm nào hay có câu hỏi gì về dịch vụ của chúng tôi? Đừng ngần ngại cho tôi biết, tôi sẵn sàng hỗ trợ bạn!")
+                        .content("Chào bạn! \uD83D\uDC4B \nTôi là "+Constants.Chat_Bot_Name+", \nvà tôi ở đây để giúp bạn tìm sản phẩm hoặc giải đáp bất kỳ thắc mắc nào. Bạn cần tìm kiếm sản phẩm nào hay có câu hỏi gì về dịch vụ của chúng tôi? \nĐừng ngần ngại cho tôi biết, tôi sẵn sàng hỗ trợ bạn!")
                         .build();
             chatMessageRepository.save(chatMessage);
 

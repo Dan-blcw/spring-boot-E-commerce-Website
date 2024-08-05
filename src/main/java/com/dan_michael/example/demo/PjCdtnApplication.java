@@ -6,6 +6,7 @@ import com.dan_michael.example.demo.chat_socket.service.UserAccountInfoService;
 import com.dan_michael.example.demo.chatbot.entities.QuestionAnswer;
 import com.dan_michael.example.demo.chatbot.entities.dtos.QuestionOfGuestInfoDtos;
 import com.dan_michael.example.demo.chatbot.service.ChatbotService;
+import com.dan_michael.example.demo.controller.GuestController;
 import com.dan_michael.example.demo.model.dto.global.RegisterDtos;
 import com.dan_michael.example.demo.model.dto.ob.*;
 
@@ -46,9 +47,78 @@ public class PjCdtnApplication {
 			CategoryService categoryService,
 			UserAccountInfoService userAccountInfoService,
 			ChatbotService chatbotService,
-			PaymentMethodsService paymentMethodsService
+			PaymentMethodsService paymentMethodsService,
+			GuestController guestController
 	) {
 		return args -> {
+			List<String> images = new ArrayList<>();
+			images.add("https://i.pinimg.com/564x/81/06/a7/8106a71477e9230cd5f7b0440c1db220.jpg");
+			images.add("https://i.pinimg.com/564x/13/1a/45/131a455d54060e2b0180a1ee37e173c5.jpg");
+			images.add("https://i.pinimg.com/736x/ba/34/85/ba34856fb7579d2d1118c2aa77737835.jpg");
+			images.add("https://i.pinimg.com/564x/69/e5/bc/69e5bcccb9c3e6385827f18232b5c52c.jpg");
+			images.add("https://i.pinimg.com/564x/13/0c/75/130c753071e9886c345715d8c3ab868e.jpg");
+			images.add("https://i.pinimg.com/564x/74/04/0c/74040ca016ef22847ca483036a4643da.jpg");
+			images.add("https://i.pinimg.com/564x/87/a1/73/87a1731e885854d779303a38e2ec3198.jpg");
+			images.add("https://i.pinimg.com/564x/95/8f/a2/958fa290846ed1ce122643070a10074f.jpg");
+			images.add("https://i.pinimg.com/564x/fd/69/32/fd6932452e50a5615723a5a151667d2f.jpg");
+			images.add("https://i.pinimg.com/564x/ab/d7/3f/abd73f1825068a84dff0176cc2c02b1e.jpg");
+			images.add("https://i.pinimg.com/564x/71/05/95/710595873b21bcf5e0912821ddf4cf61.jpg");
+
+			images.add("https://i.pinimg.com/564x/83/c4/9f/83c49f3d411968498a9e9b2391429899.jpg");
+			images.add("https://i.pinimg.com/564x/7f/12/a0/7f12a0220aadecd8ef79a9569acfc39f.jpg");
+			images.add("https://i.pinimg.com/564x/c0/9b/b9/c09bb92b43e1804fee8637c37b0702c6.jpg");
+			images.add("https://i.pinimg.com/564x/83/75/10/8375105393d5bbdadd2076ab72f1c497.jpg");
+			images.add("https://i.pinimg.com/564x/d4/b6/82/d4b682db09a0e578fe60ac6293832366.jpg");
+			images.add("https://i.pinimg.com/564x/fb/4a/88/fb4a884b9df7be75dab420159f3ffd24.jpg");
+			images.add("https://i.pinimg.com/564x/09/69/8d/09698da63c7199c20fc9bac3e76decaa.jpg");
+			images.add("https://i.pinimg.com/736x/44/d1/69/44d1690aa7ccdf62f2ff82a1ae2d4ce5.jpg");
+			images.add("https://i.pinimg.com/564x/74/60/97/74609721fb58ef0f351b35eda2281a21.jpg");
+			images.add("https://i.pinimg.com/564x/9d/8d/72/9d8d720e71cac03d6467a3c8b4c34085.jpg");
+			images.add("https://i.pinimg.com/564x/4c/1a/b1/4c1ab177ae96e00f841be19924176b36.jpg");
+			images.add("https://i.pinimg.com/564x/94/37/31/94373186e36a74925acf30bd9aea0a9f.jpg");
+			images.add("https://i.pinimg.com/564x/2b/38/67/2b38670de40bf6710713f3c41c2d379e.jpg");
+			images.add("https://i.pinimg.com/564x/a5/74/b2/a574b24e98ad5a17e4a2651a282de198.jpg");
+			images.add("https://i.pinimg.com/564x/03/b6/50/03b650466842b5a5bb2b878f5c2c5fa1.jpg");
+			images.add("https://i.pinimg.com/736x/ff/73/f7/ff73f715e1d9a9187b9c7387e12ba919.jpg");
+			images.add("https://i.pinimg.com/736x/81/63/78/81637861f1566bb718979b454ce94eed.jpg");
+			images.add("https://i.pinimg.com/736x/13/d2/e6/13d2e68e67bbd1e58c3aa5ef95c63331.jpg");
+			images.add("https://i.pinimg.com/564x/09/b1/37/09b137b84a6cdfb0a1e9235a3394fe7e.jpg");
+			images.add("https://i.pinimg.com/736x/3d/af/0b/3daf0b623cdfae5540b4ece7229a562d.jpg");
+			images.add("https://i.pinimg.com/564x/04/6e/78/046e78d1f6119daa967f5335b778b5b5.jpg");
+			images.add("https://i.pinimg.com/564x/5d/20/84/5d2084bea4d8bb7dfca769a5331a5b46.jpg");
+			images.add("https://i.pinimg.com/564x/b9/fb/7c/b9fb7cd335d16eb5ca4e638f0cf3c818.jpg");
+			images.add("https://i.pinimg.com/564x/e4/ae/96/e4ae9665b3bcd1809699751735fec17c.jpg");
+			images.add("https://i.pinimg.com/564x/1a/d2/62/1ad262a326f12475826604e43e647c2f.jpg");
+			images.add("https://i.pinimg.com/564x/d2/6e/f6/d26ef6e8479c816e07fb2c9fc62e3294.jpg");
+			images.add("https://i.pinimg.com/736x/46/88/66/468866981478e7b63dbc5d8214a04f6e.jpg");
+			images.add("https://i.pinimg.com/564x/95/5e/9a/955e9a42e6ecbdbac1826e62e5216a82.jpg");
+			images.add("https://i.pinimg.com/564x/84/7c/26/847c26b9bc67059891a0880f393f4ee0.jpg");
+			images.add("https://i.pinimg.com/564x/48/d4/06/48d406db66ad71736a079aa52c875897.jpg");
+			images.add("https://i.pinimg.com/564x/cc/10/21/cc1021d86f6a53adb783d0cbdfe3032a.jpg");
+			images.add("https://i.pinimg.com/564x/b3/1c/c8/b31cc811d1d4d57ea9924479064e6975.jpg");
+			images.add("https://i.pinimg.com/736x/85/97/43/8597430660c7fec44b74cb3e695e7554.jpg");
+			images.add("https://i.pinimg.com/564x/a4/6f/66/a46f66baefcd0a34a237551bea08acc5.jpg");
+			images.add("https://i.pinimg.com/564x/c5/0a/5d/c50a5d5eb438d6c002a37d2747976ad2.jpg");
+			images.add("https://i.pinimg.com/564x/f7/f0/b1/f7f0b19e0f4e642ae8f60e1612b16a40.jpg");
+			images.add("https://i.pinimg.com/736x/66/59/c7/6659c7a56081a9578b3c6464719833c0.jpg");
+			images.add("https://i.pinimg.com/564x/42/e7/a7/42e7a71c4e86b8b04826bd457a707d26.jpg");
+			images.add("https://i.pinimg.com/564x/36/6a/c0/366ac03e6913d08d48a22bef2ddeced1.jpg");
+			images.add("https://i.pinimg.com/564x/30/b6/fa/30b6faee98b6b44410fe8b7fe9bf55a6.jpg");
+			images.add("https://i.pinimg.com/736x/dc/f2/51/dcf2513deef8948c5e7f67b81c217597.jpg");
+			images.add("https://i.pinimg.com/564x/7f/a3/fc/7fa3fcd26a398190d94e6fa8d68bd8fa.jpg");
+			images.add("https://i.pinimg.com/564x/0e/66/8d/0e668d2e37e7a2e3ac58ca8f61ed6ca2.jpg");
+			images.add("https://i.pinimg.com/564x/80/2d/df/802ddf721747291f041cfddd942a7e16.jpg");
+			images.add("https://i.pinimg.com/736x/83/d5/cc/83d5cc97bdc6330b89ddfc2c552d7c19.jpg");
+			images.add("https://i.pinimg.com/736x/46/97/d2/4697d262b66200348baf700a3d230ae2.jpg");
+			images.add("https://i.pinimg.com/736x/f4/0b/30/f40b3033e8667994bf1ce133eac0e5c5.jpg");
+			images.add("https://i.pinimg.com/564x/13/1e/df/131edf984bcb9b939323a786b5c00bbb.jpg");
+			images.add("https://i.pinimg.com/736x/f0/65/ef/f065ef0c1c543279bfb9819f2dc9adbc.jpg");
+			images.add("https://i.pinimg.com/564x/14/23/3e/14233e28247f515cb7cf6ea2e75ff964.jpg");
+			images.add("https://i.pinimg.com/564x/cc/ba/49/ccba49d1ab1d778b5aaacea40739e017.jpg");
+			images.add("https://i.pinimg.com/564x/ce/b0/a9/ceb0a99754d241550a03276cc468289b.jpg");
+			images.add("https://i.pinimg.com/736x/3a/f8/2a/3af82aedbc6634f2054ea0b2fc8190a5.jpg");
+			images.add("https://i.pinimg.com/736x/dd/2f/b4/dd2fb488fed73916ba4e4f63d89c9739.jpg");
+			guestController.post_All_ticker_Chat_Bot(images);
 			var responseAI0 = QuestionAnswer.builder()
 					.question(Constants.Start_Answer_Chat_Bot_)
 					.answer("Chào bạn! \uD83D\uDC4B Tôi là "+ Constants.Chat_Bot_Name +", và tôi ở đây để giúp bạn tìm sản phẩm hoặc giải đáp bất kỳ thắc mắc nào. Bạn cần tìm kiếm sản phẩm nào hay có câu hỏi gì về dịch vụ của chúng tôi? Đừng ngần ngại cho tôi biết, tôi sẵn sàng hỗ trợ bạn!")
@@ -419,9 +489,10 @@ public class PjCdtnApplication {
 					.quantityDetails(listsub1)
 					.category("Áo")
 					.subCategory("Áo Sơ Mi")
+					.imageMain("https://product.hstatic.net/1000026602/product/img_4447_0e9cd93e708c4936a1acc6d26276f00f_master.jpg")
 					.tradeMask("Netstripes")
-					.originalPrice(1000000.0f)
-					.saleDiscountPercent(10.0f)
+					.originalPrice(100000.0f)
+					.saleDiscountPercent(24.0f)
 					.createdByUserid(1)
 					.build();
 			var pro1 = ProductDtos.builder()
@@ -429,10 +500,11 @@ public class PjCdtnApplication {
 					.description("Quần short Slim Denim Back Devipock là một sản phẩm thời trang hiện đại, kết hợp giữa sự thoải mái và phong cách.")
 					.quantityDetails(listsub2)
 					.category("Quần")
+					.imageMain("https://product.hstatic.net/1000026602/product/img_2373_1f20f528d40b4e57877df775f304f78c_master.jpg")
 					.subCategory("Quần Short")
 					.tradeMask("Devipock")
-					.originalPrice(800000.0f)
-					.saleDiscountPercent(20.0f)
+					.originalPrice(80000.0f)
+					.saleDiscountPercent(26.0f)
 					.createdByUserid(2)
 					.build();
 			var pro2 = ProductDtos.builder()
@@ -441,9 +513,10 @@ public class PjCdtnApplication {
 					.subCategory("Áo sơ mi")
 					.quantityDetails(listsub2)
 					.category("Áo")
+					.imageMain("https://product.hstatic.net/1000026602/product/img_4448_ec4132cc5f3d4a89afa21ecec8643381_master.jpg")
 					.tradeMask("BTW")
-					.originalPrice(8000000.0f)
-					.saleDiscountPercent(20.0f)
+					.originalPrice(800000.0f)
+					.saleDiscountPercent(19.0f)
 					.createdByUserid(1)
 					.build();
 			var pro3 = ProductDtos.builder()
@@ -452,9 +525,10 @@ public class PjCdtnApplication {
 					.quantityDetails(listsub1)
 					.category("Áo")
 					.tradeMask("Artemisia")
+					.imageMain("https://product.hstatic.net/1000026602/product/img_1851_359eb91c8f384c0e96ff4e88e51d94f1_master.jpg")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(17.0f)
 					.createdByUserid(1)
 					.build();
 			var pro4 = ProductDtos.builder()
@@ -463,9 +537,10 @@ public class PjCdtnApplication {
 					.quantityDetails(listsub1)
 					.category("Áo")
 					.tradeMask("Artemisia")
+					.imageMain("https://product.hstatic.net/1000026602/product/img_4321_bba557f524b94ecc9fbfc77d90a6915d_master.jpg")
 					.subCategory("Áo Thun")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(16.0f)
 					.createdByUserid(1)
 					.build();
 			var pro5 = ProductDtos.builder()
@@ -475,8 +550,9 @@ public class PjCdtnApplication {
 					.category("Áo")
 					.tradeMask("Artemisia")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.imageMain("https://product.hstatic.net/1000026602/product/img_6614_82afb831e0464b4e9cdd88c834db6b8b_master.jpg")
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(19.0f)
 					.createdByUserid(1)
 					.build();
 			var pro6 = ProductDtos.builder()
@@ -486,8 +562,9 @@ public class PjCdtnApplication {
 					.category("Áo")
 					.tradeMask("Artemisia")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.imageMain("https://product.hstatic.net/1000026602/product/img_4324_517bbc4cc40140e99a70bb46c7a2083f_master.jpg")
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(19.0f)
 					.createdByUserid(1)
 					.build();
 			var pro7 = ProductDtos.builder()
@@ -496,9 +573,10 @@ public class PjCdtnApplication {
 					.quantityDetails(listsub1)
 					.category("Áo")
 					.tradeMask("Artemisia")
+					.imageMain("https://product.hstatic.net/1000026602/product/img_4768_e0e9892a08fc4e18b4a9d35fe6001fbe_master.jpg")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(14.0f)
 					.createdByUserid(1)
 					.build();
 			var pro8 = ProductDtos.builder()
@@ -508,8 +586,9 @@ public class PjCdtnApplication {
 					.category("Áo")
 					.tradeMask("Artemisia")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.imageMain("https://product.hstatic.net/1000026602/product/img_0443_019f9288f0234ec48aada420e96cd316_master.jpg")
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(14.0f)
 					.createdByUserid(1)
 					.build();
 			var pro9 = ProductDtos.builder()
@@ -517,10 +596,11 @@ public class PjCdtnApplication {
 					.description("description 9")
 					.quantityDetails(listsub1)
 					.category("Áo")
+					.imageMain("https://product.hstatic.net/1000026602/product/img_5703_be15e67520964287b86ce4f6ec62f281_master.jpg")
 					.tradeMask("Artemisia")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(19.0f)
 					.createdByUserid(1)
 					.build();
 			var pro10 = ProductDtos.builder()
@@ -528,9 +608,10 @@ public class PjCdtnApplication {
 					.description("description 10")
 					.quantityDetails(listsub1)
 					.category("Áo")
+					.imageMain("https://product.hstatic.net/1000026602/product/img_7752_fb896354845e4b9d8293c36ffe212eac_master.jpg")
 					.tradeMask("Artemisia")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
+					.originalPrice(2350000.0f)
 					.saleDiscountPercent(20.0f)
 					.createdByUserid(1)
 					.build();
@@ -540,9 +621,10 @@ public class PjCdtnApplication {
 					.quantityDetails(listsub1)
 					.category("Áo")
 					.tradeMask("Artemisia")
+					.imageMain("https://product.hstatic.net/1000026602/product/img_9129_9f40c23f32d74c2e818c13aa433ad4b8_master.jpg")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(25.0f)
 					.createdByUserid(1)
 					.build();
 			var pro12 = ProductDtos.builder()
@@ -550,10 +632,11 @@ public class PjCdtnApplication {
 					.description("description 12")
 					.quantityDetails(listsub1)
 					.category("Áo")
+					.imageMain("https://product.hstatic.net/1000026602/product/00000095_c7e78956d6db4b65971859f31ca66a85_master.jpg")
 					.tradeMask("Artemisia")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(9.0f)
 					.createdByUserid(1)
 					.build();
 			var pro13 = ProductDtos.builder()
@@ -562,9 +645,10 @@ public class PjCdtnApplication {
 					.quantityDetails(listsub1)
 					.category("Áo")
 					.tradeMask("Artemisia")
+					.imageMain("https://product.hstatic.net/1000026602/product/img_4260_8383ba5e2fdb4a9381747421d92bec4f_master.jpg")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(8.0f)
 					.createdByUserid(1)
 					.build();
 			var pro14 = ProductDtos.builder()
@@ -572,10 +656,11 @@ public class PjCdtnApplication {
 					.description("description 14")
 					.quantityDetails(listsub1)
 					.category("Áo")
+					.imageMain("https://product.hstatic.net/1000026602/product/img_6707_8aa638c6f11e4dd89d3b9a05c9b09576_master.jpg")
 					.tradeMask("Artemisia")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(2.0f)
 					.createdByUserid(1)
 					.build();
 			var pro15 = ProductDtos.builder()
@@ -583,10 +668,11 @@ public class PjCdtnApplication {
 					.description("description 15")
 					.quantityDetails(listsub1)
 					.category("Áo")
+					.imageMain("https://product.hstatic.net/1000026602/product/img_6137_559a685d9a884fc2b92d212b72e711be_master.jpg")
 					.tradeMask("Artemisia")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(17.0f)
 					.createdByUserid(1)
 					.build();
 			var pro16 = ProductDtos.builder()
@@ -594,10 +680,11 @@ public class PjCdtnApplication {
 					.description("description 16")
 					.quantityDetails(listsub1)
 					.category("Áo")
+					.imageMain("https://product.hstatic.net/1000026602/product/img_6925_e6f52748e358465896b80061597d8d71_master.jpg")
 					.tradeMask("Artemisia")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(14.0f)
 					.createdByUserid(1)
 					.build();
 			var pro17 = ProductDtos.builder()
@@ -606,9 +693,10 @@ public class PjCdtnApplication {
 					.quantityDetails(listsub1)
 					.category("Áo")
 					.tradeMask("Artemisia")
+					.imageMain("https://product.hstatic.net/1000026602/product/img_5217_f773bb9fa92c4cba8eae86ca7163994c_master.jpg")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(18.0f)
 					.createdByUserid(1)
 					.build();
 			var pro18 = ProductDtos.builder()
@@ -616,10 +704,11 @@ public class PjCdtnApplication {
 					.description("description 18")
 					.quantityDetails(listsub1)
 					.category("Áo")
+					.imageMain("https://product.hstatic.net/1000026602/product/abc01955_608aca368feb437aabedccc9df9b50cc_master.jpg")
 					.tradeMask("Artemisia")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(25.0f)
 					.createdByUserid(1)
 					.build();
 			var pro19 = ProductDtos.builder()
@@ -627,10 +716,11 @@ public class PjCdtnApplication {
 					.description("description 19")
 					.quantityDetails(listsub1)
 					.category("Áo")
+					.imageMain("https://product.hstatic.net/1000026602/product/img_2731_2ec7f583b710452783087b53ac09ef49_master.jpg")
 					.tradeMask("Artemisia")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(5.0f)
 					.createdByUserid(1)
 					.build();
 			var pro20 = ProductDtos.builder()
@@ -638,10 +728,11 @@ public class PjCdtnApplication {
 					.description("description 20")
 					.quantityDetails(listsub1)
 					.category("Áo")
+					.imageMain("https://product.hstatic.net/1000026602/product/img_4448_ec4132cc5f3d4a89afa21ecec8643381_master.jpg")
 					.tradeMask("Artemisia")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(19.0f)
 					.createdByUserid(1)
 					.build();
 			var pro21 = ProductDtos.builder()
@@ -649,10 +740,11 @@ public class PjCdtnApplication {
 					.description("description 21")
 					.quantityDetails(listsub1)
 					.category("Áo")
+					.imageMain("https://product.hstatic.net/1000026602/product/img_1105_e11b0ecefdf548629cecd16bc1e13d59_master.jpg")
 					.tradeMask("Artemisia")
 					.subCategory("Áo Sơ Mi")
-					.originalPrice(23500000.0f)
-					.saleDiscountPercent(20.0f)
+					.originalPrice(2350000.0f)
+					.saleDiscountPercent(15.0f)
 					.createdByUserid(1)
 					.build();
 

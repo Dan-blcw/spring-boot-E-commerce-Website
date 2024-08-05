@@ -16,15 +16,15 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class PaymentMethods {
+public class QRInfoMethods {
 
     @Id
     @GeneratedValue
     public Integer id;
     @Column(unique = true)
-    public String name;
+    public Integer accountNo;
+    public String accountName;
     @Column(length = 10485760)
     public String description;
-    public Date createdDate;
-    public Integer status;
+
 }

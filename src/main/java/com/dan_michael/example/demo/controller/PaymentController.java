@@ -8,8 +8,12 @@ import com.dan_michael.example.demo.model.response.ResponseObject;
 import com.dan_michael.example.demo.service.Payment.PaymentVNPayService;
 import com.dan_michael.example.demo.service.Payment.PaymentMethodsService;
 import com.dan_michael.example.demo.util.Constants;
-import com.mservice.allinone.models.*;
-import com.mservice.allinone.processor.allinone.*;
+//import com.mservice.allinone.models.*;
+//import com.mservice.allinone.processor.allinone.*;
+import com.mservice.allinone.models.PayATMRequest;
+import com.mservice.allinone.models.PayATMResponse;
+import com.mservice.allinone.processor.allinone.PayATM;
+import com.mservice.paygate.models.PaymentResponse;
 import com.mservice.shared.sharedmodels.Environment;
 import com.mservice.shared.sharedmodels.PartnerInfo;
 import com.paypal.api.payments.PayerInfo;
@@ -243,56 +247,72 @@ public class PaymentController {
 //        return hashRSA;
 //    }
 
-    @PostMapping("/momo-payment")
-    public String doPost(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//    @PostMapping("/momo-payment")
+//    public String doPost(HttpServletRequest request, HttpServletResponse response) throws Exception {
+////        PartnerInfo devInfo = new PartnerInfo("MOMOLRJZ20181206", "mTCKt9W3eU1m39TW", "SetA5RDnLHvt51AULf51DyauxUo3kDU6");
+////        Environment env = new Environment("https://test-payment.momo.vn/v2/gateway/api", devInfo, "development");
 //        PartnerInfo devInfo = new PartnerInfo("MOMOLRJZ20181206", "mTCKt9W3eU1m39TW", "SetA5RDnLHvt51AULf51DyauxUo3kDU6");
-//        Environment env = new Environment("https://test-payment.momo.vn/v2/gateway/api", devInfo, "development");
-
-        PartnerInfo devInfo = new PartnerInfo("MOMOBKUN20180529", "klm05TvNBzhg7h7j", "at67qH6mk8w5Y1nAyMoYKMWACiEi2bsa");
-        Environment env = new Environment("https://test-payment.momo.vn/v2/gateway/api/create", devInfo, "development");
-
-        String amount = "50000";
-
-        String orderInfo = "Pay With MoMo";
-        String returnURL = "https://google.com.vn";
-        String notifyURL = "https://google.com.vn";
-        String extraData = "";
-        String bankCode = "SML";
-        String requestId = String.valueOf(System.currentTimeMillis());
-        String orderId = String.valueOf(System.currentTimeMillis());
-        String partnerClientId = "partnerClientId";
-        String publicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkpa+qMXS6O11x7jBGo9W3yxeHEsAdyDE" +
-                "40UoXhoQf9K6attSIclTZMEGfq6gmJm2BogVJtPkjvri5/j9mBntA8qKMzzanSQaBEbr8FyByHnf226dsL" +
-                "t1RbJSMLjCd3UC1n0Yq8KKvfHhvmvVbGcWfpgfo7iQTVmL0r1eQxzgnSq31EL1yYNMuaZjpHmQuT2" +
-                "4Hmxl9W9enRtJyVTUhwKhtjOSOsR03sMnsckpFT9pn1/V9BE2Kf3rFGqc6JukXkqK6ZW9mtmGLSq3" +
-                "K+JRRq2w8PVmcbcvTr/adW4EL2yc1qk9Ec4HtiDhtSYd6/ov8xLVkKAQjLVt7Ex3/agRPfPrNwIDAQAB";
-        String customerNumber = "0963181714";
-        System.out.println("PartnerInfo: " + devInfo);
-        PayATM atmProcess = new PayATM(env);
-
-        System.out.println("Environment: " + env);
-        System.out.println("Partner Info: " + env.getPartnerInfo());
-
-        PayATMRequest payATMRequest = atmProcess.createPayWithATMRequest(requestId, orderId, bankCode, amount, orderInfo, returnURL, notifyURL, extraData, env.getPartnerInfo());
-//        payATMRequest.setAccessKey(publicKey);
-//        payATMRequest.setSignature(generateRSA(customerNumber, "247", "247", "nhatnguyen", env.getPartnerInfo().getPartnerCode(), Long.parseLong(amount), publicKey));
-//        PaymentResponse response1 = atmProcess.process(env, orderId, requestId, amount, orderInfo, returnURL, notifyURL, "", RequestType.CAPTURE_WALLET, Boolean.TRUE);
-
-
-// Debug: Print out the request object to verify values
-        System.out.println("PayATMRequest: " + payATMRequest);
-
-//        PayATMResponse payATMResponse = atmProcess.execute(payATMRequest);
-
-//        PayATMResponse payATMResponse_1 = PayATM.process(env,requestId, orderId, bankCode, amount, orderInfo, returnURL, notifyURL, extraData);
-// Debug: Print out the response object to verify values
-        PayATMResponse payATMResponse1 = PayATM.process(env, requestId, orderId, bankCode, amount, orderInfo, returnURL, notifyURL, extraData);
-
-        System.out.println("PayATMResponse: " + payATMResponse1);
+//        Environment env = new Environment("https://test-payment.momo.vn/v2/gateway/api/create", devInfo, "development");
+//        String amount = "50000";
+//        String orderInfo = "Pay With MoMo";
+//        String returnURL = "https://google.com.vn";
+//        String notifyURL = "https://google.com.vn";
+//        String extraData = "";
+//        String bankCode = "SML";
+//        String requestId = String.valueOf(System.currentTimeMillis());
+//        String orderId = String.valueOf(System.currentTimeMillis());
+//        System.out.println("PartnerInfo: " + devInfo);
+//        PayATM atmProcess = new PayATM(env);
+//
+//        System.out.println("Environment: " + env);
+//        System.out.println("Partner Info: " + env.getPartnerInfo());
+//
+//        PayATMRequest payATMRequest = atmProcess.createPayWithATMRequest(requestId, orderId, bankCode, amount, orderInfo, returnURL, notifyURL, extraData, env.getPartnerInfo());
+//
+//        System.out.println("PayATMRequest: " + payATMRequest);
+//
+//        PayATMResponse payATMResponse1 = atmProcess.process(env, requestId, orderId, bankCode, amount, orderInfo, returnURL, notifyURL, extraData);
+//
 //        System.out.println("PayATMResponse: " + payATMResponse1);
-//        System.out.println(payATMResponse);
-        return "dfsasadf" ;
-    }
+//        return "dfsasadf" ;
+//    }
+        @PostMapping("/momo-payment")
+        public String doPost(HttpServletRequest request, HttpServletResponse response) throws Exception {
+//            PartnerInfo devInfo = new PartnerInfo("MOMOLRJZ20181206", "mTCKt9W3eU1m39TW", "SetA5RDnLHvt51AULf51DyauxUo3kDU6");
+            PartnerInfo devInfo = new PartnerInfo("MOMO", "F8BBA842ECF85", "K951B6PE1waDMi640xX08PD3vg6EkVlz");
+            Environment env = new Environment("https://test-payment.momo.vn/v2/gateway/api/create", devInfo, "development");
+
+            String amount = "50000";
+            String orderInfo = "Pay With MoMo";
+            String returnURL = "https://google.com.vn";
+            String notifyURL = "https://google.com.vn";
+            String extraData = "";
+            String bankCode = "SML";
+            String requestId = String.valueOf(System.currentTimeMillis());
+            String orderId = String.valueOf(System.currentTimeMillis());
+
+            System.out.println("PartnerInfo: {}" + devInfo);
+            PayATM atmProcess = new PayATM(env);
+
+            System.out.println("Environment: {}" + env);
+            System.out.println("Partner Info: {}" + env.getPartnerInfo());
+
+            PayATMRequest payATMRequest = atmProcess.createPayWithATMRequest(requestId, orderId, bankCode, amount, orderInfo, returnURL, notifyURL, extraData, env.getPartnerInfo());
+
+            System.out.println("PayATMRequest: {}" + payATMRequest);
+
+            PayATMResponse payATMResponse1 = atmProcess.execute(payATMRequest);
+//            PayATMResponse payATMResponse1 = atmProcess.process(env, requestId, orderId, bankCode, amount, orderInfo, returnURL, notifyURL, extraData);
+
+            if (payATMResponse1 != null) {
+                System.out.println("PayATMResponse: {}" + payATMResponse1);
+            } else {
+                System.out.println("PayATMResponse is null");
+            }
+
+            return "dfsasadf";
+        }
+
 
 
 }

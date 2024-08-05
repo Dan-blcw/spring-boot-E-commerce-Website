@@ -34,7 +34,7 @@ public class CartService {
         List<CartResponse> save = new ArrayList<>();
         var flag = cartRepository.findAll();
         for (var x: flag){
-            var tolalPay = 0.0f;
+            var tolalPay = 0.0d;
             var totalQua = 0;
             List<SubCart_OrderResponse> boxItem = new ArrayList<>();
             var detail = cartDetailRepository.findByIdentification_cart(x.getId());
@@ -68,7 +68,7 @@ public class CartService {
 
     public CartResponse getCartById(Integer id) {
         var flag = cartRepository.findById(id);
-        var tolalPay = 0.0f;
+        var tolalPay = 0.0d;
         var totalQua = 0;
         List<SubCart_OrderResponse> boxItem = new ArrayList<>();
         var detail = cartDetailRepository.findByIdentification_cart(flag.get().getId());
@@ -98,7 +98,7 @@ public class CartService {
 
     public CartResponse getCartByUserId(Integer user_id) {
         var flag = cartRepository.findByIdentification(user_id);
-        var tolalPay = 0.0f;
+        var tolalPay = 0.0d;
         var totalQua = 0;
         List<SubCart_OrderResponse> boxItem = new ArrayList<>();
         var detail = cartDetailRepository.findByIdentification_cart(flag.getId());
@@ -131,7 +131,7 @@ public class CartService {
         if(user == null){
             return null;
         }
-        var totalPayment = 0.0f;
+        var totalPayment = 0.0d;
         var totalQuantity = 0;
         var cart_user= cartRepository.findByIdentification(user.getId());
         var boxItem_user = cartDetailRepository.findByIdentification_cart(cart_user.getId());
@@ -177,7 +177,7 @@ public class CartService {
 
     @Transactional
     public CartResponse createOrAddCart(CartDetailDtos request) {
-        Float totalPay = 0.0f;
+        Double totalPay = 0.0d;
         var totalQua = 0;
         var user = userRepository.findById_create(request.getUserId());
         if(user == null){

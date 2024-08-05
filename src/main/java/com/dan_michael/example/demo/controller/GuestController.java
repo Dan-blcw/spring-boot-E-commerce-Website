@@ -1,6 +1,8 @@
 package com.dan_michael.example.demo.controller;
 
 
+import com.dan_michael.example.demo.chat_socket.entities.ChatImg;
+import com.dan_michael.example.demo.chat_socket.respository.ChatImgRepository;
 import com.dan_michael.example.demo.chatbot.entities.dtos.QuestionOfGuestInfoDtos;
 import com.dan_michael.example.demo.chatbot.entities.dtos.RequestMessageChatBotDtos;
 import com.dan_michael.example.demo.chatbot.service.ChatbotService;
@@ -42,6 +44,8 @@ public class GuestController {
     private final UserService userService;
 
     private final ChatbotService chatBotService;
+
+    private final ChatImgRepository chatImgRepository;
 //--------------------------Quest of Guess----------------------------------
     @GetMapping("/")
     public String getResponse(@RequestParam String question) {
@@ -87,18 +91,30 @@ public class GuestController {
                         .build());
     }
 
-//    @GetMapping(value = "/products")
-//    public ResponseEntity<?> get_All(
-//            @RequestParam (required = false)Integer _limit,
-//            @RequestParam (required = false)Integer _total
-//    ) {
-//        var list = service.findAllHander();
-//        return ResponseEntity.ok(
-//                ProductListDtos.builder()
-//                        .data(list)
-//                        .paginationDto(new PaginationDto(_total,_limit))
-//                        .build());
-//    }
+    @GetMapping(value = "/products-chat-bot")
+    public ResponseEntity<?> get_All_Pros_Chat_Bot() {
+        var saves = service.findProduct_ChatBot();
+        return ResponseEntity.ok(saves);
+    }
+
+    @GetMapping(value = "/products-chat-bot-image")
+    public ResponseEntity<?> get_All_ticker_Chat_Bot() {
+        var saves = chatImgRepository.findAll();
+        return ResponseEntity.ok(saves);
+    }
+    @PostMapping(value = "/products-chat-bot-image-post")
+    public ResponseEntity<?> post_All_ticker_Chat_Bot(List<String> images) {
+        for(var x: images){
+            if(chatImgRepository.findChatImgByUrl(x) == null){
+                chatImgRepository.save(ChatImg.builder()
+                        .img_url(x)
+                        .build());
+            }
+
+        }
+        return ResponseEntity.ok(images);
+    }
+
 //--------------------------favorite----------------------------------
     @GetMapping(value = "/favorite-products")
     public ResponseEntity<?> getFavoriteByUser_id(
@@ -153,6 +169,7 @@ public class GuestController {
         List<ProductResponse> list = service.search_all(categoryName,subCategoryName,isPromotion,isReleased,ratingGte,price_gte,price_lte,_sort);
         return ResponseEntity.ok(ProductListDtos.builder().data(list).paginationDto(new PaginationDto(list.size(),_limit)).build());
     }
+
 //--------------------------GetQuantityDetail----------------------------------
     @GetMapping(value = "/detail-product/{product_name}/get-color-detail")
     public ResponseEntity<?> getColorDetail(

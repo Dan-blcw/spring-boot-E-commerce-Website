@@ -55,8 +55,8 @@ public class OrderService {
     public OrderResponse createOrder(OrderDtos request) {
         var subtotalProduct = 0;
         var totalQuantity_order = 0;
-        var totalAmountOrder = 0.0F;
-        var subAmountOrder = 0.0F;
+        var totalAmountOrder = 0.0f;
+        var subAmountOrder = 0.0f;
         var user = userRepository.findById_create(request.getUserId());
 
         Order order = new Order();
@@ -76,7 +76,7 @@ public class OrderService {
         List<OrderDetail> box = new ArrayList<>();
         for (ItemDetailDto x : request.getOrderDetails()) {
             OrderDetail detail = new OrderDetail();
-            detail.setProduct_id(x.getItemDetail_id());
+            detail.setItemDetail_id(x.getItemDetail_id());
 
             var product = productRepository.findByID_(x.getItemDetail_id());
             var quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(product.getName());

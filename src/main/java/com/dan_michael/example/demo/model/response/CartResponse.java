@@ -19,7 +19,7 @@ import java.util.List;
 public class CartResponse {
     private Integer cart_id;
     private Integer user_id;
-    private Float totalPayment;
+    private Double totalPayment;
     private Integer totalQuantity;
     private List<SubCart_OrderResponse> cart_items;
 }

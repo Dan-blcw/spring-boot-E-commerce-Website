@@ -30,13 +30,19 @@ public class ChatbotService {
     private final UserRepository userRepository;
     public String handleInput(String message) {
         System.out.println(message);
-        QuestionAnswer qa = questionAnswerRepository.findByQuestion(removeDiacritics(message.toLowerCase()));
-        System.out.println(qa);
-        if (qa != null && qa.getAnswer() != null) {
-            return qa.getAnswer();
-        } else {
-            return Constants.Chat_Bot_No_Answer;
+        List<QuestionAnswer> qa = questionAnswerRepository.findByKey(removeDiacritics(message.toLowerCase()));
+//        System.out.println(qa.get(0).getAnswer());
+        if(qa != null){
+            for(var x :qa){
+                if (x != null && x.getAnswer() != null) {
+                    return x.getAnswer();
+//                    + "câu trả lời của bạn trả về kết quả nhiều hơn 1, nếu bạn muốn hỏi kĩ hơn về vấn đề này, bạn có thể tìm kiếm từ khóa ở bên cạch");
+                } else if(x.getAnswer() != null){
+                    return x.getAnswer();
+                }
+            }
         }
+        return Constants.Chat_Bot_No_Answer;
     }
     
     public QuestionAnswer createQuestionAnswer(QuestionAnswer qa) {
