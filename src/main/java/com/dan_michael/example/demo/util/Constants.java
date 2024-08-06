@@ -13,6 +13,18 @@ public final class Constants {
     public static final String Global_Path = "/api/v1/global";
     public static final String Global_Image_Path = "/api/v1/global/media/images/";
     public static final String Login_Out_Path = "/api/v1/auth";
+    public static final String User_Path = "/api/v1/user/**";
+    public static final String Product_Path = "/api/v1/product/**";
+    public static final String Carts_Path = "/api/v1/carts/**";
+    public static final String Orders_Path = "/api/v1/orders/**";
+    public static final String Email_Sender_Path = "/api/v1/email-sender/**";
+    public static final String Chat_Bot_Path = "/api/v1/chat-box/**";
+    public static final String Payment_Path = "/api/v1/payments/**";
+    public static final String Transactions_Path = "/api/v1/transactions/**";
+    public static final String Rest_Path = "/api/v1/rest/**";
+    public static final String Configuration_UI_Path = "/configuration/ui";
+    public static final String Configuration_Security_Path = "/configuration/security";
+    public static final String Index_Chat_Bot_Path = "/index.html";
     public static final String User_Not_Found = "User Not Found In Database, Please Check Email Again";
     public static final String Email_ARD_Exist = "This Email Has Been Registered, Please Enter Another Email !";
 
@@ -32,7 +44,7 @@ public final class Constants {
     public static final String Delete_Comment_Fail = "Delete Comment Failed";
     public static final String Delete_Comment_Success = "Delete Comment Successfully";
     public static final String Comment_Not_Found = "Error! Comment Do Not Exist, Comment Not Found In Database !";
-    public static final String Comment_Permission_Fail = "Error! You Sre Not S Commenter On This Comment, Edit Permission Failed !";
+    public static final String Comment_Permission_Fail = "Error! You Are Not A Commenter On This Comment, Edit Permission Failed !";
 
 //  Product Response
     public static final String Product_ARD_Exist = "Product Already Exists !";
@@ -120,20 +132,23 @@ public final class Constants {
     public static final String Last_Name_Of_Company =  "Chat bot";
     public static final String Email_Of_Company =  "ecommercedemo47@gmail.com";
     public static final String Team_Name =  "The E-commerce Team (Dan - Michael)";
-    public static final String Create_QuestionAnswer_For_Guest_Fail =  "Created A Response To The Customer Failed And Sent an Email To The Customer Unsuccessfully";
+    public static final String Create_QuestionAnswer_For_Guest_Fail =  "Created A Response To The Customer Failed And Sent An Email To The Customer Unsuccessfully";
     public static final String Create_QuestionAnswer_For_Guest_Success =  "Successfully created A Response For The Customer And Sent An Email To The Customer.";
-    public static final String Create_Question_For_Guest_Fail =  "Create Successful Questions For Customers Failure, Please Check Information Of Your Email !";
+    public static final String Create_Question_For_Guest_Fail =  "Create Questions For Customers Failure, Please Check Information Of Your Email !";
     public static final String Create_Question_For_Guest_Success =  "Create Successful Questions For Customers Successfully, Please Wait For A Reply From Customer Service Soon !";
-    public static final String Answer_Exists =  "The question has been answered by the administrator, you can ask Chatbot for help on this issue !";
-    public static final String Question_Does_Not_Exists =  "Question does not exist, answer update failed !";
-    public static final String Question_Exists =  "The question already exists in the repository, you can ask Chatbot for help with this issue.";
+    public static final String Answer_Exists =  "The Question Has Been Answered By The Administrator, You Can Ask Chat Bot For Help On This Issue !";
+    public static final String Question_Does_Not_Exists =  "Question Does Not Exist, Answer Update Failed !";
+    public static final String Question_Exists =  "The question Already Exists In The Repository, You Can Ask Chatbot For Help With This Issue Or Wait a Response From Admin.";
     public static final String Logo_Path_0 =  "D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_5.png";
     public static final String Logo_Path_1 =  "D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_1.png";
     public static final String Logo_Path_2 =  "D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_2.png";
     public static final String Logo_Path_3 =  "D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_3.png";
     public static final String Logo_Path_4 =  "D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_4.png";
     public static final String Chat_Bot_No_Answer =  "I'm Sorry, I Didn't Understand That. Could You Please Rephrase?";
-//    public static final String Chat_Bot_No_Answer =  "I'm Sorry, I Didn't Understand That. Could You Please Rephrase?";
+    public static final String Chat_Bot_Many_Answer =  "The Keyword You Provided Has Quite A Lot Of Results Returned ";
+    public static final String Chat_Bot_Many_Answer_2 =  "If You Want More Detailed Information, You Can Ask Me Again.";
+    public static final String Sticker_Path =  "https://i.pinimg.com/";
+    public static final String Chat_Bot_No_Answer_Sticker =  "Sorry But We Don't Support Sticker Answering At The Moment, Can You Ask Another Question Again?";
     public static final String Delete_Answer_Question_AI_Success =  "Delete Question Answer AI Successfully";
     public static final String Delete_Answer_Question_AI_Fail =  "Delete Question Answer AI Failure !";
     public static final String Already_Use_First_Discount =  "TThis Account Has Already Used The First Discount Promotion !";

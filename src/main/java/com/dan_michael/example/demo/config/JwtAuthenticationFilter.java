@@ -36,9 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         if (
                 request.getServletPath().contains(Constants.Login_Out_Path) ||
-                request.getServletPath().contains(Constants.Global_Path) ||
-                request.getServletPath().contains("/api/v1/transactions") ||
-                        request.getServletPath().contains("/api/v1/payment/")
+                request.getServletPath().contains(Constants.Global_Path)
         )
         {
             filterChain.doFilter(request, response);

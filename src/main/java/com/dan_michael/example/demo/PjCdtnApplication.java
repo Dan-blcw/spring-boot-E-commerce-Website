@@ -121,7 +121,7 @@ public class PjCdtnApplication {
 			guestController.post_All_ticker_Chat_Bot(images);
 			var responseAI0 = QuestionAnswer.builder()
 					.question(Constants.Start_Answer_Chat_Bot_)
-					.answer("Chào bạn! \uD83D\uDC4B Tôi là "+ Constants.Chat_Bot_Name +", và tôi ở đây để giúp bạn tìm sản phẩm hoặc giải đáp bất kỳ thắc mắc nào. Bạn cần tìm kiếm sản phẩm nào hay có câu hỏi gì về dịch vụ của chúng tôi? Đừng ngần ngại cho tôi biết, tôi sẵn sàng hỗ trợ bạn!")
+					.answer("Chào bạn! \uD83D\uDC4B Tôi là "+ Constants.Chat_Bot_Name +"\nTôi ở đây để giúp bạn tìm sản phẩm hoặc giải đáp bất kỳ thắc mắc nào. Bạn cần tìm kiếm sản phẩm nào hay có câu hỏi gì về dịch vụ của chúng tôi? Đừng ngần ngại cho tôi biết, tôi sẵn sàng hỗ trợ bạn!")
 					.build();
 
 			var responseAI1 = QuestionAnswer.builder()

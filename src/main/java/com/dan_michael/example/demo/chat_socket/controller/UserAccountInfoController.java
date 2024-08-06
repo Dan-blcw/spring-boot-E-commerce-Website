@@ -40,8 +40,4 @@ public class UserAccountInfoController {
         return ResponseEntity.ok(userService.findConnectedUsers());
     }
 
-    @GetMapping("/chat-bot")
-    public ResponseEntity<UserAccountInfo> findChatBot() {
-        return ResponseEntity.ok(userService.findChatBot());
-    }
 }

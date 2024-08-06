@@ -11,7 +11,7 @@ import java.util.List;
 public interface QuestionOfGuestRepository extends JpaRepository<QuestionForGuest, Integer> {
     @Query("SELECT pi FROM QuestionForGuest pi WHERE pi.question = :question")
     QuestionForGuest findByQuestionForAnwser(@Param("question") String question);
-    @Query("SELECT pi FROM QuestionForGuest pi WHERE pi.question = null")
+    @Query("SELECT pi FROM QuestionForGuest pi WHERE pi.question IS NOT NULL")
     List<QuestionForGuest> findByQuestionUnAnswered();
     @Query("SELECT pi FROM QuestionForGuest pi WHERE pi.question = :question AND pi.answer = :answer ")
     QuestionForGuest findByQuestionForAnwser(

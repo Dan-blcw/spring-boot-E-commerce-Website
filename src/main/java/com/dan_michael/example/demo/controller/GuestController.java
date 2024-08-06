@@ -51,7 +51,7 @@ public class GuestController {
     public String getResponse(@RequestParam String question) {
         return chatBotService.handleInput(question);
     }
-    @PostMapping("/chat")
+    @PostMapping("/qa-create-question-guest")
     public ResponseMessageDtos createQuestionForGuest(@RequestBody QuestionOfGuestInfoDtos request) {
         return chatBotService.createQuestionForGuest(request);
     }

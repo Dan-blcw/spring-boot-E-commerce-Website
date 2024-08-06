@@ -91,6 +91,11 @@ public class AuthenticationService {
                 .useFirstDiscount(false)
                 .build();
         var savedUser = repository.save(Admin);
+        cartRepository.save(Cart.builder()
+                .cartDetails(null)
+                .createdAt(new Date())
+                .identification_user(Admin.getId())
+                .build());
         var jwtToken = jwtService.generateToken(Admin);
         saveUserToken(savedUser, jwtToken);
         return AuthenticationDtos.builder()

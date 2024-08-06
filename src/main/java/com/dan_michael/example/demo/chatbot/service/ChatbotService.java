@@ -29,18 +29,18 @@ public class ChatbotService {
 
     private final UserRepository userRepository;
     public String handleInput(String message) {
-        System.out.println(message);
         List<QuestionAnswer> qa = questionAnswerRepository.findByKey(removeDiacritics(message.toLowerCase()));
-//        System.out.println(qa.get(0).getAnswer());
         if(qa != null){
-            for(var x :qa){
-                if (x != null && x.getAnswer() != null) {
-                    return x.getAnswer();
-//                    + "câu trả lời của bạn trả về kết quả nhiều hơn 1, nếu bạn muốn hỏi kĩ hơn về vấn đề này, bạn có thể tìm kiếm từ khóa ở bên cạch");
-                } else if(x.getAnswer() != null){
-                    return x.getAnswer();
+            for(var x = 0; x< qa.size();x ++){
+                if(qa.get(0).getAnswer() !=null){
+                    return qa.get(0).getAnswer();
+                }else if(qa.get(x).getAnswer() !=null){
+                    return (qa.get(x).getAnswer() + Constants.Chat_Bot_Many_Answer+ "("+qa.size()+" - Result) " + Constants.Chat_Bot_Many_Answer_2);
                 }
             }
+        }
+        if(message.contains(Constants.Sticker_Path)){
+            return Constants.Chat_Bot_No_Answer_Sticker;
         }
         return Constants.Chat_Bot_No_Answer;
     }
@@ -50,7 +50,7 @@ public class ChatbotService {
         return questionAnswerRepository.save(qa);
     }
     public ResponseMessageDtos createQuestionAnswerForGuest(QuestionAnswer request) {
-        var question_of_guest = questionOfGuestRepository.findByQuestionForAnwser(request.getQuestion());
+        var question_of_guest = questionOfGuestRepository.findByQuestionForAnwser(removeDiacritics(request.getQuestion().toLowerCase()));
         if(question_of_guest == null){
             return ResponseMessageDtos.builder()
                     .status(404)
@@ -84,11 +84,11 @@ public class ChatbotService {
     }
 
     public ResponseMessageDtos createQuestionForGuest(QuestionOfGuestInfoDtos request) {
-        var question_of_guest = questionOfGuestRepository.findByQuestionForAnwser(request.getQuestion());
+        var question_of_guest = questionOfGuestRepository.findByQuestionForAnwser(removeDiacritics(request.getQuestion().toLowerCase()));
         if(question_of_guest != null){
             return ResponseMessageDtos.builder()
                     .status(404)
-                    .message(Constants.Create_QuestionAnswer_For_Guest_Fail)
+                    .message(Constants.Question_Exists)
                     .build();
         }
         var user = userRepository.findByEmail_(request.getEmail());

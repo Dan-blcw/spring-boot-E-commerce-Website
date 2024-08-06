@@ -72,9 +72,9 @@ public class ProductService {
         }
         String saveDetail = "";
         for (var x: boxResponse){
-            saveDetail +=  "sản phẩm màu " + x.getColor();
+            saveDetail +=  "sản phẩm màu " + x.getColor().toUpperCase();
             for(var y: x.getSizes()){
-                saveDetail += " có số lượng "+ y.quantity+ " cho kích thước "+ y.size +", ";
+                saveDetail += " có số lượng "+ y.quantity+ " cho kích thước "+ y.size.toUpperCase() +", ";
             }
             saveDetail += "Tiếp với ";
         }
@@ -84,7 +84,7 @@ public class ProductService {
                 "\n     " +
                 "Sản phẩm này có màu sắc đa dạng, bao gồm "+saveColors.toUpperCase()+" cùng với các kích thước từ "+saveSizes.toUpperCase()+"." +
                 "\n     " +
-                "Với chi tiết số lượng phong phú, "+saveDetail.toUpperCase()+" Tổng số lượng sản phẩm hiện có là "+String.valueOf(qa.getTotalQuantity()).toUpperCase()+"." +
+                "Với chi tiết số lượng phong phú, "+saveDetail+" Tổng số lượng sản phẩm hiện có là "+qa.getTotalQuantity()+"." +
                 "\n     " +
                 "Sản phẩm này có giá gốc "+String.valueOf(qa.getOriginalPrice()).toUpperCase()+" VND, hiện đang được giảm giá "+String.valueOf(qa.getSaleDiscountPercent()).toUpperCase()
                 +"%, với giá cuối cùng là "+String.valueOf(qa.getFinalPrice()).toUpperCase()+" VND. Được đánh giá "+String.valueOf(qa.getRating()).toUpperCase()+" sao, "+ qa.getName() +" không chỉ có chất lượng xuất sắc mà còn mang đến giá trị tốt cho khách hàng." +
