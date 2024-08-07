@@ -13,6 +13,9 @@ public interface QuestionOfGuestRepository extends JpaRepository<QuestionForGues
     QuestionForGuest findByQuestionForAnwser(@Param("question") String question);
     @Query("SELECT pi FROM QuestionForGuest pi WHERE pi.question IS NOT NULL")
     List<QuestionForGuest> findByQuestionUnAnswered();
+
+    @Query("SELECT pi FROM QuestionForGuest pi WHERE pi.question IS NOT NULL and  pi.answer IS NULL ")
+    List<QuestionForGuest> findByQuestionUnAnsweredNUl();
     @Query("SELECT pi FROM QuestionForGuest pi WHERE pi.question = :question AND pi.answer = :answer ")
     QuestionForGuest findByQuestionForAnwser(
             @Param("question") String question,

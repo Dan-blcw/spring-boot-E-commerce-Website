@@ -266,9 +266,10 @@ public class AdminController {
     }
 
     @GetMapping("/tradeMask/{id}")
-    public ResponseEntity<TradeMark> getTradeMarkById(@PathVariable Integer id) {
-        Optional<TradeMark> tradeMark = service.findById(id);
-        return tradeMark.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public TradeMark getTradeMarkById(@PathVariable String id) {
+        TradeMark tradeMark = service.findById(id);
+//        return tradeMark.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return tradeMark;
     }
 
     @PostMapping("/tradeMask")
@@ -276,11 +277,15 @@ public class AdminController {
         return service.saveTrask(tradeMark);
     }
 
-    @PutMapping("/tradeMask/{id}")
-    public ResponseEntity<TradeMark> updateTradeMark(@PathVariable Integer id, @RequestBody TradeMaskDtos tradeMarkDetails) {
-        Optional<TradeMark> tradeMark = service.findById(id);
-        if (tradeMark.isPresent()) {
-            return ResponseEntity.ok(service.saveTrask(tradeMarkDetails));
+    @PutMapping("/update-tradeMask")
+    public ResponseEntity<TradeMark> updateTradeMark(@RequestBody TradeMaskDtos tradeMarkDetails) {
+        TradeMark tradeMark = service.findById(tradeMarkDetails.getTradeMarkName());
+        tradeMark.setDescription(tradeMarkDetails.getDescription());
+        tradeMark.setStatus(tradeMarkDetails.getStatus());
+        tradeMark.setImage_url(tradeMarkDetails.getImage_url());
+        System.out.println(tradeMarkDetails.getDescription());
+        if (tradeMark != null) {
+            return ResponseEntity.ok(service.updateTrask(tradeMark));
         } else {
             return ResponseEntity.notFound().build();
         }

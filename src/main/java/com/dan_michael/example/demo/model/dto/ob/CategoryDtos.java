@@ -12,7 +12,8 @@ import java.util.List;
 public class CategoryDtos {
     private List<String> brands;
     public String categoryName;
+    public String image_url;
     public String sku;
     public Integer status;
-//    private MultipartFile image;
+
 }

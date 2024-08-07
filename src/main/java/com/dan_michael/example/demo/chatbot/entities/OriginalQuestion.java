@@ -13,7 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class QuestionForGuest {
+public class OriginalQuestion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,12 +21,4 @@ public class QuestionForGuest {
 
     @Column(length = 10485760)
     private String question;
-
-    @Column(length = 10485760)
-    private String answer;
-
-    private String user_img_url;
-    private String name;
-    private String email;
-    private String phone;
 }

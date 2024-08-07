@@ -1,5 +1,6 @@
 package com.dan_michael.example.demo.repositories;
 
+import com.dan_michael.example.demo.model.entities.Cart;
 import com.dan_michael.example.demo.model.entities.Comment;
 import com.dan_michael.example.demo.model.entities.TradeMark;
 import jakarta.transaction.Transactional;
@@ -9,7 +10,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TradeMarkRepository extends JpaRepository<TradeMark, Integer> {
-
+    @Query("SELECT pi FROM TradeMark pi WHERE pi.name = :name")
+    TradeMark findByName(@Param("name") String name);
 }

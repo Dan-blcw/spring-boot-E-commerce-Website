@@ -6,10 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TradeMaskDtos {
-    private String tradeMarkSku;
     private String tradeMarkName;
+    private Integer id;
     private String description;
+    public String image_url;
+    public String sku;
+    public Integer status;
 }

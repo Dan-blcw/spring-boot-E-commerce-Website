@@ -6,10 +6,12 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.dan_michael.example.demo.chatbot.entities.ManyQuestionAnswerDtos;
+import com.dan_michael.example.demo.chatbot.entities.OriginalQuestion;
 import com.dan_michael.example.demo.chatbot.entities.QuestionAnswer;
 import com.dan_michael.example.demo.chatbot.entities.QuestionForGuest;
 import com.dan_michael.example.demo.chatbot.entities.dtos.QuestionOfGuestInfoDtos;
 import com.dan_michael.example.demo.chatbot.entities.dtos.RequestMessageChatBotDtos;
+import com.dan_michael.example.demo.chatbot.resository.OriginalQuestionRepository;
 import com.dan_michael.example.demo.chatbot.resository.QuestionAnswerRepository;
 import com.dan_michael.example.demo.chatbot.resository.QuestionOfGuestRepository;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ChatbotService {
 
+    private final OriginalQuestionRepository originalQuestionRepository;
     private final QuestionAnswerRepository questionAnswerRepository;
 
     private final QuestionOfGuestRepository questionOfGuestRepository;
@@ -46,11 +49,14 @@ public class ChatbotService {
     }
     
     public QuestionAnswer createQuestionAnswer(QuestionAnswer qa) {
+        originalQuestionRepository.save(OriginalQuestion.builder()
+                .question(qa.getQuestion())
+                .build());
         qa.setQuestion(removeDiacritics(qa.getQuestion().toLowerCase()));
         return questionAnswerRepository.save(qa);
     }
     public ResponseMessageDtos createQuestionAnswerForGuest(QuestionAnswer request) {
-        var question_of_guest = questionOfGuestRepository.findByQuestionForAnwser(removeDiacritics(request.getQuestion().toLowerCase()));
+        var question_of_guest = questionOfGuestRepository.findByQuestionForAnwser(request.getQuestion());
         if(question_of_guest == null){
             return ResponseMessageDtos.builder()
                     .status(404)
@@ -70,11 +76,12 @@ public class ChatbotService {
                     .message(Constants.Create_QuestionAnswer_For_Guest_Fail)
                     .build();
         }
+        question_of_guest.setUser_img_url(user.getUserImgUrl());
         question_of_guest.setAnswer(request.getAnswer());
         questionOfGuestRepository.save(question_of_guest);
         questionAnswerRepository.save(
                 QuestionAnswer.builder()
-                        .question(question_of_guest.getQuestion())
+                        .question(removeDiacritics(question_of_guest.getQuestion().toLowerCase()))
                         .answer(request.getAnswer())
                 .build());
         return ResponseMessageDtos.builder()
@@ -91,6 +98,9 @@ public class ChatbotService {
                     .message(Constants.Question_Exists)
                     .build();
         }
+        originalQuestionRepository.save(OriginalQuestion.builder()
+                .question(request.getQuestion())
+                .build());
         var user = userRepository.findByEmail_(request.getEmail());
         if(user==null){
             return ResponseMessageDtos.builder()
@@ -101,6 +111,7 @@ public class ChatbotService {
         var qa = QuestionForGuest.builder()
                 .name(request.getName())
                 .email(request.getEmail())
+                .user_img_url(user.getUserImgUrl())
                 .phone(request.getPhone())
                 .question(request.getQuestion())
                 .build();
@@ -137,8 +148,8 @@ public class ChatbotService {
     }
     
     public List<String> getAllQuestions() {
-    	return questionAnswerRepository.findAll().stream()
-                .map(QuestionAnswer::getQuestion)
+    	return originalQuestionRepository.findAll().stream()
+                .map(OriginalQuestion::getQuestion)
                 .collect(Collectors.toList());
     }
 
@@ -146,6 +157,10 @@ public class ChatbotService {
         return questionOfGuestRepository.findByQuestionUnAnswered().stream()
                 .map(QuestionForGuest::getQuestion)
                 .collect(Collectors.toList());
+    }
+
+    public List<QuestionForGuest> getAllQuestionsOfGuestInfo() {
+        return questionOfGuestRepository.findByQuestionUnAnsweredNUl();
     }
     public static String removeDiacritics(String input) {
         String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);

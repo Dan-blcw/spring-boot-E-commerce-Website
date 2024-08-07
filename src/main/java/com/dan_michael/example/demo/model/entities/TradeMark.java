@@ -21,10 +21,12 @@ public class TradeMark {
     @Id
     @GeneratedValue
     private Integer id;
-    private String tradeMarkSku;
-    private String tradeMarkName;
+    private String sku;
+    private String image_url;
+    private String name;
     @Column(length = 10485760)
     private String description;
+    private Integer status;
     @CreatedDate
     @Column(
             nullable = false,

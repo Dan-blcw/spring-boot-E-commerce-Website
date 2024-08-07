@@ -27,6 +27,8 @@ public class Category {
 
     private String sku;
 
+    private String image_url;
+
     @OneToMany(mappedBy = "category",fetch = FetchType.EAGER)
     private List<SubCategory> brand;
 

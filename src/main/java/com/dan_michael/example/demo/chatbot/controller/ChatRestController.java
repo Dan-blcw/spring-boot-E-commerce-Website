@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.dan_michael.example.demo.chatbot.entities.ManyQuestionAnswerDtos;
 import com.dan_michael.example.demo.chatbot.entities.QuestionAnswer;
+import com.dan_michael.example.demo.chatbot.entities.QuestionForGuest;
 import com.dan_michael.example.demo.chatbot.entities.dtos.RequestMessageChatBotDtos;
 import com.dan_michael.example.demo.chatbot.resository.QuestionOfGuestRepository;
 import com.dan_michael.example.demo.chatbot.service.ChatbotService;
@@ -69,6 +70,13 @@ public class ChatRestController {
         List<String> questions = chatBotService.getAllQuestionsOfGuest();
         return questions;
     }
+
+    @GetMapping("/getAllQuestionsOfGuestInfor")
+    public List<QuestionForGuest> questionsOfGuestInfo() {
+        List<QuestionForGuest> questions = chatBotService.getAllQuestionsOfGuestInfo();
+        return questions;
+    }
+
     @PostMapping("/qa-answer-guest")
     public ResponseMessageDtos createQuestionAnswerOfGuest(
             @RequestBody QuestionAnswer qa

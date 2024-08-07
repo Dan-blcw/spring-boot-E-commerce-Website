@@ -14,6 +14,7 @@ public class SubCategoryResponse {
     private Integer id;
     private String sku;
     private String name;
+    private String image_url;
     private List<String> brands;
     private Date date;
     private Integer status;

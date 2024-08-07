@@ -359,6 +359,7 @@ public class PjCdtnApplication {
 			CategoryDtos category0 = CategoryDtos.builder()
 					.sku("576842548")
 					.categoryName("Áo")
+					.image_url("https://product.hstatic.net/1000026602/product/img_6707_8aa638c6f11e4dd89d3b9a05c9b09576_master.jpg")
 					.brands(brands0)
 					.status(1)
 					.build();
@@ -366,6 +367,7 @@ public class PjCdtnApplication {
 			CategoryDtos category1 = CategoryDtos.builder()
 					.sku("JDFH6725")
 					.categoryName("Quần")
+					.image_url("https://i.pinimg.com/564x/cd/17/3e/cd173e563b0ad39cfddc4ded2dab67ad.jpg")
 					.brands(brands1)
 					.status(1)
 					.build();
@@ -819,19 +821,25 @@ public class PjCdtnApplication {
 			productService.createComment(comment2,pro21Response.getId());
 //---------------------------------------------------------------------------------------
 			var trademask_0 = TradeMaskDtos.builder()
-					.tradeMarkSku("NS-001")
+					.sku("NS-001")
 					.tradeMarkName("Burberry")
+					.status(1)
+					.image_url("https://i.pinimg.com/564x/1e/85/b8/1e85b83dfc74daa9408da37cb011775d.jpg")
 					.description("Burberry là thương hiệu thời trang cao cấp của Anh, nổi tiếng với các sản phẩm từ chất liệu cao cấp, bao gồm áo khoác trench, quần áo, túi xách và phụ kiện.")
 					.build();
 			var trademask_1 = TradeMaskDtos.builder()
-					.tradeMarkSku("DP-001")
+					.sku("DP-001")
 					.tradeMarkName("Devipock")
+					.status(1)
+					.image_url("https://i.pinimg.com/originals/2e/bc/1e/2ebc1ea4ab4eff518990b30cc10a1f6f.gif")
 					.description("Devipock là thương hiệu thời trang tiên phong, tập trung vào các thiết kế độc đáo và sáng tạo. Các sản phẩm của Devipock bao gồm quần áo, giày dép và phụ kiện với phong cách hiện đại và phá cách. Thương hiệu này cam kết sử dụng chất liệu cao cấp và thân thiện với môi trường, nhằm mang lại sự thoải mái và phong cách cho khách hàng.")
 					.build();
 			var trademask_2 = TradeMaskDtos.builder()
-					.tradeMarkSku("BU-001")
-					.tradeMarkName("Devipock")
-					.description("Devipock là thương hiệu thời trang tiên phong, tập trung vào các thiết kế độc đáo và sáng tạo. Các sản phẩm của Devipock bao gồm quần áo, giày dép và phụ kiện với phong cách hiện đại và phá cách. Thương hiệu này cam kết sử dụng chất liệu cao cấp và thân thiện với môi trường, nhằm mang lại sự thoải mái và phong cách cho khách hàng.")
+					.sku("BU-001")
+					.tradeMarkName("Artemisia")
+					.image_url("https://i.pinimg.com/736x/03/90/fe/0390fef222b2b427a5bf5dbda6064762.jpg")
+					.status(1)
+					.description("Artemisia là thương hiệu thời trang tiên phong, tập trung vào các thiết kế độc đáo và sáng tạo. Các sản phẩm của Artemisia bao gồm quần áo, giày dép và phụ kiện với phong cách hiện đại và phá cách. Thương hiệu này cam kết sử dụng chất liệu cao cấp và thân thiện với môi trường, nhằm mang lại sự thoải mái và phong cách cho khách hàng.")
 					.build();
 			productService.saveTrask(trademask_0);
 			productService.saveTrask(trademask_1);

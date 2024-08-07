@@ -48,6 +48,7 @@ public class CategoryService {
         Category category_flag = Category.builder()
                     .name(request.getCategoryName())
                     .brand(listBrands)
+                    .image_url(request.image_url)
                     .sku(request.getSku())
                     .createdDate(new Date())
                     .status(request.getStatus())
@@ -59,6 +60,7 @@ public class CategoryService {
                 .id(category_flag.getId())
                 .sku(category_flag.getSku())
                 .name(category_flag.getName())
+                .image_url(category_flag.getImage_url())
                 .brands(check)
                 .date(category_flag.getCreatedDate())
                 .status(category_flag.getStatus())
@@ -84,6 +86,7 @@ public class CategoryService {
                 }
             }
             category_flag.setBrand(listBrands);
+            category_flag.setImage_url(request.image_url);
             category_flag.setSku(request.getSku());
             category_flag.setStatus(request.getStatus());
             repository.save(category_flag);
@@ -92,6 +95,7 @@ public class CategoryService {
                 .id(category_flag.getId())
                 .sku(category_flag.getSku())
                 .name(category_flag.getName())
+                .image_url(category_flag.getImage_url())
                 .brands(check)
                 .date(category_flag.getCreatedDate())
                 .status(category_flag.getStatus())
@@ -115,6 +119,7 @@ public class CategoryService {
                     .id(x.getId())
                     .sku(x.getSku())
                     .name(x.getName())
+                    .image_url(x.getImage_url())
                     .brands(check)
                     .date(x.getCreatedDate())
                     .status(x.getStatus())
@@ -137,6 +142,7 @@ public class CategoryService {
                 .id(categoryDetail.get().getId())
                 .sku(categoryDetail.get().getSku())
                 .name(categoryDetail.get().getName())
+                .image_url(categoryDetail.get().getImage_url())
                 .brands(check)
                 .date(categoryDetail.get().getCreatedDate())
                 .status(categoryDetail.get().getStatus())
