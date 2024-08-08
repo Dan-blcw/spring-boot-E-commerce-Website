@@ -13,6 +13,7 @@ import com.dan_michael.example.demo.model.dto.ob.*;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubColor;
 
 import com.dan_michael.example.demo.model.dto.ob.sub.SubSizeQuantity;
+import com.dan_michael.example.demo.model.entities.Role;
 import com.dan_michael.example.demo.service.AuthenticationService;
 import com.dan_michael.example.demo.service.CategoryService;
 import com.dan_michael.example.demo.service.Payment.PaymentMethodsService;
@@ -294,9 +295,11 @@ public class PjCdtnApplication {
 					.name("Aza Assistant")
 					.img_url(chatbot.getImg_url())
 					.fullName("Aza Assistant")
+					.role(Role.ADMIN)
 					.build());
 			var AdminInfo = UserAccountInfo.builder()
 					.name("Admin")
+					.role(Role.ADMIN)
 					.img_url(admin.getImg_url())
 					.fullName("Admin")
 					.build();

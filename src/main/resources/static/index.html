@@ -781,7 +781,7 @@
                 {},
                 JSON.stringify({name: name, fullName: fullname,img_url:img_Url_User ,status: 'OFFLINE'})
             );
-            window.location.reload();
+            stompClient.disconnect();
         }
     }
 
@@ -804,7 +804,7 @@
     emojiPicker.addEventListener('emoji-click', event => {
         const messageInput = document.querySelector('#message');
         messageInput.focus();
-        emojiPicker.classList.remove('show'); // Ẩn emoji-picker sau khi chọn emoji
+        emojiPicker.classList.remove('show');
     });
 
     document.querySelector('#emoji-picker').addEventListener('emoji-click', (event) => {
@@ -847,43 +847,6 @@
             console.error('Error fetching options:', error);
         }
     }
-
-    // Hiển thị tùy chọn trong danh sách
-    // function displayOption2(options2) {
-    //     const optionsContainer = document.getElementById('options-container-2');
-    //     optionsContainer.innerHTML = '';
-    //     options2.forEach(option => {
-    //         const optionItem = document.createElement('li');
-    //         optionItem.className = 'option-item-2';
-    //
-    //         const optionImage = document.createElement('img');
-    //         optionImage.src = option.imageUrl; // Đặt URL của ảnh vào đây
-    //
-    //         const optionTextContainer = document.createElement('div');
-    //         optionTextContainer.className = 'option-text-2';
-    //
-    //         const optionName = document.createElement('span');
-    //         optionName.className = 'option-name-2';
-    //         optionName.textContent = option.name; // Đặt tên của option vào đây
-    //
-    //         const optionPrice = document.createElement('span');
-    //         optionPrice.className = 'option-price-2';
-    //         optionPrice.textContent = option.price; // Đặt giá của option vào đây
-    //
-    //         optionTextContainer.appendChild(optionName);
-    //         optionTextContainer.appendChild(optionPrice);
-    //         optionItem.appendChild(optionImage);
-    //         optionItem.appendChild(optionTextContainer);
-    //
-    //         optionItem.addEventListener('click', () => {
-    //             const messageInput = document.getElementById('message');
-    //             messageInput.value = option.name; // Cập nhật nội dung tin nhắn với tùy chọn đã chọn
-    //             // hiddenOptions(); // Xóa và ẩn tất cả tùy chọn
-    //         });
-    //
-    //         optionsContainer.appendChild(optionItem);
-    //     });
-    // }
     function displayOption2(options2) {
         const optionsContainer = document.getElementById('options-container-2');
         optionsContainer.innerHTML = '';
