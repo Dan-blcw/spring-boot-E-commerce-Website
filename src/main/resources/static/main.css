@@ -1,0 +1,397 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+.chat-container {
+    display: flex;
+    max-width: 2000px;
+    min-width: 2000px;
+    min-height: 600px;
+    max-height: 600px;
+    margin: 20px;
+    border: 1px solid #939393;
+    background-color: #fff;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.users-list {
+    flex: 1;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #99540c;
+    color: #fff;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+
+.users-list-container {
+    height: 100%;
+    overflow-y: hidden;
+}
+
+.users-list h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.users-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.user-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.user-item.active {
+    background-color: #eeb297;
+    color: #1e1e1e;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.user-item img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-item span {
+    font-weight: bold;
+}
+
+.separator {
+    height: 1px;
+    background-color: #ccc;
+    margin: 10px 0;
+}
+
+.chat-area {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.message {
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+#chat-messages {
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+
+.message p {
+    padding: 0 12px;
+    border-radius: 15px;
+    word-wrap: break-word;
+}
+
+.user-item span.nbr-msg {
+    margin-left: 10px;
+    background-color: #f8fa6f;
+    color: white;
+    padding: 5px;
+    width: 4px;
+    border-radius: 50%;
+    height: 4px;
+}
+
+.sender {
+    background-color: #99540c;
+    color: #fff;
+    align-self: flex-end;
+}
+
+.receiver {
+    background-color: #ecf0f1;
+    color: #333;
+    align-self: flex-start;
+}
+
+.message-input {
+    margin-top: auto;
+    display: flex;
+}
+
+.message-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.message-input button {
+    /*flex: 1;*/
+    padding: 8px;
+    border: none;
+    background-color: #99540c;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+
+.user-form {
+    max-width: 400px;
+    padding: 40px;
+    box-sizing: border-box;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.user-form h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.user-form label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.user-form input {
+    width: 100%;
+    padding: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.user-form button {
+    padding: 12px;
+    border: none;
+    background-color: #99540c;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.hidden {
+    display: none;
+}
+
+a.logout {
+    color: #fff;
+    text-decoration: none;
+}
+/*List option*/
+.options-list {
+    flex: 1;
+    border-left: 1px solid #ccc;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #f0f0f0;
+    color: #333;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%; /* Adjust this as needed */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+
+.options-list h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.options-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.option-item {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.option-item:hover {
+    background-color: #ddd;
+}
+/*#emoji-picker {*/
+/*    display: none;*/
+/*}*/
+
+/*!* CSS để hiển thị emoji-picker khi cần *!*/
+/*#emoji-picker.show {*/
+/*    display: block;*/
+/*}*/
+
+/*!* Thêm một số kiểu cho nút kích hoạt emoji-picker *!*/
+/*.emoji-btn {*/
+/*    cursor: pointer;*/
+/*    background-color: #f0f0f0;*/
+/*    border: 1px solid #ddd;*/
+/*    padding: 5px 5px;*/
+/*    border-radius: 5px;*/
+/*}*/
+#emoji-picker {
+    display: none;
+    position: absolute;
+    bottom: 0; /* Canh dưới */
+    right: 0; /* Canh phải */
+    z-index: 1000; /* Đảm bảo nó nằm trên các phần tử khác */
+    background: white; /* Màu nền để dễ nhìn */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ để nổi bật */
+    border-radius: 10px; /* Bo tròn góc */
+    padding-bottom: 15px;
+    margin-bottom: 50px;
+}
+
+/* CSS để hiển thị emoji-picker khi cần */
+#emoji-picker.show {
+    display: block;
+}
+
+/* Thêm một số kiểu cho nút kích hoạt emoji-picker */
+.emoji-btn {
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+/* Đảm bảo form là relative để emoji-picker canh đúng */
+#messageForm {
+    position: relative;
+}
+/* Định dạng cho các khung option */
+/*.option-item-2 {*/
+/*    display: flex;*/
+/*    align-items: end;*/
+/*    position: absolute;*/
+/*    bottom: 0; !* Canh dưới *!*/
+/*    right: 0; !* Canh phải *!*/
+/*    border-bottom: 1px solid #ccc;*/
+/*    cursor: pointer;*/
+/*    background-color: #fff;*/
+/*    width: 200px;*/
+/*    border-radius: 5px;*/
+/*    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+/*    transition: background-color 0.3s ease;*/
+/*    padding-bottom: 15px;*/
+/*    margin-bottom: 50px;*/
+/*}*/
+.option-item-2 {
+    display: flex;
+    /*align-items: flex-end; !* Sử dụng flex-end để đảm bảo các phần tử con được canh dưới *!*/
+    /*position: absolute;*/
+    bottom: 0; /* Canh dưới */
+    right: 0; /* Canh phải */
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    background-color: #fff;
+    width: 350px;
+    /*font-size: 200px;*/
+    height: 100px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 15px 0 0 0; /* Đảm bảo padding chỉ ở trên */
+    margin: 0 5px 5px 0; /* Đặt margin để nó nằm đúng góc dưới cùng bên phải */
+}
+
+/*.option-item-2:hover {*/
+/*    background-color: #f0f0f0;*/
+/*    height: max-content;*/
+/*    transform: translateY(5px); !* Move the item up by 5px *!*/
+/*}*/
+/*.option-item-2 {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    padding: 10px;*/
+/*    border: 1px solid #ccc;*/
+/*    margin-bottom: 10px;*/
+/*}*/
+
+/*.option-item-2 img {*/
+/*    max-width: 50px; !* Adjust the width as needed *!*/
+/*    margin-right: 10px;*/
+/*}*/
+
+.option-text-2 {
+    display: flex;
+    flex-direction: column;
+}
+
+/*.option-name-2,*/
+/*.option-price-2 {*/
+/*    margin: 0;*/
+/*}*/
+.option-item-2 img {
+    width: 80px;
+    height: 80px;
+    border-radius: 5px;
+    margin-right: 25px;
+}
+
+.option-item-2 .option-text-2 {
+    display: flex;
+    flex-direction: column;
+}
+
+.option-item-2 .option-name-2 {
+    font-weight: bold;
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+.option-item-2 .option-price-2 {
+    color: #555;
+    font-size: 24px;
+}
+
+#toggle-options-btn {
+    cursor: pointer;
+    background-color: #99540c;
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+#toggle-options-btn:hover {
+    background-color: #1a8cff;
+}
+
+#options-container {
+    list-style: none;
+    padding: 0;
+}

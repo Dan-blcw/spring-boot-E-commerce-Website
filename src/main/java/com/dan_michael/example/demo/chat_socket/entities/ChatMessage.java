@@ -21,6 +21,7 @@ public class ChatMessage {
     @GeneratedValue
     private Integer id;
     private String chatId;
+    private String action;
     private String senderId;
     private String senderImage;
     private String recipientId;

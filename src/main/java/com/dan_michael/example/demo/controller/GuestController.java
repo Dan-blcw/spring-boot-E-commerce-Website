@@ -3,6 +3,7 @@ package com.dan_michael.example.demo.controller;
 
 import com.dan_michael.example.demo.chat_socket.entities.ChatImg;
 import com.dan_michael.example.demo.chat_socket.respository.ChatImgRepository;
+import com.dan_michael.example.demo.chat_socket.service.ChatMessageService;
 import com.dan_michael.example.demo.chatbot.entities.dtos.QuestionOfGuestInfoDtos;
 import com.dan_michael.example.demo.chatbot.entities.dtos.RequestMessageChatBotDtos;
 import com.dan_michael.example.demo.chatbot.service.ChatbotService;
@@ -46,6 +47,19 @@ public class GuestController {
     private final ChatbotService chatBotService;
 
     private final ChatImgRepository chatImgRepository;
+
+    private final ChatMessageService chatMessageService;
+
+    //--------------------------Hỏi Thằng Hương ấy----------------------------------
+//    @DeleteMapping("/delete-message/{id}")
+//    public ResponseMessageDtos DeleteMessage(@PathVariable Integer id) {
+//        return chatMessageService.delete(id);
+//    }
+//
+//    @PutMapping("/update-message/{id}")
+//    public ResponseMessageDtos UpdateMessage(@PathVariable Integer id,@RequestBody String reContent) {
+//        return chatMessageService.update(id,reContent);
+//    }
 //--------------------------Quest of Guess----------------------------------
     @GetMapping("/")
     public String getResponse(@RequestParam String question) {

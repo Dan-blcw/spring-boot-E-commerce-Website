@@ -986,6 +986,7 @@ public class ProductService {
                 .name(boxItem.get().getName())
                 .sizes(sizesListRe)
                 .colours(colorsListRe)
+                .imageMain(boxItem.get().getImageMain())
                 .subCategory(boxItem.get().getSubCategory())
                 .totalQuantity(boxItem.get().getTotalQuantity())
                 .description(boxItem.get().getDescription())

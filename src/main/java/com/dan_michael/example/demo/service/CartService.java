@@ -141,7 +141,6 @@ public class CartService {
         for (var x : request.getCart_items()){
             for(var y : boxItem_user){
                 if(
-                        Objects.equals(y.getProduct_identification(), x.getItemDetail_id()) &&
                         Objects.equals(y.getName(), x.getName()) &&
                         Objects.equals(y.getColor(), x.getColor()) &&
                         Objects.equals(y.getSize(), x.getSize())
