@@ -23,6 +23,11 @@ public class ProductDtos {
     private String subCategory;
     private String tradeMask;
 
+
+    private Integer quantitySold;
+    private String style;
+    private String material;
+
     private Float originalPrice ;
     private Float saleDiscountPercent ;
 

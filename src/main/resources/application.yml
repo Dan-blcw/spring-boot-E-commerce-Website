@@ -49,7 +49,7 @@ payment:
     url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
     tmnCode: 58X4B4HP
     secretKey: VRLDWNVWDNPCOEPBZUTWSEDQAGXJCNGZ
-    returnUrl: http://localhost:8080/api/v1/payments/vn-pay-callback
+    returnUrl: http://localhost:8888/payment/result?
     version: 2.1.0
     command: pay
     orderType: other

@@ -155,6 +155,7 @@ public final class Constants {
     public static final String Subject_Answer_Question =  "Thank You for Your Question - Our Response Inside !";
     public static final String Send_Mail_Answer_Success =  "Send Email To Answer Customer's Questions Successfully";
     public static final String Send_Mail_Get_Discount_Success =  "Send Email To Customer's For Get The First Discount Promotion Successfully";
+    public static final String Send_Mail_Get_Discount_Subject =  "Get the Coupon Code for your first order";
     public static final String Send_Mail_Answer_Fail =  "Send Email To Answer Customer's Questions Failure !";
     public static final String Send_Mail_Get_Discount_Fail =  "Send Email To Customer's For Get The First Discount Promotion Failure !";
 

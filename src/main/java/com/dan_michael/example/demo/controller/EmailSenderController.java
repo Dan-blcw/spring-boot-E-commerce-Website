@@ -33,16 +33,12 @@ public class EmailSenderController {
     @PostMapping("/get-discount-code")
     public ResponseMessageDtos getDiscount(@RequestBody EmailSenderDtos request) {
         String toEmail = request.getEmail();
-        String subject = request.getSubject();
-        String name = request.getName();
-        String discountCode = request.getDiscountCode();
+        String subject = Constants.Send_Mail_Get_Discount_Subject;
         String logoPath = Constants.Logo_Path_0;
         return emailService.getDiscountCode(
                 toEmail,
                 subject,
-                name,
-                logoPath,
-                discountCode
+                logoPath
         );
     }
 }

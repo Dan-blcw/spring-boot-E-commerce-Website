@@ -47,6 +47,10 @@ public class Product {
     @Column(length = 10485760)
     private String description;
 
+    private Integer quantitySold;
+    private String style;
+    private String material;
+
     private String category;
     private String tradeMask;
     private String subCategory;

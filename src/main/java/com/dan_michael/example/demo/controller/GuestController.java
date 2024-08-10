@@ -11,8 +11,10 @@ import com.dan_michael.example.demo.model.dto.global.ChangeForgetPasswordDtos;
 import com.dan_michael.example.demo.model.dto.global.ForgetPasswordDtos;
 import com.dan_michael.example.demo.model.dto.global.PaginationDto;
 import com.dan_michael.example.demo.model.dto.ob.ProductListDtos;
+import com.dan_michael.example.demo.model.entities.Discount;
 import com.dan_michael.example.demo.model.response.ProductResponse;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
+import com.dan_michael.example.demo.repositories.DiscountRepository;
 import com.dan_michael.example.demo.repositories.UserRepository;
 import com.dan_michael.example.demo.repositories.image.ProductImgRepository;
 import com.dan_michael.example.demo.repositories.image.UserImgRepository;
@@ -36,21 +38,25 @@ public class GuestController {
 
     private final ProductService service;
 
-    private final ProductImgRepository productImgRepository;
-
-    private final UserRepository userRepository;
-
-    private final UserImgRepository userImgRepository;
-
     private final UserService userService;
 
     private final ChatbotService chatBotService;
 
     private final ChatImgRepository chatImgRepository;
 
-    private final ChatMessageService chatMessageService;
+    private final ProductImgRepository productImgRepository;
 
-    //--------------------------Hỏi Thằng Hương ấy----------------------------------
+    private final UserImgRepository userImgRepository;
+
+    private final DiscountRepository discountRepository;
+
+//--------------------------Except discount----------------------------------
+    @PostMapping("/check-discount-sku")
+    public Discount CheckDiscount(@RequestParam String sku){
+        return discountRepository.findBySku(sku);
+    }
+
+//--------------------------Hỏi Thằng Hương ấy----------------------------------
 //    @DeleteMapping("/delete-message/{id}")
 //    public ResponseMessageDtos DeleteMessage(@PathVariable Integer id) {
 //        return chatMessageService.delete(id);
@@ -176,11 +182,12 @@ public class GuestController {
             @RequestParam (required = false)Integer ratingGte,
             @RequestParam (required = false)Integer price_gte,
             @RequestParam (required = false)Integer price_lte,
+            @RequestParam (required = false)Boolean isBestSelling,
             @RequestParam Integer _limit,
             @RequestParam Integer _page,
             @RequestParam (required = false)String _sort
     ) {
-        List<ProductResponse> list = service.search_all(categoryName,subCategoryName,isPromotion,isReleased,ratingGte,price_gte,price_lte,_sort);
+        List<ProductResponse> list = service.search_all(categoryName,subCategoryName,isPromotion,isReleased,ratingGte,price_gte,price_lte,_sort,isBestSelling);
         return ResponseEntity.ok(ProductListDtos.builder().data(list).paginationDto(new PaginationDto(list.size(),_limit)).build());
     }
 

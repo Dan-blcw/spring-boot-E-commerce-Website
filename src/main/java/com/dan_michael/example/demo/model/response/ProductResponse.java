@@ -33,6 +33,10 @@ public class ProductResponse {
     private Float rating;
     private Integer nRating;
 
+    private Integer quantitySold;
+    private String style;
+    private String material;
+
     private List<Integer> favourite;
 
     private Float originalPrice ;

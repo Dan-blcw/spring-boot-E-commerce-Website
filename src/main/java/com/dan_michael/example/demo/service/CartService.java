@@ -145,23 +145,28 @@ public class CartService {
                         Objects.equals(y.getColor(), x.getColor()) &&
                         Objects.equals(y.getSize(), x.getSize())
                 ){
-                    y.setQuantity(x.getQuantity());
-                    y.setUnitPrice(x.getUnitPrice());
-                    y.setTotalPrice(x.getTotalPrice());
-                    totalPayment += x.getTotalPrice();
-                    totalQuantity += x.getQuantity();
-                    cartDetailRepository.save(y);
-                    var itemCart = SubCart_OrderResponse.builder()
-                            .itemDetail_id(y.getId())
-                            .name(y.getName())
-                            .size(y.getSize())
-                            .color(y.getColor())
-                            .image(y.getImage())
-                            .quantity(y.getQuantity())
-                            .unitPrice(y.getUnitPrice())
-                            .totalPrice(y.getTotalPrice())
-                            .build();
-                    boxItem.add(itemCart);
+                    if(x.getQuantity() != 0){
+                        y.setQuantity(x.getQuantity());
+                        y.setUnitPrice(x.getUnitPrice());
+                        y.setTotalPrice(x.getTotalPrice());
+                        totalPayment += x.getTotalPrice();
+                        totalQuantity += x.getQuantity();
+                        cartDetailRepository.save(y);
+                        var itemCart = SubCart_OrderResponse.builder()
+                                .itemDetail_id(y.getId())
+                                .name(y.getName())
+                                .size(y.getSize())
+                                .color(y.getColor())
+                                .image(y.getImage())
+                                .quantity(y.getQuantity())
+                                .unitPrice(y.getUnitPrice())
+                                .totalPrice(y.getTotalPrice())
+                                .build();
+                        boxItem.add(itemCart);
+                    }else{
+                        cartDetailRepository.delete(y);
+                    }
+
                 }
             }
         }

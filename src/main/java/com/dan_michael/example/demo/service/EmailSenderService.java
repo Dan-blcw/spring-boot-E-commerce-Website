@@ -1,7 +1,9 @@
 package com.dan_michael.example.demo.service;
 
+import com.dan_michael.example.demo.model.entities.Discount;
 import com.dan_michael.example.demo.model.entities.User;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
+import com.dan_michael.example.demo.repositories.DiscountRepository;
 import com.dan_michael.example.demo.repositories.UserRepository;
 import com.dan_michael.example.demo.util.Constants;
 import jakarta.mail.MessagingException;
@@ -12,6 +14,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import java.io.File;
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class EmailSenderService {
@@ -19,6 +23,7 @@ public class EmailSenderService {
     private JavaMailSender mailSender;
 
     private final UserRepository userRepository;
+    private final DiscountRepository discountRepository;
 //---------------------------------Done-------------------------------------------------------------------
     public ResponseMessageDtos sendEmailAnswer(String toEmail, String subject, String name, String question, String answer, String logoPath) {
         MimeMessage message = mailSender.createMimeMessage();
@@ -85,7 +90,7 @@ public class EmailSenderService {
                 .message(Constants.Send_Mail_Answer_Fail)
                 .build();
 }
-    public ResponseMessageDtos getDiscountCode(String toEmail, String subject, String name, String logoPath,String discountCode) {
+    public ResponseMessageDtos getDiscountCode(String toEmail, String subject, String logoPath) {
         MimeMessage message = mailSender.createMimeMessage();
         var user = userRepository.findByEmail_(toEmail);
         if(user == null){
@@ -105,13 +110,18 @@ public class EmailSenderService {
             helper.setFrom(Constants.Email_Of_Company);
             helper.setTo(toEmail);
             helper.setSubject(subject);
+            var sku = generateSku();
+            Discount saveDis = Discount.builder()
+                    .sku(sku)
+                    .discountPercent(10)
+                    .build();
             String htmlBody = "<div style='text-align: center; font-family: Arial, sans-serif; font-size: 15px;'>"
                     + "<img src='cid:image_logo' style='display: block; margin: 0 auto; max-width: 360px; border-radius: 50%;' />"
-                    + "<h1>Hi "+ name+ "!</h1>"
+                    + "<h1>Hi "+ user.getName()+ "!</h1>"
                     + "<p>Thanks for signing up with our E-commerce platform! You're about to join the largest online community of enthusiastic shoppers.</p>"
                     + "<p>As a welcome gift, enjoy a discount on your first order!</p>"
                     + "<p>Grab the Discount Code and return to our site and enter the discount code by clicking the link below</p>"
-                    + "<p><a href='https://www.pinterest.com/pin/710020697515286358/'style='display: inline-block; margin: 20px auto; font-size: 32px; padding: 10px 20px; color: #000; background-color: #DDD6B9; text-decoration: none; border-radius: 5px;'> "+discountCode+ "</a></p>"
+                    + "<p><a href='https://www.pinterest.com/pin/710020697515286358/'style='display: inline-block; margin: 20px auto; font-size: 32px; padding: 10px 20px; color: #000; background-color: #DDD6B9; text-decoration: none; border-radius: 5px;'> "+sku+ "</a></p>"
                     + "<p>All first orders will receive a 20% discount for all customers. Also.We have many special offers for students, women, Teens, tech lovers, etc.</p>"
                     + "<p> Check out our special offers page to see if you're eligible for any type of discount</p>"
                     + "<p>Here’s to your success,</p>"
@@ -139,7 +149,9 @@ public class EmailSenderService {
             helper.addInline("image_yt", ytIcon);
             helper.addInline("image_pin", pinIcon);
 
+            discountRepository.save(saveDis);
             mailSender.send(message);
+
             user.setUseFirstDiscount(true);
             userRepository.save(user);
             return ResponseMessageDtos.builder()
@@ -153,6 +165,10 @@ public class EmailSenderService {
                 .status(404)
                 .message(Constants.Send_Mail_Get_Discount_Fail)
                 .build();
+    }
+    public static String generateSku() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString().replace("-", "").toUpperCase().substring(0, 10);
     }
 //----------------------------------Demo-------------------------------------------------------------
 //    public void setMailSender(

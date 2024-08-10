@@ -179,6 +179,10 @@ public class ProductService {
         product_flag.setName(request.getName());
         product_flag.setDescription(request.getDescription());
 
+        product_flag.setQuantitySold(request.getQuantitySold());
+        product_flag.setStyle(request.getStyle());
+        product_flag.setMaterial(request.getMaterial());
+
         product_flag.setCategory(request.getCategory());
         product_flag.setSubCategory(request.getSubCategory());
         product_flag.setTradeMask(request.getTradeMask());
@@ -284,6 +288,9 @@ public class ProductService {
                 .images(productImagesBox)
                 .colours(colors)
                 .sizes(sizes)
+                .quantitySold(product_flag.getQuantitySold())
+                .style(product_flag.getStyle())
+                .material(product_flag.getMaterial())
                 .tradaMask(request.getTradeMask())
                 .subCategory(request.getSubCategory())
                 .name(product_flag.getName())
@@ -772,6 +779,9 @@ public class ProductService {
         var save = ProductResponse.builder()
                 .id(product_flag.getId())
                 .images(productImagesBox)
+                .quantitySold(product_flag.getQuantitySold())
+                .style(product_flag.getStyle())
+                .material(product_flag.getMaterial())
                 .subCategory(request.getSubCategory())
                 .sizes(valuesave(sizesadd,sizes))
                 .colours(valuesave(colorsadd,colors))
@@ -901,6 +911,9 @@ public class ProductService {
                     .name(x.getName())
                     .sizes(sizesListRe)
                     .colours(colorsListRe)
+                    .quantitySold(x.getQuantitySold())
+                    .style(x.getStyle())
+                    .material(x.getMaterial())
                     .imageMain(x.getImageMain())
                     .subCategory(x.getSubCategory())
                     .totalQuantity(x.getTotalQuantity())
@@ -985,6 +998,9 @@ public class ProductService {
                 .images(productImagesBox)
                 .name(boxItem.get().getName())
                 .sizes(sizesListRe)
+                .quantitySold(boxItem.get().getQuantitySold())
+                .style(boxItem.get().getStyle())
+                .material(boxItem.get().getMaterial())
                 .colours(colorsListRe)
                 .imageMain(boxItem.get().getImageMain())
                 .subCategory(boxItem.get().getSubCategory())
@@ -1209,6 +1225,9 @@ public class ProductService {
                         .id(x.getId())
                         .images(productImagesBox)
                         .sizes(sizesListRe)
+                        .quantitySold(x.getQuantitySold())
+                        .style(x.getStyle())
+                        .material(x.getMaterial())
                         .colours(colorsListRe)
                         .subCategory(x.getSubCategory())
                         .name(x.getName())
@@ -1287,7 +1306,9 @@ public class ProductService {
             Integer ratingGte,
             Integer priceGte,
             Integer priceLte,
-            String sort) {
+            String sort,
+            Boolean isBestSelling
+    ) {
         var ratingLt = 6;
         if(ratingGte !=null){
             ratingLt = ratingGte +  1;
@@ -1316,6 +1337,13 @@ public class ProductService {
         } else if ("DESC".equalsIgnoreCase(sort)) {
             productList.sort(Comparator.comparing(Product::getFinalPrice).reversed());
         }
+
+        if(isBestSelling == false){
+            productList.sort(Comparator.comparing(Product::getQuantitySold));
+        }else{
+            productList.sort(Comparator.comparing(Product::getQuantitySold).reversed());
+        }
+
         List<ProductResponse> productsResponseList = new ArrayList<>();
         for (var x : productList) {
             List<ProductImg> imgs = productImgRepository.findProductImgByProductName(x.getName());
@@ -1375,6 +1403,9 @@ public class ProductService {
                     .images(productImagesBox)
                     .subCategory(x.getSubCategory())
                     .sizes(sizeListRe)
+                    .quantitySold(x.getQuantitySold())
+                    .style(x.getStyle())
+                    .material(x.getMaterial())
                     .colours(colorsListRe)
                     .name(x.getName())
                     .description(x.getDescription())
@@ -1470,7 +1501,7 @@ public class ProductService {
                 .message(Constants.Fetch_Data_Quantity_Total_Success)
                 .build();
     }
-//    ----------------------------------TradeMask
+//    ----------------------------------TradeMask------------------------------------------
         public List<TradeMark> findAll() {
             return tradeMarkRepository.findAll();
         }
