@@ -109,6 +109,7 @@ public class OrderService {
             product.setTotalQuantity(product.getTotalQuantity()-subtotalProduct);
             productRepository.save(product);
 
+            detail.setName(x.getName());
             detail.setQuantity(x.getQuantity());
             detail.setColor(x.getColor());
             detail.setSize(x.getSize());
