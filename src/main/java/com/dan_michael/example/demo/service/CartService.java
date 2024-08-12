@@ -25,8 +25,6 @@ public class CartService {
 
     private final CartDetailRepository cartDetailRepository;
 
-//    private final ProductRepository productRepository;
-
     private final UserRepository userRepository;
 
 //---------------------------Cart & cartDetail---------------------------------------
@@ -40,7 +38,7 @@ public class CartService {
             var detail = cartDetailRepository.findByIdentification_cart(x.getId());
             for(var y : detail){
                 var itemCart = SubCart_OrderResponse.builder()
-                        .itemDetail_id(y.getId())
+                        .itemDetail_id(y.getProduct_identification())
                         .name(y.getName())
                         .size(y.getSize())
                         .image(y.getImage())
@@ -74,7 +72,7 @@ public class CartService {
         var detail = cartDetailRepository.findByIdentification_cart(flag.get().getId());
         for(var y : detail){
             var itemCart = SubCart_OrderResponse.builder()
-                    .itemDetail_id(y.getId())
+                    .itemDetail_id(y.getProduct_identification())
                     .name(y.getName())
                     .size(y.getSize())
                     .color(y.getColor())
@@ -104,7 +102,7 @@ public class CartService {
         var detail = cartDetailRepository.findByIdentification_cart(flag.getId());
         for(var y : detail){
             var itemCart = SubCart_OrderResponse.builder()
-                    .itemDetail_id(y.getId())
+                    .itemDetail_id(y.getProduct_identification())
                     .name(y.getName())
                     .size(y.getSize())
                     .color(y.getColor())
@@ -135,12 +133,13 @@ public class CartService {
         var totalQuantity = 0;
         var cart_user= cartRepository.findByIdentification(user.getId());
         var boxItem_user = cartDetailRepository.findByIdentification_cart(cart_user.getId());
-        System.out.println(boxItem_user.size());
-        System.out.println(request.getCart_items().size());
+//        System.out.println(boxItem_user.size());
+//        System.out.println(request.getCart_items().size());
         List<SubCart_OrderResponse> boxItem = new ArrayList<>();
         for (var x : request.getCart_items()){
             for(var y : boxItem_user){
                 if(
+                        Objects.equals(y.getProduct_identification(), x.getItemDetail_id()) &&
                         Objects.equals(y.getName(), x.getName()) &&
                         Objects.equals(y.getColor(), x.getColor()) &&
                         Objects.equals(y.getSize(), x.getSize())
@@ -153,7 +152,7 @@ public class CartService {
                         totalQuantity += x.getQuantity();
                         cartDetailRepository.save(y);
                         var itemCart = SubCart_OrderResponse.builder()
-                                .itemDetail_id(y.getId())
+                                .itemDetail_id(y.getProduct_identification())
                                 .name(y.getName())
                                 .size(y.getSize())
                                 .color(y.getColor())

@@ -20,7 +20,6 @@ public class Material {
     @Id
     @GeneratedValue
     private Integer id;
-    private String sku;
     private String image_url;
     private String name;
     @Column(length = 10485760)

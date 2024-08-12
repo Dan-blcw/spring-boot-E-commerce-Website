@@ -296,5 +296,7 @@ public class AdminController {
         service.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+
 }
 

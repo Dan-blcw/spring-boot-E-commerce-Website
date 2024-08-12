@@ -5,6 +5,7 @@ import com.dan_michael.example.demo.chat_socket.respository.ChatMessageRepositor
 import com.dan_michael.example.demo.chatbot.entities.dtos.RequestMessageChatBotDtos;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.repositories.image.UserImgRepository;
+import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,11 +32,18 @@ public class ChatMessageService {
 
     public ChatMessage delete(Integer id) {
         var chatMessage = repository.findById_(id);
-        if(chatMessage !=null && !Objects.equals(chatMessage.getContent(), chatMessage.getSenderId()+" đã thu hồi một tin nhắn")){
+        if(
+                chatMessage !=null &&
+                !Objects.equals(chatMessage.getContent(), chatMessage.getSenderId()+" đã thu hồi một tin nhắn") &&
+                !Objects.equals(chatMessage.getSenderId(), Constants.Chat_Bot_Name)
+        ){
             chatMessage.setContent(chatMessage.getSenderId()+" đã thu hồi một tin nhắn");
             chatMessage.setAction("DELETE");
             return repository.save(chatMessage);
-        }else if(Objects.equals(chatMessage.getContent(), chatMessage.getSenderId()+" đã thu hồi một tin nhắn")){
+        }else if(
+            Objects.equals(chatMessage.getContent(), chatMessage.getSenderId()+" đã thu hồi một tin nhắn") ||
+            Objects.equals(chatMessage.getSenderId(), Constants.Chat_Bot_Name)
+        ){
             repository.deleteById(id);
         }
         return chatMessage;

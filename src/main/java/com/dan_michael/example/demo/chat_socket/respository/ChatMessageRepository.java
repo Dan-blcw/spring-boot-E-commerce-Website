@@ -14,8 +14,8 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Intege
     List<ChatMessage> findByChatId(@Param("chatId")String chatId);
     @Query("SELECT pi FROM ChatMessage pi Where pi.id = :id")
     ChatMessage findById_(@Param("id")Integer id);
-//    @Transactional
-//    @Modifying
-//    @Query("DELETE FROM ChatMessage od WHERE od.id = :id")
-//    void deleteById(@Param("id") Integer id);
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM ChatMessage od WHERE od.id >= :id")
+    void deleteById_(@Param("id") Integer id);
 }
