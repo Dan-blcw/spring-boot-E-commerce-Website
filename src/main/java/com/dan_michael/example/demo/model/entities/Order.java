@@ -45,7 +45,7 @@ public class Order {
     private Integer paymentStatus;
 
 //    private Float unitPrice;
-    private Float totalPrice;
+//    private Float totalPrice;
     private Float shippingFee;
     private Float taxFee;
 
