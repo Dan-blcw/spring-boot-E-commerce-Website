@@ -23,12 +23,14 @@ public class OrderResponse {
     private Integer user_id;
     private List<SubCart_OrderResponse> orderDetails;
     private String address;
-    private String companyName;
+
     private String phoneNumber;
     private String emailAddress;
 
     private String paymentMethods;
     private Integer paymentStatus;
+
+    private String shippingStatus;
 
     private Float unitPrice;
     private Float shippingFee;

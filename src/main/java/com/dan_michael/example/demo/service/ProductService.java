@@ -7,16 +7,12 @@ import com.dan_michael.example.demo.chatbot.resository.QuestionAnswerRepository;
 import com.dan_michael.example.demo.model.dto.ob.*;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubColor;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubSizeQuantity;
-import com.dan_michael.example.demo.model.entities.TradeMark;
+import com.dan_michael.example.demo.model.entities.*;
 import com.dan_michael.example.demo.model.response.*;
 import com.dan_michael.example.demo.model.entities.SubEn.*;
-import com.dan_michael.example.demo.model.entities.Comment;
-import com.dan_michael.example.demo.model.entities.Product;
 import com.dan_michael.example.demo.model.entities.img.ProductImg;
-import com.dan_michael.example.demo.repositories.CommentRepository;
-import com.dan_michael.example.demo.repositories.TradeMarkRepository;
+import com.dan_michael.example.demo.repositories.*;
 import com.dan_michael.example.demo.repositories.image.ProductImgRepository;
-import com.dan_michael.example.demo.repositories.ProductRepository;
 import com.dan_michael.example.demo.repositories.SupRe.*;
 import com.dan_michael.example.demo.util.Constants;
 import jakarta.transaction.Transactional;
@@ -54,6 +50,9 @@ public class ProductService {
     private final QuestionAnswerRepository questionAnswerRepository;
 
     private final OriginalQuestionRepository originalQuestionRepository;
+
+    private final StyleRepository styleRepository;
+    private final MaterialRepository materialRepository;
 
 //-------------------Answer AI -----------------------------------
     public String saveInfoChatBotAnswer(ProductResponse qa,List<String> sizes,List<String> colors,List<SubColor> boxResponse){
@@ -262,7 +261,7 @@ public class ProductService {
                         .path(imageFile.getOriginalFilename())
                         .toUriString());
                 productImgRepository.save(productImg);
-                if(productImg.getImageName() == request.getImageMain()){
+                if(Objects.equals(productImg.getImageName(), request.getImageMain())){
                     product_flag.setImageMain(productImg.getImg_url());
                 }
                 SubImgResponse response = SubImgResponse.builder()
@@ -279,7 +278,7 @@ public class ProductService {
         product_flag.setQuantityDetails(Box);
         product_flag.setTotalQuantity(totalQuantity);
         product_flag.setImages(productImagesBox_0);
-        if(product_flag.getImageMain() == null){
+        if(request.getImageMain().contains("https://product.hstatic.net")){
             product_flag.setImageMain(request.getImageMain());
         }
         productRepository.save(product_flag);
@@ -291,7 +290,7 @@ public class ProductService {
                 .quantitySold(product_flag.getQuantitySold())
                 .style(product_flag.getStyle())
                 .material(product_flag.getMaterial())
-                .tradaMask(request.getTradeMask())
+                .tradeMask(request.getTradeMask())
                 .subCategory(request.getSubCategory())
                 .name(product_flag.getName())
                 .description(product_flag.getDescription())
@@ -306,7 +305,6 @@ public class ProductService {
                 .saleDiscountPercent(product_flag.getSaleDiscountPercent())
                 .finalPrice(product_flag.getFinalPrice())
                 .saleStatus(product_flag.getSaleStatus())
-                .tradaMask(product_flag.getTradeMask())
                 .newStatus(product_flag.getNewStatus())
                 .comments(product_flag.getComments())
                 .createDate(product_flag.getCreateDate())
@@ -401,7 +399,7 @@ public class ProductService {
         // [tên sản phẩm] thuộc hãng nào?
         QuestionAnswer qa11 = QuestionAnswer.builder()
                 .question(removeDiacritics(oriqe11.toLowerCase()))
-                .answer((save.getName() + " thuộc hãng " + save.getTradaMask() + " ." + save.getTradaMask()+ " là 1 nhãn hàng với chất liệu khá tốt, sản phẩm đẹp mắt và hiện đâng hợp tác với chúng tôi"))
+                .answer((save.getName() + " thuộc hãng " + save.getTradeMask() + " ." + save.getTradeMask()+ " là 1 nhãn hàng với chất liệu khá tốt, sản phẩm đẹp mắt và hiện đâng hợp tác với chúng tôi"))
                 .build();
         //Giá gốc của [tên sản phẩm] là bao nhiêu?
         QuestionAnswer qa13 = QuestionAnswer.builder()
@@ -788,7 +786,7 @@ public class ProductService {
                 .totalQuantity(totalQuantity)
                 .imageMain(product_flag.getImageMain())
                 .name(product_flag.getName())
-                .tradaMask(product_flag.getTradeMask())
+                .tradeMask(product_flag.getTradeMask())
                 .description(product_flag.getDescription())
                 .quantityDetails(BoxResponse)
                 .category(product_flag.getCategory())
@@ -907,6 +905,7 @@ public class ProductService {
             }
             var y = ProductResponse.builder()
                     .id(x.getId())
+                    .skuQa(x.getSkuQa())
                     .images(productImagesBox)
                     .name(x.getName())
                     .sizes(sizesListRe)
@@ -923,7 +922,7 @@ public class ProductService {
                     .rating(rating)
                     .nRating(nRating)
                     .favourite(favouriteListRe)
-                    .tradaMask(x.getTradeMask())
+                    .tradeMask(x.getTradeMask())
                     .originalPrice(x.getOriginalPrice())
                     .saleDiscountPercent(x.getSaleDiscountPercent())
                     .finalPrice(x.getFinalPrice())
@@ -995,6 +994,7 @@ public class ProductService {
         }
         var productResponse = ProductResponse.builder()
                 .id(boxItem.get().getId())
+                .skuQa(boxItem.get().getSkuQa())
                 .images(productImagesBox)
                 .name(boxItem.get().getName())
                 .sizes(sizesListRe)
@@ -1009,7 +1009,7 @@ public class ProductService {
                 .quantityDetails(subColors)
                 .category(boxItem.get().getCategory())
                 .rating(rating)
-                .tradaMask(boxItem.get().getTradeMask())
+                .tradeMask(boxItem.get().getTradeMask())
                 .nRating(nRating)
                 .favourite(favouriteListRe)
                 .originalPrice(boxItem.get().getOriginalPrice())
@@ -1231,7 +1231,7 @@ public class ProductService {
                         .colours(colorsListRe)
                         .subCategory(x.getSubCategory())
                         .name(x.getName())
-                        .tradaMask(x.getTradeMask())
+                        .tradeMask(x.getTradeMask())
                         .description(x.getDescription())
                         .quantityDetails(subColors)
                         .category(x.getCategory())
@@ -1414,8 +1414,7 @@ public class ProductService {
                     .category(x.getCategory())
                     .rating(rating)
                     .nRating(nRating)
-                    .tradaMask(x.getTradeMask())
-                    .tradaMask(x.getTradeMask())
+                    .tradeMask(x.getTradeMask())
                     .favourite(favouriteListRe)
                     .originalPrice(x.getOriginalPrice())
                     .saleDiscountPercent(x.getSaleDiscountPercent())
@@ -1506,20 +1505,23 @@ public class ProductService {
             return tradeMarkRepository.findAll();
         }
 
-        public TradeMark findById(String name) {
+        public TradeMark findByTradeMarkId(String name) {
             return tradeMarkRepository.findByName(name);
         }
 
         public TradeMark saveTrask(TradeMaskDtos tradeMark) {
-            var save = TradeMark.builder()
-                    .sku(tradeMark.getSku())
-                    .name(tradeMark.getTradeMarkName())
-                    .image_url(tradeMark.getImage_url())
-                    .status(tradeMark.getStatus())
-                    .description(tradeMark.getDescription())
-                    .createDate(new Date())
-                    .build();
-            return tradeMarkRepository.save(save);
+            if(tradeMarkRepository.findByName(tradeMark.getTradeMarkName())==null){
+                var save = TradeMark.builder()
+                        .sku(tradeMark.getSku())
+                        .name(tradeMark.getTradeMarkName())
+                        .image_url(tradeMark.getImage_url())
+                        .status(tradeMark.getStatus())
+                        .description(tradeMark.getDescription())
+                        .createDate(new Date())
+                        .build();
+                return tradeMarkRepository.save(save);
+            }
+            return null;
         }
         public TradeMark updateTrask(TradeMark tradeMark) {
             return tradeMarkRepository.save(tradeMark);
@@ -1527,6 +1529,63 @@ public class ProductService {
         public void deleteById(Integer id) {
             tradeMarkRepository.deleteById(id);
         }
+//    ----------------------------------Style------------------------------------------
+    public List<Style> getAllStyles() {
+        return styleRepository.findAll();
+    }
 
+    public Style getStyleById(String name) {
+        return styleRepository.findByName(name);
+    }
+    public Style createStyle(StyleDtos style) {
+        if(styleRepository.findByName(style.getStyleName())==null) {
+            var save = Style.builder()
+                    .name(style.getStyleName())
+                    .image_url(style.getImage_url())
+                    .status(style.getStatus())
+                    .description(style.getDescription())
+                    .createDate(new Date())
+                    .build();
+            return styleRepository.save(save);
+        }
+        return null;
+    }
 
+    public Style updateStyle(Style updatedStyle) {
+        return styleRepository.save(updatedStyle);
+    }
+
+    public void deleteStyle(Integer id) {
+        styleRepository.deleteById(id);
+    }
+    //    ----------------------------------Material------------------------------------------
+    public List<Material> getAllMaterials() {
+        return materialRepository.findAll();
+    }
+
+    public Material getMaterialById(String name) {
+        return materialRepository.findByName(name);
+    }
+
+    public Material createMaterial(MaterialDtos material) {
+        if(materialRepository.findByName(material.getMaterialName())==null) {
+            var save = Material.builder()
+                    .name(material.getMaterialName())
+                    .image_url(material.getImage_url())
+                    .status(material.getStatus())
+                    .description(material.getDescription())
+                    .createDate(new Date())
+                    .build();
+            return materialRepository.save(save);
+        }
+        return null;
+    }
+
+    public Material updateMaterial( Material updatedMaterial) {
+        return materialRepository.save(updatedMaterial);
+    }
+
+    public void deleteMaterial(Integer id) {
+        materialRepository.deleteById(id);
+    }
 }

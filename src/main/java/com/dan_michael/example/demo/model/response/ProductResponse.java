@@ -29,7 +29,7 @@ public class ProductResponse {
     private List<SubColor> quantityDetails;
     private Integer totalQuantity;
     private String category;
-    private String tradaMask;
+    private String tradeMask;
     private Float rating;
     private Integer nRating;
 

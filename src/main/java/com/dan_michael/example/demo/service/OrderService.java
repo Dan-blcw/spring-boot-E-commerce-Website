@@ -62,7 +62,6 @@ public class OrderService {
         Order order = new Order();
         order.setIdentification_user(user.getId());
         order.setAddress(request.getAddress());
-        order.setCompanyName(request.getCompanyName());
         order.setPhoneNumber(request.getPhoneNumber());
         order.setEmailAddress(request.getEmailAddress());
         order.setPaymentMethods(request.getPaymentMethods());
@@ -94,6 +93,7 @@ public class OrderService {
                             y_0.setQuantity(y_0.getQuantity()-x.getQuantity());
                             detailSizeQuantityRepository.save(y_0);
                             subtotalProduct += x.getQuantity();
+                            product.setQuantitySold(product.getQuantitySold()+x.getQuantity());
                         }
                     }
                 }
@@ -133,13 +133,13 @@ public class OrderService {
         }
         y.setOrderDetails(box);
         y.setShippingFee(request.getShippingFee());
-        y.setTaxFee(request.getTaxFee());
+        y.setTaxFee(0.0f);
         y.setPercentDiscount(request.getPercentDiscount());
         if(request.getPercentDiscount() > 0){
-            totalAmountOrder = (totalAmountOrder + request.getShippingFee() + request.getTaxFee());
+            totalAmountOrder = (totalAmountOrder + request.getShippingFee());
             totalAmountOrder = totalAmountOrder - totalAmountOrder*(request.getPercentDiscount()/100);
         }else {
-            totalAmountOrder = totalAmountOrder + request.getShippingFee() + request.getTaxFee();
+            totalAmountOrder = totalAmountOrder + request.getShippingFee();
         }
         y.setTotalAmountOrder(totalAmountOrder);
         orderRepository.save(y);
@@ -148,7 +148,7 @@ public class OrderService {
                 .user_id(y.getIdentification_user())
                 .orderDetails(boxItem)
                 .address(y.getAddress())
-                .companyName(y.getCompanyName())
+                .shippingStatus(y.getShippingStatus())
                 .phoneNumber(y.getPhoneNumber())
                 .emailAddress(y.getEmailAddress())
                 .paymentMethods(y.getPaymentMethods())
@@ -167,7 +167,7 @@ public class OrderService {
     public Optional<Order> updateOrder(Integer id, OrderDtos request) {
         return orderRepository.findById(id).map(order -> {
             order.setAddress(request.getAddress());
-            order.setCompanyName(request.getCompanyName());
+//            order.setCompanyName(request.getCompanyName());
             order.setPhoneNumber(request.getPhoneNumber());
             order.setEmailAddress(request.getEmailAddress());
             order.setOrderStatus(request.getOrderStatus());

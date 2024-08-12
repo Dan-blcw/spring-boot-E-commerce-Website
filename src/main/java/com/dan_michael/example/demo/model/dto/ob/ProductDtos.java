@@ -14,7 +14,6 @@ import java.util.List;
 public class ProductDtos {
     private List<MultipartFile> images;
     private String name;
-
     private String description;
 
     @JsonDeserialize(using = SubColorListDeserializer.class)
@@ -22,7 +21,6 @@ public class ProductDtos {
     private String category;
     private String subCategory;
     private String tradeMask;
-
 
     private Integer quantitySold;
     private String style;

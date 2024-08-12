@@ -22,7 +22,6 @@ public class OrderDtos {
     private Integer paymentStatus;
 
     private Float shippingFee;
-    private Float taxFee;
 
     private Integer percentDiscount;
     private Integer orderStatus;

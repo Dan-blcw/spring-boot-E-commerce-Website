@@ -1,6 +1,8 @@
 package com.dan_michael.example.demo.controller;
 
 import com.dan_michael.example.demo.model.dto.ob.*;
+import com.dan_michael.example.demo.model.entities.Material;
+import com.dan_michael.example.demo.model.entities.Style;
 import com.dan_michael.example.demo.model.entities.TradeMark;
 import com.dan_michael.example.demo.model.response.SubBrandsResponse;
 import com.dan_michael.example.demo.model.response.SubCategoryResponse;
@@ -12,6 +14,7 @@ import com.dan_michael.example.demo.service.ProductService;
 import com.dan_michael.example.demo.util.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -259,7 +262,7 @@ public class AdminController {
     ) {
         return paymentMethodsService.remove(id);
     }
-//-------------------------------------------------------------------------------------------------------
+//---------------------------------------tradeMask----------------------------------------------------------------
     @GetMapping("/tradeMask")
     public List<TradeMark> getAllTradeMarks() {
         return service.findAll();
@@ -267,7 +270,7 @@ public class AdminController {
 
     @GetMapping("/tradeMask/{id}")
     public TradeMark getTradeMarkById(@PathVariable String id) {
-        TradeMark tradeMark = service.findById(id);
+        TradeMark tradeMark = service.findByTradeMarkId(id);
 //        return tradeMark.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
         return tradeMark;
     }
@@ -279,7 +282,7 @@ public class AdminController {
 
     @PutMapping("/update-tradeMask")
     public ResponseEntity<TradeMark> updateTradeMark(@RequestBody TradeMaskDtos tradeMarkDetails) {
-        TradeMark tradeMark = service.findById(tradeMarkDetails.getTradeMarkName());
+        TradeMark tradeMark = service.findByTradeMarkId(tradeMarkDetails.getTradeMarkName());
         tradeMark.setDescription(tradeMarkDetails.getDescription());
         tradeMark.setStatus(tradeMarkDetails.getStatus());
         tradeMark.setImage_url(tradeMarkDetails.getImage_url());
@@ -297,6 +300,77 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
+//----------------------------------styles---------------------------------------------------------------------
+    @GetMapping("/styles")
+    public List<Style> getAllStyles() {
+        return service.getAllStyles();
+    }
 
+    @GetMapping("/styles/{id}")
+    public Style getStyleById(@PathVariable String id) {
+        Style style = service.getStyleById(id);
+        return style;
+    }
+
+    @PostMapping("/styles")
+    public ResponseEntity<Style> createStyle(@RequestBody StyleDtos style) {
+        Style createdStyle = service.createStyle(style);
+        return new ResponseEntity<>(createdStyle, HttpStatus.CREATED);
+    }
+    @PutMapping("/update-styles")
+    public ResponseEntity<Style> updateStyle(@RequestBody StyleDtos tradeMarkDetails) {
+        Style style = service.getStyleById(tradeMarkDetails.getStyleName());
+        style.setDescription(tradeMarkDetails.getDescription());
+        style.setStatus(tradeMarkDetails.getStatus());
+        style.setImage_url(tradeMarkDetails.getImage_url());
+        System.out.println(tradeMarkDetails.getDescription());
+        if (style != null) {
+            return ResponseEntity.ok(service.updateStyle(style));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @DeleteMapping("/styles/{id}")
+    public ResponseEntity<Void> deleteStyle(@PathVariable Integer id) {
+        service.deleteStyle(id);
+        return ResponseEntity.noContent().build();
+    }
+//----------------------------------Material---------------------------------------------------------------------
+    @GetMapping("/material")
+    public List<Material> getAllMaterials() {
+        return service.getAllMaterials();
+    }
+
+    @GetMapping("/material/{id}")
+    public Material getMaterialById(@PathVariable String id) {
+        Material material = service.getMaterialById(id);
+        return material;
+    }
+
+    @PostMapping("/material")
+    public ResponseEntity<Material> createMaterial(@RequestBody MaterialDtos material) {
+        Material createdMaterial = service.createMaterial(material);
+        return new ResponseEntity<>(createdMaterial, HttpStatus.CREATED);
+    }
+
+    @PutMapping("update-material")
+    public ResponseEntity<Material> updateMaterial(@RequestBody MaterialDtos updatedMaterial) {
+        Material material = service.getMaterialById(updatedMaterial.getMaterialName());
+        material.setDescription(updatedMaterial.getDescription());
+        material.setStatus(updatedMaterial.getStatus());
+        material.setImage_url(updatedMaterial.getImage_url());
+        System.out.println(updatedMaterial.getDescription());
+        if (material != null) {
+            return ResponseEntity.ok(service.updateMaterial(material));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/material/{id}")
+    public ResponseEntity<Void> deleteMaterial(@PathVariable Integer id) {
+        service.deleteMaterial(id);
+        return ResponseEntity.noContent().build();
+    }
 }
 
