@@ -147,7 +147,7 @@ public class CartService {
                     if(x.getQuantity() != 0){
                         y.setQuantity(x.getQuantity());
                         y.setUnitPrice(x.getUnitPrice());
-                        y.setTotalPrice(x.getTotalPrice());
+                        y.setTotalPrice(x.getQuantity() * x.getUnitPrice());
                         totalPayment += x.getTotalPrice();
                         totalQuantity += x.getQuantity();
                         cartDetailRepository.save(y);
@@ -199,7 +199,7 @@ public class CartService {
                     .size(request.getCart_item().getSize())
                     .image(request.getCart_item().getImage())
                     .unitPrice(request.getCart_item().getUnitPrice())
-                    .totalPrice(request.getCart_item().getTotalPrice())
+                    .totalPrice(request.getCart_item().getUnitPrice() * request.getCart_item().getQuantity())
                     .quantity(request.getCart_item().getQuantity())
                     .build();
             var additem_0 = cartDetailRepository.save(additem);
@@ -213,7 +213,7 @@ public class CartService {
                     .image(additem.getImage())
                     .quantity(additem.getQuantity())
                     .unitPrice(additem_0.getUnitPrice())
-                    .totalPrice(additem.getTotalPrice())
+                    .totalPrice(additem.getUnitPrice()*additem.getQuantity())
                     .build();
             box.add(additem_0);
             boxItem.add(itemCart);
@@ -238,7 +238,7 @@ public class CartService {
                     .size(request.getCart_item().getSize())
                     .image(request.getCart_item().getImage())
                     .unitPrice(request.getCart_item().getUnitPrice())
-                    .totalPrice(request.getCart_item().getTotalPrice())
+                    .totalPrice(request.getCart_item().getUnitPrice() * request.getCart_item().getQuantity())
                     .quantity(request.getCart_item().getQuantity())
                     .build();
             for(var x : box){
@@ -250,7 +250,7 @@ public class CartService {
                         .image(x.getImage())
                         .quantity(x.getQuantity())
                         .unitPrice(x.getUnitPrice())
-                        .totalPrice(x.getTotalPrice())
+                        .totalPrice(x.getUnitPrice() * x.getQuantity())
                         .build();
                 if(    Objects.equals(x.getProduct_identification(), request.getCart_item().getItemDetail_id()) &&
                         Objects.equals(x.getName(), request.getCart_item().getName()) &&
@@ -283,7 +283,7 @@ public class CartService {
                         .image(additem.getImage())
                         .quantity(additem.getQuantity())
                         .unitPrice(additem.getUnitPrice())
-                        .totalPrice(additem.getTotalPrice())
+                        .totalPrice(additem.getUnitPrice()*additem.getQuantity())
                         .build();
                 totalQua += additem.getQuantity();
                 totalPay += additem.getTotalPrice();
