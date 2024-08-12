@@ -45,7 +45,7 @@ public class CartService {
                         .color(y.getColor())
                         .quantity(y.getQuantity())
                         .unitPrice(y.getUnitPrice())
-                        .totalPrice(y.getTotalPrice())
+                        .totalPrice(y.getUnitPrice()*y.getQuantity())
                         .build();
                 boxItem.add(itemCart);
                 tolalPay += y.getTotalPrice();
@@ -79,7 +79,7 @@ public class CartService {
                     .image(y.getImage())
                     .quantity(y.getQuantity())
                     .unitPrice(y.getUnitPrice())
-                    .totalPrice(y.getTotalPrice())
+                    .totalPrice(y.getUnitPrice()*y.getQuantity())
                     .build();
             boxItem.add(itemCart);
             tolalPay += y.getTotalPrice();
@@ -109,7 +109,7 @@ public class CartService {
                     .image(y.getImage())
                     .quantity(y.getQuantity())
                     .unitPrice(y.getUnitPrice())
-                    .totalPrice(y.getTotalPrice())
+                    .totalPrice(y.getUnitPrice()*y.getQuantity())
                     .build();
             boxItem.add(itemCart);
             tolalPay += y.getTotalPrice();
@@ -159,7 +159,7 @@ public class CartService {
                                 .image(y.getImage())
                                 .quantity(y.getQuantity())
                                 .unitPrice(y.getUnitPrice())
-                                .totalPrice(y.getTotalPrice())
+                                .totalPrice(y.getUnitPrice()*y.getQuantity())
                                 .build();
                         boxItem.add(itemCart);
                     }else{
