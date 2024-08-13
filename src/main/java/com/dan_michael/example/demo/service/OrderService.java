@@ -50,7 +50,13 @@ public class OrderService {
         flag.get().setOrderDetails(orderDetailRepository.findByIdentification_order(id));
         return flag;
     }
-
+    public List<Order> getOrderByUserId(Integer id) {
+        var flag = orderRepository.findByAllOrderByUser(id);
+        for(var x:flag){
+            x.setOrderDetails(orderDetailRepository.findByIdentification_user(id,x.getId()));
+        }
+        return flag;
+    }
     @Transactional
     public OrderResponse createOrder(OrderDtos request) {
         var subtotalProduct = 0;
@@ -114,6 +120,7 @@ public class OrderService {
             detail.setColor(x.getColor());
             detail.setSize(x.getSize());
             detail.setIdentification_order(y.getId());
+            detail.setIdentification_user(user.getId());
             detail.setUnitPrice(x.getUnitPrice());
             detail.setTotalPrice(x.getTotalPrice());
             var itemCart = SubCart_OrderResponse.builder()

@@ -17,4 +17,7 @@ public interface OrderDetailRepository  extends JpaRepository<OrderDetail, Integ
     void deleteByIdentificationOrder(@Param("identificationOrder") Integer identificationOrder);
     @Query("SELECT pi FROM OrderDetail pi WHERE pi.identification_order = :identificationOrder")
     List<OrderDetail> findByIdentification_order(@Param("identificationOrder") Integer identificationOrder);
+
+    @Query("SELECT pi FROM OrderDetail pi WHERE pi.identification_user = :identification_user and pi.identification_order = :identification_order")
+    List<OrderDetail> findByIdentification_user(@Param("identification_user") Integer identification_user,@Param("identification_order") Integer identification_order);
 }

@@ -19,15 +19,19 @@ public interface DetailSizeQuantityRepository extends JpaRepository<DetailSizeQu
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM DetailSizeQuantity od WHERE od.identification = :identification and od.size = :size")
+    @Query("DELETE FROM DetailSizeQuantity od WHERE od.identification = :identification and od.size = :size and od.identification_pro = :identification_pro")
     void deleteByIdentificationAndSizeName(
                     @Param("identification") String identification,
-                    @Param("size") String size);
+                    @Param("identification_pro") String identification_pro,
+                    @Param("size") String size
+
+    );
 
 
-    @Query("SELECT od FROM DetailSizeQuantity od WHERE od.identification = :identification and od.size = :size")
+    @Query("SELECT od FROM DetailSizeQuantity od WHERE od.identification = :identification and od.size = :size and od.identification_pro = :identification_pro")
     DetailSizeQuantity DetailByIdentificationAndSizeName(
             @Param("identification") String identification,
+            @Param("identification_pro") String identification_pro,
             @Param("size") String size);
 
     @Transactional

@@ -199,6 +199,9 @@ public class ProductService {
         }
         product_flag.setFinalPrice(finalPrice);
         product_flag.setNewStatus(true);
+//        if(product_flag.getQuantitySold() >16){
+//            product_flag.setNewStatus(false);
+//        }
         product_flag.setFavourite(null);
 
         product_flag.setCreateDate(new Date());
@@ -430,7 +433,13 @@ public class ProductService {
 //        questionAnswerRepository.save(qa16);
         return save;
     }
-
+//    public ResponseMessageDtos updateProduct(Integer id, List<MultipartFile> images) {
+//        var product_flag = productRepository.findByID_(id);
+//        if(product_flag == null){
+//            return ResponseMessageDtos.builder().build();
+//        }
+//
+//    }
     public ProductResponse updateProduct(ProductDtos request) {
         var totalQuantity = 0;
         List<String> sizes = new ArrayList<>();
@@ -452,6 +461,8 @@ public class ProductService {
             product_flag.setDescription(request.getDescription());
             product_flag.setCategory(request.getCategory());
             product_flag.setTradeMask(request.getTradeMask());
+            product_flag.setStyle(request.getStyle());
+            product_flag.setMaterial(request.getMaterial());
             product_flag.setSubCategory(request.getSubCategory());
             product_flag.setNRating(0);
 
@@ -466,8 +477,9 @@ public class ProductService {
                 finalPrice = request.getOriginalPrice();
             }
             product_flag.setFinalPrice(finalPrice);
-
-            product_flag.setNewStatus(false);
+//            if(product_flag.getQuantitySold() >16){
+//                product_flag.setNewStatus(false);
+//            }
             product_flag.setUpdateDate(new Date());
             product_flag.setCreatedByUserid(request.getCreatedByUserid());
         }
@@ -608,20 +620,20 @@ public class ProductService {
             var colorchange = valueadd(colors, colorsadd);
             var sizechange = valueadd(sizesadd, sizes);
 
-            System.out.println("Colors : " + colors);
-            System.out.println("sizes : " + sizes);
-
-            System.out.println("Color_add : " + colorsadd);
-            System.out.println("size_add : " + sizesadd);
-
-            System.out.println("Color_change : " + colorchange);
-            System.out.println("size_change : " + sizechange);
-
-            System.out.println("xoaColor : " + xoaColor);
-            System.out.println("xoaSize : " + xoaSize);
-
-            System.out.println("addColor : " + addColor);
-            System.out.println("addSize : " + addSize);
+//            System.out.println("Colors : " + colors);
+//            System.out.println("sizes : " + sizes);
+//
+//            System.out.println("Color_add : " + colorsadd);
+//            System.out.println("size_add : " + sizesadd);
+//
+//            System.out.println("Color_change : " + colorchange);
+//            System.out.println("size_change : " + sizechange);
+//
+//            System.out.println("xoaColor : " + xoaColor);
+//            System.out.println("xoaSize : " + xoaSize);
+//
+//            System.out.println("addColor : " + addColor);
+//            System.out.println("addSize : " + addSize);
             //      Xóa đi nếu có
             if ((xoaColor || xoaSize)) {
                 if (request.getQuantityDetails() != null && !request.getQuantityDetails().isEmpty()) {
@@ -630,13 +642,12 @@ public class ProductService {
                         if (colorchange.contains(x.getColor()) && xoaColor) {
                             quantityDetailRepository.deleteByIdentificationAndColor(product_flag.getName(), x.getColor());
                             for (var y : detailSizeQuantitys) {
-                                detailSizeQuantityRepository.deleteByIdentificationAndSizeName(x.getColor(), y.getSize());
+                                detailSizeQuantityRepository.deleteByIdentificationAndSizeName(x.getColor(),product_flag.getName(), y.getSize());
                             }
                         }
                         for (var y : detailSizeQuantitys) {
                             if (sizechange.contains(y.getSize()) && xoaSize) {
-                                detailSizeQuantityRepository.deleteByIdentificationAndSizeName(x.getColor(), y.getSize());
-                                continue;
+                                detailSizeQuantityRepository.deleteByIdentificationAndSizeName(x.getColor(),product_flag.getName(), y.getSize());
                             }
                         }
                     }
@@ -666,7 +677,7 @@ public class ProductService {
 
                         for (var y : x.getSizes()) {
                             if (sizechange.contains(y.getSize()) && addSize) {
-                                var check = detailSizeQuantityRepository.DetailByIdentificationAndSizeName(x.getColor(), y.getSize());
+                                var check = detailSizeQuantityRepository.DetailByIdentificationAndSizeName(x.getColor(),product_flag.getName(), y.getSize());
                                 if (check != null) {
                                     continue;
                                 }
@@ -687,65 +698,44 @@ public class ProductService {
                 }
             }
         }
-//      Thêm Ảnh mới
+        //      Thêm Ảnh mới
         List<SubImgResponse> productImagesBox = new ArrayList<>();
-        List<String> boxSend = new ArrayList<>();
-        List<String> boxSave = new ArrayList<>();
-        List<String> boxOldImage = new ArrayList<>();
         List<ProductImg> productImagesBox_0 = productImgRepository.findProductImgByProductName(product_flag.getName());
-        for (var x :productImagesBox_0){
-            boxOldImage.add(x.getImageName());
-        }
-        if (request.getImages() != null && request.getImages().size() > 0) {
-            for (MultipartFile imageFile : request.getImages()) {
-                boxSave.add(imageFile.getOriginalFilename());
-                ProductImg productImg = new ProductImg();
-                if(boxOldImage.contains(imageFile.getOriginalFilename())){
-                    var saveImg = productImgRepository.findProductImgByimageName_(imageFile.getOriginalFilename(),product_flag.getName());
-                    SubImgResponse response = SubImgResponse.builder()
-                            .id(saveImg.getId())
-                            .img_url(saveImg.getImg_url())
-                            .imageName(saveImg.getImageName())
-                            .identification(saveImg.getIdentification())
-                            .build();
+        System.out.println(productImagesBox_0.size());
+        if(productImagesBox_0!=null){
+            if (request.getImages() != null && !request.getImages().isEmpty()) {
+                for (var x = 0; x< request.getImages().size() ;x++) {
+                    for(var y =0 ; y< productImagesBox_0.size() ;y++){
+                        if(x == y){
+                            try {
+                                productImagesBox_0.get(y).setImage(request.getImages().get(y).getBytes());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            productImagesBox_0.get(y).setIdentification(product_flag.getName());
+                            productImagesBox_0.get(y).setImageName(request.getImages().get(y).getOriginalFilename());
+                            productImagesBox_0.get(y).setImg_url(ServletUriComponentsBuilder.fromCurrentContextPath()
+                                    .path(Constants.Global_Image_Path)
+                                    .path(product_flag.getName()+"/")
+                                    .path(request.getImages().get(y).getOriginalFilename())
+                                    .toUriString());
+                            productImgRepository.save(productImagesBox_0.get(y));
+                            if(Objects.equals(productImagesBox_0.get(y).getImageName(), request.getImageMain())){
+                                product_flag.setImageMain(productImagesBox_0.get(y).getImg_url());
+                            }
+                            SubImgResponse response = SubImgResponse.builder()
+                                    .id(productImagesBox_0.get(y).getId())
+                                    .img_url(productImagesBox_0.get(y).getImg_url())
+                                    .imageName(productImagesBox_0.get(y).getImageName())
+                                    .identification(productImagesBox_0.get(y).getIdentification())
+                                    .build();
+                            productImagesBox.add(response);
+                            productImagesBox_0.add(productImagesBox_0.get(y));
+                        }
 
-                    if(!productImagesBox.contains(response)){
-                        productImagesBox.add(response);
                     }
-                    continue;
                 }
-                boxSend.add(imageFile.getOriginalFilename());
-                try {
-                    productImg.setImage(imageFile.getBytes()); // Save image bytes
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    // Handle exception
-                }
-                productImg.setIdentification(product_flag.getName()); // Set the product reference
-                productImg.setImageName(imageFile.getOriginalFilename());
-                productImg.setImg_url(ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path(Constants.Global_Image_Path)
-                        .path(product_flag.getName()+"/")
-                        .path(imageFile.getOriginalFilename())
-                        .toUriString());
-                productImgRepository.save(productImg);
-                if(productImg.getImageName() == product_flag.getImageMain() || product_flag.getImageMain() != null){
-                    product_flag.setImageMain(productImg.getImg_url());
-                }
-                SubImgResponse response = SubImgResponse.builder()
-                        .id(productImg.getId())
-                        .img_url(productImg.getImg_url())
-                        .imageName(productImg.getImageName())
-                        .identification(productImg.getIdentification())
-                        .build();
-                productImagesBox.add(response);
-                productImagesBox_0.add(productImg);
             }
-        }
-//        Xóa Đi Ảnh Cũ nếu có
-        List<String> boxNewSave = valueadd(boxSave,boxSend);
-        for(var x : valueadd(boxNewSave,boxOldImage)){
-            productImgRepository.deleteByIdentificationAndImageName(product_flag.getName(),x);
         }
 
         product_flag.setImages(productImagesBox_0);
@@ -802,11 +792,11 @@ public class ProductService {
                 .createDate(product_flag.getCreateDate())
                 .createdByUserid(product_flag.getCreatedByUserid())
                 .build();
-        QuestionAnswer qa = questionAnswerRepository.findByQuestion(product_flag.getSkuQa().toLowerCase());
-        if(qa !=null){
-            qa.setAnswer(saveInfoChatBotAnswer(save,valuesave(sizesadd,sizes),valuesave(colorsadd,colors),BoxResponse));
-        }
-        questionAnswerRepository.save(qa);
+//        QuestionAnswer qa = questionAnswerRepository.findByQuestion(product_flag.getSkuQa().toLowerCase());
+//        if(qa !=null){
+//            qa.setAnswer(saveInfoChatBotAnswer(save,valuesave(sizesadd,sizes),valuesave(colorsadd,colors),BoxResponse));
+//        }
+//        questionAnswerRepository.save(qa);
         return save;
     }
     public List<String> valueadd(List<String>a , List<String>b){

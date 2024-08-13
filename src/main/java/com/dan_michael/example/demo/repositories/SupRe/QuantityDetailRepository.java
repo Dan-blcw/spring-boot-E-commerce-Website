@@ -22,7 +22,8 @@ public interface QuantityDetailRepository extends JpaRepository<QuantityDetail, 
     @Query("DELETE FROM QuantityDetail od WHERE od.identification = :identification and od.color = :color")
     void deleteByIdentificationAndColor(
             @Param("identification") String identification,
-            @Param("color") String color);
+            @Param("color") String color
+    );
 
     @Transactional
     @Modifying

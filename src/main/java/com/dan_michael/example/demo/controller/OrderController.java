@@ -31,6 +31,11 @@ public class OrderController {
         return order.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/user/{id}")
+    public List<Order> getOrderByUserId(@PathVariable Integer id) {
+        return orderService.getOrderByUserId(id);
+    }
 //     Create a new order
     @PostMapping
     public ResponseEntity<?> createOrder(

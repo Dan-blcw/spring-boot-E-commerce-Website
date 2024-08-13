@@ -24,6 +24,7 @@ public class OrderDetail {
     private Order order;
 
     private Integer identification_order;
+    private Integer identification_user;
     private Integer itemDetail_id;
     private String name;
     private Integer quantity;

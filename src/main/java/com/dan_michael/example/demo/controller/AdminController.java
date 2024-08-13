@@ -66,7 +66,7 @@ public class AdminController {
                             .status(400)
                             .build());
         }
-}
+    }
 
     @PostMapping(value = "/add-product-json")
     public ResponseEntity<?> createProductTest(
@@ -87,12 +87,16 @@ public class AdminController {
     @PostMapping(value = "/update-product", consumes = { "multipart/form-data" })
     public ResponseEntity<?> updateProduct(
             @RequestPart("productDtos") String productDtosJson,
-            @RequestPart("images") List<MultipartFile> images) throws IOException {
-
+            @RequestPart(value = "images", required = false) List<MultipartFile> images
+    ) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         ProductDtos request = mapper.readValue(productDtosJson, ProductDtos.class);
-        System.out.println("Quantity: " + images.get(0).getOriginalFilename());
-        request.setImages(images);
+        if(images !=null){
+            request.setImages(images);
+            System.out.println("Images not null");
+        }else {
+            System.out.println("Images null");
+        }
         var response = service.updateProduct(request);
         if(response != null){
             return ResponseEntity.ok(response);
@@ -105,7 +109,24 @@ public class AdminController {
             );
         }
     }
-
+//    @PostMapping(value = "/update-product-image/{id}/{imageMain}", consumes = { "multipart/form-data" })
+//    public ResponseEntity<?> updateImage(
+//            @PathVariable Integer id,
+//            @PathVariable String imageMain,
+//            @RequestPart("images") List<MultipartFile> images
+//    ) throws IOException
+//    {
+//        var response = service.updateProduct(id,imageMain,images);
+//        if (response != null) {
+//            return ResponseEntity.ok(response);
+//        } else {
+//            return ResponseEntity.badRequest().body(
+//                    ResponseMessageDtos.builder()
+//                            .message(Constants.Product_ARD_Exist)
+//                            .status(400)
+//                            .build());
+//        }
+//    }
     @PutMapping(value = "/update-product-json")
     public ResponseEntity<?> updateProductTest(
             @RequestBody ProductDtos request

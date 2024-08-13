@@ -399,42 +399,21 @@ public class PjCdtnApplication {
 			SubSizeQuantity subSizeQuantity3 = SubSizeQuantity.builder()
 					.size("XL")
 					.quantity(50).build();
-//			black
-			SubSizeQuantity subSizeQuantity4 = SubSizeQuantity.builder()
-					.size("XXL")
-					.quantity(10).build();
-			SubSizeQuantity subSizeQuantity5 = SubSizeQuantity.builder()
-					.size("XS")
-					.quantity(80).build();
+////			black
+//			SubSizeQuantity subSizeQuantity4 = SubSizeQuantity.builder()
+//					.size("XXL")
+//					.quantity(10).build();
+//			SubSizeQuantity subSizeQuantity5 = SubSizeQuantity.builder()
+//					.size("XS")
+//					.quantity(80).build();
 
-			SubSizeQuantity subSizeQuantity6 = SubSizeQuantity.builder()
-					.size("S")
-					.quantity(4753)
-					.build();
-			SubSizeQuantity subSizeQuantity7 = SubSizeQuantity.builder()
-					.size("M")
-					.quantity(43).build();
-//			blue
-			SubSizeQuantity subSizeQuantity8 = SubSizeQuantity.builder()
-					.size("L")
-					.quantity(87).build();
-			SubSizeQuantity subSizeQuantity9 = SubSizeQuantity.builder()
-					.size("XL")
-					.quantity(43).build();
-//			black
-			SubSizeQuantity subSizeQuantity10 = SubSizeQuantity.builder()
-					.size("XXL")
-					.quantity(42).build();
-			SubSizeQuantity subSizeQuantity11 = SubSizeQuantity.builder()
-					.size("XS")
-					.quantity(42).build();
 
 
 			subSizeQuantityList0.add(subSizeQuantity0);
 			subSizeQuantityList0.add(subSizeQuantity1);
 
-			subSizeQuantityList1.add(subSizeQuantity4);
-			subSizeQuantityList1.add(subSizeQuantity5);
+			subSizeQuantityList0.add(subSizeQuantity2);
+//			subSizeQuantityList1.add(subSizeQuantity2);
 
 			subSizeQuantityList2.add(subSizeQuantity2);
 			subSizeQuantityList2.add(subSizeQuantity3);
@@ -447,7 +426,7 @@ public class PjCdtnApplication {
 //			red medium - 12
 			SubColor sub1 = SubColor.builder()
 					.color("Xanh Dương")
-					.sizes(subSizeQuantityList1)
+					.sizes(subSizeQuantityList0)
 					.build();
 
 			SubColor sub2 = SubColor.builder()
@@ -455,15 +434,11 @@ public class PjCdtnApplication {
 					.sizes(subSizeQuantityList2)
 					.build();
 //			Color & SubSizeQuantity
-			SubColor sub3 = SubColor.builder()
-					.color("Trắng")
-					.sizes(subSizeQuantityList3)
-					.build();
+//			SubColor sub3 = SubColor.builder()
+//					.color("Trắng")
+//					.sizes(subSizeQuantityList3)
+//					.build();
 //			red medium - 12
-			SubColor sub4 = SubColor.builder()
-					.color("blue")
-					.sizes(subSizeQuantityList4)
-					.build();
 
 			List<SubColor> listsub1 = new ArrayList<>();
 			List<SubColor> listsub2 = new ArrayList<>();
