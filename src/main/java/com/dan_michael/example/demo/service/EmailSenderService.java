@@ -14,6 +14,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import java.io.File;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -64,13 +65,15 @@ public class EmailSenderService {
 
             helper.setText(htmlBody, true);
 
-            File logo = new File(logoPath);
+            ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+            File logo = new File(Objects.requireNonNull(classLoader.getResource(logoPath)).getFile());
             helper.addInline("image_logo", logo);
 
-            File fbIcon = new File(Constants.Logo_Path_1);
-            File liIcon = new File(Constants.Logo_Path_2);
-            File ytIcon = new File(Constants.Logo_Path_3);
-            File pinIcon = new File(Constants.Logo_Path_4);
+
+            File fbIcon = new File(Objects.requireNonNull(classLoader.getResource(Constants.Logo_Path_1)).getFile());
+            File liIcon = new File(Objects.requireNonNull(classLoader.getResource(Constants.Logo_Path_2)).getFile());
+            File ytIcon = new File(Objects.requireNonNull(classLoader.getResource(Constants.Logo_Path_3)).getFile());
+            File pinIcon = new File(Objects.requireNonNull(classLoader.getResource(Constants.Logo_Path_4)).getFile());
 
             helper.addInline("image_fb", fbIcon);
             helper.addInline("image_li", liIcon);
@@ -136,13 +139,15 @@ public class EmailSenderService {
 
             helper.setText(htmlBody, true);
 
-            File logo = new File(logoPath);
+            ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+            File logo = new File(Objects.requireNonNull(classLoader.getResource(logoPath)).getFile());
             helper.addInline("image_logo", logo);
 
-            File fbIcon = new File(Constants.Logo_Path_1);
-            File liIcon = new File(Constants.Logo_Path_2);
-            File ytIcon = new File(Constants.Logo_Path_3);
-            File pinIcon = new File(Constants.Logo_Path_4);
+
+            File fbIcon = new File(Objects.requireNonNull(classLoader.getResource(Constants.Logo_Path_1)).getFile());
+            File liIcon = new File(Objects.requireNonNull(classLoader.getResource(Constants.Logo_Path_2)).getFile());
+            File ytIcon = new File(Objects.requireNonNull(classLoader.getResource(Constants.Logo_Path_3)).getFile());
+            File pinIcon = new File(Objects.requireNonNull(classLoader.getResource(Constants.Logo_Path_4)).getFile());
 
             helper.addInline("image_fb", fbIcon);
             helper.addInline("image_li", liIcon);

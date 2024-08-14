@@ -139,11 +139,11 @@ public final class Constants {
     public static final String Answer_Exists =  "The Question Has Been Answered By The Administrator, You Can Ask Chat Bot For Help On This Issue !";
     public static final String Question_Does_Not_Exists =  "Question Does Not Exist, Answer Update Failed !";
     public static final String Question_Exists =  "The question Already Exists In The Repository, You Can Ask Chatbot For Help With This Issue Or Wait a Response From Admin.";
-    public static final String Logo_Path_0 =  "D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_5.png";
-    public static final String Logo_Path_1 =  "D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_1.png";
-    public static final String Logo_Path_2 =  "D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_2.png";
-    public static final String Logo_Path_3 =  "D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_3.png";
-    public static final String Logo_Path_4 =  "D:\\Downloads\\PJ_CDTN\\demo\\src\\main\\resources\\img_4.png";
+    public static final String Logo_Path_0 =  "img_5.png";
+    public static final String Logo_Path_1 =  "img_1.png";
+    public static final String Logo_Path_2 =  "img_2.png";
+    public static final String Logo_Path_3 =  "img_3.png";
+    public static final String Logo_Path_4 =  "img_4.png";
     public static final String Chat_Bot_No_Answer =  "I'm Sorry, I Didn't Understand That. Could You Please Rephrase?";
     public static final String Chat_Bot_Many_Answer =  "The Keyword You Provided Has Quite A Lot Of Results Returned ";
     public static final String Chat_Bot_Many_Answer_2 =  "If You Want More Detailed Information, You Can Ask Me Again.";
