@@ -24,18 +24,25 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "AND (:priceLte IS NULL OR p.finalPrice <= :priceLte) " +
             "AND (:subCategoryName IS NULL OR p.subCategory IN :subCategoryName) " +
             "AND (:categoryName IS NULL OR p.category IN :categoryName) " +
+            "AND (:productName IS NULL OR p.name IN :productName) " +
+            "AND (:style IS NULL OR p.style IN :style) " +
+            "AND (:material IS NULL OR p.material IN :material) " +
             "AND (:isReleased IS NULL OR p.newStatus = :isReleased) " +
             "AND (:isPromotion IS NULL OR p.saleStatus = :isPromotion) " +
             "AND (:ratingLt IS NULL OR p.rating < :ratingLt) " +
-            "AND (:ratingGte IS NULL OR p.rating >= :ratingGte) ")
-    List<Product> search_all(@Param("categoryName") String categoryName,
-                            @Param("subCategoryName") String subCategoryName,
-                             @Param("isPromotion") Boolean isPromotion,
-                             @Param("isReleased") Boolean isReleased,
-                             @Param("ratingGte") Integer ratingGte,
-                             @Param("ratingLt") Integer ratingLt,
-                             @Param("priceGte") Integer priceGte,
-                             @Param("priceLte") Integer priceLte);
+            "AND (:ratingGte IS NULL OR p.rating >= :ratingGte) order by p.id")
+    List<Product> search_all(
+            @Param("productName") String productName,
+            @Param("style") String style,
+            @Param("material") String material,
+            @Param("categoryName") String categoryName,
+            @Param("subCategoryName") String subCategoryName,
+            @Param("isPromotion") Boolean isPromotion,
+            @Param("isReleased") Boolean isReleased,
+            @Param("ratingGte") Integer ratingGte,
+            @Param("ratingLt") Integer ratingLt,
+            @Param("priceGte") Integer priceGte,
+            @Param("priceLte") Integer priceLte);
 
     @Transactional
     @Modifying

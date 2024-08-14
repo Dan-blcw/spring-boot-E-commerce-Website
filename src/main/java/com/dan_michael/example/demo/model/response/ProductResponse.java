@@ -43,6 +43,7 @@ public class ProductResponse {
     private Float saleDiscountPercent ;
     private Float finalPrice ;
     private Boolean saleStatus;
+    private Boolean isFavorite;
 
 
     private Boolean newStatus;

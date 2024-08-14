@@ -92,22 +92,24 @@ public class GuestController {
 //--------------------------Read Only Product----------------------------------
     @GetMapping(value = "/detail-product")
     public ResponseEntity<?> detail(
+            @RequestParam (required = false)Integer _userId,
             @RequestParam (required = false)Integer id
 
     ) {
-        var ob = service.findbyIDHander(id);
+        var ob = service.findbyIDHander(_userId,id);
         return ResponseEntity.ok(ob);
     }
     @GetMapping(value = "/products")
     public ResponseEntity<?> get_All(
+            @RequestParam (required = false)Integer _userId,
             @RequestParam (required = false)Integer _limit,
-        @RequestParam (required = false)Integer _total
+            @RequestParam (required = false)Integer _page
     ) {
-        var list = service.findAllHander();
+        var list = service.findAllHander(_userId,_limit,_page);
         return ResponseEntity.ok(
                 ProductListDtos.builder()
                         .data(list)
-                        .paginationDto(new PaginationDto(_total,_limit))
+                        .paginationDto(new PaginationDto(_page,_limit))
                         .build());
     }
 
@@ -175,6 +177,10 @@ public class GuestController {
 //--------------------------Search----------------------------------
     @GetMapping(value = "/list-search",produces = "application/json")
     public ResponseEntity<?> global_search(
+            @RequestParam (required = false) Integer _userId,
+            @RequestParam (required = false) String productName,
+            @RequestParam (required = false) String style,
+            @RequestParam (required = false) String material,
             @RequestParam (required = false) String categoryName,
             @RequestParam (required = false)List<String> subCategoryName,
             @RequestParam (required = false)Boolean isPromotion,
@@ -187,7 +193,7 @@ public class GuestController {
             @RequestParam Integer _page,
             @RequestParam (required = false)String _sort
     ) {
-        List<ProductResponse> list = service.search_all(categoryName,subCategoryName,isPromotion,isReleased,ratingGte,price_gte,price_lte,_sort,isBestSelling);
+        List<ProductResponse> list = service.search_all(_userId,_limit,_page,categoryName,productName,style,material,subCategoryName,isPromotion,isReleased,ratingGte,price_gte,price_lte,_sort,isBestSelling);
         return ResponseEntity.ok(ProductListDtos.builder().data(list).paginationDto(new PaginationDto(list.size(),_limit)).build());
     }
 

@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaginationDto {
-    private Integer total;
-    private Integer limit;
+    private Integer _limit;
+    private Integer _page;
 }

@@ -508,7 +508,7 @@ public class PjCdtnApplication {
 					.imageMain("https://product.hstatic.net/1000026602/product/img_1851_359eb91c8f384c0e96ff4e88e51d94f1_master.jpg")
 					.subCategory("Áo Sơ Mi")
 					.originalPrice(2350000.0f)
-					.saleDiscountPercent(17.0f)
+					.saleDiscountPercent(0.0f)
 					.createdByUserid(1)
 					.build();
 			var pro4 = ProductDtos.builder()
@@ -553,7 +553,7 @@ public class PjCdtnApplication {
 					.subCategory("Áo Sơ Mi")
 					.imageMain("https://product.hstatic.net/1000026602/product/img_4324_517bbc4cc40140e99a70bb46c7a2083f_master.jpg")
 					.originalPrice(2350000.0f)
-					.saleDiscountPercent(19.0f)
+					.saleDiscountPercent(0.0f)
 					.createdByUserid(1)
 					.build();
 			var pro7 = ProductDtos.builder()
@@ -658,7 +658,7 @@ public class PjCdtnApplication {
 					.imageMain("https://product.hstatic.net/1000026602/product/img_4260_8383ba5e2fdb4a9381747421d92bec4f_master.jpg")
 					.subCategory("Áo Sơ Mi")
 					.originalPrice(2350000.0f)
-					.saleDiscountPercent(8.0f)
+					.saleDiscountPercent(0.0f)
 					.createdByUserid(1)
 					.build();
 			var pro14 = ProductDtos.builder()

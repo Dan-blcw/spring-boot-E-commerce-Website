@@ -19,6 +19,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -181,7 +182,7 @@ public class ProductService {
         product_flag.setQuantitySold(request.getQuantitySold());
         product_flag.setStyle(request.getStyle());
         product_flag.setMaterial(request.getMaterial());
-
+        product_flag.setIsFavorite(false);
         product_flag.setCategory(request.getCategory());
         product_flag.setSubCategory(request.getSubCategory());
         product_flag.setTradeMask(request.getTradeMask());
@@ -196,12 +197,14 @@ public class ProductService {
         }else{
             product_flag.setSaleStatus(false);
             finalPrice = request.getOriginalPrice();
+            product_flag.setOriginalPrice(request.getOriginalPrice());
+            product_flag.setSaleDiscountPercent(0.0f);
         }
         product_flag.setFinalPrice(finalPrice);
         product_flag.setNewStatus(true);
-//        if(product_flag.getQuantitySold() >16){
-//            product_flag.setNewStatus(false);
-//        }
+        if(product_flag.getQuantitySold() !=null && product_flag.getQuantitySold() >16){
+            product_flag.setNewStatus(false);
+        }
         product_flag.setFavourite(null);
 
         product_flag.setCreateDate(new Date());
@@ -766,6 +769,7 @@ public class ProductService {
         }
         var save = ProductResponse.builder()
                 .id(product_flag.getId())
+                .isFavorite(product_flag.getIsFavorite())
                 .images(productImagesBox)
                 .quantitySold(product_flag.getQuantitySold())
                 .style(product_flag.getStyle())
@@ -835,11 +839,14 @@ public class ProductService {
 //        }
 //    }
 
-    public List<ProductResponse> findAllHander() {
+    public List<ProductResponse> findAllHander(Integer _userId,Integer _limit, Integer _page) {
         List<ProductResponse> productsResponseList = new ArrayList<>();
         var flag = productRepository.findAll();
         flag.sort(Comparator.comparing(Product::getFinalPrice).reversed());
-        for (var x : flag) {
+        int start = Math.max((_page - 1) * _limit, 0);
+        int end = Math.min(start + _limit, flag.size());
+        List<Product> paginatedProducts = flag.subList(start, end);
+        for (var x : paginatedProducts) {
             List<ProductImg> imgs = productImgRepository.findProductImgByProductName(x.getName());
             List<Comment> commentsList = commentRepository.findCommentByIAndIdentification_pro(x.getName());
             List<QuantityDetail> quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(x.getName());
@@ -860,7 +867,11 @@ public class ProductService {
             }else {
                 rating = 5.0f;
             }
+            boolean isFavourite = false;
             for (var x_0: favouriteList) { favouriteListRe.add(x_0.getUser_id());}
+            if(favouriteListRe.contains(_userId)){
+                isFavourite = true;
+            }
             for (var x_0: quantityDetailsList) {
                 List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor(),x_0.getIdentification());
                 if(!colorsListRe.contains(x_0.getColor())){
@@ -895,6 +906,7 @@ public class ProductService {
             }
             var y = ProductResponse.builder()
                     .id(x.getId())
+                    .isFavorite(isFavourite)
                     .skuQa(x.getSkuQa())
                     .images(productImagesBox)
                     .name(x.getName())
@@ -917,7 +929,6 @@ public class ProductService {
                     .saleDiscountPercent(x.getSaleDiscountPercent())
                     .finalPrice(x.getFinalPrice())
                     .saleStatus(x.getSaleStatus())
-
                     .newStatus(x.getNewStatus())
                     .comments(commentsList)
                     .createDate(x.getCreateDate())
@@ -927,7 +938,7 @@ public class ProductService {
         }
         return productsResponseList;
     }
-    public ProductResponse findbyIDHander(Integer id){
+    public ProductResponse findbyIDHander(Integer _userId,Integer id){
         var boxItem = productRepository.findById(id);
         List<ProductImg> imgs = productImgRepository.findProductImgByProductName(boxItem.get().getName());
         List<Comment> commentsList = commentRepository.findCommentByIAndIdentification_pro(boxItem.get().getName());
@@ -949,7 +960,11 @@ public class ProductService {
         }else {
             rating = 5.0f;
         }
+        boolean isFavourite = false;
         for (var x_0: favouriteList) { favouriteListRe.add(x_0.getUser_id());}
+        if(favouriteListRe.contains(_userId)){
+            isFavourite = true;
+        }
         for (var x_0: quantityDetailsList) {
             List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor(),x_0.getIdentification());
             if(!colorsListRe.contains(x_0.getColor())){
@@ -984,6 +999,7 @@ public class ProductService {
         }
         var productResponse = ProductResponse.builder()
                 .id(boxItem.get().getId())
+                .isFavorite(isFavourite)
                 .skuQa(boxItem.get().getSkuQa())
                 .images(productImagesBox)
                 .name(boxItem.get().getName())
@@ -1213,6 +1229,9 @@ public class ProductService {
                 }
                 var productResponse = ProductResponse.builder()
                         .id(x.getId())
+                        .skuQa(x.getSkuQa())
+                        .isFavorite(true)
+                        .imageMain(x.getImageMain())
                         .images(productImagesBox)
                         .sizes(sizesListRe)
                         .quantitySold(x.getQuantitySold())
@@ -1288,137 +1307,294 @@ public class ProductService {
                 .build();
     }
 //--------------------------------------Search--------------------------------------------------------------
-    public List<ProductResponse> search_all(
-            String categoryName,
-            List<String> subCategoryName,
-            Boolean isPromotion,
-            Boolean isReleased,
-            Integer ratingGte,
-            Integer priceGte,
-            Integer priceLte,
-            String sort,
-            Boolean isBestSelling
-    ) {
-        var ratingLt = 6;
-        if(ratingGte !=null){
-            ratingLt = ratingGte +  1;
-        }
-        List<Product> productList = new ArrayList<>();
-        if(subCategoryName != null){
-            for (var x : subCategoryName) {
-                List<Product> box = productRepository.search_all(categoryName,x, isPromotion, isReleased, ratingGte,ratingLt, priceGte, priceLte);
+//    public List<ProductResponse> search_all(
+//            Integer _limit,
+//            Integer _page,
+//            String categoryName,
+//            List<String> subCategoryName,
+//            Boolean isPromotion,
+//            Boolean isReleased,
+//            Integer ratingGte,
+//            Integer priceGte,
+//            Integer priceLte,
+//            String sort,
+//            Boolean isBestSelling
+//    ) {
+//        var ratingLt = 6;
+//        if(ratingGte !=null){
+//            ratingLt = ratingGte +  1;
+//        }
+//        List<Product> productList = new ArrayList<>();
+//        if(subCategoryName != null){
+//            for (var x : subCategoryName) {
+//                List<Product> box = productRepository.search_all(categoryName,x, isPromotion, isReleased, ratingGte,ratingLt, priceGte, priceLte);
+//                for (var y : box) {
+//                    if (!productList.contains(y)) {
+//                        productList.add(y);
+//                    }
+//                }
+//            }
+//        }else {
+//            List<Product> box = productRepository.search_all(categoryName,null, isPromotion, isReleased, ratingGte,ratingLt, priceGte, priceLte);
+//            for (var y : box) {
+//                if (!productList.contains(y)) {
+//                    productList.add(y);
+//                }
+//            }
+//        }
+//
+//        if ("ASC".equalsIgnoreCase(sort)) {
+//            productList.sort(Comparator.comparing(Product::getFinalPrice));
+//        } else if ("DESC".equalsIgnoreCase(sort)) {
+//            productList.sort(Comparator.comparing(Product::getFinalPrice).reversed());
+//        }
+//
+//        if(isBestSelling == false){
+//            productList.sort(Comparator.comparing(Product::getQuantitySold));
+//        }else{
+//            productList.sort(Comparator.comparing(Product::getQuantitySold).reversed());
+//        }
+//
+//        List<ProductResponse> productsResponseList = new ArrayList<>();
+//        for (var x : productList) {
+//            List<ProductImg> imgs = productImgRepository.findProductImgByProductName(x.getName());
+//            List<Comment> commentsList = commentRepository.findCommentByIAndIdentification_pro(x.getName());
+//            List<QuantityDetail> quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(x.getName());
+//            List<FavouriteProduct> favouriteList = favouriteProductRepository.findFavouriteByIdentification(x.getName());
+//
+//            List<SubImgResponse> productImagesBox = new ArrayList<>();
+//            List<Integer> favouriteListRe = new ArrayList<>();
+//            List<String> colorsListRe = new ArrayList<>();
+//            List<String> sizeListRe = new ArrayList<>();
+//            List<SubColor> subColors = new ArrayList<>();
+//            for (var x_0: quantityDetailsList) {
+//                List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor(),x_0.getIdentification());
+//                if(!colorsListRe.contains(x_0.getColor())){
+//                    colorsListRe.add(x_0.getColor());
+//                }
+//                List<SubSizeQuantity> sizeQuantities = new ArrayList<>();
+//                for (var y_0: detailSizeQuantities){
+//                    if(!sizeListRe.contains(y_0.getSize())){
+//                        sizeListRe.add(y_0.getSize());
+//                    }
+//                    if(y_0.getIdentification().equals(x_0.getColor())){
+//                        sizeQuantities.add(SubSizeQuantity.builder()
+//                                .size(y_0.getSize())
+//                                .quantity(y_0.getQuantity())
+//                                .build());
+//                    }
+//                }
+//                subColors.add(SubColor.builder()
+//                        .color(x_0.getColor())
+//                        .sizes(sizeQuantities)
+//                        .build());
+//                x_0.setSizeQuantities(detailSizeQuantities);
+//            }
+//            Float rating = 0.0f;
+//            int nRating = commentsList.size();
+//            for (var x_0 : commentsList) {
+//                rating += x_0.getRating();
+//            }
+//            rating = rating / nRating;
+//            for (var x_0 : favouriteList) {
+//                favouriteListRe.add(x_0.getUser_id());
+//            }
+//            for (var x_0: imgs) {
+//                SubImgResponse response = SubImgResponse.builder()
+//                        .id(x_0.getId())
+//                        .img_url(x_0.getImg_url())
+//                        .imageName(x_0.getImageName())
+//                        .identification(x_0.getIdentification())
+//                        .build();
+//                productImagesBox.add(response);
+//            }
+//
+//            var y = ProductResponse.builder()
+//                    .id(x.getId())
+//                    .images(productImagesBox)
+//                    .subCategory(x.getSubCategory())
+//                    .sizes(sizeListRe)
+//                    .quantitySold(x.getQuantitySold())
+//                    .style(x.getStyle())
+//                    .material(x.getMaterial())
+//                    .colours(colorsListRe)
+//                    .name(x.getName())
+//                    .description(x.getDescription())
+//                    .quantityDetails(subColors)
+//                    .totalQuantity(x.getTotalQuantity())
+//                    .category(x.getCategory())
+//                    .rating(rating)
+//                    .nRating(nRating)
+//                    .tradeMask(x.getTradeMask())
+//                    .favourite(favouriteListRe)
+//                    .originalPrice(x.getOriginalPrice())
+//                    .saleDiscountPercent(x.getSaleDiscountPercent())
+//                    .finalPrice(x.getFinalPrice())
+//                    .saleStatus(x.getSaleStatus())
+//                    .newStatus(x.getNewStatus())
+//                    .comments(commentsList)
+//                    .createDate(x.getCreateDate())
+//                    .createdByUserid(x.getCreatedByUserid())
+//                    .build();
+//            productsResponseList.add(y);
+//        }
+//        return productsResponseList;
+//    }
+        public List<ProductResponse> search_all(
+                Integer _userId,
+                Integer _limit,
+                Integer _page,
+                String categoryName,
+                String productName,
+                String style,
+                String material,
+                List<String> subCategoryName,
+                Boolean isPromotion,
+                Boolean isReleased,
+                Integer ratingGte,
+                Integer priceGte,
+                Integer priceLte,
+                String sort,
+                Boolean isBestSelling
+        ) {
+            int ratingLt = 6;
+            if (ratingGte != null) {
+                ratingLt = ratingGte + 1;
+            }
+
+            List<Product> productList = new ArrayList<>();
+            if (subCategoryName != null) {
+                for (var x : subCategoryName) {
+                    List<Product> box = productRepository.search_all(productName,style,material,categoryName, x, isPromotion, isReleased, ratingGte, ratingLt, priceGte, priceLte);
+                    for (var y : box) {
+                        if (!productList.contains(y)) {
+                            productList.add(y);
+                        }
+                    }
+                }
+            } else {
+                List<Product> box = productRepository.search_all(productName,style,material,categoryName, null, isPromotion, isReleased, ratingGte, ratingLt, priceGte, priceLte);
                 for (var y : box) {
                     if (!productList.contains(y)) {
                         productList.add(y);
                     }
                 }
             }
-        }else {
-            List<Product> box = productRepository.search_all(categoryName,null, isPromotion, isReleased, ratingGte,ratingLt, priceGte, priceLte);
-            for (var y : box) {
-                if (!productList.contains(y)) {
-                    productList.add(y);
-                }
+
+            // Apply sorting
+            if ("ASC".equalsIgnoreCase(sort)) {
+                productList.sort(Comparator.comparing(Product::getFinalPrice));
+            } else if ("DESC".equalsIgnoreCase(sort)) {
+                productList.sort(Comparator.comparing(Product::getFinalPrice).reversed());
             }
-        }
 
-        if ("ASC".equalsIgnoreCase(sort)) {
-            productList.sort(Comparator.comparing(Product::getFinalPrice));
-        } else if ("DESC".equalsIgnoreCase(sort)) {
-            productList.sort(Comparator.comparing(Product::getFinalPrice).reversed());
-        }
+            if (isBestSelling != null && isBestSelling) {
+                productList.sort(Comparator.comparing(Product::getQuantitySold).reversed());
+            } else {
+                productList.sort(Comparator.comparing(Product::getQuantitySold));
+            }
 
-        if(isBestSelling == false){
-            productList.sort(Comparator.comparing(Product::getQuantitySold));
-        }else{
-            productList.sort(Comparator.comparing(Product::getQuantitySold).reversed());
-        }
+            // Implementing Pagination
+            int start = Math.max((_page - 1) * _limit, 0);
+            int end = Math.min(start + _limit, productList.size());
+            List<Product> paginatedProducts = productList.subList(start, end);
 
-        List<ProductResponse> productsResponseList = new ArrayList<>();
-        for (var x : productList) {
-            List<ProductImg> imgs = productImgRepository.findProductImgByProductName(x.getName());
-            List<Comment> commentsList = commentRepository.findCommentByIAndIdentification_pro(x.getName());
-            List<QuantityDetail> quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(x.getName());
-            List<FavouriteProduct> favouriteList = favouriteProductRepository.findFavouriteByIdentification(x.getName());
+            List<ProductResponse> productsResponseList = new ArrayList<>();
+            for (var x : paginatedProducts) {
+                List<ProductImg> imgs = productImgRepository.findProductImgByProductName(x.getName());
+                List<Comment> commentsList = commentRepository.findCommentByIAndIdentification_pro(x.getName());
+                List<QuantityDetail> quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(x.getName());
+                List<FavouriteProduct> favouriteList = favouriteProductRepository.findFavouriteByIdentification(x.getName());
 
-            List<SubImgResponse> productImagesBox = new ArrayList<>();
-            List<Integer> favouriteListRe = new ArrayList<>();
-            List<String> colorsListRe = new ArrayList<>();
-            List<String> sizeListRe = new ArrayList<>();
-            List<SubColor> subColors = new ArrayList<>();
-            for (var x_0: quantityDetailsList) {
-                List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor(),x_0.getIdentification());
-                if(!colorsListRe.contains(x_0.getColor())){
-                    colorsListRe.add(x_0.getColor());
-                }
-                List<SubSizeQuantity> sizeQuantities = new ArrayList<>();
-                for (var y_0: detailSizeQuantities){
-                    if(!sizeListRe.contains(y_0.getSize())){
-                        sizeListRe.add(y_0.getSize());
+                List<SubImgResponse> productImagesBox = new ArrayList<>();
+                List<Integer> favouriteListRe = new ArrayList<>();
+                List<String> colorsListRe = new ArrayList<>();
+                List<String> sizeListRe = new ArrayList<>();
+                List<SubColor> subColors = new ArrayList<>();
+                boolean isFavourite = false;
+                for (var x_0 : quantityDetailsList) {
+                    List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor(), x_0.getIdentification());
+                    if (!colorsListRe.contains(x_0.getColor())) {
+                        colorsListRe.add(x_0.getColor());
                     }
-                    if(y_0.getIdentification().equals(x_0.getColor())){
-                        sizeQuantities.add(SubSizeQuantity.builder()
-                                .size(y_0.getSize())
-                                .quantity(y_0.getQuantity())
-                                .build());
+                    List<SubSizeQuantity> sizeQuantities = new ArrayList<>();
+                    for (var y_0 : detailSizeQuantities) {
+                        if (!sizeListRe.contains(y_0.getSize())) {
+                            sizeListRe.add(y_0.getSize());
+                        }
+                        if (y_0.getIdentification().equals(x_0.getColor())) {
+                            sizeQuantities.add(SubSizeQuantity.builder()
+                                    .size(y_0.getSize())
+                                    .quantity(y_0.getQuantity())
+                                    .build());
+                        }
                     }
+                    subColors.add(SubColor.builder()
+                            .color(x_0.getColor())
+                            .sizes(sizeQuantities)
+                            .build());
+                    x_0.setSizeQuantities(detailSizeQuantities);
                 }
-                subColors.add(SubColor.builder()
-                        .color(x_0.getColor())
-                        .sizes(sizeQuantities)
-                        .build());
-                x_0.setSizeQuantities(detailSizeQuantities);
-            }
-            Float rating = 0.0f;
-            int nRating = commentsList.size();
-            for (var x_0 : commentsList) {
-                rating += x_0.getRating();
-            }
-            rating = rating / nRating;
-            for (var x_0 : favouriteList) {
-                favouriteListRe.add(x_0.getUser_id());
-            }
-            for (var x_0: imgs) {
-                SubImgResponse response = SubImgResponse.builder()
-                        .id(x_0.getId())
-                        .img_url(x_0.getImg_url())
-                        .imageName(x_0.getImageName())
-                        .identification(x_0.getIdentification())
+
+                Float rating = 0.0f;
+                int nRating = commentsList.size();
+                for (var x_0 : commentsList) {
+                    rating += x_0.getRating();
+                }
+                rating = nRating > 0 ? rating / nRating : 0;
+
+                for (var x_0 : favouriteList) {
+                    favouriteListRe.add(x_0.getUser_id());
+                }
+                if(favouriteListRe.contains(_userId)){
+                    isFavourite = true;
+                }
+                for (var x_0 : imgs) {
+                    SubImgResponse response = SubImgResponse.builder()
+                            .id(x_0.getId())
+                            .img_url(x_0.getImg_url())
+                            .imageName(x_0.getImageName())
+                            .identification(x_0.getIdentification())
+                            .build();
+                    productImagesBox.add(response);
+                }
+
+                var y = ProductResponse.builder()
+                        .id(x.getId())
+                        .isFavorite(isFavourite)
+                        .imageMain(x.getImageMain())
+                        .skuQa(x.getSkuQa())
+                        .images(productImagesBox)
+                        .subCategory(x.getSubCategory())
+                        .sizes(sizeListRe)
+                        .quantitySold(x.getQuantitySold())
+                        .style(x.getStyle())
+                        .material(x.getMaterial())
+                        .colours(colorsListRe)
+                        .name(x.getName())
+                        .description(x.getDescription())
+                        .quantityDetails(subColors)
+                        .totalQuantity(x.getTotalQuantity())
+                        .category(x.getCategory())
+                        .rating(rating)
+                        .nRating(nRating)
+                        .tradeMask(x.getTradeMask())
+                        .favourite(favouriteListRe)
+                        .originalPrice(x.getOriginalPrice())
+                        .saleDiscountPercent(x.getSaleDiscountPercent())
+                        .finalPrice(x.getFinalPrice())
+                        .saleStatus(x.getSaleStatus())
+                        .newStatus(x.getNewStatus())
+                        .comments(commentsList)
+                        .createDate(x.getCreateDate())
+                        .createdByUserid(x.getCreatedByUserid())
                         .build();
-                productImagesBox.add(response);
+                productsResponseList.add(y);
             }
 
-            var y = ProductResponse.builder()
-                    .id(x.getId())
-                    .images(productImagesBox)
-                    .subCategory(x.getSubCategory())
-                    .sizes(sizeListRe)
-                    .quantitySold(x.getQuantitySold())
-                    .style(x.getStyle())
-                    .material(x.getMaterial())
-                    .colours(colorsListRe)
-                    .name(x.getName())
-                    .description(x.getDescription())
-                    .quantityDetails(subColors)
-                    .totalQuantity(x.getTotalQuantity())
-                    .category(x.getCategory())
-                    .rating(rating)
-                    .nRating(nRating)
-                    .tradeMask(x.getTradeMask())
-                    .favourite(favouriteListRe)
-                    .originalPrice(x.getOriginalPrice())
-                    .saleDiscountPercent(x.getSaleDiscountPercent())
-                    .finalPrice(x.getFinalPrice())
-                    .saleStatus(x.getSaleStatus())
-                    .newStatus(x.getNewStatus())
-                    .comments(commentsList)
-                    .createDate(x.getCreateDate())
-                    .createdByUserid(x.getCreatedByUserid())
-                    .build();
-            productsResponseList.add(y);
+            return productsResponseList;
         }
-        return productsResponseList;
-    }
+
 
     public SubColorDetailResponse getSizeQuantityByColorAndproductname(String productName, String color){
         var boxListColor = quantityDetailRepository.findQuantityDetailsByIAndIdentificationAndColor(productName,color);
