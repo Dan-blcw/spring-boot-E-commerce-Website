@@ -30,7 +30,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "AND (:isReleased IS NULL OR p.newStatus = :isReleased) " +
             "AND (:isPromotion IS NULL OR p.saleStatus = :isPromotion) " +
             "AND (:ratingLt IS NULL OR p.rating < :ratingLt) " +
-            "AND (:ratingGte IS NULL OR p.rating >= :ratingGte) order by p.id")
+            "AND (:ratingGte IS NULL OR p.rating >= :ratingGte)")
     List<Product> search_all(
             @Param("productName") String productName,
             @Param("style") String style,

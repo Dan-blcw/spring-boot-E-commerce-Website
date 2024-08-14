@@ -840,7 +840,7 @@ public class ProductService {
     public List<ProductResponse> findAllHander(Integer _userId,Integer _limit, Integer _page) {
         List<ProductResponse> productsResponseList = new ArrayList<>();
         var flag = productRepository.findAll();
-        flag.sort(Comparator.comparing(Product::getFinalPrice).reversed());
+        flag.sort(Comparator.comparing(Product::getId).reversed());
         int start = Math.max((_page - 1) * _limit, 0);
         int end = Math.min(start + _limit, flag.size());
         List<Product> paginatedProducts = flag.subList(start, end);
@@ -1484,12 +1484,12 @@ public class ProductService {
                 productList.sort(Comparator.comparing(Product::getFinalPrice));
             } else if ("DESC".equalsIgnoreCase(sort)) {
                 productList.sort(Comparator.comparing(Product::getFinalPrice).reversed());
+            }else{
+                productList.sort((Comparator.comparing(Product::getId)).reversed());
             }
 
             if (isBestSelling != null && isBestSelling) {
                 productList.sort(Comparator.comparing(Product::getQuantitySold).reversed());
-            } else {
-                productList.sort(Comparator.comparing(Product::getQuantitySold));
             }
 
             // Implementing Pagination

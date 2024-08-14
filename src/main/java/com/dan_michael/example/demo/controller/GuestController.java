@@ -183,17 +183,17 @@ public class GuestController {
             @RequestParam (required = false) String material,
             @RequestParam (required = false) String categoryName,
             @RequestParam (required = false)List<String> subCategoryName,
-            @RequestParam (required = false)Boolean isPromotion,
-            @RequestParam (required = false)Boolean isReleased,
+            @RequestParam (required = false)Boolean _isPromotion,
+            @RequestParam (required = false)Boolean _isReleased,
             @RequestParam (required = false)Integer ratingGte,
             @RequestParam (required = false)Integer price_gte,
             @RequestParam (required = false)Integer price_lte,
-            @RequestParam (required = false)Boolean isBestSelling,
+            @RequestParam (required = false)Boolean _isBestSelling,
             @RequestParam Integer _limit,
             @RequestParam Integer _page,
             @RequestParam (required = false)String _sort
     ) {
-        List<ProductResponse> list = service.search_all(_userId,_limit,_page,categoryName,productName,style,material,subCategoryName,isPromotion,isReleased,ratingGte,price_gte,price_lte,_sort,isBestSelling);
+        List<ProductResponse> list = service.search_all(_userId,_limit,_page,categoryName,productName,style,material,subCategoryName,_isPromotion,_isReleased,ratingGte,price_gte,price_lte,_sort,_isBestSelling);
         return ResponseEntity.ok(ProductListDtos.builder().data(list).paginationDto(new PaginationDto(list.size(),_limit)).build());
     }
 
