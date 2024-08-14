@@ -99,19 +99,19 @@ public class GuestController {
         var ob = service.findbyIDHander(_userId,id);
         return ResponseEntity.ok(ob);
     }
-    @GetMapping(value = "/products")
-    public ResponseEntity<?> get_All(
-            @RequestParam (required = false)Integer _userId,
-            @RequestParam (required = false)Integer _limit,
-            @RequestParam (required = false)Integer _page
-    ) {
-        var list = service.findAllHander(_userId,_limit,_page);
-        return ResponseEntity.ok(
-                ProductListDtos.builder()
-                        .data(list)
-                        .paginationDto(new PaginationDto(_page,_limit))
-                        .build());
-    }
+//    @GetMapping(value = "/products")
+//    public ResponseEntity<?> get_All(
+//            @RequestParam (required = false)Integer _userId,
+//            @RequestParam (required = false)Integer _limit,
+//            @RequestParam (required = false)Integer _page
+//    ) {
+//        var list = service.findAllHander(_userId,_limit,_page);
+//        return ResponseEntity.ok(
+//                ProductListDtos.builder()
+//                        .data(list)
+//                        .paginationDto(new PaginationDto(_page,_limit))
+//                        .build());
+//    }
 
     @GetMapping(value = "/products-chat-bot")
     public ResponseEntity<?> get_All_Pros_Chat_Bot() {
@@ -175,7 +175,7 @@ public class GuestController {
     }
 
 //--------------------------Search----------------------------------
-    @GetMapping(value = "/list-search",produces = "application/json")
+    @GetMapping(value = "/products",produces = "application/json")
     public ResponseEntity<?> global_search(
             @RequestParam (required = false) Integer _userId,
             @RequestParam (required = false) String productName,
