@@ -182,7 +182,6 @@ public class ProductService {
         product_flag.setQuantitySold(request.getQuantitySold());
         product_flag.setStyle(request.getStyle());
         product_flag.setMaterial(request.getMaterial());
-        product_flag.setIsFavorite(false);
         product_flag.setCategory(request.getCategory());
         product_flag.setSubCategory(request.getSubCategory());
         product_flag.setTradeMask(request.getTradeMask());
@@ -769,7 +768,6 @@ public class ProductService {
         }
         var save = ProductResponse.builder()
                 .id(product_flag.getId())
-                .isFavorite(product_flag.getIsFavorite())
                 .images(productImagesBox)
                 .quantitySold(product_flag.getQuantitySold())
                 .style(product_flag.getStyle())
