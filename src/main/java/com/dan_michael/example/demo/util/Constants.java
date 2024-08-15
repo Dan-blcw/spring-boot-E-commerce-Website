@@ -60,7 +60,9 @@ public final class Constants {
     public static final String Add_Favorite_Success = "Add Favorite product Successfully";
     public static final String Add_Favorite_Fail =  "Add Favorite product Failure !";
     public static final String Delete_Favorite_Success = "Delete Favorite product Successfully";
+    public static final String Delete_All_Favorite_Success = "Delete All Favorite product Successfully";
     public static final String Delete_Favorite_Fail =  "Delete Favorite product Failure !";
+    public static final String Delete_All_Favorite_Fail =  "Delete All Favorite product Failure !";
 
 //  Category - Brand response
     public static final String Category_ARD_Exist = "Category Already Exists !";

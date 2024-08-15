@@ -14,6 +14,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import java.io.File;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -116,7 +117,9 @@ public class EmailSenderService {
             var sku = generateSku();
             Discount saveDis = Discount.builder()
                     .sku(sku)
-                    .discountPercent(10)
+                    .status(1)
+                    .percentDiscount(10)
+                    .createDate(new Date())
                     .build();
             String htmlBody = "<div style='text-align: center; font-family: Arial, sans-serif; font-size: 15px;'>"
                     + "<img src='cid:image_logo' style='display: block; margin: 0 auto; max-width: 360px; border-radius: 50%;' />"

@@ -157,33 +157,7 @@ public class AdminController {
     }
 
 //---------------------------Category And Brand---------------------------------------
-    @GetMapping(value = "/brands")
-    public SubBrandsResponse findBrandsBy(
-            @RequestParam Integer category_id
-    ){
-        var response = categoryService.findBrandByCategoryID(category_id);
-        if(response == null){
-            return SubBrandsResponse.builder()
-                    .brands(response)
-                    .message(Constants.Fetch_Data_Brand_Fail)
-                    .build();
-        }
-        return SubBrandsResponse.builder()
-                .brands(response)
-                .message(Constants.Fetch_Data_Brand_Success)
-                .build();
-    }
-    @GetMapping(value = "/categorys")
-    public List<SubCategoryResponse> listCategory(){
-        return categoryService.listCategory();
-    }
-    @GetMapping(value = "/detail-category/{id}")
-    public SubCategoryResponse detailCategory(
-            @PathVariable Integer id
-    ){
-        var detailCategory = categoryService.detailCategory(id);
-        return detailCategory;
-    }
+
     @PostMapping(value = "/add-category")
     public ResponseEntity<?> createCategory(
             @RequestBody CategoryDtos request

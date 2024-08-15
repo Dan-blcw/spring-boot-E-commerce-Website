@@ -23,6 +23,7 @@ public class OrderDtos {
 
     private Float shippingFee;
 
+    private String percentDiscountSku;
     private Integer percentDiscount;
     private Integer orderStatus;
 }

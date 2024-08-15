@@ -21,10 +21,7 @@ public class Discount {
     @GeneratedValue
     private Integer id;
     private String sku;
-    private String title;
-    private Integer discountPercent;
-    @Column(length = 10485760)
-    private String description;
+    private Integer percentDiscount;
     private Integer status;
     @CreatedDate
     @Column(

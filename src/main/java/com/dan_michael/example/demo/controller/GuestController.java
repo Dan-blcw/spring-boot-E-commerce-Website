@@ -8,18 +8,23 @@ import com.dan_michael.example.demo.chatbot.entities.dtos.QuestionOfGuestInfoDto
 import com.dan_michael.example.demo.chatbot.entities.dtos.RequestMessageChatBotDtos;
 import com.dan_michael.example.demo.chatbot.service.ChatbotService;
 import com.dan_michael.example.demo.model.dto.global.ChangeForgetPasswordDtos;
+import com.dan_michael.example.demo.model.dto.global.FavoriteDtos;
 import com.dan_michael.example.demo.model.dto.global.ForgetPasswordDtos;
 import com.dan_michael.example.demo.model.dto.global.PaginationDto;
 import com.dan_michael.example.demo.model.dto.ob.ProductListDtos;
 import com.dan_michael.example.demo.model.entities.Discount;
 import com.dan_michael.example.demo.model.response.ProductResponse;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
+import com.dan_michael.example.demo.model.response.SubBrandsResponse;
+import com.dan_michael.example.demo.model.response.SubCategoryResponse;
 import com.dan_michael.example.demo.repositories.DiscountRepository;
 import com.dan_michael.example.demo.repositories.UserRepository;
 import com.dan_michael.example.demo.repositories.image.ProductImgRepository;
 import com.dan_michael.example.demo.repositories.image.UserImgRepository;
+import com.dan_michael.example.demo.service.CategoryService;
 import com.dan_michael.example.demo.service.ProductService;
 import com.dan_michael.example.demo.service.UserService;
+import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -40,6 +45,8 @@ public class GuestController {
 
     private final UserService userService;
 
+    private final CategoryService categoryService;
+
     private final ChatbotService chatBotService;
 
     private final ChatImgRepository chatImgRepository;
@@ -50,6 +57,34 @@ public class GuestController {
 
     private final DiscountRepository discountRepository;
 
+//--------------------------Except discount----------------------------------
+    @GetMapping(value = "/categories")
+    public List<SubCategoryResponse> listCategory(){
+    return categoryService.listCategory();
+}
+    @GetMapping(value = "/detail-category/{id}")
+    public SubCategoryResponse detailCategory(
+            @PathVariable Integer id
+    ){
+        var detailCategory = categoryService.detailCategory(id);
+        return detailCategory;
+    }
+    @GetMapping(value = "/subCategory")
+    public SubBrandsResponse findBrandsBy(
+            @RequestParam Integer category_id
+    ){
+        var response = categoryService.findBrandByCategoryID(category_id);
+        if(response == null){
+            return SubBrandsResponse.builder()
+                    .brands(response)
+                    .message(Constants.Fetch_Data_Brand_Fail)
+                    .build();
+        }
+        return SubBrandsResponse.builder()
+                .brands(response)
+                .message(Constants.Fetch_Data_Brand_Success)
+                .build();
+    }
 //--------------------------Except discount----------------------------------
     @PostMapping("/check-discount-sku")
     public Discount CheckDiscount(@RequestParam String sku){
@@ -131,8 +166,9 @@ public class GuestController {
             @RequestParam Integer _page,
             @RequestParam (required = false)String _sort
     ) {
-        List<ProductResponse> list = service.search_all(_userId,_limit,_page,categoryName,productName,style,material,subCategoryName,_isPromotion,_isReleased,ratingGte,price_gte,price_lte,_sort,_isBestSelling);
-        return ResponseEntity.ok(ProductListDtos.builder().data(list).paginationDto(new PaginationDto(list.size(),_limit)).build());
+        ProductListDtos list = service.search_all(_userId,_limit,_page,categoryName,productName,style,material,subCategoryName,_isPromotion,_isReleased,ratingGte,price_gte,price_lte,_sort,_isBestSelling);
+//        return ResponseEntity.ok(ProductListDtos.builder().data(list).paginationDto(new PaginationDto(_limit,_page,)).build());
+        return ResponseEntity.ok(list);
     }
 
 
@@ -171,19 +207,24 @@ public class GuestController {
     }
     @PostMapping(value = "/add-favorite")
     public ResponseEntity<?> addFavorite(
-            @RequestParam (required = false)String Product_name,
-            @RequestParam (required = false)Integer use_id
+            @RequestBody FavoriteDtos favoriteDtos
     ) {
-        var response = service.addFavourite(Product_name,use_id);
+        var response = service.addFavourite(favoriteDtos.getProduct_name(),favoriteDtos.getUse_id());
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping(value = "/delete-favorite")
     public ResponseEntity<?> deleteFavorite(
-            @RequestParam (required = false)String Product_name,
-            @RequestParam (required = false)Integer use_id
+            @RequestBody FavoriteDtos favoriteDtos
     ) {
-        var response = service.deleteFavourite(Product_name,use_id);
+        var response = service.deleteFavourite(favoriteDtos.getProduct_name(),favoriteDtos.getUse_id());
+        return ResponseEntity.ok(response);
+    }
+    @DeleteMapping(value = "/delete-all-favorite")
+    public ResponseEntity<?> deleteAllFavorite(
+            @RequestBody FavoriteDtos favoriteDtos
+    ) {
+        var response = service.deleteAllFavourite(favoriteDtos.getUse_id());
         return ResponseEntity.ok(response);
     }
 //--------------------------QuantityDetail----------------------------------

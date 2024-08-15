@@ -19,6 +19,10 @@ public interface FavouriteProductRepository extends JpaRepository<FavouriteProdu
 
     @Transactional
     @Modifying
+    @Query("DELETE FROM FavouriteProduct od WHERE od.user_id = :user_id")
+    void deleteAllByUser_id(@Param("user_id") Integer user_id);
+    @Transactional
+    @Modifying
     @Query("DELETE FROM FavouriteProduct od WHERE od.identification = :identification")
     void deleteByIdentification(@Param("identification") String identification);
 }

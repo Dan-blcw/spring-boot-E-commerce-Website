@@ -22,11 +22,11 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query("SELECT p FROM Product p " +
             "WHERE (:priceGte IS NULL OR p.finalPrice >= :priceGte) " +
             "AND (:priceLte IS NULL OR p.finalPrice <= :priceLte) " +
-            "AND (:subCategoryName IS NULL OR p.subCategory IN :subCategoryName) " +
-            "AND (:categoryName IS NULL OR p.category IN :categoryName) " +
-            "AND (:productName IS NULL OR p.name IN :productName) " +
-            "AND (:style IS NULL OR p.style IN :style) " +
-            "AND (:material IS NULL OR p.material IN :material) " +
+            "AND (:subCategoryName IS NULL OR p.subCategory like %:subCategoryName%) " +
+            "AND (:categoryName IS NULL OR p.category like %:categoryName%) " +
+            "AND (:productName IS NULL OR LOWER(FUNCTION('unaccent', p.name)) LIKE LOWER(FUNCTION('unaccent', CONCAT('%', :productName, '%')))) " +
+            "AND (:style IS NULL OR p.style like %:style%) " +
+            "AND (:material IS NULL OR p.material like %:material%) " +
             "AND (:isReleased IS NULL OR p.newStatus = :isReleased) " +
             "AND (:isPromotion IS NULL OR p.saleStatus = :isPromotion) " +
             "AND (:ratingLt IS NULL OR p.rating < :ratingLt) " +
@@ -43,6 +43,11 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             @Param("ratingLt") Integer ratingLt,
             @Param("priceGte") Integer priceGte,
             @Param("priceLte") Integer priceLte);
+    //            @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :productName, '%'))")
+
+    //            "AND (:productName IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :productName, '%'))) " +
+    //            "AND (:productName IS NULL OR LOWER(FUNCTION('unaccent', p.name)) LIKE LOWER(FUNCTION('unaccent', CONCAT('%', :productName, '%')))) " +
+//            "AND (:productName IS NULL OR LOWER(FUNCTION('unaccent', CAST(p.name AS TEXT))) LIKE LOWER(FUNCTION('unaccent', CONCAT('%', :productName, '%')))) " +
 
     @Transactional
     @Modifying

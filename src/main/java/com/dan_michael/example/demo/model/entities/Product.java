@@ -43,6 +43,7 @@ public class Product {
     @JsonManagedReference
     private List<FavouriteProduct> favourite;
 
+    @Column(length = 10485760)
     private String name;
     @Column(length = 10485760)
     private String description;
@@ -63,7 +64,6 @@ public class Product {
     private Float saleDiscountPercent ;
     private Float finalPrice ;
     private Boolean saleStatus;
-//    private Boolean isFavorite;
 
     private Boolean newStatus;
 
