@@ -215,9 +215,10 @@ public class GuestController {
 
     @DeleteMapping(value = "/delete-favorite")
     public ResponseEntity<?> deleteFavorite(
-            @RequestBody FavoriteDtos favoriteDtos
+            @RequestParam (required = false)Integer use_id,
+            @RequestParam (required = false)String product_name
     ) {
-        var response = service.deleteFavourite(favoriteDtos.getProduct_name(),favoriteDtos.getUse_id());
+        var response = service.deleteFavourite(product_name,use_id);
         return ResponseEntity.ok(response);
     }
     @DeleteMapping(value = "/delete-all-favorite")
