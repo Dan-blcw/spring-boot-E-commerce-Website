@@ -182,7 +182,11 @@ public class ProductService {
         product_flag.setName(request.getName());
         product_flag.setDescription(request.getDescription());
 
-        product_flag.setQuantitySold(request.getQuantitySold());
+        if(request.getQuantitySold() != null){
+            product_flag.setQuantitySold(request.getQuantitySold());
+        }else{
+            product_flag.setQuantitySold(0);
+        }
         product_flag.setStyle(request.getStyle());
         product_flag.setMaterial(request.getMaterial());
         product_flag.setCategory(request.getCategory());
