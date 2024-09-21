@@ -15,6 +15,9 @@ public interface ProductImgRepository extends JpaRepository<ProductImg, Integer>
     @Query("SELECT pi FROM ProductImg pi WHERE pi.identification = :identification_pro")
     List<ProductImg> findProductImgByProductName(@Param("identification_pro") String identification_pro);
 
+    @Query("SELECT pi FROM ProductImg pi WHERE pi.identification = :identification_pro")
+    ProductImg findProductImgByProductName_(@Param("identification_pro") String identification_pro);
+
     @Transactional
     @Query("SELECT pi FROM ProductImg pi WHERE pi.imageName = :imageName AND pi.identification = :productName")
     Optional<ProductImg> findProductImgByimageName(

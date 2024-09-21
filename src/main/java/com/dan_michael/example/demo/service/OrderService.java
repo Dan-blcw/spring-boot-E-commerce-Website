@@ -15,6 +15,7 @@ import com.dan_michael.example.demo.repositories.ProductRepository;
 import com.dan_michael.example.demo.repositories.SupRe.DetailSizeQuantityRepository;
 import com.dan_michael.example.demo.repositories.SupRe.QuantityDetailRepository;
 import com.dan_michael.example.demo.repositories.UserRepository;
+import com.dan_michael.example.demo.repositories.image.ProductImgRepository;
 import com.dan_michael.example.demo.util.Constants;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,8 @@ public class OrderService {
     private final DetailSizeQuantityRepository detailSizeQuantityRepository;
 
     private final ProductRepository productRepository;
+
+    private final ProductImgRepository productImgRepository;
 
     private final ProductService productService;
 
@@ -69,6 +72,7 @@ public class OrderService {
         var user = userRepository.findById_create(request.getUserId());
 
         Order order = new Order();
+        order.setSkuOrder(ProductService.generateSku());
         order.setIdentification_user(user.getId());
         order.setAddress(request.getAddress());
         order.setPhoneNumber(request.getPhoneNumber());
@@ -123,6 +127,7 @@ public class OrderService {
             detail.setQuantity(x.getQuantity());
             detail.setColor(x.getColor());
             detail.setSize(x.getSize());
+            detail.setImage(x.getImage());
             detail.setIdentification_order(y.getId());
             detail.setIdentification_user(user.getId());
             detail.setUnitPrice(x.getUnitPrice());
@@ -164,6 +169,7 @@ public class OrderService {
         orderRepository.save(y);
         return OrderResponse.builder()
                 .order_id(y.getId())
+                .skuOrder(y.getSkuOrder())
                 .user_id(y.getIdentification_user())
                 .orderDetails(boxItem)
                 .address(y.getAddress())

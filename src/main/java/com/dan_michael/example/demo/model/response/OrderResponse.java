@@ -25,6 +25,7 @@ public class OrderResponse {
     private String address;
 
     private String phoneNumber;
+    private String skuOrder;
     private String emailAddress;
 
     private String paymentMethods;

@@ -27,6 +27,7 @@ public class OrderDetail {
     private Integer identification_user;
     private Integer itemDetail_id;
     private String name;
+    private String image;
     private Integer quantity;
     private String size;
     private String color;
