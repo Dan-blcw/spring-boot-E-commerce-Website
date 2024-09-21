@@ -127,7 +127,9 @@ public class OrderService {
             detail.setQuantity(x.getQuantity());
             detail.setColor(x.getColor());
             detail.setSize(x.getSize());
-            detail.setImage(x.getImage());
+//            System.out.println(productRepository.findByName(x.getName()).get().getImageMain());
+            var image_Detail = productRepository.findByName(x.getName()).get().getImageMain();
+            detail.setImage(image_Detail);
             detail.setIdentification_order(y.getId());
             detail.setIdentification_user(user.getId());
             detail.setUnitPrice(x.getUnitPrice());
@@ -136,7 +138,7 @@ public class OrderService {
                     .itemDetail_id(y.getId())
                     .name(x.getName())
                     .size(x.getSize())
-                    .image(x.getImage())
+                    .image(image_Detail)
                     .color(x.getColor())
                     .quantity(x.getQuantity())
                     .unitPrice(x.getUnitPrice())
