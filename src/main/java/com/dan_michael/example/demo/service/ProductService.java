@@ -946,13 +946,9 @@ public class ProductService {
                 isFavourite = true;
             }
             for (var x_0 : imgs) {
-//                SubImgResponse response = SubImgResponse.builder()
-//                        .id(x_0.getId())
-//                        .img_url(x_0.getImg_url())
-//                        .imageName(x_0.getImageName())
-//                        .identification(x_0.getIdentification())
-//                        .build();
-                productImagesBox.add(x_0.getImg_url());
+                if(!Objects.equals(x.getImageMain(), x_0.getImg_url())){
+                    productImagesBox.add(x_0.getImg_url());
+                }
             }
 
             var y = ProductResponse.builder()
@@ -1042,13 +1038,9 @@ public class ProductService {
             x_0.setSizeQuantities(detailSizeQuantities);
         }
         for (var x_0: imgs) {
-//            SubImgResponse response = SubImgResponse.builder()
-//                    .id(x_0.getId())
-//                    .img_url(x_0.getImg_url())
-//                    .imageName(x_0.getImageName())
-//                    .identification(x_0.getIdentification())
-//                    .build();
-            productImagesBox.add(x_0.getImg_url());
+            if(!Objects.equals(boxItem.get().getImageMain(), x_0.getImg_url())){
+                productImagesBox.add(x_0.getImg_url());
+            }
         }
         var productResponse = ProductResponse.builder()
                 .id(boxItem.get().getId())
