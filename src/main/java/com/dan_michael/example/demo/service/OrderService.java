@@ -98,7 +98,7 @@ public class OrderService {
                 List<SubSizeQuantity> sizeQuantities = new ArrayList<>();
                 for (var y_0: detailSizeQuantities){
                     if(y_0.getIdentification().equals(x.getColor())){
-                        if((y_0.getQuantity() > x.getQuantity()) && Objects.equals(x.getSize(), y_0.getSize())){
+                        if((y_0.getQuantity() >= x.getQuantity()) && Objects.equals(x.getSize(), y_0.getSize())){
                             sizeQuantities.add(SubSizeQuantity.builder()
                                     .size(y_0.getSize())
                                     .quantity(y_0.getQuantity())
