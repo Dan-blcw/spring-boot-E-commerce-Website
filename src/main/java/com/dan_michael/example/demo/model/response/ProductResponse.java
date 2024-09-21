@@ -19,7 +19,8 @@ public class ProductResponse {
     private Integer id;
     private String imageMain;
     private String skuQa;
-    private List<SubImgResponse> images;
+//    private List<SubImgResponse> images;
+    private List<String> images;
     private List<String> colours;
     private List<String> sizes;
     private String subCategory;
