@@ -1,5 +1,6 @@
 package com.dan_michael.example.demo.service;
 
+import com.dan_michael.example.demo.model.dto.ob.CommentDto;
 import com.dan_michael.example.demo.model.dto.ob.OrderDtos;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubColor;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubSizeQuantity;
@@ -37,6 +38,8 @@ public class OrderService {
     private final DetailSizeQuantityRepository detailSizeQuantityRepository;
 
     private final ProductRepository productRepository;
+
+    private final ProductService productService;
 
 //--------------------------Order----------------------------------
     public List<Order> getAllOrders() {
@@ -100,6 +103,7 @@ public class OrderService {
                             detailSizeQuantityRepository.save(y_0);
                             subtotalProduct += x.getQuantity();
                             product.setQuantitySold(product.getQuantitySold()+x.getQuantity());
+//                            productService.createComment()
                         }
                     }
                 }
@@ -139,6 +143,13 @@ public class OrderService {
             box.add(detail);
             createOrderDetail(detail);
         }
+//        var comment2 = CommentDto.builder()
+//                .content("Very good value for money.")
+//                .rating(5.0f)
+//                .productQuality("Excellent")
+//                .username("Dan")
+//                .build();
+
         y.setOrderDetails(box);
         y.setShippingFee(request.getShippingFee());
         y.setTaxFee(0.0f);

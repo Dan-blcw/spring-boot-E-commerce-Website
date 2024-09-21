@@ -20,10 +20,12 @@ import java.util.List;
 public class UserAccountInfoService {
 
     private final UserAccountInfoRepository repository;
+
     private final ChatMessageRepository chatMessageRepository;
+
     private final ChatRoomService chatRoomService;
+
     private final UserRepository userRepository;
-    private final QuestionAnswerRepository questionAnswerRepository;
     public void saveUser(UserAccountInfo user) {
         var check = repository.findUserTestByName(user.getName());
         user.setStatus(Status.ONLINE);
@@ -67,14 +69,14 @@ public class UserAccountInfoService {
 
     public List<UserAccountInfo> findConnectedUsers() {
         var adminOnline = repository.findAll_ByRole(Role.ADMIN,Status.ONLINE);
-        var userOnline = repository.findAll_ByRole(Role.USER,Status.ONLINE);
+//        var userOnline = repository.findAll_ByRole(Role.USER,Status.ONLINE);
         var adminOffline = repository.findAll_ByRole(Role.ADMIN,Status.OFFLINE);
-        var userOffline = repository.findAll_ByRole(Role.USER,Status.OFFLINE);
+//        var userOffline = repository.findAll_ByRole(Role.USER,Status.OFFLINE);
         List<UserAccountInfo> save = new ArrayList<>();
         save.addAll(adminOnline);
-        save.addAll(userOnline);
+//        save.addAll(userOnline);
         save.addAll(adminOffline);
-        save.addAll(userOffline);
+//        save.addAll(userOffline);
         return  save;
     }
 

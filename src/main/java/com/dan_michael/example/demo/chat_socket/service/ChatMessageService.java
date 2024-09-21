@@ -16,9 +16,11 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class ChatMessageService {
+
     private final ChatMessageRepository repository;
+
     private final ChatRoomService chatRoomService;
-    private final UserImgRepository userImgRepository;
+
     public ChatMessage save(ChatMessage chatMessage) {
         var chatId = chatRoomService
                 .getChatRoomId(chatMessage.getSenderId(), chatMessage.getRecipientId(), true)

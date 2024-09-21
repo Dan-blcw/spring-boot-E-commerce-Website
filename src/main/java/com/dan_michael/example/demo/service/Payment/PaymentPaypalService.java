@@ -104,32 +104,25 @@
 //}
 package com.dan_michael.example.demo.service.Payment;
 
-        import com.dan_michael.example.demo.model.dto.ob.ItemDetailDto;
-        import com.dan_michael.example.demo.model.dto.ob.OrderDtos;
-        import com.dan_michael.example.demo.model.response.OrderResponse;
-        import com.dan_michael.example.demo.repositories.ProductRepository;
-        import com.dan_michael.example.demo.util.Constants;
-        import com.paypal.api.payments.*;
-        import com.paypal.base.rest.APIContext;
-        import com.paypal.base.rest.PayPalRESTException;
-        import lombok.Getter;
-        import lombok.RequiredArgsConstructor;
-        import org.slf4j.Logger;
-        import org.slf4j.LoggerFactory;
-        import org.springframework.beans.factory.annotation.Value;
-        import org.springframework.stereotype.Service;
-
-        import java.text.DecimalFormat;
-        import java.util.ArrayList;
-        import java.util.List;
+import com.dan_michael.example.demo.model.response.OrderResponse;
+import com.dan_michael.example.demo.util.Constants;
+import com.paypal.api.payments.*;
+import com.paypal.base.rest.APIContext;
+import com.paypal.base.rest.PayPalRESTException;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class PaymentPaypalService {
-
-    private final ProductRepository productRepository;
     private static final Logger logger = LoggerFactory.getLogger(PaymentPaypalService.class);
-
     @Getter
     @Value("${payment.paypal.clientId}")
     private String CLIENT_ID = "AWDqATAEKGD1PwKN7uTPIBlG94ky6YjfiD6ceJRJT5cciM4kvV3Uff4mYqp4ZrUaRR0RWYBnIxorHfdZ";
@@ -215,7 +208,6 @@ public class PaymentPaypalService {
 
     private String formatAmount(Float amount) {
         return DECIMAL_FORMAT.format(amount);
-//        return String.valueOf(amount);
     }
 
     private RedirectUrls getRedirectURLs() {

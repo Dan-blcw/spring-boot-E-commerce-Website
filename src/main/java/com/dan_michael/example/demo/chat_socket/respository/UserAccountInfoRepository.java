@@ -17,6 +17,7 @@ public interface UserAccountInfoRepository extends JpaRepository<UserAccountInfo
 
     @Query("SELECT pi FROM UserAccountInfo pi Where pi.role = :role AND pi.status = :status")
     List<UserAccountInfo> findAll_ByRole(@Param("role") Role role, @Param("status")Status status);
+
     @Query("SELECT pi FROM UserAccountInfo pi WHERE pi.name = :name")
     UserAccountInfo findUserTestByName(@Param("name")String name);
 }

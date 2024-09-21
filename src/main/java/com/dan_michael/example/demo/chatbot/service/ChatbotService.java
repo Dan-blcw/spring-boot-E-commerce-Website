@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 public class ChatbotService {
 
     private final OriginalQuestionRepository originalQuestionRepository;
+
     private final QuestionAnswerRepository questionAnswerRepository;
 
     private final QuestionOfGuestRepository questionOfGuestRepository;

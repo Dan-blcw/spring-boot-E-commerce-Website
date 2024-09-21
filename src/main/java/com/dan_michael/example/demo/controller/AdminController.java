@@ -296,10 +296,10 @@ public class AdminController {
     }
 
 //----------------------------------styles---------------------------------------------------------------------
-    @GetMapping("/styles")
-    public List<Style> getAllStyles() {
-        return service.getAllStyles();
-    }
+//    @GetMapping("/styles")
+//    public List<Style> getAllStyles() {
+//        return service.getAllStyles();
+//    }
 
     @GetMapping("/styles/{id}")
     public Style getStyleById(@PathVariable String id) {
@@ -331,10 +331,10 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 //----------------------------------Material---------------------------------------------------------------------
-    @GetMapping("/material")
-    public List<Material> getAllMaterials() {
-        return service.getAllMaterials();
-    }
+//    @GetMapping("/material")
+//    public List<Material> getAllMaterials() {
+//        return service.getAllMaterials();
+//    }
 
     @GetMapping("/material/{id}")
     public Material getMaterialById(@PathVariable String id) {

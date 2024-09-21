@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ChangeForgetPasswordDtos {
-    private String email;
+    private String OTPCode;
     private String new_password;
     private String renew_password;
 }

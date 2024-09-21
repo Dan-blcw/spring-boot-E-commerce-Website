@@ -21,10 +21,12 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class EmailSenderService {
+
     @Autowired
     private JavaMailSender mailSender;
 
     private final UserRepository userRepository;
+
     private final DiscountRepository discountRepository;
 //---------------------------------Done-------------------------------------------------------------------
     public ResponseMessageDtos sendEmailAnswer(String toEmail, String subject, String name, String question, String answer, String logoPath) {
@@ -93,7 +95,7 @@ public class EmailSenderService {
                 .status(404)
                 .message(Constants.Send_Mail_Answer_Fail)
                 .build();
-}
+    }
     public ResponseMessageDtos getDiscountCode(String toEmail, String subject, String logoPath) {
         MimeMessage message = mailSender.createMimeMessage();
         var user = userRepository.findByEmail_(toEmail);
@@ -174,6 +176,59 @@ public class EmailSenderService {
                 .message(Constants.Send_Mail_Get_Discount_Fail)
                 .build();
     }
+
+    public ResponseMessageDtos sendOtpForChangePassword(String toEmail, String subject, String logoPath,String otp) {
+        MimeMessage message = mailSender.createMimeMessage();
+        var user = userRepository.findByEmail_(toEmail);
+        if (user == null) {
+            return ResponseMessageDtos.builder()
+                    .status(404)
+                    .message(Constants.User_Not_Found)
+                    .build();
+        }
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom(Constants.Email_Of_Company);
+            helper.setTo(toEmail);
+            helper.setSubject(subject);
+
+
+            // Nội dung email về OTP
+            String htmlBody = "<div style='text-align: center; font-family: Arial, sans-serif; font-size: 15px;'>"
+                    + "<img src='cid:image_logo' style='display: block; margin: 0 auto; max-width: 360px; border-radius: 50%;' />"
+                    + "<h1>Hello, " + user.getName() + "!</h1>"
+                    + "<p>You have requested to reset your password for your account.</p>"
+                    + "<p>Your OTP code is:</p>"
+                    + "<p><strong style='font-size: 24px;'>" + otp + "</strong></p>"
+                    + "<p>Please enter this OTP code to proceed with resetting your password.</p>"
+                    + "<p>Note: This OTP is valid for 10 minutes only.</p>"
+                    + "<p>If you did not request this, please ignore this email.</p>"
+                    + "<p>Best regards,</p>"
+                    + "<p>The E-commerce Support Team</p>"
+                    + "</div>";
+            helper.setText(htmlBody, true);
+
+            ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+            File logo = new File(Objects.requireNonNull(classLoader.getResource(logoPath)).getFile());
+            helper.addInline("image_logo", logo);
+
+
+            // Gửi email
+            mailSender.send(message);
+
+            return ResponseMessageDtos.builder()
+                    .status(200)
+                    .message(Constants.Send_Otp_Success)
+                    .build();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        return ResponseMessageDtos.builder()
+                .status(404)
+                .message(Constants.Send_Otp_Fail)
+                .build();
+    }
+
     public static String generateSku() {
         UUID uuid = UUID.randomUUID();
         return uuid.toString().replace("-", "").toUpperCase().substring(0, 10);

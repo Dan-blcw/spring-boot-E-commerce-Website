@@ -4,10 +4,12 @@ import com.dan_michael.example.demo.model.dto.global.ChangeForgetPasswordDtos;
 import com.dan_michael.example.demo.model.dto.global.ChangePasswordDtos;
 import com.dan_michael.example.demo.model.dto.global.ChangeProfileDtos;
 import com.dan_michael.example.demo.model.dto.global.ForgetPasswordDtos;
+import com.dan_michael.example.demo.model.entities.OTP;
 import com.dan_michael.example.demo.model.entities.User;
 import com.dan_michael.example.demo.model.entities.img.UserImg;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.response.SubImgResponse;
+import com.dan_michael.example.demo.repositories.OTPRepository;
 import com.dan_michael.example.demo.repositories.image.UserImgRepository;
 import com.dan_michael.example.demo.repositories.UserRepository;
 import com.dan_michael.example.demo.util.Constants;
@@ -26,45 +28,68 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final EmailSenderService emailService;
+
     private final PasswordEncoder passwordEncoder;
 
     private final UserRepository repository;
 
+    private final OTPRepository otpRepository;
+
     private final UserImgRepository userImgRepository;
 
     public ResponseMessageDtos checkAccountForgetPassword(ForgetPasswordDtos request) {
-        System.out.println(request);
-        var user = repository.findByUserAndEmail(request.getName(),request.getEmail());
+//        System.out.println(request);
+        var user = repository.findByUserAndEmail(request.getEmail());
         if(user == null){
             return ResponseMessageDtos.builder()
                     .status(0)
                     .message(Constants.Verification_Fail)
                     .build();
         }
+        if(otpRepository.findByOTPCodeByEmail(request.getEmail()) !=null){
+            otpRepository.deleteByOTPEmail(request.getEmail());
+        }
+        OTP otp = OTP.builder()
+                .OTPCode(ProductService.generateSku())
+                .email(request.getEmail())
+                .build();
+        String toEmail = request.getEmail();
+        String subject = Constants.Send_OTP_Change_Password;
+        String logoPath = Constants.Logo_Path_0;
+        emailService.sendOtpForChangePassword(toEmail,subject,logoPath,otp.getOTPCode());
+        otpRepository.save(otp);
         return ResponseMessageDtos.builder()
-                .status(1)
+                .status(200)
                 .message(Constants.Verification_Success)
                 .build();
     }
 
     public ResponseMessageDtos changeAccountForgetPassword(ChangeForgetPasswordDtos request) {
-        var user = repository.findByEmail_(request.getEmail());
+        var otpFlag = otpRepository.findByOTPCodeByOTP(request.getOTPCode());
+        if(otpFlag == null){
+            return ResponseMessageDtos.builder()
+                    .status(404)
+                    .message(Constants.OTP_CODE_Not_Found)
+                    .build();
+        }
+        var user = repository.findByEmail_(otpFlag.getEmail());
         if(user==null){
             return ResponseMessageDtos.builder()
-                    .status(0)
+                    .status(404)
                     .message(Constants.User_Not_Found)
                     .build();
         }
         if (!request.getNew_password().equals(request.getRenew_password())) {
             return ResponseMessageDtos.builder()
-                    .status(0)
+                    .status(404)
                     .message(Constants.Password_Not_Match)
                     .build();
         }
         user.setPassword(passwordEncoder.encode(request.getNew_password()));
         repository.save(user);
         return ResponseMessageDtos.builder()
-                .status(1)
+                .status(200)
                 .message(Constants.Change_FGPassword_Success)
                 .build();
     }

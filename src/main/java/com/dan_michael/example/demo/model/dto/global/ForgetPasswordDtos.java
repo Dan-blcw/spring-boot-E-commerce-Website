@@ -9,6 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Setter
 @Builder
 public class ForgetPasswordDtos {
-    private String name;
     private String email;
+    private String name;
 }

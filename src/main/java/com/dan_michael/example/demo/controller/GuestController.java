@@ -13,6 +13,8 @@ import com.dan_michael.example.demo.model.dto.global.ForgetPasswordDtos;
 import com.dan_michael.example.demo.model.dto.global.PaginationDto;
 import com.dan_michael.example.demo.model.dto.ob.ProductListDtos;
 import com.dan_michael.example.demo.model.entities.Discount;
+import com.dan_michael.example.demo.model.entities.Material;
+import com.dan_michael.example.demo.model.entities.Style;
 import com.dan_michael.example.demo.model.response.ProductResponse;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.response.SubBrandsResponse;
@@ -57,7 +59,18 @@ public class GuestController {
 
     private final DiscountRepository discountRepository;
 
-//--------------------------Except discount----------------------------------
+//------------------------------------------------------------
+    @GetMapping("/styles")
+    public List<Style> getAllStyles() {
+        return service.getAllStyles();
+    }
+
+    @GetMapping("/material")
+    public List<Material> getAllMaterials() {
+        return service.getAllMaterials();
+    }
+
+    //--------------------------Except discount----------------------------------
     @GetMapping(value = "/categories")
     public List<SubCategoryResponse> listCategory(){
     return categoryService.listCategory();
@@ -111,13 +124,13 @@ public class GuestController {
         return chatBotService.createQuestionForGuest(request);
     }
 //--------------------------Forget Password----------------------------------
-    @GetMapping(value = "/check-forget-password")
+    @PostMapping(value = "/check-fp")
     public ResponseMessageDtos checkForgetPassword(
             @RequestBody ForgetPasswordDtos request
     ) {
         return userService.checkAccountForgetPassword(request);
     }
-    @PatchMapping(value = "/update-forget-password")
+    @PatchMapping(value = "/change-fp")
     public ResponseEntity<?> forgetPassword(
             @RequestBody ChangeForgetPasswordDtos request
     ) {
