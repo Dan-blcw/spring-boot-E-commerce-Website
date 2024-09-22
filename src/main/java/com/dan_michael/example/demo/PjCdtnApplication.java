@@ -783,7 +783,7 @@ public class PjCdtnApplication {
 					.build();
 
 			var comment0 = CommentDto.builder()
-					.content("This is a great product!")
+					.content("\"An excellent deal for the cost. The performance and durability of the product make it stand out in its price range, ensuring customers get more than what they pay for.")
 					.rating(4.5f)
 					.color("Đỏ")
 					.size("M")
@@ -791,7 +791,7 @@ public class PjCdtnApplication {
 					.username("Admin")
 					.build();
 			var comment1 = CommentDto.builder()
-					.content("Not satisfied with the quality.")
+					.content("A fantastic balance of affordability and quality. It's rare to find something this well-made at such a competitive price, offering users both reliability and great value for their money.")
 					.rating(2.0f)
 					.color("Xanh")
 					.size("L")
@@ -799,7 +799,7 @@ public class PjCdtnApplication {
 					.username("Dan")
 					.build();
 			var comment2 = CommentDto.builder()
-					.content("Very good value for money.")
+					.content("\"This product offers exceptional value for the price. The quality far exceeds expectations given the cost, making it a smart and budget-friendly choice for anyone looking to get the most out of their investment.")
 					.rating(5.0f)
 					.color("Đen")
 					.size("XL")
