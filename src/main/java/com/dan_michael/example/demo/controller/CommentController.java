@@ -41,6 +41,19 @@ public class CommentController {
         List<Comment> listComment = service.listComment();
         return new ResponseEntity<List<Comment>>(listComment, HttpStatus.OK);
     }
+
+    @GetMapping("/Comments-complete/{user}")
+    public ResponseEntity<?> completeComment(@PathVariable String user) throws ChangeSetPersister.NotFoundException {
+        List<Comment> listComment = service.completeComment(user);
+        return new ResponseEntity<List<Comment>>(listComment, HttpStatus.OK);
+    }
+
+    @GetMapping("/Comments-unfinished/{user}")
+    public ResponseEntity<?> unfinishedComment(@PathVariable String user) throws ChangeSetPersister.NotFoundException {
+        List<Comment> listComment = service.unfinishedComment(user);
+        return new ResponseEntity<List<Comment>>(listComment, HttpStatus.OK);
+    }
+
     @PostMapping("/{product_id}/add-comments")
     public ResponseEntity<Comment> createComment(
             @RequestBody CommentDto comment,

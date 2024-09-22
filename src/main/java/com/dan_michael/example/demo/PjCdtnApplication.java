@@ -785,19 +785,34 @@ public class PjCdtnApplication {
 			var comment0 = CommentDto.builder()
 					.content("This is a great product!")
 					.rating(4.5f)
-					.productQuality("High")
+					.color("Đỏ")
+					.size("M")
+//					.productQuality("High")
 					.username("Admin")
 					.build();
 			var comment1 = CommentDto.builder()
 					.content("Not satisfied with the quality.")
 					.rating(2.0f)
-					.productQuality("Low")
+					.color("Xanh")
+					.size("L")
+//					.productQuality("Low")
 					.username("Dan")
 					.build();
 			var comment2 = CommentDto.builder()
 					.content("Very good value for money.")
 					.rating(5.0f)
-					.productQuality("Excellent")
+					.color("Đen")
+					.size("XL")
+//					.productQuality("Excellent")
+					.username("Dan")
+					.build();
+
+			var comment3 = CommentDto.builder()
+//					.content("Very good value for money.")
+					.rating(0.0f)
+					.color("Đen")
+					.size("XL")
+//					.productQuality("Excellent")
 					.username("Dan")
 					.build();
 			var pro0Response =productService.createProduct(pro0);
@@ -833,6 +848,12 @@ public class PjCdtnApplication {
 			productService.createComment(comment1,pro5Response.getId());
 			productService.createComment(comment0,pro6Response.getId());
 			productService.createComment(comment2,pro7Response.getId());
+
+			productService.createComment(comment3,pro2Response.getId());
+			productService.createComment(comment3,pro17Response.getId());
+			productService.createComment(comment3,pro10Response.getId());
+			productService.createComment(comment3,pro8Response.getId());
+
 			productService.createComment(comment1,pro8Response.getId());
 			productService.createComment(comment1,pro8Response.getId());
 			productService.createComment(comment0,pro9Response.getId());

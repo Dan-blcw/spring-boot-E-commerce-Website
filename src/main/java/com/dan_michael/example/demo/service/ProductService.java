@@ -891,6 +891,12 @@ public class ProductService {
         }
         _total = productList.size();
         // Implementing Pagination
+        if(_page == null){
+            _page = 1;
+        }
+        if(_limit == null){
+            _limit = 20;
+        }
         int start = Math.max((_page - 1) * _limit, 0);
         int end = Math.min(start + _limit, productList.size());
         List<Product> paginatedProducts = productList.subList(start, end);
@@ -1123,17 +1129,40 @@ public class ProductService {
         List<Comment> commentList =  commentRepository.findAll();
         return commentList;
     }
+
+    public List<Comment> unfinishedComment (String user)
+            throws ChangeSetPersister.NotFoundException
+    {
+        List<Comment> commentList =  commentRepository.findCommentUnfinished(user);
+        return commentList;
+    }
+
+    public List<Comment> completeComment (String user)
+            throws ChangeSetPersister.NotFoundException
+    {
+        List<Comment> commentList =  commentRepository.findCommentCompleted(user);
+        return commentList;
+    }
     public Comment createComment (CommentDto commentDto,Integer product_id)
             throws ChangeSetPersister.NotFoundException
     {
         Product product = productRepository.findById(
                 product_id).orElseThrow(()-> new ChangeSetPersister.NotFoundException());
         List<Comment> commentsList = commentRepository.findCommentByIAndIdentification_pro(product.getName());
+        var status = true;
+        if(commentDto.getContent() == null ){
+            status = false;
+        }
         Comment comment = Comment.builder()
                 .content(commentDto.getContent())
                 .rating(commentDto.getRating())
-                .productQuality(commentDto.getProductQuality())
+                .color(commentDto.getColor())
+                .size(commentDto.getSize())
+                .image(product.getImageMain())
+//                .productQuality(commentDto.getProductQuality())
                 .identification_pro(product.getName())
+                .rate_status(status)
+                .createDate(new Date())
                 .identification_user(commentDto.getUsername())
                 .build();
         commentsList.add(comment);
@@ -1183,7 +1212,6 @@ public class ProductService {
         }
         comment.setContent(commentDto.getContent());
         comment.setRating(commentDto.getRating());
-        comment.setProductQuality(commentDto.getProductQuality());
         commentsList.add(comment);
         Float rating = 0.0f;
         int nRating = commentsList.size();

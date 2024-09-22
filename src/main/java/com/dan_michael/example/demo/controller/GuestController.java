@@ -36,6 +36,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -147,19 +148,15 @@ public class GuestController {
         var ob = service.findbyIDHander(_userId,id);
         return ResponseEntity.ok(ob);
     }
-//    @GetMapping(value = "/products")
-//    public ResponseEntity<?> get_All(
-//            @RequestParam (required = false)Integer _userId,
-//            @RequestParam (required = false)Integer _limit,
-//            @RequestParam (required = false)Integer _page
-//    ) {
-//        var list = service.findAllHander(_userId,_limit,_page);
-//        return ResponseEntity.ok(
-//                ProductListDtos.builder()
-//                        .data(list)
-//                        .paginationDto(new PaginationDto(_page,_limit))
-//                        .build());
-//    }
+    @GetMapping(value = "/product-relate/{info}")
+    public ResponseEntity<?> productRelate(
+            @PathVariable (required = false)String info
+    ) {
+        List<String> sub = new ArrayList<>();
+        sub.add(info);
+        var save =  service.search_all(null,null,null,null,null,null,null,sub,null,null,null,null,null,null,null);
+        return ResponseEntity.ok(save);
+    }
 //--------------------------Search----------------------------------
     @GetMapping(value = "/products",produces = "application/json")
     public ResponseEntity<?> global_search(

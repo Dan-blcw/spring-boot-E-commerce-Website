@@ -14,7 +14,18 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
     @Query("SELECT pi FROM Comment pi WHERE pi.id = :Id")
     Comment findCommentById(@Param("Id")Integer Id);
 
-    @Query("SELECT pi FROM Comment pi WHERE pi.identification_pro = :identification_pro")
+
+//    @Query("SELECT pi FROM Comment pi WHERE pi.content IS NOT NULL AND pi.productQuality IS NOT NULL")
+//    List<Comment> findCommentCompleted();
+//
+//    @Query("SELECT pi FROM Comment pi WHERE pi.content IS NULL OR pi.productQuality IS NULL")
+//    List<Comment> findCommentUnfinished();
+    @Query("SELECT pi FROM Comment pi WHERE pi.content IS NOT NULL AND pi.identification_user = :identification_user")
+    List<Comment> findCommentCompleted(@Param("identification_user") String identification_user);
+
+    @Query("SELECT pi FROM Comment pi WHERE pi.content IS NULL AND pi.identification_user = :identification_user")
+    List<Comment> findCommentUnfinished(@Param("identification_user") String identification_user);
+    @Query("SELECT pi FROM Comment pi WHERE pi.identification_pro = :identification_pro AND pi.content IS NOT NULL")
     List<Comment> findCommentByIAndIdentification_pro(@Param("identification_pro") String identification_pro);
 
     @Query("SELECT pi FROM Comment pi WHERE pi.identification_user = :identification_user")

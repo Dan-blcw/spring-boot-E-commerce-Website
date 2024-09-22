@@ -19,6 +19,7 @@ import com.dan_michael.example.demo.repositories.image.ProductImgRepository;
 import com.dan_michael.example.demo.util.Constants;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import com.dan_michael.example.demo.model.dto.ob.ItemDetailDto;
 
@@ -39,8 +40,6 @@ public class OrderService {
     private final DetailSizeQuantityRepository detailSizeQuantityRepository;
 
     private final ProductRepository productRepository;
-
-    private final ProductImgRepository productImgRepository;
 
     private final ProductService productService;
 
@@ -89,7 +88,7 @@ public class OrderService {
         for (ItemDetailDto x : request.getOrderDetails()) {
             OrderDetail detail = new OrderDetail();
             detail.setItemDetail_id(x.getItemDetail_id());
-
+            var image_Detail = productRepository.findByName(x.getName()).get().getImageMain();
             var product = productRepository.findByID_(x.getItemDetail_id());
             var quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(product.getName());
             List<SubColor> BoxResponse = new ArrayList<>();
@@ -107,7 +106,18 @@ public class OrderService {
                             detailSizeQuantityRepository.save(y_0);
                             subtotalProduct += x.getQuantity();
                             product.setQuantitySold(product.getQuantitySold()+x.getQuantity());
-//                            productService.createComment()
+                            CommentDto commentDto = CommentDto
+                                    .builder()
+                                    .rating(0.0f)
+                                    .username(userRepository.findById(request.getUserId()).get().getName())
+                                    .color(x.getColor())
+                                    .size(y_0.getSize())
+                                    .build();
+                            try {
+                                productService.createComment(commentDto,x.getItemDetail_id());
+                            } catch (ChangeSetPersister.NotFoundException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
                     }
                 }
@@ -127,8 +137,6 @@ public class OrderService {
             detail.setQuantity(x.getQuantity());
             detail.setColor(x.getColor());
             detail.setSize(x.getSize());
-//            System.out.println(productRepository.findByName(x.getName()).get().getImageMain());
-            var image_Detail = productRepository.findByName(x.getName()).get().getImageMain();
             detail.setImage(image_Detail);
             detail.setIdentification_order(y.getId());
             detail.setIdentification_user(user.getId());
