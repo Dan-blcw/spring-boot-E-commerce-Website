@@ -40,4 +40,9 @@ public class UserAccountInfoController {
         return ResponseEntity.ok(userService.findConnectedUsers());
     }
 
+    @GetMapping("/admin")
+    public ResponseEntity<List<UserAccountInfo>> findConnectedUsersAdmin() {
+        return ResponseEntity.ok(userService.findConnectedUsersAdmin());
+    }
+
 }

@@ -1159,7 +1159,7 @@ public class ProductService {
                 .color(commentDto.getColor())
                 .size(commentDto.getSize())
                 .image(product.getImageMain())
-//                .productQuality(commentDto.getProductQuality())
+                .imageUser(userRepository.findByName_(commentDto.getUsername()).getUserImgUrl())
                 .identification_pro(product.getName())
                 .rate_status(status)
                 .createDate(new Date())

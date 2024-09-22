@@ -25,9 +25,10 @@ public class Comment {
 
     private String content;
     private String image;
+    private String imageUser;
     private String color;
     private String size;
-//    private String productQuality;
+
     private Float rating;
     private Boolean rate_status;
     private String identification_pro;

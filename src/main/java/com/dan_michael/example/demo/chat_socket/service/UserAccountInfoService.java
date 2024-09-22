@@ -80,4 +80,15 @@ public class UserAccountInfoService {
         return  save;
     }
 
+    public List<UserAccountInfo> findConnectedUsersAdmin() {
+        var chatBot = repository.findUserTestByName(Constants.Chat_Bot_Name);
+        var userOnline = repository.findAll_ByRole(Role.USER,Status.ONLINE);
+        var userOffline = repository.findAll_ByRole(Role.USER,Status.OFFLINE);
+        List<UserAccountInfo> save = new ArrayList<>();
+        save.add(chatBot);
+        save.addAll(userOnline);
+        save.addAll(userOffline);
+        return  save;
+    }
+
 }
