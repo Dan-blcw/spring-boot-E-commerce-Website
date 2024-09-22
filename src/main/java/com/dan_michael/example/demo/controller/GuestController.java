@@ -138,6 +138,16 @@ public class GuestController {
         return ResponseEntity.ok(userService.changeAccountForgetPassword(request));
     }
 
+//------------------------------------------------------------
+//    @GetMapping(value = "/detail-user")
+//    public ResponseEntity<?> detail(
+//            @RequestParam (required = false)Integer _userId,
+//            @RequestParam (required = false)Integer id
+//
+//    ) {
+//        var ob = service.findbyIDHander(_userId,id);
+//        return ResponseEntity.ok(ob);
+//    }
 //--------------------------Read Only Product----------------------------------
     @GetMapping(value = "/detail-product")
     public ResponseEntity<?> detail(
@@ -150,11 +160,14 @@ public class GuestController {
     }
     @GetMapping(value = "/product-relate/{info}")
     public ResponseEntity<?> productRelate(
+            @RequestParam (required = false) Integer _userId,
+            @RequestParam Integer _limit,
+            @RequestParam Integer _page,
             @PathVariable (required = false)String info
     ) {
         List<String> sub = new ArrayList<>();
         sub.add(info);
-        var save =  service.search_all(null,null,null,null,null,null,null,sub,null,null,null,null,null,null,null);
+        var save =  service.search_all(_userId,_limit,_page,null,null,null,null,sub,null,null,null,null,null,null,null);
         return ResponseEntity.ok(save);
     }
 //--------------------------Search----------------------------------

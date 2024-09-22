@@ -36,6 +36,13 @@ public class AccountController {
          return ResponseEntity.ok(Change_service.updateProfile(request, connectedUser));
     }
 
+    @GetMapping(value = "/detail-profile")
+    public ResponseEntity<?> detailProfile(
+            Principal connectedUser
+    ) {
+        return ResponseEntity.ok(Change_service.detailProfile(connectedUser));
+    }
+
     @PatchMapping("/update-password")
     public ResponseEntity<?> updatePassword(
             @RequestBody ChangePasswordDtos request,

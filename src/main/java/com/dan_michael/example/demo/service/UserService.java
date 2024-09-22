@@ -7,6 +7,7 @@ import com.dan_michael.example.demo.model.dto.global.ForgetPasswordDtos;
 import com.dan_michael.example.demo.model.entities.OTP;
 import com.dan_michael.example.demo.model.entities.User;
 import com.dan_michael.example.demo.model.entities.img.UserImg;
+import com.dan_michael.example.demo.model.response.DetailProfile;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.response.SubImgResponse;
 import com.dan_michael.example.demo.repositories.OTPRepository;
@@ -150,6 +151,25 @@ public class UserService {
         return ResponseMessageDtos.builder()
                 .status(1)
                 .message(Constants.Change_InformationPF_Success)
+                .build();
+    }
+
+    public DetailProfile detailProfile(Principal connectedUser) {
+        var save =  (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        return DetailProfile.builder()
+                .name(save.getName())
+                .username(save.getUsername())
+                .email(save.getEmail())
+                .password(save.getPassword())
+                .companyName(save.getCompanyName())
+                .address(save.getAddress())
+                .phoneNumber(save.getPhoneNumber())
+                .date_joined(save.getDate_joined())
+                .last_login(save.getLast_login())
+                .last_update(save.getLast_update())
+                .is_active(save.getIs_active())
+                .useFirstDiscount(save.getUseFirstDiscount())
+                .userImgUrl(save.getUserImgUrl())
                 .build();
     }
 

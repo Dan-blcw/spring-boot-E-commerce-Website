@@ -36,6 +36,8 @@ public final class Constants {
     public static final String Change_FGPassword_Success = "Update Forget Password Successfully ";
     public static final String Change_InformationPF_Success = "Update Information Profile User Successfully";
     public static final String Change_InformationPF_Fail = "Update Forget Password Successfully";
+    public static final String Get_InformationPF_Success = "Get Information Detail Profile Successfully";
+    public static final String Get_InformationPF_Fail = "Get Information Detail Profile Failed";
     public static final String Wrong_Password = "Wrong Password, The Password You Entered Does Not Match The Saved Password.!";
     public static final String Change_Password = "Update Password User Successfully ";
 
