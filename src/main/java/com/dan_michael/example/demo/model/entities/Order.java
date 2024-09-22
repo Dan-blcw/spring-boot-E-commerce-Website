@@ -39,7 +39,7 @@ public class Order {
     private String phoneNumber;
     private String emailAddress;
 
-    private String shippingStatus;
+//    private String shippingStatus;
 
     private String PaymentMethods;
     private Integer paymentStatus;
@@ -52,7 +52,7 @@ public class Order {
     private Integer percentDiscount;
     private Float TotalAmountOrder;
 
-    private Integer orderStatus;
+    private String orderStatus;
 
     @CreationTimestamp
     private Date createdAt;

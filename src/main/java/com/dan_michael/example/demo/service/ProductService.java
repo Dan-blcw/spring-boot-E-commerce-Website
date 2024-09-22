@@ -848,7 +848,8 @@ public class ProductService {
             Integer priceGte,
             Integer priceLte,
             String sort,
-            Boolean isBestSelling
+            Boolean isBestSelling,
+            String removeDetail
     ) {
         int ratingLt = 6;
         int _total = 0;
@@ -900,9 +901,15 @@ public class ProductService {
         int start = Math.max((_page - 1) * _limit, 0);
         int end = Math.min(start + _limit, productList.size());
         List<Product> paginatedProducts = productList.subList(start, end);
+        if(removeDetail != null){
+            Collections.shuffle(paginatedProducts);
+        }
 
         List<ProductResponse> productsResponseList = new ArrayList<>();
         for (var x : paginatedProducts) {
+            if(removeDetail!=null && Objects.equals(x.getName(), removeDetail)){
+                continue;
+            }
             List<ProductImg> imgs = productImgRepository.findProductImgByProductName(x.getName());
             List<Comment> commentsList = commentRepository.findCommentByIAndIdentification_pro(x.getName());
             List<QuantityDetail> quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(x.getName());
@@ -956,7 +963,6 @@ public class ProductService {
                     productImagesBox.add(x_0.getImg_url());
                 }
             }
-
             var y = ProductResponse.builder()
                     .id(x.getId())
                     .isFavorite(isFavourite)
@@ -1149,19 +1155,24 @@ public class ProductService {
         Product product = productRepository.findById(
                 product_id).orElseThrow(()-> new ChangeSetPersister.NotFoundException());
         List<Comment> commentsList = commentRepository.findCommentByIAndIdentification_pro(product.getName());
-        var status = true;
+        var comment_status = commentDto.getStatus();
+        if(comment_status == null){
+            comment_status =0;
+        }
+        var rate_status = true;
         if(commentDto.getContent() == null ){
-            status = false;
+            rate_status = false;
         }
         Comment comment = Comment.builder()
                 .content(commentDto.getContent())
                 .rating(commentDto.getRating())
                 .color(commentDto.getColor())
                 .size(commentDto.getSize())
+                .status(commentDto.getStatus())
                 .image(product.getImageMain())
                 .imageUser(userRepository.findByName_(commentDto.getUsername()).getUserImgUrl())
                 .identification_pro(product.getName())
-                .rate_status(status)
+                .rate_status(rate_status)
                 .createDate(new Date())
                 .identification_user(commentDto.getUsername())
                 .build();

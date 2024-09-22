@@ -456,7 +456,6 @@ public class PjCdtnApplication {
 					.quantitySold(21)
 					.style("Casual")
 					.material("Cotton")
-
 					.quantityDetails(listsub1)
 					.category("Áo")
 					.subCategory("Áo Sơ Mi")
@@ -787,6 +786,7 @@ public class PjCdtnApplication {
 					.rating(4.5f)
 					.color("Đỏ")
 					.size("M")
+					.status(1)
 //					.productQuality("High")
 					.username("Admin")
 					.build();
@@ -795,6 +795,7 @@ public class PjCdtnApplication {
 					.rating(2.0f)
 					.color("Xanh")
 					.size("L")
+					.status(1)
 //					.productQuality("Low")
 					.username("Dan")
 					.build();
@@ -803,6 +804,7 @@ public class PjCdtnApplication {
 					.rating(5.0f)
 					.color("Đen")
 					.size("XL")
+					.status(1)
 //					.productQuality("Excellent")
 					.username("Dan")
 					.build();
@@ -810,6 +812,7 @@ public class PjCdtnApplication {
 			var comment3 = CommentDto.builder()
 //					.content("Very good value for money.")
 					.rating(0.0f)
+					.status(1)
 					.color("Đen")
 					.size("XL")
 //					.productQuality("Excellent")

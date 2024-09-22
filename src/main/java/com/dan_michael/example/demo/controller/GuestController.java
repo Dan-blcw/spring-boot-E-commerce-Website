@@ -161,13 +161,14 @@ public class GuestController {
     @GetMapping(value = "/product-relate/{info}")
     public ResponseEntity<?> productRelate(
             @RequestParam (required = false) Integer _userId,
-            @RequestParam Integer _limit,
-            @RequestParam Integer _page,
-            @PathVariable (required = false)String info
+            @RequestParam (required = false) String name,
+            @RequestParam (required = false) Integer _limit,
+            @RequestParam (required = false) Integer _page,
+            @PathVariable (required = false) String info
     ) {
         List<String> sub = new ArrayList<>();
         sub.add(info);
-        var save =  service.search_all(_userId,_limit,_page,null,null,null,null,sub,null,null,null,null,null,null,null);
+        var save =  service.search_all(_userId,_limit,_page,null,null,null,null,sub,null,null,null,null,null,null,null,name);
         return ResponseEntity.ok(save);
     }
 //--------------------------Search----------------------------------
@@ -189,7 +190,7 @@ public class GuestController {
             @RequestParam Integer _page,
             @RequestParam (required = false)String _sort
     ) {
-        ProductListDtos list = service.search_all(_userId,_limit,_page,categoryName,productName,style,material,subCategoryName,_isPromotion,_isReleased,ratingGte,price_gte,price_lte,_sort,_isBestSelling);
+        ProductListDtos list = service.search_all(_userId,_limit,_page,categoryName,productName,style,material,subCategoryName,_isPromotion,_isReleased,ratingGte,price_gte,price_lte,_sort,_isBestSelling,null);
 //        return ResponseEntity.ok(ProductListDtos.builder().data(list).paginationDto(new PaginationDto(_limit,_page,)).build());
         return ResponseEntity.ok(list);
     }

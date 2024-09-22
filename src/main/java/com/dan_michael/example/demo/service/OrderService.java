@@ -9,6 +9,7 @@ import com.dan_michael.example.demo.model.entities.SubEn.OrderDetail;
 import com.dan_michael.example.demo.model.entities.SubEn.DetailSizeQuantity;
 import com.dan_michael.example.demo.model.response.OrderResponse;
 import com.dan_michael.example.demo.model.response.SubCart_OrderResponse;
+import com.dan_michael.example.demo.repositories.CommentRepository;
 import com.dan_michael.example.demo.repositories.SupRe.OrderDetailRepository;
 import com.dan_michael.example.demo.repositories.OrderRepository;
 import com.dan_michael.example.demo.repositories.ProductRepository;
@@ -30,6 +31,8 @@ import java.util.*;
 public class OrderService {
 
     private final UserRepository userRepository;
+
+    private final CommentRepository commentRepository;
 
     private final OrderRepository orderRepository;
 
@@ -62,6 +65,29 @@ public class OrderService {
         }
         return flag;
     }
+
+    public List<Order> getOrderByUserId_PaymentStatus(Integer id, Integer paymentStatus) {
+        var flag = orderRepository.findByAllOrderByUser_PaymentStatus(id,paymentStatus);
+        for(var x:flag){
+            x.setOrderDetails(orderDetailRepository.findByIdentification_user(id,x.getId()));
+        }
+        return flag;
+    }
+    public List<Order> getOrderByUserId_OrderStatus(Integer id, String orderStatus) {
+        var flag = orderRepository.findByAllOrderByUser_OrderStatus(id,orderStatus);
+        for(var x:flag){
+            x.setOrderDetails(orderDetailRepository.findByIdentification_user(id,x.getId()));
+        }
+        return flag;
+    }
+
+    public List<Order> getOrderByUserId_Both(Integer id,Integer paymentStatus ,String orderStatus) {
+        var flag = orderRepository.findByAllOrderByUser_Both(id,paymentStatus,orderStatus);
+        for(var x:flag){
+            x.setOrderDetails(orderDetailRepository.findByIdentification_user(id,x.getId()));
+        }
+        return flag;
+    }
     @Transactional
     public OrderResponse createOrder(OrderDtos request) {
         var subtotalProduct = 0;
@@ -79,7 +105,6 @@ public class OrderService {
         order.setPaymentMethods(request.getPaymentMethods());
         order.setPaymentStatus(request.getPaymentStatus());
         order.setOrderStatus(request.getOrderStatus());
-        order.setShippingStatus(Constants.Order_Status_Wait);
         order.setCreatedAt(new Date());
 
         List<SubCart_OrderResponse> boxItem = new ArrayList<>();
@@ -114,7 +139,13 @@ public class OrderService {
                                     .size(y_0.getSize())
                                     .build();
                             try {
-                                productService.createComment(commentDto,x.getItemDetail_id());
+                                if(request.getPaymentStatus() != 0 ){
+                                    commentDto.setStatus(1);
+                                    productService.createComment(commentDto,x.getItemDetail_id());
+                                }else {
+                                    commentDto.setStatus(0);
+                                    productService.createComment(commentDto,x.getItemDetail_id());
+                                }
                             } catch (ChangeSetPersister.NotFoundException e) {
                                 throw new RuntimeException(e);
                             }
@@ -158,13 +189,6 @@ public class OrderService {
             box.add(detail);
             createOrderDetail(detail);
         }
-//        var comment2 = CommentDto.builder()
-//                .content("Very good value for money.")
-//                .rating(5.0f)
-//                .productQuality("Excellent")
-//                .username("Dan")
-//                .build();
-
         y.setOrderDetails(box);
         y.setShippingFee(request.getShippingFee());
         y.setTaxFee(0.0f);
@@ -183,7 +207,6 @@ public class OrderService {
                 .user_id(y.getIdentification_user())
                 .orderDetails(boxItem)
                 .address(y.getAddress())
-                .shippingStatus(y.getShippingStatus())
                 .phoneNumber(y.getPhoneNumber())
                 .emailAddress(y.getEmailAddress())
                 .paymentMethods(y.getPaymentMethods())
@@ -201,8 +224,15 @@ public class OrderService {
     @Transactional
     public Optional<Order> updateOrder(Integer id, OrderDtos request) {
         return orderRepository.findById(id).map(order -> {
+            if(order.getPaymentStatus() == 0 && request.getPaymentStatus() !=0){
+                var comment = commentRepository.findCommentStatus0(userRepository.findById_create(order.getIdentification_user()).getName());
+                for(var change :comment){
+                    change.setStatus(1);
+                }
+                commentRepository.saveAll(comment);
+            }
+            order.setPaymentStatus(request.getPaymentStatus());
             order.setAddress(request.getAddress());
-//            order.setCompanyName(request.getCompanyName());
             order.setPhoneNumber(request.getPhoneNumber());
             order.setEmailAddress(request.getEmailAddress());
             order.setOrderStatus(request.getOrderStatus());

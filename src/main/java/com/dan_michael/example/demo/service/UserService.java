@@ -137,16 +137,10 @@ public class UserService {
                     .build();
         }
         user.setName(request.getName());
-        user.setUsername(request.getName());
-//        user.setEmail(request.getEmail());
-
-        user.setCompanyName(request.getCompanyName());
+        user.setEmail(request.getEmail());
         user.setAddress(request.getAddress());
         user.setPhoneNumber(request.getPhoneNumber());
-
-//        user.setIs_active(request.getIs_active());
         user.setLast_update(new Date());
-
         repository.save(user);
         return ResponseMessageDtos.builder()
                 .status(1)

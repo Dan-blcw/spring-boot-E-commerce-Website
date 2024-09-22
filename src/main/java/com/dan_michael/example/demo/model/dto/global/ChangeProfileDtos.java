@@ -13,7 +13,7 @@ import java.util.Date;
 @Builder
 public class ChangeProfileDtos {
     private String name;
+    private String email;
     private String address;
-    private String companyName;
     private String phoneNumber;
 }

@@ -31,7 +31,7 @@ public class OrderResponse {
     private String paymentMethods;
     private Integer paymentStatus;
 
-    private String shippingStatus;
+//    private String shippingStatus;
 
     private Float unitPrice;
     private Float shippingFee;
@@ -41,5 +41,5 @@ public class OrderResponse {
     private Float totalPayment;
     private Integer totalQuantity;
 
-    private Integer orderStatus;
+    private String orderStatus;
 }

@@ -22,6 +22,9 @@ public class CommentDto {
     @JsonProperty("identification_pro")
     private String identification_pro;
 
+    @JsonProperty("status")
+    private Integer status;
+
     @JsonProperty("color")
     private String color;
 

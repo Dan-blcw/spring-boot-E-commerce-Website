@@ -33,6 +33,7 @@ public class Comment {
     private Boolean rate_status;
     private String identification_pro;
     private String identification_user;
+    private Integer status;
     @CreatedDate
     @Column(
             nullable = false,

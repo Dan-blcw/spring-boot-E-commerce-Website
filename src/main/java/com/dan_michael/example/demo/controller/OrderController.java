@@ -25,6 +25,8 @@ public class OrderController {
     public List<Order> getAllOrders() {
         return orderService.getAllOrders();
     }
+
+
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable Integer id) {
         Optional<Order> order = orderService.getOrderById(id);
@@ -35,6 +37,21 @@ public class OrderController {
     @GetMapping("/user/{id}")
     public List<Order> getOrderByUserId(@PathVariable Integer id) {
         return orderService.getOrderByUserId(id);
+    }
+
+    @GetMapping("/user/classify")
+    public List<Order> getOrderByUserIdClassify(
+            @RequestParam(required = false) Integer userId,
+            @RequestParam(required = false) Integer paymentStatus,
+            @RequestParam(required = false) String orderStatus
+    ) {
+        if(paymentStatus != null  && orderStatus == null){
+            return orderService.getOrderByUserId_PaymentStatus(userId,paymentStatus);
+        }
+        if(orderStatus!= null  && paymentStatus == null){
+            return orderService.getOrderByUserId_OrderStatus(userId,orderStatus);
+        }
+        return orderService.getOrderByUserId_Both(userId,paymentStatus,orderStatus);
     }
 //     Create a new order
     @PostMapping

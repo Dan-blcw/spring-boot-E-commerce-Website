@@ -25,5 +25,5 @@ public class OrderDtos {
 
     private String percentDiscountSku;
     private Integer percentDiscount;
-    private Integer orderStatus;
+    private String orderStatus;
 }

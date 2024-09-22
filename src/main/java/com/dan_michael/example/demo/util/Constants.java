@@ -100,13 +100,15 @@ public final class Constants {
     public static final String Delete_Order_Detail_Fail =  "Delete Order Detail Failure !";
 
 //  Order Shipping Status
-    public static final String Order_Status_Wait =  "Chờ Lấy Hàng";
-    public static final String Order_Status_Take_Process_ =  "Đang Đi Lấy";
-    public static final String Order_Status_Delivery_Process =  "Đang Giao Hàng";
-    public static final String Order_Status_Delivered =  "Đã Giao Hàng";
-    public static final String Order_Status_Refund =  "Chuyển hoàn";
-    public static final String Order_Status_No_Customer_Contact =  "Không gặp khách";
-    public static final String Order_Status_Unfinished =  "Chưa hoàn thành";
+//in transit
+//received
+//cancelled
+//    public static final String Order_Status_Wait =  "Chờ Lấy Hàng";
+    public static final String Order_Status_Unpaid =  "Chưa Thanh Toán";
+    public static final String Order_Status_Paid =  "Đã Thanh Toán";
+    public static final String Order_Status_In_Transit =  "Đang Vận Chuyển";
+    public static final String Order_Status_Received =  "Đã Nhận Hàng";
+    public static final String Order_Status_Cancelled =  "Đã Hủy";
 //  PayPal response
     public static final String PayPal_Name =  "paypal";
 
