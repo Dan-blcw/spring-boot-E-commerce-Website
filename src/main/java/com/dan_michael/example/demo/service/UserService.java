@@ -40,7 +40,6 @@ public class UserService {
     private final UserImgRepository userImgRepository;
 
     public ResponseMessageDtos checkAccountForgetPassword(ForgetPasswordDtos request) {
-//        System.out.println(request);
         var user = repository.findByUserAndEmail(request.getEmail());
         if(user == null){
             return ResponseMessageDtos.builder()
@@ -58,8 +57,8 @@ public class UserService {
         String toEmail = request.getEmail();
         String subject = Constants.Send_OTP_Change_Password;
         String logoPath = Constants.Logo_Path_0;
-        emailService.sendOtpForChangePassword(toEmail,subject,logoPath,otp.getOTPCode());
         otpRepository.save(otp);
+        emailService.sendOtpForChangePassword(toEmail,subject,logoPath,otp.getOTPCode());
         return ResponseMessageDtos.builder()
                 .status(200)
                 .message(Constants.Verification_Success)

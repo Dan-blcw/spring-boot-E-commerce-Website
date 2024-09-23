@@ -26,12 +26,14 @@ public final class Constants {
     public static final String Configuration_Security_Path = "/configuration/security";
     public static final String Index_Chat_Bot_Path = "/index.html";
     public static final String User_Not_Found = "User Not Found In Database, Please Check Email Again";
+    public static final String User_Already_Exists = "User Already Exists In Database";
     public static final String OTP_CODE_Not_Found = "OTP Not Found In Database, Please Check Email Again";
     public static final String Email_ARD_Exist = "This Email Has Been Registered, Please Enter Another Email !";
 
 //  Account Response
     public static final String Verification_Success = "Send OTP Account Verification Successful, please check email for taking OTP Code !";
     public static final String Verification_Fail = "Account Verification Failed !";
+    public static final String Exists_Account = "Account Or Username Already Exists!";
     public static final String Password_Not_Match = "RePassword Are Not The Same. It Does Not Match !";
     public static final String Change_FGPassword_Success = "Update Forget Password Successfully ";
     public static final String Change_InformationPF_Success = "Update Information Profile User Successfully";

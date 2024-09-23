@@ -14,7 +14,7 @@ public class OrderDtos {
     private Integer userId;
     private List<ItemDetailDto> orderDetails;
     private String address;
-    private String companyName;
+    private String skuDiscount;
     private String phoneNumber;
     private String emailAddress;
 

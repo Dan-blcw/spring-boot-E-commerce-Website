@@ -22,6 +22,6 @@ public class OTP {
     private Integer id;
     private String OTPCode;
     private String email;
-    private Integer status;
+//    private Integer status;
 
 }

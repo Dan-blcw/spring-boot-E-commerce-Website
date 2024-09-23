@@ -11,7 +11,7 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query("SELECT pi FROM Order pi WHERE pi.identification_user = :identification_user")
     List<Order> findByAllOrderByUser(@Param("identification_user") Integer identification_user);
-    @Query("SELECT pi FROM Order pi WHERE pi.orderStatus IS NOT NULL AND pi.orderStatus <> 'Đã Hủy'")
+    @Query("SELECT pi FROM Order pi WHERE pi.orderStatus <> 'Đã Hủy'")
     List<Order> findByAllOrderActive();
     @Query("SELECT pi FROM Order pi WHERE  pi.orderStatus =  :orderStatus")
     List<Order> findByAllOrderByAdmin_OrderStatus(

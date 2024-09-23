@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface DiscountRepository extends JpaRepository<Discount, Integer> {
-    @Query("SELECT pi FROM Discount pi WHERE pi.sku = :sku")
+    @Query("SELECT pi FROM Discount pi WHERE pi.sku = :sku AND pi.status = 1")
     Discount findBySku(@Param("sku") String sku);
 }

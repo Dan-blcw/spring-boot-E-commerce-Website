@@ -56,6 +56,8 @@ public class ProductService {
 
     private final StyleRepository styleRepository;
 
+    private final CategoryRepository categoryRepository;
+
     private final MaterialRepository materialRepository;
 
 //-------------------Answer AI -----------------------------------
@@ -911,10 +913,29 @@ public class ProductService {
             if(removeDetail!=null && Objects.equals(x.getName(), removeDetail)){
                 continue;
             }
+            var unactiveStyle = styleRepository.findByUnActive();
+            var unactiveCategory = categoryRepository.findByUnActive();
+            var unactiveMaterial = materialRepository.findByUnActive();
+            var unactiveTradeMask = materialRepository.findByUnActive();
+            List<String> unactiveStyle_ = new ArrayList<>();
+            List<String> unactiveCategory_ = new ArrayList<>();
+            List<String> unactiveMaterial_ = new ArrayList<>();
+            List<String> unactiveTradeMask_ = new ArrayList<>();
+            for (var flag: unactiveStyle) {unactiveStyle_.add(flag.getName());}
+            for (var flag: unactiveCategory) {unactiveCategory_.add(flag.getName());}
+            for (var flag: unactiveMaterial) {unactiveMaterial_.add(flag.getName());}
+            for (var flag: unactiveTradeMask) {unactiveTradeMask_.add(flag.getName());}
+            if(unactiveStyle_.contains(x.getStyle())){continue;}
+            if(unactiveCategory_.contains(x.getCategory())){continue;}
+            if(unactiveMaterial_.contains(x.getMaterial())){continue;}
+            if(unactiveTradeMask_.contains(x.getTradeMask())){continue;}
+
             List<ProductImg> imgs = productImgRepository.findProductImgByProductName(x.getName());
             List<Comment> commentsList = commentRepository.findCommentByIAndIdentification_pro(x.getName());
             List<QuantityDetail> quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(x.getName());
             List<FavouriteProduct> favouriteList = favouriteProductRepository.findFavouriteByIdentification(x.getName());
+
+
 
             List<String> productImagesBox = new ArrayList<>();
             List<Integer> favouriteListRe = new ArrayList<>();
@@ -1111,6 +1132,7 @@ public class ProductService {
         }
         quantityDetailRepository.deleteByIdentification(boxItem.get().getName());
         favouriteProductRepository.deleteByIdentification(boxItem.get().getName());
+        productRepository.deleteById(id);
         return ResponseMessageDtos.builder()
                 .status(200)
                 .message(Constants.Delete_Product_Success)
@@ -1482,7 +1504,7 @@ public class ProductService {
     }
 //    ----------------------------------TradeMask------------------------------------------
         public List<TradeMark> findAll() {
-            return tradeMarkRepository.findAll();
+            return tradeMarkRepository.findByActive();
         }
 
         public TradeMark findByTradeMarkId(String name) {
@@ -1511,7 +1533,7 @@ public class ProductService {
         }
 //    ----------------------------------Style------------------------------------------
     public List<Style> getAllStyles() {
-        return styleRepository.findAll();
+        return styleRepository.findByActive();
     }
 
     public Style getStyleById(String name) {
@@ -1540,7 +1562,7 @@ public class ProductService {
     }
     //    ----------------------------------Material------------------------------------------
     public List<Material> getAllMaterials() {
-        return materialRepository.findAll();
+        return materialRepository.findByActive();
     }
 
     public Material getMaterialById(String name) {

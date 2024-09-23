@@ -2,6 +2,7 @@ package com.dan_michael.example.demo.repositories;
 
 import com.dan_michael.example.demo.model.entities.Category;
 import com.dan_michael.example.demo.model.entities.Product;
+import com.dan_michael.example.demo.model.entities.TradeMark;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +22,9 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     @Query("SELECT pi FROM Category pi WHERE pi.name = :name")
     Category findCategoryByName_(@Param("name")String name);
 
+    @Query("SELECT pi FROM Category pi WHERE pi.status = 0")
+    List<Category> findByUnActive();
+
+    @Query("SELECT pi FROM Category pi WHERE pi.status = 1")
+    List<Category>  findByActive();
 }

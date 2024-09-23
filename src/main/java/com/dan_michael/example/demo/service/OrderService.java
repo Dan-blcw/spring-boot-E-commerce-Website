@@ -4,19 +4,17 @@ import com.dan_michael.example.demo.model.dto.ob.CommentDto;
 import com.dan_michael.example.demo.model.dto.ob.OrderDtos;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubColor;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubSizeQuantity;
+import com.dan_michael.example.demo.model.entities.Discount;
 import com.dan_michael.example.demo.model.entities.Order;
 import com.dan_michael.example.demo.model.entities.SubEn.OrderDetail;
 import com.dan_michael.example.demo.model.entities.SubEn.DetailSizeQuantity;
 import com.dan_michael.example.demo.model.response.OrderResponse;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.response.SubCart_OrderResponse;
-import com.dan_michael.example.demo.repositories.CommentRepository;
+import com.dan_michael.example.demo.repositories.*;
 import com.dan_michael.example.demo.repositories.SupRe.OrderDetailRepository;
-import com.dan_michael.example.demo.repositories.OrderRepository;
-import com.dan_michael.example.demo.repositories.ProductRepository;
 import com.dan_michael.example.demo.repositories.SupRe.DetailSizeQuantityRepository;
 import com.dan_michael.example.demo.repositories.SupRe.QuantityDetailRepository;
-import com.dan_michael.example.demo.repositories.UserRepository;
 import com.dan_michael.example.demo.repositories.image.ProductImgRepository;
 import com.dan_michael.example.demo.util.Constants;
 import jakarta.transaction.Transactional;
@@ -46,6 +44,8 @@ public class OrderService {
     private final ProductRepository productRepository;
 
     private final ProductService productService;
+
+    private final DiscountRepository discountRepository;
 
 //--------------------------Order----------------------------------
     public List<Order> getAllOrders() {
@@ -108,7 +108,7 @@ public class OrderService {
         var totalAmountOrder = 0.0f;
         var subAmountOrder = 0.0f;
         var user = userRepository.findById_create(request.getUserId());
-
+        var discount = discountRepository.findBySku(request.getSkuDiscount());
         Order order = new Order();
         order.setSkuOrder(ProductService.generateSku());
         order.setIdentification_user(user.getId());
@@ -201,6 +201,11 @@ public class OrderService {
             totalAmountOrder += x.getTotalPrice();
             box.add(detail);
             createOrderDetail(detail);
+        }
+        if(discount !=null){
+//            totalAmountOrder = totalAmountOrder - totalAmountOrder*(discount.getPercentDiscount()/100);
+            discount.setStatus(0);
+            discountRepository.save(discount);
         }
         y.setOrderDetails(box);
         y.setShippingFee(request.getShippingFee());

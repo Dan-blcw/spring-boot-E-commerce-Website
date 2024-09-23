@@ -1,14 +1,18 @@
 package com.dan_michael.example.demo.service;
 
 import com.dan_michael.example.demo.model.dto.global.AuthenticationDtos;
+import com.dan_michael.example.demo.model.dto.global.CheckEmailValidate;
 import com.dan_michael.example.demo.model.dto.global.RegisterDtos;
 import com.dan_michael.example.demo.model.dto.global.SignInDtos;
 import com.dan_michael.example.demo.model.entities.*;
+import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.repositories.CartRepository;
+import com.dan_michael.example.demo.repositories.OTPRepository;
 import com.dan_michael.example.demo.repositories.SupRe.CartDetailRepository;
 import com.dan_michael.example.demo.repositories.TokenRepository;
 import com.dan_michael.example.demo.repositories.UserRepository;
 import com.dan_michael.example.demo.repositories.image.UserImgRepository;
+import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +41,10 @@ public class AuthenticationService {
 
     private final CartRepository cartRepository;
 
-    private final CartDetailRepository cartDetailRepository;
+    private final OTPRepository otpRepository;
+
+    private final EmailSenderService emailSenderService;
+
 
     public AuthenticationDtos register(RegisterDtos request) {
         var user_flag = repository.findByEmail(request.getEmail());
@@ -71,6 +79,75 @@ public class AuthenticationService {
         return AuthenticationDtos.builder()
                 .jwt(jwtToken)
                 .user(user)
+                .build();
+    }
+
+    public AuthenticationDtos register_new(RegisterDtos request) {
+        var otpFlag = otpRepository.findByOTPCodeByOTP(request.getOtpCode());
+        if(otpFlag == null){
+            return null;
+        }
+        if(!Objects.equals(otpFlag.getEmail(), request.getEmail())){
+            return null;
+        }
+        var user_flag = repository.findByEmail(request.getEmail());
+        if(user_flag.isPresent()){
+            return null;
+        }
+        var user = User.builder()
+                .name(request.getName())
+                .username(request.getName())
+                .email(request.getEmail())
+                .userImg(null)
+                .userImgUrl(request.getImg_url())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.USER)
+                .companyName(null)
+                .address(null)
+                .phoneNumber(null)
+                .date_joined(new Date())
+                .last_login(null)
+                .is_active(1)
+                .useFirstDiscount(false)
+                .build();
+
+        var savedUser = repository.save(user);
+        cartRepository.save(Cart.builder()
+                .cartDetails(null)
+                .createdAt(new Date())
+                .identification_user(user.getId())
+                .build());
+        var jwtToken = jwtService.generateToken(user);
+        saveUserToken(savedUser, jwtToken);
+        return AuthenticationDtos.builder()
+                .jwt(jwtToken)
+                .user(user)
+                .build();
+    }
+
+    public ResponseMessageDtos CheckEmailValidate(CheckEmailValidate request) {
+        var user_flag = repository.findByEmail_Name(request.getEmail(),request.getName());
+        if(user_flag != null){
+            return ResponseMessageDtos.builder()
+                    .status(400)
+                    .message(Constants.Exists_Account)
+                    .build();
+        }
+        if(otpRepository.findByOTPCodeByEmail(request.getEmail()) !=null){
+            otpRepository.deleteByOTPEmail(request.getEmail());
+        }
+        OTP otp = OTP.builder()
+                .OTPCode(ProductService.generateSku())
+                .email(request.getEmail())
+                .build();
+        String toEmail = request.getEmail();
+        String subject = Constants.Send_OTP_Change_Password;
+        String logoPath = Constants.Logo_Path_0;
+        emailSenderService.sendOtpForAccountRegistration(toEmail,subject,logoPath,otp.getOTPCode());
+        otpRepository.save(otp);
+        return ResponseMessageDtos.builder()
+                .status(200)
+                .message(Constants.Verification_Success)
                 .build();
     }
 

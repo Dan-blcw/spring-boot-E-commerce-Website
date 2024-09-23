@@ -228,6 +228,55 @@ public class EmailSenderService {
                 .message(Constants.Send_Otp_Fail)
                 .build();
     }
+    public ResponseMessageDtos sendOtpForAccountRegistration(String toEmail, String subject, String logoPath, String otp) {
+        MimeMessage message = mailSender.createMimeMessage();
+        var user = userRepository.findByEmail_(toEmail);
+        if (user != null) {
+            return ResponseMessageDtos.builder()
+                    .status(400)
+                    .message(Constants.User_Already_Exists)
+                    .build();
+        }
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom(Constants.Email_Of_Company);
+            helper.setTo(toEmail);
+            helper.setSubject(subject);
+
+            // Nội dung email về OTP cho đăng ký tài khoản
+            String htmlBody = "<div style='text-align: center; font-family: Arial, sans-serif; font-size: 15px;'>"
+                    + "<img src='cid:image_logo' style='display: block; margin: 0 auto; max-width: 360px; border-radius: 50%;' />"
+                    + "<h1>Welcome to Our Service!</h1>"
+                    + "<p>Thank you for registering for an account with us.</p>"
+                    + "<p>Your OTP code for completing the registration process is:</p>"
+                    + "<p><strong style='font-size: 24px;'>" + otp + "</strong></p>"
+                    + "<p>Please enter this OTP code to verify your email address and complete the registration.</p>"
+                    + "<p>Note: This OTP is valid for 10 minutes only.</p>"
+                    + "<p>If you did not initiate this request, please ignore this email.</p>"
+                    + "<p>Best regards,</p>"
+                    + "<p>The E-commerce Support Team</p>"
+                    + "</div>";
+            helper.setText(htmlBody, true);
+
+            ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+            File logo = new File(Objects.requireNonNull(classLoader.getResource(logoPath)).getFile());
+            helper.addInline("image_logo", logo);
+
+            // Gửi email
+            mailSender.send(message);
+
+            return ResponseMessageDtos.builder()
+                    .status(200)
+                    .message(Constants.Send_Otp_Success)
+                    .build();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        return ResponseMessageDtos.builder()
+                .status(500)
+                .message(Constants.Send_Otp_Fail)
+                .build();
+    }
 
     public static String generateSku() {
         UUID uuid = UUID.randomUUID();

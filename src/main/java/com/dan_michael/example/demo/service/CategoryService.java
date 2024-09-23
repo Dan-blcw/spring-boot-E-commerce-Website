@@ -104,8 +104,8 @@ public class CategoryService {
 
     public List<SubCategoryResponse> listCategory() {
         List<SubCategoryResponse> list = new ArrayList<>();
-        List<Category> categoryList = repository.findAll();
-        System.out.println(categoryList);
+        List<Category> categoryList = repository.findByActive();
+//        System.out.println(categoryList);
         for (int i = 0; i < categoryList.size(); i++) {
             var x = categoryList.get(i);
             List<String> check = new ArrayList<>();

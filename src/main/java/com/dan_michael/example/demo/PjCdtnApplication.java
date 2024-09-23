@@ -270,7 +270,7 @@ public class PjCdtnApplication {
 			var admin = RegisterDtos.builder()
 					.email("admin@mail.com")
 					.name("Admin")
-					.img_url("https://i.pinimg.com/564x/70/7a/03/707a037459182e745e1914f5e0a171f4.jpg")
+					.img_url("https://static.fireant.vn/individuals/photo/629?width=200&height=200")
 					.password("123456")
 					.build();
 			System.out.println("Admin token: " + service.createAdmin(admin));
@@ -278,7 +278,7 @@ public class PjCdtnApplication {
 			var user = RegisterDtos.builder()
 					.email("phuhuong646@gmail.com")
 					.name("Dan")
-					.img_url("https://i.pinimg.com/564x/3c/58/6d/3c586dc294b2025366c1c8277b5d3eeb.jpg")
+					.img_url("https://avatars.githubusercontent.com/u/127305381?v=4")
 					.password("123456")
 					.build();
 			System.out.println("User token: " + service.register(user).getJwt());
@@ -879,7 +879,7 @@ public class PjCdtnApplication {
 			var trademask_0 = TradeMaskDtos.builder()
 					.sku("NS-001")
 					.tradeMarkName("Burberry")
-					.status(1)
+					.status(0)
 					.image_url("https://i.pinimg.com/564x/1e/85/b8/1e85b83dfc74daa9408da37cb011775d.jpg")
 					.description("Burberry là thương hiệu thời trang cao cấp của Anh, nổi tiếng với các sản phẩm từ chất liệu cao cấp, bao gồm áo khoác trench, quần áo, túi xách và phụ kiện.")
 					.build();
@@ -909,7 +909,7 @@ public class PjCdtnApplication {
 					.build();
 			var style_1 = StyleDtos.builder()
 					.styleName("Sport Wear")
-					.status(1)
+					.status(0)
 					.image_url("https://images.jdmagicbox.com/quickquotes/images_main/sports-shorts-for-men-women-2010414365-m67kn3ee.jpg")
 					.description("Sport Wear (hay còn gọi là trang phục thể thao) là phong cách thời trang dành riêng cho các hoạt động thể dục thể thao, mang đến sự thoải mái, thoáng mát và hỗ trợ tốt nhất cho người mặc khi tham gia các hoạt động thể chất. Sport Wear không chỉ phục vụ cho mục đích thể thao mà còn trở thành một phong cách thời trang phổ biến trong đời sống hàng ngày.")
 					.build();

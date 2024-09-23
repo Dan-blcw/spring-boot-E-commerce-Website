@@ -1,6 +1,7 @@
 package com.dan_michael.example.demo.controller;
 
 import com.dan_michael.example.demo.model.dto.global.AuthenticationDtos;
+import com.dan_michael.example.demo.model.dto.global.CheckEmailValidate;
 import com.dan_michael.example.demo.model.dto.global.RegisterDtos;
 import com.dan_michael.example.demo.model.dto.global.SignInDtos;
 import com.dan_michael.example.demo.service.AuthenticationService;
@@ -20,11 +21,23 @@ public class AuthenticationController {
 
     private final AuthenticationService service;
 
+
+    @PostMapping("/email-validate")
+    public ResponseEntity<?> CheckEmailValidate(
+            @RequestBody CheckEmailValidate request
+    ) {
+        var response = service.CheckEmailValidate(request);
+        if(response == null){
+            return ResponseEntity.badRequest().body(Constants.Email_ARD_Exist);
+        }
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/register")
-    public ResponseEntity<?> register(
+    public ResponseEntity<?> register_new(
             @RequestBody RegisterDtos request
     ) {
-        var response = service.register(request);
+        var response = service.register_new(request);
         if(response == null){
             return ResponseEntity.badRequest().body(Constants.Email_ARD_Exist);
         }
