@@ -356,7 +356,8 @@ public class ProductService {
 
         //info
         QuestionAnswer qa0 = QuestionAnswer.builder()
-                .question(removeDiacritics(oriqe0.toLowerCase()))
+//                .question(removeDiacritics(oriqe0.toLowerCase()))
+                .question(removeDiacritics(product_flag.getSkuQa().toLowerCase()))
                 .answer(saveInfoChatBotAnswer(save,sizes,colors,BoxResponse))
                 .build();
         //Bạn có sản phẩm [tên sản phẩm] không?
