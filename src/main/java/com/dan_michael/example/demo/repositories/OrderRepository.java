@@ -11,7 +11,12 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Integer> {
     @Query("SELECT pi FROM Order pi WHERE pi.identification_user = :identification_user")
     List<Order> findByAllOrderByUser(@Param("identification_user") Integer identification_user);
-
+    @Query("SELECT pi FROM Order pi WHERE pi.orderStatus IS NOT NULL")
+    List<Order> findByAllOrderActive();
+    @Query("SELECT pi FROM Order pi WHERE  pi.orderStatus =  :orderStatus")
+    List<Order> findByAllOrderByAdmin_OrderStatus(
+            @Param("orderStatus") String orderStatus
+    );
     @Query("SELECT pi FROM Order pi WHERE pi.identification_user = :identification_user AND pi.paymentStatus = :paymentStatus")
     List<Order> findByAllOrderByUser_PaymentStatus(
             @Param("identification_user") Integer identification_user,

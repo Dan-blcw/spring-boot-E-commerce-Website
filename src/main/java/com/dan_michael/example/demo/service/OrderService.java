@@ -8,6 +8,7 @@ import com.dan_michael.example.demo.model.entities.Order;
 import com.dan_michael.example.demo.model.entities.SubEn.OrderDetail;
 import com.dan_michael.example.demo.model.entities.SubEn.DetailSizeQuantity;
 import com.dan_michael.example.demo.model.response.OrderResponse;
+import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.response.SubCart_OrderResponse;
 import com.dan_michael.example.demo.repositories.CommentRepository;
 import com.dan_michael.example.demo.repositories.SupRe.OrderDetailRepository;
@@ -48,7 +49,19 @@ public class OrderService {
 
 //--------------------------Order----------------------------------
     public List<Order> getAllOrders() {
-        var flag = orderRepository.findAll();
+        var flag = orderRepository.findByAllOrderActive();
+        flag.forEach(x->x.setOrderDetails(orderDetailRepository.findByIdentification_order(x.getId())));
+        return flag;
+    }
+
+//    public List<Order> getAllOrdersPaymentStatus() {
+//        var flag = orderRepository.findByAllOrderActive();
+//        flag.forEach(x->x.setOrderDetails(orderDetailRepository.findByIdentification_order(x.getId())));
+//        return flag;
+//    }
+
+    public List<Order> getAllOrdersByOrderStatus(String orderStatus) {
+        var flag = orderRepository.findByAllOrderByAdmin_OrderStatus(orderStatus);
         flag.forEach(x->x.setOrderDetails(orderDetailRepository.findByIdentification_order(x.getId())));
         return flag;
     }
@@ -99,12 +112,12 @@ public class OrderService {
         Order order = new Order();
         order.setSkuOrder(ProductService.generateSku());
         order.setIdentification_user(user.getId());
+        order.setBuyer_name(user.getName());
         order.setAddress(request.getAddress());
         order.setPhoneNumber(request.getPhoneNumber());
         order.setEmailAddress(request.getEmailAddress());
         order.setPaymentMethods(request.getPaymentMethods());
         order.setPaymentStatus(request.getPaymentStatus());
-//        order.setOrderStatus(request.getOrderStatus());
         order.setCreatedAt(new Date());
 
         List<SubCart_OrderResponse> boxItem = new ArrayList<>();
@@ -238,6 +251,44 @@ public class OrderService {
             order.setOrderStatus(request.getOrderStatus());
             return orderRepository.save(order);
         });
+    }
+
+    @Transactional
+    public ResponseMessageDtos CanceledOrder(Integer id) {
+//         orderRepository.findById(id).map(order -> {
+//            if(order.getOrderStatus() == null || (order.getOrderStatus() == Constants.Order_Status_Received && order.getPaymentStatus()==1)){
+//                order.setOrderStatus(Constants.Order_Status_Cancelled);
+//                orderRepository.save(order);
+//                return ResponseMessageDtos.builder()
+//                        .status(200)
+//                        .message("")
+//                        .build();
+//            }
+//        };
+//        return ResponseMessageDtos.builder()
+//                .status(200)
+//                .message("")
+//                .build();
+        return orderRepository.findById(id).map(order -> {
+            if (order.getOrderStatus() == null ||
+                    (order.getOrderStatus() == Constants.Order_Status_Received && order.getPaymentStatus() == 1)) {
+                order.setOrderStatus(Constants.Order_Status_Cancelled);
+                orderRepository.save(order);
+                return ResponseMessageDtos.builder()
+                        .status(200)
+                        .message("Order cancelled successfully.")
+                        .build();
+            }
+            else {
+                return ResponseMessageDtos.builder()
+                        .status(400)
+                        .message("Order cannot be cancelled.")
+                        .build();
+            }
+        }).orElseGet(() -> ResponseMessageDtos.builder()
+                .status(404)
+                .message("Order not found.")
+                .build());
     }
 
     public boolean deleteOrderAndOrderDetail(Integer id) {

@@ -30,6 +30,7 @@ public class Order {
     private User user;
 
     private Integer identification_user;
+    private String buyer_name;
     @OneToMany(mappedBy = "order",fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<OrderDetail> orderDetails;

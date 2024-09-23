@@ -7,7 +7,9 @@ import com.dan_michael.example.demo.model.entities.SubEn.OrderDetail;
 import com.dan_michael.example.demo.service.OrderService;
 import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Role;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.dan_michael.example.demo.model.dto.ob.OrderDtos;
 import java.util.List;
@@ -21,11 +23,18 @@ public class OrderController {
     private final OrderService orderService;
 
     // Get all orders
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<Order> getAllOrders() {
         return orderService.getAllOrders();
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/classify")
+    public List<Order> getAllOrdersByOrderStatus(
+            @RequestParam(required = false) String orderStatus
+    ) {
+        return orderService.getAllOrdersByOrderStatus(orderStatus);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable Integer id) {
@@ -71,6 +80,15 @@ public class OrderController {
         Optional<Order> updatedOrder = orderService.updateOrder(id, orderDetails);
         return updatedOrder.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Update an existing order
+//    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(value = "/canceled-order/{id}",consumes = { "application/json"})
+    public ResponseEntity<ResponseMessageDtos> CanceledOrder(
+            @PathVariable Integer id
+    ) {
+        return ResponseEntity.ok(orderService.CanceledOrder(id));
     }
     // Delete an order
     @DeleteMapping("/{id}")

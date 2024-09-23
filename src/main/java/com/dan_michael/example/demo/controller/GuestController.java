@@ -61,6 +61,8 @@ public class GuestController {
     private final DiscountRepository discountRepository;
 
 //------------------------------------------------------------
+
+//------------------------------------------------------------
     @GetMapping("/styles")
     public List<Style> getAllStyles() {
         return service.getAllStyles();
