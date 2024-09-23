@@ -104,7 +104,7 @@ public class OrderService {
         order.setEmailAddress(request.getEmailAddress());
         order.setPaymentMethods(request.getPaymentMethods());
         order.setPaymentStatus(request.getPaymentStatus());
-        order.setOrderStatus(request.getOrderStatus());
+//        order.setOrderStatus(request.getOrderStatus());
         order.setCreatedAt(new Date());
 
         List<SubCart_OrderResponse> boxItem = new ArrayList<>();
