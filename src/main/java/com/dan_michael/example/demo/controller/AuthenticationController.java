@@ -38,7 +38,11 @@ public class AuthenticationController {
             @RequestBody RegisterDtos request
     ) {
         var response = service.register_new(request);
-        if(response == null){
+        if(response.getJwt() == "0"){
+            return ResponseEntity.badRequest().body(Constants.OTP_CODE_Not_Found);
+        }else if(response.getJwt() == "1"){
+            return ResponseEntity.badRequest().body(Constants.OTP_CODE_Not_From_This_Email);
+        }else if(response.getJwt() == "2"){
             return ResponseEntity.badRequest().body(Constants.Email_ARD_Exist);
         }
         return ResponseEntity.ok(response);

@@ -28,6 +28,7 @@ public final class Constants {
     public static final String User_Not_Found = "User Not Found In Database, Please Check Email Again";
     public static final String User_Already_Exists = "User Already Exists In Database";
     public static final String OTP_CODE_Not_Found = "OTP Not Found In Database, Please Check Email Again";
+    public static final String OTP_CODE_Not_From_This_Email = "The OTP Code Is Not From This Gmail, Please Check Your Gmail To Get The Correct OTP Code";
     public static final String Email_ARD_Exist = "This Email Has Been Registered, Please Enter Another Email !";
 
 //  Account Response

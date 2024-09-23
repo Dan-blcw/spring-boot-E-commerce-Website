@@ -85,14 +85,20 @@ public class AuthenticationService {
     public AuthenticationDtos register_new(RegisterDtos request) {
         var otpFlag = otpRepository.findByOTPCodeByOTP(request.getOtpCode());
         if(otpFlag == null){
-            return null;
+            return AuthenticationDtos.builder()
+                    .jwt("0")
+                    .build();
         }
         if(!Objects.equals(otpFlag.getEmail(), request.getEmail())){
-            return null;
+            return AuthenticationDtos.builder()
+                    .jwt("1")
+                    .build();
         }
         var user_flag = repository.findByEmail(request.getEmail());
         if(user_flag.isPresent()){
-            return null;
+            return AuthenticationDtos.builder()
+                    .jwt("2")
+                    .build();
         }
         var user = User.builder()
                 .name(request.getName())
