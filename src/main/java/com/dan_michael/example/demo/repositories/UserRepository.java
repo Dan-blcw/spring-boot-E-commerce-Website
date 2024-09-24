@@ -11,6 +11,8 @@ package com.dan_michael.example.demo.repositories;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
   Optional<User> findByEmail(String email);
+  @Query("SELECT pi FROM User pi")
+  List<User> findALl_();
 
   @Query("SELECT pi FROM User pi WHERE pi.name = :name")
   User findByName_(@Param("name")String name);

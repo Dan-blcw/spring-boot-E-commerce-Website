@@ -28,33 +28,31 @@ public class Product {
     @GeneratedValue
     private Integer id;
     private String skuQa;
-    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<ProductImg> images;
-
-    private String imageMain;
-    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<QuantityDetail> quantityDetails;
-
-    private Integer totalQuantity;
-
-    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private List<FavouriteProduct> favourite;
-
     @Column(length = 10485760)
     private String name;
     @Column(length = 10485760)
     private String description;
 
-    private Integer quantitySold;
+    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<ProductImg> images;
+
+    private String imageMain;
+    private String category;
+    private String subCategory;
+
+    private String tradeMask;
     private String style;
     private String material;
 
-    private String category;
-    private String tradeMask;
-    private String subCategory;
+    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<QuantityDetail> quantityDetails;
+    private Integer totalQuantity;
+    private Integer quantitySold;
+    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<FavouriteProduct> favourite;
 
     private Float rating;
     private Integer nRating;

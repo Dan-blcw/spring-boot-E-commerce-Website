@@ -154,7 +154,6 @@ public class UserService {
                 .username(save.getUsername())
                 .email(save.getEmail())
                 .password(save.getPassword())
-                .companyName(save.getCompanyName())
                 .address(save.getAddress())
                 .phoneNumber(save.getPhoneNumber())
                 .date_joined(save.getDate_joined())

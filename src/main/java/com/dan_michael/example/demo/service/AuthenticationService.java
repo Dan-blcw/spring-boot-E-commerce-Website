@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -59,7 +60,6 @@ public class AuthenticationService {
                 .userImgUrl(request.getImg_url())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
-                .companyName(null)
                 .address(null)
                 .phoneNumber(null)
                 .date_joined(new Date())
@@ -108,7 +108,6 @@ public class AuthenticationService {
                 .userImgUrl(request.getImg_url())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
-                .companyName(null)
                 .address(null)
                 .phoneNumber(null)
                 .date_joined(new Date())
@@ -165,7 +164,6 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .userImgUrl(request.getImg_url())
                 .role(Role.ADMIN)
-                .companyName(null)
                 .address(null)
                 .phoneNumber(null)
                 .date_joined(new Date())
@@ -187,30 +185,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationDtos createManage(RegisterDtos request) {
-        var manage = User.builder()
-                .name(request.getName())
-                .username(request.getName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .userImgUrl(request.getImg_url())
-                .role(Role.MANAGE)
-                .companyName(null)
-                .address(null)
-                .phoneNumber(null)
-                .date_joined(new Date())
-                .last_login(null)
-                .is_active(1)
-                .useFirstDiscount(false)
-                .build();
-        var savedUser = repository.save(manage);
-        var jwtToken = jwtService.generateToken(manage);
-        saveUserToken(savedUser, jwtToken);
-        return AuthenticationDtos.builder()
-                .jwt(jwtToken)
-                .user(manage)
-                .build();
-    }
+
 
     public AuthenticationDtos Login(SignInDtos request) {
         final Authentication authentication = authenticationManager.authenticate(
@@ -223,6 +198,8 @@ public class AuthenticationService {
 
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
+        var last_login = new Date();
+        user.setLast_login(last_login);
         var user_img = userImgRepository.findUserImgByUserName(user.getName());
         var user1 = User.builder()
                 .id(user.getId())
@@ -234,11 +211,10 @@ public class AuthenticationService {
                 .role(user.getRole())
                 .userImgUrl(user.getUserImgUrl())
                 .address(user.getAddress())
-                .companyName(user.getCompanyName())
                 .address(user.getAddress())
                 .phoneNumber(user.getPhoneNumber())
                 .date_joined(user.getDate_joined())
-                .last_login(new Date())
+                .last_login(last_login)
                 .last_update(user.getLast_update())
                 .is_active(user.getIs_active())
                 .useFirstDiscount(user.getUseFirstDiscount())
@@ -246,10 +222,19 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
+        repository.save(user);
         return AuthenticationDtos.builder()
                 .jwt(jwtToken)
                 .user(user1)
                 .build();
+    }
+
+    public List<User> allUser() {
+        var allUser = repository.findALl_();
+        for(var x:allUser){
+            x.setTokens(null);
+        }
+        return allUser;
     }
 
     private void saveUserToken(User user, String jwtToken) {

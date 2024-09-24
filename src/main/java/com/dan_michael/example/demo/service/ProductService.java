@@ -1503,8 +1503,12 @@ public class ProductService {
                 .build();
     }
 //    ----------------------------------TradeMask------------------------------------------
-        public List<TradeMark> findAll() {
+        public List<TradeMark> findAllTradeMark() {
             return tradeMarkRepository.findAll();
+        }
+
+        public List<TradeMark> findAllTradeMarkActive() {
+            return tradeMarkRepository.findByActive();
         }
 
         public TradeMark findByTradeMarkId(String name) {
@@ -1535,7 +1539,9 @@ public class ProductService {
     public List<Style> getAllStyles() {
         return styleRepository.findAll();
     }
-
+    public List<Style> getAllStylesActive() {
+        return styleRepository.findByActive();
+    }
     public Style getStyleById(String name) {
         return styleRepository.findByName(name);
     }
@@ -1564,6 +1570,11 @@ public class ProductService {
     public List<Material> getAllMaterials() {
         return materialRepository.findAll();
     }
+
+    public List<Material> getAllMaterialsActive() {
+        return materialRepository.findByActive();
+    }
+
 
     public Material getMaterialById(String name) {
         return materialRepository.findByName(name);

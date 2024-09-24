@@ -1,5 +1,6 @@
 package com.dan_michael.example.demo.controller;
 
+import com.dan_michael.example.demo.model.dto.global.RegisterDtos;
 import com.dan_michael.example.demo.model.dto.ob.*;
 import com.dan_michael.example.demo.model.entities.Material;
 import com.dan_michael.example.demo.model.entities.Style;
@@ -8,6 +9,7 @@ import com.dan_michael.example.demo.model.response.SubBrandsResponse;
 import com.dan_michael.example.demo.model.response.SubCategoryResponse;
 import com.dan_michael.example.demo.model.entities.PaymentMethods;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
+import com.dan_michael.example.demo.service.AuthenticationService;
 import com.dan_michael.example.demo.service.CategoryService;
 import com.dan_michael.example.demo.service.Payment.PaymentMethodsService;
 import com.dan_michael.example.demo.service.ProductService;
@@ -33,9 +35,22 @@ public class AdminController {
 
     private final ProductService service;
 
+    private final AuthenticationService authenticationService;
+
     private final CategoryService categoryService;
 
     private final PaymentMethodsService paymentMethodsService;
+
+//--------------------------- Account ---------------------------------------
+    @PostMapping("/add-admin")
+    public ResponseEntity<?> createAdmin(@RequestBody RegisterDtos registerDtos){
+        return ResponseEntity.ok(authenticationService.createAdmin(registerDtos));
+    }
+
+    @PostMapping("/all-user")
+    public ResponseEntity<?> allUser(){
+        return ResponseEntity.ok(authenticationService.allUser());
+    }
 
 //--------------------------- Product(CUD - R in GuestController) ---------------------------------------
 //        Kiểm tra định dạng JsonDtos gửi từ front End có đúng không
@@ -260,7 +275,7 @@ public class AdminController {
 //---------------------------------------tradeMask----------------------------------------------------------------
     @GetMapping("/tradeMask")
     public List<TradeMark> getAllTradeMarks() {
-        return service.findAll();
+        return service.findAllTradeMark();
     }
 
     @GetMapping("/tradeMask/{id}")
@@ -296,10 +311,10 @@ public class AdminController {
     }
 
 //----------------------------------styles---------------------------------------------------------------------
-//    @GetMapping("/styles")
-//    public List<Style> getAllStyles() {
-//        return service.getAllStyles();
-//    }
+    @GetMapping("/styles")
+    public List<Style> getAllStyles() {
+        return service.getAllStyles();
+    }
 
     @GetMapping("/styles/{id}")
     public Style getStyleById(@PathVariable String id) {
@@ -331,10 +346,10 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 //----------------------------------Material---------------------------------------------------------------------
-//    @GetMapping("/material")
-//    public List<Material> getAllMaterials() {
-//        return service.getAllMaterials();
-//    }
+    @GetMapping("/material")
+    public List<Material> getAllMaterials() {
+        return service.getAllMaterials();
+    }
 
     @GetMapping("/material/{id}")
     public Material getMaterialById(@PathVariable String id) {

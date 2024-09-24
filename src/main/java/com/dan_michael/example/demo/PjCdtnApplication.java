@@ -876,75 +876,75 @@ public class PjCdtnApplication {
 			productService.createComment(comment1,pro21Response.getId());
 			productService.createComment(comment2,pro21Response.getId());
 //---------------------------------------------------------------------------------------
-			var trademask_0 = TradeMaskDtos.builder()
-					.sku("NS-001")
-					.tradeMarkName("Burberry")
-					.status(0)
-					.image_url("https://i.pinimg.com/564x/1e/85/b8/1e85b83dfc74daa9408da37cb011775d.jpg")
-					.description("Burberry là thương hiệu thời trang cao cấp của Anh, nổi tiếng với các sản phẩm từ chất liệu cao cấp, bao gồm áo khoác trench, quần áo, túi xách và phụ kiện.")
-					.build();
-			var trademask_1 = TradeMaskDtos.builder()
-					.sku("DP-001")
-					.tradeMarkName("Devipock")
-					.status(1)
-					.image_url("https://i.pinimg.com/originals/2e/bc/1e/2ebc1ea4ab4eff518990b30cc10a1f6f.gif")
-					.description("Devipock là thương hiệu thời trang tiên phong, tập trung vào các thiết kế độc đáo và sáng tạo. Các sản phẩm của Devipock bao gồm quần áo, giày dép và phụ kiện với phong cách hiện đại và phá cách. Thương hiệu này cam kết sử dụng chất liệu cao cấp và thân thiện với môi trường, nhằm mang lại sự thoải mái và phong cách cho khách hàng.")
-					.build();
-			var trademask_2 = TradeMaskDtos.builder()
-					.sku("BU-001")
-					.tradeMarkName("Artemisia")
-					.image_url("https://i.pinimg.com/736x/03/90/fe/0390fef222b2b427a5bf5dbda6064762.jpg")
-					.status(1)
-					.description("Artemisia là thương hiệu thời trang tiên phong, tập trung vào các thiết kế độc đáo và sáng tạo. Các sản phẩm của Artemisia bao gồm quần áo, giày dép và phụ kiện với phong cách hiện đại và phá cách. Thương hiệu này cam kết sử dụng chất liệu cao cấp và thân thiện với môi trường, nhằm mang lại sự thoải mái và phong cách cho khách hàng.")
-					.build();
-			productService.saveTrask(trademask_0);
-			productService.saveTrask(trademask_1);
-			productService.saveTrask(trademask_2);
-
-			var style_0 = StyleDtos.builder()
-					.styleName("Casual")
-					.status(1)
-					.image_url("https://hoang-phuc.com/media/magefan_blog/2022/02/casual-2.jpg")
-					.description("Phong cách Casual là một phong cách thời trang thoải mái, không quá cầu kỳ, và thích hợp cho các hoạt động hàng ngày. Đây là kiểu trang phục mà người mặc cảm thấy tự do, dễ chịu, và không bị ràng buộc bởi các quy tắc thời trang khắt khe.")
-					.build();
-			var style_1 = StyleDtos.builder()
-					.styleName("Sport Wear")
-					.status(0)
-					.image_url("https://images.jdmagicbox.com/quickquotes/images_main/sports-shorts-for-men-women-2010414365-m67kn3ee.jpg")
-					.description("Sport Wear (hay còn gọi là trang phục thể thao) là phong cách thời trang dành riêng cho các hoạt động thể dục thể thao, mang đến sự thoải mái, thoáng mát và hỗ trợ tốt nhất cho người mặc khi tham gia các hoạt động thể chất. Sport Wear không chỉ phục vụ cho mục đích thể thao mà còn trở thành một phong cách thời trang phổ biến trong đời sống hàng ngày.")
-					.build();
-			var style_2 = StyleDtos.builder()
-					.styleName("Street Style")
-					.image_url("https://img.vuahanghieu.com/unsafe/0x0/left/top/smart/filters:quality(90)/https://admin.vuahanghieu.com/upload/news/content/2023/05/street-style-la-gi-8-jpg-1684894499-24052023091459.jpg")
-					.status(1)
-					.description("Street Style (phong cách đường phố) là một phong cách thời trang bắt nguồn từ văn hóa đường phố, đặc biệt là từ các thành phố lớn như New York, Tokyo, Paris, và London. Phong cách này thường phản ánh sự tự do, sáng tạo, và cá tính riêng của người mặc, không bị giới hạn bởi những quy tắc thời trang truyền thống.")
-					.build();
-			productService.createStyle(style_0);
-			productService.createStyle(style_1);
-			productService.createStyle(style_2);
-
-
-			var material_0 = MaterialDtos.builder()
-					.materialName("Denim")
-					.status(1)
-					.image_url("https://brydenapparel.com/wp-content/uploads/2023/07/Denim-Fabric-1.jpg")
-					.description("Denim là một loại vải dệt bền và chắc, thường được làm từ sợi cotton, được biết đến nhiều nhất trong việc sử dụng để may quần jeans. Denim có nguồn gốc từ thành phố Nîmes ở Pháp, và tên \"denim\" xuất phát từ cụm từ \"serge de Nîmes,\" có nghĩa là \"vải bông chéo của Nîmes.\"")
-					.build();
-			var material_1 = MaterialDtos.builder()
-					.materialName("Vải Dạ")
-					.status(1)
-					.image_url("https://bizweb.dktcdn.net/100/348/534/products/vai-da-7-d165c408-3cf2-410f-8e05-4b0e9f4046cf.jpg?v=1634041228343")
-					.description("Vải dạ (hay còn gọi là dạ len) là một loại vải dày, ấm áp và mềm mịn, thường được làm từ sợi len hoặc sợi tổng hợp. Vải dạ có bề mặt mịn màng và khả năng giữ nhiệt tốt, vì vậy nó thường được sử dụng trong các trang phục mùa đông như áo khoác, mũ, khăn quàng cổ và váy.")
-					.build();
-			var material_2 = MaterialDtos.builder()
-					.materialName("Cotton")
-					.image_url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9iZP60MCAlNvyakAqWDrHzBb9fl_exs6Oug&s")
-					.status(1)
-					.description("Cotton là một loại vải tự nhiên được làm từ sợi bông, nổi tiếng với sự mềm mại, thoáng mát và thân thiện với làn da. Đây là một trong những loại vải phổ biến nhất trên thế giới, được sử dụng rộng rãi trong nhiều lĩnh vực, đặc biệt là trong ngành may mặc.")
-					.build();
-			productService.createMaterial(material_0);
-			productService.createMaterial(material_1);
-			productService.createMaterial(material_2);
+//			var trademask_0 = TradeMaskDtos.builder()
+//					.sku("NS-001")
+//					.tradeMarkName("Burberry")
+//					.status(0)
+//					.image_url("https://i.pinimg.com/564x/1e/85/b8/1e85b83dfc74daa9408da37cb011775d.jpg")
+//					.description("Burberry là thương hiệu thời trang cao cấp của Anh, nổi tiếng với các sản phẩm từ chất liệu cao cấp, bao gồm áo khoác trench, quần áo, túi xách và phụ kiện.")
+//					.build();
+//			var trademask_1 = TradeMaskDtos.builder()
+//					.sku("DP-001")
+//					.tradeMarkName("Devipock")
+//					.status(1)
+//					.image_url("https://i.pinimg.com/originals/2e/bc/1e/2ebc1ea4ab4eff518990b30cc10a1f6f.gif")
+//					.description("Devipock là thương hiệu thời trang tiên phong, tập trung vào các thiết kế độc đáo và sáng tạo. Các sản phẩm của Devipock bao gồm quần áo, giày dép và phụ kiện với phong cách hiện đại và phá cách. Thương hiệu này cam kết sử dụng chất liệu cao cấp và thân thiện với môi trường, nhằm mang lại sự thoải mái và phong cách cho khách hàng.")
+//					.build();
+//			var trademask_2 = TradeMaskDtos.builder()
+//					.sku("BU-001")
+//					.tradeMarkName("Artemisia")
+//					.image_url("https://i.pinimg.com/736x/03/90/fe/0390fef222b2b427a5bf5dbda6064762.jpg")
+//					.status(1)
+//					.description("Artemisia là thương hiệu thời trang tiên phong, tập trung vào các thiết kế độc đáo và sáng tạo. Các sản phẩm của Artemisia bao gồm quần áo, giày dép và phụ kiện với phong cách hiện đại và phá cách. Thương hiệu này cam kết sử dụng chất liệu cao cấp và thân thiện với môi trường, nhằm mang lại sự thoải mái và phong cách cho khách hàng.")
+//					.build();
+//			productService.saveTrask(trademask_0);
+//			productService.saveTrask(trademask_1);
+//			productService.saveTrask(trademask_2);
+//
+//			var style_0 = StyleDtos.builder()
+//					.styleName("Casual")
+//					.status(1)
+//					.image_url("https://hoang-phuc.com/media/magefan_blog/2022/02/casual-2.jpg")
+//					.description("Phong cách Casual là một phong cách thời trang thoải mái, không quá cầu kỳ, và thích hợp cho các hoạt động hàng ngày. Đây là kiểu trang phục mà người mặc cảm thấy tự do, dễ chịu, và không bị ràng buộc bởi các quy tắc thời trang khắt khe.")
+//					.build();
+//			var style_1 = StyleDtos.builder()
+//					.styleName("Sport Wear")
+//					.status(0)
+//					.image_url("https://images.jdmagicbox.com/quickquotes/images_main/sports-shorts-for-men-women-2010414365-m67kn3ee.jpg")
+//					.description("Sport Wear (hay còn gọi là trang phục thể thao) là phong cách thời trang dành riêng cho các hoạt động thể dục thể thao, mang đến sự thoải mái, thoáng mát và hỗ trợ tốt nhất cho người mặc khi tham gia các hoạt động thể chất. Sport Wear không chỉ phục vụ cho mục đích thể thao mà còn trở thành một phong cách thời trang phổ biến trong đời sống hàng ngày.")
+//					.build();
+//			var style_2 = StyleDtos.builder()
+//					.styleName("Street Style")
+//					.image_url("https://img.vuahanghieu.com/unsafe/0x0/left/top/smart/filters:quality(90)/https://admin.vuahanghieu.com/upload/news/content/2023/05/street-style-la-gi-8-jpg-1684894499-24052023091459.jpg")
+//					.status(1)
+//					.description("Street Style (phong cách đường phố) là một phong cách thời trang bắt nguồn từ văn hóa đường phố, đặc biệt là từ các thành phố lớn như New York, Tokyo, Paris, và London. Phong cách này thường phản ánh sự tự do, sáng tạo, và cá tính riêng của người mặc, không bị giới hạn bởi những quy tắc thời trang truyền thống.")
+//					.build();
+//			productService.createStyle(style_0);
+//			productService.createStyle(style_1);
+//			productService.createStyle(style_2);
+//
+//
+//			var material_0 = MaterialDtos.builder()
+//					.materialName("Denim")
+//					.status(1)
+//					.image_url("https://brydenapparel.com/wp-content/uploads/2023/07/Denim-Fabric-1.jpg")
+//					.description("Denim là một loại vải dệt bền và chắc, thường được làm từ sợi cotton, được biết đến nhiều nhất trong việc sử dụng để may quần jeans. Denim có nguồn gốc từ thành phố Nîmes ở Pháp, và tên \"denim\" xuất phát từ cụm từ \"serge de Nîmes,\" có nghĩa là \"vải bông chéo của Nîmes.\"")
+//					.build();
+//			var material_1 = MaterialDtos.builder()
+//					.materialName("Vải Dạ")
+//					.status(1)
+//					.image_url("https://bizweb.dktcdn.net/100/348/534/products/vai-da-7-d165c408-3cf2-410f-8e05-4b0e9f4046cf.jpg?v=1634041228343")
+//					.description("Vải dạ (hay còn gọi là dạ len) là một loại vải dày, ấm áp và mềm mịn, thường được làm từ sợi len hoặc sợi tổng hợp. Vải dạ có bề mặt mịn màng và khả năng giữ nhiệt tốt, vì vậy nó thường được sử dụng trong các trang phục mùa đông như áo khoác, mũ, khăn quàng cổ và váy.")
+//					.build();
+//			var material_2 = MaterialDtos.builder()
+//					.materialName("Cotton")
+//					.image_url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9iZP60MCAlNvyakAqWDrHzBb9fl_exs6Oug&s")
+//					.status(1)
+//					.description("Cotton là một loại vải tự nhiên được làm từ sợi bông, nổi tiếng với sự mềm mại, thoáng mát và thân thiện với làn da. Đây là một trong những loại vải phổ biến nhất trên thế giới, được sử dụng rộng rãi trong nhiều lĩnh vực, đặc biệt là trong ngành may mặc.")
+//					.build();
+//			productService.createMaterial(material_0);
+//			productService.createMaterial(material_1);
+//			productService.createMaterial(material_2);
 		};
 
 	}

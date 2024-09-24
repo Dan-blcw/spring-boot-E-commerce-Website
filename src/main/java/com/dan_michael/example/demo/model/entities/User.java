@@ -32,7 +32,6 @@ public class User implements UserDetails {
   private String password;
 
   //Thêm
-  private String companyName;
   private String address;
   private String phoneNumber;
   private Date date_joined;
@@ -97,7 +96,6 @@ public class User implements UserDetails {
             ", username='" + username + '\'' +
             ", email='" + email + '\'' +
             ", password='" + (password != null ? "****" : null) + '\'' +  // Masking the password
-            ", companyName='" + companyName + '\'' +
             ", address='" + address + '\'' +
             ", phoneNumber='" + phoneNumber + '\'' +
             ", dateJoined=" + date_joined +

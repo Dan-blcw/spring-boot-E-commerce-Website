@@ -15,6 +15,7 @@ import com.dan_michael.example.demo.model.dto.ob.ProductListDtos;
 import com.dan_michael.example.demo.model.entities.Discount;
 import com.dan_michael.example.demo.model.entities.Material;
 import com.dan_michael.example.demo.model.entities.Style;
+import com.dan_michael.example.demo.model.entities.TradeMark;
 import com.dan_michael.example.demo.model.response.ProductResponse;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.response.SubBrandsResponse;
@@ -63,14 +64,19 @@ public class GuestController {
 //------------------------------------------------------------
 
 //------------------------------------------------------------
+
+    @GetMapping("/tradeMask")
+    public List<TradeMark> getAllTradeMarks() {
+        return service.findAllTradeMarkActive();
+    }
     @GetMapping("/styles")
     public List<Style> getAllStyles() {
-        return service.getAllStyles();
+        return service.getAllStylesActive();
     }
 
     @GetMapping("/material")
     public List<Material> getAllMaterials() {
-        return service.getAllMaterials();
+        return service.getAllMaterialsActive();
     }
 
     //--------------------------Except discount----------------------------------
