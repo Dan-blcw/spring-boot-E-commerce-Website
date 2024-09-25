@@ -2,15 +2,13 @@ package com.dan_michael.example.demo.controller;
 
 import com.dan_michael.example.demo.model.dto.global.RegisterDtos;
 import com.dan_michael.example.demo.model.dto.ob.*;
-import com.dan_michael.example.demo.model.entities.Material;
-import com.dan_michael.example.demo.model.entities.Style;
-import com.dan_michael.example.demo.model.entities.TradeMark;
+import com.dan_michael.example.demo.model.entities.*;
 import com.dan_michael.example.demo.model.response.SubBrandsResponse;
 import com.dan_michael.example.demo.model.response.SubCategoryResponse;
-import com.dan_michael.example.demo.model.entities.PaymentMethods;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.service.AuthenticationService;
 import com.dan_michael.example.demo.service.CategoryService;
+import com.dan_michael.example.demo.service.OrderService;
 import com.dan_michael.example.demo.service.Payment.PaymentMethodsService;
 import com.dan_michael.example.demo.service.ProductService;
 import com.dan_michael.example.demo.util.Constants;
@@ -35,12 +33,27 @@ public class AdminController {
 
     private final ProductService service;
 
+    private final OrderService orderService;
+
     private final AuthenticationService authenticationService;
 
     private final CategoryService categoryService;
 
     private final PaymentMethodsService paymentMethodsService;
 
+//--------------------------- order ---------------------------------------
+
+    @GetMapping("/orders")
+    public List<Order> getAllOrders() {
+        return orderService.getAllOrders();
+    }
+
+    @GetMapping("/orders/classify")
+    public List<Order> getAllOrdersByOrderStatus(
+            @RequestParam(required = false) String orderStatus
+    ) {
+        return orderService.getAllOrdersByOrderStatus(orderStatus);
+    }
 //--------------------------- Account ---------------------------------------
     @PostMapping("/add-admin")
     public ResponseEntity<?> createAdmin(@RequestBody RegisterDtos registerDtos){

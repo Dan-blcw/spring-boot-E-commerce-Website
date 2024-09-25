@@ -50,6 +50,10 @@ public class OrderService {
 //--------------------------Order----------------------------------
     public List<Order> getAllOrders() {
         var flag = orderRepository.findByAllOrderActive();
+        flag.removeIf(x -> Objects.equals(x.getOrderStatus(), Constants.Order_Status_Cancelled));
+        if(flag == null){
+            return null;
+        }
         flag.forEach(x->x.setOrderDetails(orderDetailRepository.findByIdentification_order(x.getId())));
         return flag;
     }

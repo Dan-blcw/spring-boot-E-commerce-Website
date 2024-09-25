@@ -23,18 +23,18 @@ public class OrderController {
     private final OrderService orderService;
 
     // Get all orders
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping
-    public List<Order> getAllOrders() {
-        return orderService.getAllOrders();
-    }
-    @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/admin/classify")
-    public List<Order> getAllOrdersByOrderStatus(
-            @RequestParam(required = false) String orderStatus
-    ) {
-        return orderService.getAllOrdersByOrderStatus(orderStatus);
-    }
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @GetMapping
+//    public List<Order> getAllOrders() {
+//        return orderService.getAllOrders();
+//    }
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @GetMapping("/admin/classify")
+//    public List<Order> getAllOrdersByOrderStatus(
+//            @RequestParam(required = false) String orderStatus
+//    ) {
+//        return orderService.getAllOrdersByOrderStatus(orderStatus);
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable Integer id) {
