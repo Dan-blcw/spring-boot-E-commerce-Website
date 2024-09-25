@@ -13,6 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductDtos {
     private List<MultipartFile> images;
+
+    private Integer id;
     private String name;
     private String description;
 

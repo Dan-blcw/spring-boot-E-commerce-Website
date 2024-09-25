@@ -103,16 +103,19 @@ public class ChatbotService {
                 .question(request.getQuestion())
                 .build());
         var user = userRepository.findByEmail_(request.getEmail());
-        if(user==null){
-            return ResponseMessageDtos.builder()
-                    .status(404)
-                    .message(Constants.Create_Question_For_Guest_Fail)
-                    .build();
+        var avatar = "https://i.pinimg.com/564x/88/68/d7/8868d7b09e6eff73db538eee5e077816.jpg";
+        if(user!=null){
+//            return ResponseMessageDtos.builder()
+//                    .status(404)
+//                    .message(Constants.Create_Question_For_Guest_Fail)
+//                    .build();
+            avatar = user.getUserImgUrl();
         }
+//        avatar = user.getUserImgUrl();
         var qa = QuestionForGuest.builder()
                 .name(request.getName())
                 .email(request.getEmail())
-                .user_img_url(user.getUserImgUrl())
+                .user_img_url(avatar)
                 .phone(request.getPhone())
                 .question(request.getQuestion())
                 .build();

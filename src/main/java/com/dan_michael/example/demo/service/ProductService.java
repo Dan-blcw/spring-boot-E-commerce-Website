@@ -279,12 +279,6 @@ public class ProductService {
                 if(Objects.equals(productImg.getImageName(), request.getImageMain())){
                     product_flag.setImageMain(productImg.getImg_url());
                 }
-//                SubImgResponse response = SubImgResponse.builder()
-//                        .id(productImg.getId())
-//                        .img_url(productImg.getImg_url())
-//                        .imageName(productImg.getImageName())
-//                        .identification(productImg.getIdentification())
-//                        .build();
                 productImagesBox.add(productImg.getImg_url());
                 productImagesBox_0.add(productImg);
             }
@@ -461,7 +455,7 @@ public class ProductService {
         boolean xoaSize = true;
         boolean xoaColor = true;
 
-        var product_flag = productRepository.findByName_(request.getName());
+        var product_flag = productRepository.findByID_(request.getId());
 
         if(product_flag != null){
             product_flag.setName(request.getName());

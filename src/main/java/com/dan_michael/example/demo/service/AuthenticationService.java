@@ -157,6 +157,10 @@ public class AuthenticationService {
     }
 
     public AuthenticationDtos createAdmin(RegisterDtos request) {
+        var user_flag = repository.findByEmail(request.getEmail());
+        if(user_flag.isPresent()){
+            return null;
+        }
         var Admin = User.builder()
                 .name(request.getName())
                 .username(request.getName())

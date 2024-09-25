@@ -31,13 +31,13 @@ public class EmailSenderService {
 //---------------------------------Done-------------------------------------------------------------------
     public ResponseMessageDtos sendEmailAnswer(String toEmail, String subject, String name, String question, String answer, String logoPath) {
         MimeMessage message = mailSender.createMimeMessage();
-        var user = userRepository.findByEmail_(toEmail);
-        if(user == null){
-            return ResponseMessageDtos.builder()
-                    .status(404)
-                    .message(Constants.User_Not_Found)
-                    .build();
-        }
+//        var user = userRepository.findByEmail_(toEmail);
+//        if(user == null){
+//            return ResponseMessageDtos.builder()
+//                    .status(404)
+//                    .message(Constants.User_Not_Found)
+//                    .build();
+//        }
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom(Constants.Email_Of_Company);
