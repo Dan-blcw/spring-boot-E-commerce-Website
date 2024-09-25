@@ -7,6 +7,7 @@ import com.dan_michael.example.demo.chatbot.entities.QuestionAnswer;
 import com.dan_michael.example.demo.chatbot.entities.dtos.QuestionOfGuestInfoDtos;
 import com.dan_michael.example.demo.chatbot.service.ChatbotService;
 import com.dan_michael.example.demo.controller.GuestController;
+import com.dan_michael.example.demo.controller.OrderController;
 import com.dan_michael.example.demo.model.dto.global.RegisterDtos;
 import com.dan_michael.example.demo.model.dto.ob.*;
 
@@ -49,7 +50,8 @@ public class PjCdtnApplication {
 			UserAccountInfoService userAccountInfoService,
 			ChatbotService chatbotService,
 			PaymentMethodsService paymentMethodsService,
-			GuestController guestController
+			GuestController guestController,
+			OrderController orderController
 	) {
 		return args -> {
 			List<String> images = new ArrayList<>();
@@ -876,6 +878,10 @@ public class PjCdtnApplication {
 			productService.createComment(comment1,pro21Response.getId());
 			productService.createComment(comment2,pro21Response.getId());
 //---------------------------------------------------------------------------------------
+//			OrderDtos orderDtos = OrderDtos.builder()
+//					.
+//					.build();
+//			orderController.createOrder()
 //			var trademask_0 = TradeMaskDtos.builder()
 //					.sku("NS-001")
 //					.tradeMarkName("Burberry")

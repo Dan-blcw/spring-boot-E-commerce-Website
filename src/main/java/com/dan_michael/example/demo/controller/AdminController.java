@@ -33,7 +33,7 @@ public class AdminController {
 
     private final ProductService service;
 
-    private final OrderService orderService;
+//    private final OrderService orderService;
 
     private final AuthenticationService authenticationService;
 
@@ -43,17 +43,17 @@ public class AdminController {
 
 //--------------------------- order ---------------------------------------
 
-    @GetMapping("/orders")
-    public List<Order> getAllOrders() {
-        return orderService.getAllOrders();
-    }
-
-    @GetMapping("/orders/classify")
-    public List<Order> getAllOrdersByOrderStatus(
-            @RequestParam(required = false) String orderStatus
-    ) {
-        return orderService.getAllOrdersByOrderStatus(orderStatus);
-    }
+//    @GetMapping("/orders")
+//    public List<Order> getAllOrders() {
+//        return orderService.getAllOrders();
+//    }
+//
+//    @GetMapping("/orders/classify")
+//    public List<Order> getAllOrdersByOrderStatus(
+//            @RequestParam(required = false) String orderStatus
+//    ) {
+//        return orderService.getAllOrdersByOrderStatus(orderStatus);
+//    }
 //--------------------------- Account ---------------------------------------
     @PostMapping("/add-admin")
     public ResponseEntity<?> createAdmin(@RequestBody RegisterDtos registerDtos){
