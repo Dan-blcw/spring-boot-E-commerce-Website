@@ -71,13 +71,11 @@ public class ChatbotService {
                     .build();
         }
         var user = userRepository.findByEmail_(question_of_guest.getEmail());
-        if(user==null){
-            return ResponseMessageDtos.builder()
-                    .status(404)
-                    .message(Constants.Create_QuestionAnswer_For_Guest_Fail)
-                    .build();
+        var avatar = "https://i.pinimg.com/564x/88/68/d7/8868d7b09e6eff73db538eee5e077816.jpg";
+        if(user!=null){
+            avatar = user.getUserImgUrl();
         }
-        question_of_guest.setUser_img_url(user.getUserImgUrl());
+        question_of_guest.setUser_img_url(avatar);
         question_of_guest.setAnswer(request.getAnswer());
         questionOfGuestRepository.save(question_of_guest);
         questionAnswerRepository.save(
@@ -105,13 +103,8 @@ public class ChatbotService {
         var user = userRepository.findByEmail_(request.getEmail());
         var avatar = "https://i.pinimg.com/564x/88/68/d7/8868d7b09e6eff73db538eee5e077816.jpg";
         if(user!=null){
-//            return ResponseMessageDtos.builder()
-//                    .status(404)
-//                    .message(Constants.Create_Question_For_Guest_Fail)
-//                    .build();
             avatar = user.getUserImgUrl();
         }
-//        avatar = user.getUserImgUrl();
         var qa = QuestionForGuest.builder()
                 .name(request.getName())
                 .email(request.getEmail())
