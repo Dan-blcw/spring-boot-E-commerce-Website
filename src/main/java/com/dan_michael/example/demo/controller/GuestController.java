@@ -109,8 +109,15 @@ public class GuestController {
     }
 //--------------------------Except discount----------------------------------
     @PostMapping("/check-discount-sku")
-    public Discount CheckDiscount(@RequestParam String sku){
-        return discountRepository.findBySku(sku);
+    public ResponseEntity<?> CheckDiscount(@RequestParam String sku){
+        var save = discountRepository.findBySku(sku);
+        if(save == null){
+            return ResponseEntity.ok(ResponseMessageDtos.builder()
+                            .status(400)
+                            .message("Coupon sku code does not exist, please check your email to get the offer")
+                    .build());
+        }
+        return ResponseEntity.ok(save);
     }
 
 //--------------------------Hỏi Thằng Hương ấy----------------------------------

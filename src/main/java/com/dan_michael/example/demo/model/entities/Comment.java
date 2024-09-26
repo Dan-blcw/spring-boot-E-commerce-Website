@@ -34,7 +34,7 @@ public class Comment {
     private String identification_pro;
     private Integer identification_order;
     private String identification_user;
-    private Integer status;
+    private Integer statusActive;
     @CreatedDate
     @Column(
             nullable = false,

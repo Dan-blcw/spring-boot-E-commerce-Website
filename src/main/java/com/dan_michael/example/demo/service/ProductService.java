@@ -451,7 +451,6 @@ public class ProductService {
         var totalQuantity = 0;
         List<String> sizes = new ArrayList<>();
         List<String> colors = new ArrayList<>();
-
         List<String> sizesadd = new ArrayList<>();
         List<String> colorsadd = new ArrayList<>();
 
@@ -515,7 +514,7 @@ public class ProductService {
                                         if (y_0.getSize().equals(y.getSize()) && x.getColor().equals(x.getColor())) {
                                             y_0.setQuantity(y.getQuantity());
                                             detailSizeQuantityRepository.save(y_0);
-                                            totalQuantity += y.getQuantity();
+//                                            totalQuantity += y.getQuantity();
 
                                             if (!sizes.contains(y.getSize())) {
                                                 sizes.add(y_0.getSize());
@@ -541,7 +540,7 @@ public class ProductService {
 
                                             y.setQuantity(y_0.getQuantity());
                                             detailSizeQuantityRepository.save(y);
-                                            totalQuantity += y_0.getQuantity();
+//                                            totalQuantity += y_0.getQuantity();
 
                                             if (!sizes.contains(y_0.getSize())) {
                                                 sizes.add(y_0.getSize());
@@ -1179,7 +1178,7 @@ public class ProductService {
                 .rating(commentDto.getRating())
                 .color(commentDto.getColor())
                 .size(commentDto.getSize())
-                .status(commentDto.getStatus())
+                .statusActive(comment_status)
                 .image(product.getImageMain())
                 .identification_order(commentDto.getIdOrder())
                 .imageUser(userRepository.findByName_(commentDto.getUsername()).getUserImgUrl())
@@ -1233,8 +1232,12 @@ public class ProductService {
                     .message(Constants.Comment_Permission_Fail)
                     .build();
         }
+        comment.setRate_status(true);
         comment.setContent(commentDto.getContent());
         comment.setRating(commentDto.getRating());
+        if(comment.getContent() == null){
+            comment.setRate_status(false);
+        }
         commentsList.add(comment);
         Float rating = 0.0f;
         int nRating = commentsList.size();

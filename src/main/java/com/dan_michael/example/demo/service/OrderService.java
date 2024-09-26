@@ -157,10 +157,6 @@ public class OrderService {
                                     .size(y_0.getSize())
                                     .build();
                             try {
-//                                if(request.getPaymentStatus() != 0 ){
-//                                    commentDto.setStatus(1);
-//                                    productService.createComment(commentDto,x.getItemDetail_id());
-//                                }else {
                                     commentDto.setStatus(0);
                                     productService.createComment(commentDto,x.getItemDetail_id());
 //                                }
@@ -247,14 +243,15 @@ public class OrderService {
     @Transactional
     public Optional<Order> updateOrderAdmin(Integer id, OrderDtos request) {
         return orderRepository.findById(id).map(order -> {
-            if(order.getPaymentStatus() == 0 && request.getPaymentStatus() !=0){
-                var comment = commentRepository.findCommentStatus0(userRepository.findById_create(order.getIdentification_user()).getName(),id);
+            if((order.getPaymentStatus() == 0 && request.getPaymentStatus() == 1 )|| order.getPaymentStatus() == 1){
+                var comment = commentRepository.findCommentStatus0(id);
+                System.out.println(comment.size());
                 for(var change :comment){
-                    if(request.getOrderStatus() == Constants.Order_Status_Received){
-                        change.setStatus(1);
+                    if(Objects.equals(request.getOrderStatus(), Constants.Order_Status_Received)){
+                        change.setStatusActive(1);
+                        commentRepository.save(change);
                     }
                 }
-                commentRepository.saveAll(comment);
             }
             order.setPaymentStatus(request.getPaymentStatus());
             order.setOrderStatus(request.getOrderStatus());
@@ -276,15 +273,6 @@ public class OrderService {
     @Transactional
     public Optional<Order> updateOrderUser(Integer id, OrderDtos request) {
         return orderRepository.findById(id).map(order -> {
-            if(order.getPaymentStatus() == 0 && request.getPaymentStatus() !=0){
-                var comment = commentRepository.findCommentStatus0(userRepository.findById_create(order.getIdentification_user()).getName(),id);
-                for(var change :comment){
-                    if(request.getOrderStatus() == Constants.Order_Status_Received){
-                        change.setStatus(1);
-                    }
-                }
-                commentRepository.saveAll(comment);
-            }
             order.setAddress(request.getAddress());
             order.setPhoneNumber(request.getPhoneNumber());
             order.setEmailAddress(request.getEmailAddress());
