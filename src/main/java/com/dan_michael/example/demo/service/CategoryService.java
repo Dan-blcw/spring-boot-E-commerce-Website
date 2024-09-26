@@ -10,6 +10,7 @@ import com.dan_michael.example.demo.repositories.ProductRepository;
 import com.dan_michael.example.demo.repositories.SupRe.SubCategoryRepository;
 import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,10 +27,8 @@ public class CategoryService {
 
     private final SubCategoryRepository subCategoryRepository;
     public SubCategoryResponse createCategory(CategoryDtos request) {
-
-        var ob = repository.findCategoryByName(request.getCategoryName());
-
-        if(ob.isPresent()){
+        var ob = repository.findCategoryByName_Sku(request.getCategoryName(),request.getSku());
+        if(ob != null){
             return null;
         }
         List<SubCategory> listBrands = new ArrayList<>();
@@ -68,11 +67,16 @@ public class CategoryService {
     }
 
     public SubCategoryResponse updateCategory(CategoryDtos request) {
-
         var category_flag = repository.findCategoryByName_(request.getCategoryName());
         List<SubCategory> listBrands = new ArrayList<>();
         List<String> check = new ArrayList<>();
         if(category_flag != null){
+            for(var flog : subCategoryRepository.findBrandsByIAndIdentification(category_flag.getName())){
+                if(request.getBrands().contains(flog.getSubCategoryName())){
+                    continue;
+                }
+                productRepository.deleteBySubCategorysName(flog.getSubCategoryName());
+            }
             subCategoryRepository.deleteByIdentification(category_flag.getName());
             for (var x:request.getBrands()) {
                 if(!check.contains(x)){
@@ -105,7 +109,6 @@ public class CategoryService {
     public List<SubCategoryResponse> listCategory() {
         List<SubCategoryResponse> list = new ArrayList<>();
         List<Category> categoryList = repository.findAll();
-//        System.out.println(categoryList);
         for (int i = 0; i < categoryList.size(); i++) {
             var x = categoryList.get(i);
             List<String> check = new ArrayList<>();
@@ -168,24 +171,6 @@ public class CategoryService {
         }
     }
 
-    public ResponseMessageDtos removeBrand(Integer category_id, String subCategorysName) {
-        var flag = repository.findCategoryById_(category_id);
-        if(flag != null){
-            subCategoryRepository.deleteBySubCategorysName(subCategorysName);
-            productRepository.deleteBySubCategorysName(subCategorysName);
-            flag.setBrand(subCategoryRepository.findBrandsByIAndIdentification(flag.getName()));
-            repository.save(flag);
-            return ResponseMessageDtos.builder()
-                    .status(200)
-                    .message(Constants.Delete_Brand_Success)
-                    .build();
-        }else {
-            return ResponseMessageDtos.builder()
-                    .status(400)
-                    .message(Constants.Delete_Brand_Fail)
-                    .build();
-        }
-    }
 
     public List<String> findBrandByCategoryID(Integer id) {
         var categoryDetail = repository.findById(id);

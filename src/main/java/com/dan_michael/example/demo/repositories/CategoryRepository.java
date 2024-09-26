@@ -19,9 +19,10 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
     @Query("SELECT pi FROM Category pi WHERE pi.id = :id")
     Category findCategoryById_(@Param("id") Integer id);
 
-    @Query("SELECT pi FROM Category pi WHERE pi.name = :name")
+    @Query("SELECT pi FROM Category pi WHERE pi.name = :name ")
     Category findCategoryByName_(@Param("name")String name);
-
+    @Query("SELECT pi FROM Category pi WHERE pi.name = :name OR pi.sku  = :sku")
+    Category findCategoryByName_Sku(@Param("name")String name,@Param("sku")String sku);
     @Query("SELECT pi FROM Category pi WHERE pi.status = 0")
     List<Category> findByUnActive();
 

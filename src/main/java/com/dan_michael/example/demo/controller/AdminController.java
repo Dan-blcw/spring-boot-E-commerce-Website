@@ -228,13 +228,13 @@ public class AdminController {
         return categoryService.removeCategory(id);
     }
 
-    @DeleteMapping(value = "/delete-category/{category_id}/")
-    public ResponseMessageDtos DeleteBrand(
-            @PathVariable Integer category_id,
-            @RequestParam String subCategory
-    ) {
-        return categoryService.removeBrand(category_id,subCategory);
-    }
+//    @DeleteMapping(value = "/delete-category/{category_id}/")
+//    public ResponseMessageDtos DeleteBrand(
+//            @PathVariable Integer category_id,
+//            @RequestParam String subCategory
+//    ) {
+//        return categoryService.removeBrand(category_id,subCategory);
+//    }
 
 
     //---------------------------PaymentMethods---------------------------------------

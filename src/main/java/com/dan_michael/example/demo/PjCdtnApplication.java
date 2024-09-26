@@ -353,7 +353,7 @@ public class PjCdtnApplication {
 			brands0.add("Áo Sơ Mi");
 			brands0.add("Áo Sơ Thun");
 			brands0.add("Áo Khoác");
-			brands0.add("Áo Quần què");
+			brands0.add("Áo Phông");
 
 			List<String> brands1 = new ArrayList<>();
 			brands1.add("Quần short");
@@ -483,9 +483,9 @@ public class PjCdtnApplication {
 					.createdByUserid(2)
 					.build();
 			var pro2 = ProductDtos.builder()
-					.name("Áo sơ mi Denim Cloud Gray BTW")
+					.name("Áo Sơ Mi Denim Cloud Gray BTW")
 					.description("Áo sơ mi Denim Cloud Gray BTW là một sản phẩm thời trang phổ biến, thường được làm từ chất liệu vải denim chất lượng cao")
-					.subCategory("Áo sơ mi")
+					.subCategory("Áo Sơ Mi")
 					.quantityDetails(listsub2)
 					.category("Áo")
 					.quantitySold(21)
