@@ -156,10 +156,13 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationDtos createAdmin(RegisterDtos request) {
+    public ResponseMessageDtos createAdmin(RegisterDtos request) {
         var user_flag = repository.findByEmail(request.getEmail());
         if(user_flag.isPresent()){
-            return null;
+            return ResponseMessageDtos.builder()
+                    .status(400)
+                    .message(Constants.User_Already_Exists)
+                    .build();
         }
         var Admin = User.builder()
                 .name(request.getName())
@@ -183,9 +186,9 @@ public class AuthenticationService {
                 .build());
         var jwtToken = jwtService.generateToken(Admin);
         saveUserToken(savedUser, jwtToken);
-        return AuthenticationDtos.builder()
-                .jwt(jwtToken)
-                .user(Admin)
+        return ResponseMessageDtos.builder()
+                .status(200)
+                .message(Constants.Create_Admin_Success)
                 .build();
     }
 

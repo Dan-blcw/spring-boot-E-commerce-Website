@@ -32,6 +32,7 @@ public class Comment {
     private Float rating;
     private Boolean rate_status;
     private String identification_pro;
+    private Integer identification_order;
     private String identification_user;
     private Integer status;
     @CreatedDate

@@ -44,10 +44,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             @Param("priceGte") Integer priceGte,
             @Param("priceLte") Integer priceLte);
     //            @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :productName, '%'))")
-
     //            "AND (:productName IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :productName, '%'))) " +
     //            "AND (:productName IS NULL OR LOWER(FUNCTION('unaccent', p.name)) LIKE LOWER(FUNCTION('unaccent', CONCAT('%', :productName, '%')))) " +
-//            "AND (:productName IS NULL OR LOWER(FUNCTION('unaccent', CAST(p.name AS TEXT))) LIKE LOWER(FUNCTION('unaccent', CONCAT('%', :productName, '%')))) " +
+    //            "AND (:productName IS NULL OR LOWER(FUNCTION('unaccent', CAST(p.name AS TEXT))) LIKE LOWER(FUNCTION('unaccent', CONCAT('%', :productName, '%')))) " +
 
     @Transactional
     @Modifying

@@ -4,6 +4,7 @@ import com.dan_michael.example.demo.chatbot.entities.OriginalQuestion;
 import com.dan_michael.example.demo.chatbot.entities.QuestionAnswer;
 import com.dan_michael.example.demo.chatbot.resository.OriginalQuestionRepository;
 import com.dan_michael.example.demo.chatbot.resository.QuestionAnswerRepository;
+import com.dan_michael.example.demo.chatbot.resository.QuestionOfGuestRepository;
 import com.dan_michael.example.demo.model.dto.global.PaginationDto;
 import com.dan_michael.example.demo.model.dto.ob.*;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubColor;
@@ -12,6 +13,8 @@ import com.dan_michael.example.demo.model.entities.*;
 import com.dan_michael.example.demo.model.response.*;
 import com.dan_michael.example.demo.model.entities.SubEn.*;
 import com.dan_michael.example.demo.model.entities.img.ProductImg;
+import com.dan_michael.example.demo.model.response.barChartData.ChartData;
+import com.dan_michael.example.demo.model.response.barChartData.Data;
 import com.dan_michael.example.demo.repositories.*;
 import com.dan_michael.example.demo.repositories.image.ProductImgRepository;
 import com.dan_michael.example.demo.repositories.SupRe.*;
@@ -20,12 +23,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
-import java.security.SecureRandom;
 import java.util.*;
 
 import static com.dan_michael.example.demo.chatbot.service.ChatbotService.removeDiacritics;
@@ -36,7 +37,10 @@ import static com.dan_michael.example.demo.chatbot.service.ChatbotService.remove
 public class ProductService {
 
     private final UserRepository userRepository;
+
     private final ProductRepository productRepository;
+
+    private final OrderRepository orderRepository;
 
     private final CommentRepository commentRepository;
 
@@ -51,6 +55,8 @@ public class ProductService {
     private final FavouriteProductRepository favouriteProductRepository;
 
     private final QuestionAnswerRepository questionAnswerRepository;
+
+    private final QuestionOfGuestRepository questionOfGuestRepository;
 
     private final OriginalQuestionRepository originalQuestionRepository;
 
@@ -726,12 +732,6 @@ public class ProductService {
                             if(Objects.equals(productImagesBox_0.get(y).getImageName(), request.getImageMain())){
                                 product_flag.setImageMain(productImagesBox_0.get(y).getImg_url());
                             }
-//                            SubImgResponse response = SubImgResponse.builder()
-//                                    .id(productImagesBox_0.get(y).getId())
-//                                    .img_url(productImagesBox_0.get(y).getImg_url())
-//                                    .imageName(productImagesBox_0.get(y).getImageName())
-//                                    .identification(productImagesBox_0.get(y).getIdentification())
-//                                    .build();
                             productImagesBox.add(productImagesBox_0.get(y).getImg_url());
                             productImagesBox_0.add(productImagesBox_0.get(y));
                         }
@@ -795,11 +795,6 @@ public class ProductService {
                 .createDate(product_flag.getCreateDate())
                 .createdByUserid(product_flag.getCreatedByUserid())
                 .build();
-//        QuestionAnswer qa = questionAnswerRepository.findByQuestion(product_flag.getSkuQa().toLowerCase());
-//        if(qa !=null){
-//            qa.setAnswer(saveInfoChatBotAnswer(save,valuesave(sizesadd,sizes),valuesave(colorsadd,colors),BoxResponse));
-//        }
-//        questionAnswerRepository.save(qa);
         return save;
     }
     public List<String> valueadd(List<String>a , List<String>b){
@@ -888,29 +883,22 @@ public class ProductService {
             productList.sort(Comparator.comparing(Product::getQuantitySold).reversed());
         }
         _total = productList.size();
-        // Implementing Pagination
         if(_page == null){
             _page = 1;
         }
         if(_limit == null){
             _limit = 20;
         }
-        int start = Math.max((_page - 1) * _limit, 0);
-        int end = Math.min(start + _limit, productList.size());
-        List<Product> paginatedProducts = productList.subList(start, end);
-        if(removeDetail != null){
-            Collections.shuffle(paginatedProducts);
-        }
 
         List<ProductResponse> productsResponseList = new ArrayList<>();
-        for (var x : paginatedProducts) {
+        for (var x : productList) {
             if(removeDetail!=null && Objects.equals(x.getName(), removeDetail)){
                 continue;
             }
             var unactiveStyle = styleRepository.findByUnActive();
             var unactiveCategory = categoryRepository.findByUnActive();
             var unactiveMaterial = materialRepository.findByUnActive();
-            var unactiveTradeMask = materialRepository.findByUnActive();
+            var unactiveTradeMask = tradeMarkRepository.findByUnActive();
             List<String> unactiveStyle_ = new ArrayList<>();
             List<String> unactiveCategory_ = new ArrayList<>();
             List<String> unactiveMaterial_ = new ArrayList<>();
@@ -1011,7 +999,13 @@ public class ProductService {
                     .build();
             productsResponseList.add(y);
         }
-        return ProductListDtos.builder().data(productsResponseList).paginationDto(new PaginationDto(_limit,_page,_total)).build();
+        int start = Math.max((_page - 1) * _limit, 0);
+        int end = Math.min(start + _limit, productList.size());
+        List<ProductResponse> paginatedProducts = productsResponseList.subList(start, end);
+        if(removeDetail != null){
+            Collections.shuffle(paginatedProducts);
+        }
+        return ProductListDtos.builder().data(paginatedProducts).paginationDto(new PaginationDto(_limit,_page,_total)).build();
     }
 
     public ProductResponse findbyIDHander(Integer _userId,Integer id){
@@ -1187,6 +1181,7 @@ public class ProductService {
                 .size(commentDto.getSize())
                 .status(commentDto.getStatus())
                 .image(product.getImageMain())
+                .identification_order(commentDto.getIdOrder())
                 .imageUser(userRepository.findByName_(commentDto.getUsername()).getUserImgUrl())
                 .identification_pro(product.getName())
                 .rate_status(rate_status)
@@ -1595,4 +1590,129 @@ public class ProductService {
     public void deleteMaterial(Integer id) {
         materialRepository.deleteById(id);
     }
+// ----------------------------------------------------------------------------------------------
+    public StatisticsResponse statistics(){
+        var productActive =  search_all(null,10000000,1,null,null,null,null,null,null,null,null,null,null,null,true,null);
+        var bestSelling =  search_all(null,4,1,null,null,null,null,null,null,null,null,null,null,null,true,null);
+        if(productActive==null || bestSelling == null){
+            return null;
+        }
+        //loc order da huy
+        var orders = orderRepository.findByAllOrderActive();
+        orders.removeIf(x -> Objects.equals(x.getOrderStatus(), Constants.Order_Status_Cancelled));
+        var nOrders = orders.size();
+        var nOrdersThisMonth = 0;
+        for (var flog: orders){
+            var createdAt = flog.getCreatedAt();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(createdAt);
+            int month = calendar.get(Calendar.MONTH);
+            calendar.setTime(new Date());
+            if(month == calendar.get(Calendar.MONTH)){
+                nOrdersThisMonth += 1;
+            }
+        }
+        //loc order chua thanh toan
+        var revenue = 0.0f;
+        var revenueThisMonth = 0.0f;
+        orders.removeIf(x -> Objects.equals(x.getPaymentStatus(), 0));
+        for (var flog: orders){
+            revenue += flog.getTotalAmountOrder();
+            var createdAt = flog.getCreatedAt();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(createdAt);
+            int month = calendar.get(Calendar.MONTH);
+            calendar.setTime(new Date());
+            if(month == calendar.get(Calendar.MONTH)){
+                revenueThisMonth += flog.getTotalAmountOrder();
+            }
+        }
+        //So luong san pham da ban
+        var nSold = 0;
+        for(var x:productActive.getData()){
+            nSold+= x.getQuantitySold();
+        }
+        //loc so luong khach hang
+        var users = userRepository.findALl_();
+        users.removeIf(x -> x.getRole() == Role.ADMIN);
+
+        return StatisticsResponse.builder()
+                .proBestSelling(bestSelling.getData())
+                .nTotalCustomer(users.size())
+                .nTotalProductActive(productActive.getData().size())
+                .nTotalOrders(nOrders)
+                .nTotalOrdersThisMonth(nOrdersThisMonth)
+                .nTotalRevenueThisMonth(revenueThisMonth)
+                .nTotalRevenue(revenue)
+                .nTotalQuantitySold(nSold)
+                .nTotalWaitingQuestion(questionOfGuestRepository.findByQuestionUnAnsweredNUl().size())
+                .nTotalRating(commentRepository.findAllCommentCompleted().size())
+                .build();
+    }
+    public ChartData statisticsChartBar(){
+        var orders = orderRepository.findAll();
+        Float nOrders = (float) orders.size();
+        orders.removeIf(x -> Objects.equals(x.getOrderStatus(), Constants.Order_Status_Cancelled));
+        Float nDaHuy = (float) (nOrders - orders.size());
+        orders.removeIf(x -> Objects.equals(x.getOrderStatus(), Constants.Order_Status_Received));
+        Float nDaNhanHang = (float)(nOrders - nDaHuy - orders.size());
+        orders.removeIf(x -> Objects.equals(x.getOrderStatus(), Constants.Order_Status_In_Transit));
+        Float nDangVanCHuyen = (float)(nOrders - nDaNhanHang- nDaHuy - orders.size());
+        orders.removeIf(x -> Objects.equals(x.getOrderStatus(), null));
+        Float nDangxuly = (float)(nOrders -nDangVanCHuyen -nDaNhanHang- nDaHuy - orders.size());
+        Data data0 = Data.builder()
+                .year(2024)
+                .labels(Arrays.asList(Constants.Order_Status_Process,Constants.Order_Status_In_Transit,Constants.Order_Status_Received,Constants.Order_Status_Cancelled))
+                .data(Arrays.asList(nDangxuly,nDangVanCHuyen,nDaNhanHang,nDaHuy))
+                .build();
+        List<Data> list = new ArrayList<>();
+        list.add(data0);
+        return ChartData.builder()
+                .datasets(list)
+                .build();
+    }
+    public ChartData statisticsChartLine(){
+        float nt1= 0;float nt2= 0;float nt3= 0;float nt4= 0;float nt5= 0;float nt6= 0;
+        float nt7= 0;float nt8= 0;float nt9= 0;float nt10= 0;float nt11= 0;float nt12= 0;
+        var orders = orderRepository.findAll();
+        orders.removeIf(x -> Objects.equals(x.getOrderStatus(), Constants.Order_Status_Cancelled));
+        orders.removeIf(x -> Objects.equals(x.getPaymentStatus(), 0));
+        for(var x:orders){
+            var createdAt = x.getCreatedAt();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(createdAt);
+            int month = calendar.get(Calendar.MONTH);
+            switch (month) {
+                case 0 -> nt1 += x.getTotalAmountOrder();
+                case 1 -> nt2 += x.getTotalAmountOrder();
+                case 2 -> nt3 += x.getTotalAmountOrder();
+                case 3 -> nt4 += x.getTotalAmountOrder();
+                case 4 -> nt5 += x.getTotalAmountOrder();
+                case 5 -> nt6 += x.getTotalAmountOrder();
+                case 6 -> nt7 += x.getTotalAmountOrder();
+                case 7 -> nt8 += x.getTotalAmountOrder();
+                case 8 -> nt9 += x.getTotalAmountOrder();
+                case 9 -> nt10 += x.getTotalAmountOrder();
+                case 10 -> nt11 += x.getTotalAmountOrder();
+                case 11 -> nt12 += x.getTotalAmountOrder();
+                default -> {
+                }
+            }
+        }
+        Data data0 = Data.builder()
+                .year(2024)
+                .data(Arrays.asList(nt1,nt2,nt3,nt4,nt5,nt6,nt7,nt8,nt9,nt10,nt11,nt12))
+                .build();
+        Data data1 = Data.builder()
+                .year(2023)
+                .data(Arrays.asList(5000.0f,5000.0f,5000.0f,2000.0f,8000.0f,9000.0f,5000.0f,2000.0f,8000.0f,10000.0f,5000.0f,5000.0f))
+                .build();
+        List<Data> list = new ArrayList<>();
+        list.add(data0);
+        list.add(data1);
+        return ChartData.builder()
+                .datasets(list)
+                .build();
+    }
+
 }

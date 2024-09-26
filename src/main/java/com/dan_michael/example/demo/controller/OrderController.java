@@ -12,12 +12,36 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.dan_michael.example.demo.model.dto.ob.OrderDtos;
+
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
 public class OrderController {
+
+//--------------------------Clone hoa don----------------------------------
+//var createdAt = x.getCreatedAt();
+//    Calendar calendar = Calendar.getInstance();
+//            calendar.setTime(createdAt);
+//    int month = calendar.get(Calendar.MONTH);
+//            switch (month) {
+//        case 0 -> nt1 += x.getTotalAmountOrder();
+//        case 1 -> nt2 += x.getTotalAmountOrder();
+//        case 2 -> nt3 += x.getTotalAmountOrder();
+//        case 3 -> nt4 += x.getTotalAmountOrder();
+//        case 4 -> nt5 += x.getTotalAmountOrder();
+//        case 5 -> nt6 += x.getTotalAmountOrder();
+//        case 6 -> nt7 += x.getTotalAmountOrder();
+//        case 7 -> nt8 += x.getTotalAmountOrder();
+//        case 8 -> nt9 += x.getTotalAmountOrder();
+//        case 9 -> nt10 += x.getTotalAmountOrder();
+//        case 10 -> nt11 += x.getTotalAmountOrder();
+//        case 11 -> nt12 += x.getTotalAmountOrder();
+//        default -> {
+//        }
+//    }
 
 //--------------------------Order(CRUD)----------------------------------
     private final OrderService orderService;
@@ -72,12 +96,34 @@ public class OrderController {
     }
 
     // Update an existing order
-    @PutMapping(value = "/{id}",consumes = { "application/json"})
-    public ResponseEntity<Order> updateOrder(
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(value = "/admin/{id}",consumes = { "application/json"})
+    public ResponseEntity<Order> updateOrderAdmin(
             @PathVariable Integer id,
             @RequestBody OrderDtos orderDetails
     ) {
-        Optional<Order> updatedOrder = orderService.updateOrder(id, orderDetails);
+        Optional<Order> updatedOrder = orderService.updateOrderAdmin(id, orderDetails);
+        return updatedOrder.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(value = "/admin-clone-time/{id}",consumes = { "application/json"})
+    public ResponseEntity<Order> CloneTimeOrder(
+            @PathVariable Integer id,
+            @RequestBody OrderDtos orderDetails
+    ) {
+        Optional<Order> updatedOrder = orderService.CloneTime(id, orderDetails);
+        return updatedOrder.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping(value = "/{id}",consumes = { "application/json"})
+    public ResponseEntity<Order> updateOrderUser(
+            @PathVariable Integer id,
+            @RequestBody OrderDtos orderDetails
+    ) {
+        Optional<Order> updatedOrder = orderService.updateOrderUser(id, orderDetails);
         return updatedOrder.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

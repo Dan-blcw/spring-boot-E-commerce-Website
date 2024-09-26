@@ -33,34 +33,36 @@ public class AdminController {
 
     private final ProductService service;
 
-//    private final OrderService orderService;
-
     private final AuthenticationService authenticationService;
 
     private final CategoryService categoryService;
 
     private final PaymentMethodsService paymentMethodsService;
 
-//--------------------------- order ---------------------------------------
+//--------------------------- THONG KE ---------------------------------------
 
-//    @GetMapping("/orders")
-//    public List<Order> getAllOrders() {
-//        return orderService.getAllOrders();
-//    }
-//
-//    @GetMapping("/orders/classify")
-//    public List<Order> getAllOrdersByOrderStatus(
-//            @RequestParam(required = false) String orderStatus
-//    ) {
-//        return orderService.getAllOrdersByOrderStatus(orderStatus);
-//    }
+    @GetMapping("/quantity-statistics")
+    public ResponseEntity<?> quantityStatistics() {
+        return ResponseEntity.ok(service.statistics());
+    }
+
+    @GetMapping("/statistics-chart-line")
+    public ResponseEntity<?>  getChartLine() {
+        return ResponseEntity.ok(service.statisticsChartLine());
+    }
+
+
+    @GetMapping("/statistics-chart-bar")
+    public ResponseEntity<?>  getChartBar() {
+        return ResponseEntity.ok(service.statisticsChartBar());
+    }
 //--------------------------- Account ---------------------------------------
     @PostMapping("/add-admin")
     public ResponseEntity<?> createAdmin(@RequestBody RegisterDtos registerDtos){
         return ResponseEntity.ok(authenticationService.createAdmin(registerDtos));
     }
 
-    @PostMapping("/all-user")
+    @GetMapping("/all-user")
     public ResponseEntity<?> allUser(){
         return ResponseEntity.ok(authenticationService.allUser());
     }
@@ -229,9 +231,9 @@ public class AdminController {
     @DeleteMapping(value = "/delete-category/{category_id}/")
     public ResponseMessageDtos DeleteBrand(
             @PathVariable Integer category_id,
-            @RequestParam String brandName
+            @RequestParam String subCategory
     ) {
-        return categoryService.removeBrand(category_id,brandName);
+        return categoryService.removeBrand(category_id,subCategory);
     }
 
 

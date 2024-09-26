@@ -26,4 +26,8 @@ public class OrderDtos {
     private String percentDiscountSku;
     private Integer percentDiscount;
     private String orderStatus;
+
+    private Integer Month;
+    private Integer Year;
+    private Integer Day;
 }

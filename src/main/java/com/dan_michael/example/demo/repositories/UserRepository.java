@@ -24,8 +24,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
   @Query("SELECT pi FROM User pi WHERE pi.id = :id")
   User findById_create(@Param("id")Integer id);
 
-  @Query("SELECT pi FROM User pi WHERE pi.is_active = :is_active")
-  List<User> findAllByIs_active(@Param("is_active")Integer is_active);
+//  @Query("SELECT pi FROM User pi WHERE pi.role = :role")
+//  List<User> findByRole(@Param("role")String role);
 
   @Query("SELECT pi FROM User pi WHERE pi.email = :email")
   User findByUserAndEmail(

@@ -27,6 +27,7 @@ public final class Constants {
     public static final String Index_Chat_Bot_Path = "/index.html";
     public static final String User_Not_Found = "User Not Found In Database, Please Check Email Again";
     public static final String User_Already_Exists = "User Already Exists In Database";
+    public static final String Create_Admin_Success = "Create Admin Account Successfully";
     public static final String OTP_CODE_Not_Found = "OTP Not Found In Database, Please Check Email Again";
     public static final String OTP_CODE_Not_From_This_Email = "The OTP Code Is Not From This Gmail, Please Check Your Gmail To Get The Correct OTP Code";
     public static final String Email_ARD_Exist = "This Email Has Been Registered, Please Enter Another Email !";
@@ -106,7 +107,7 @@ public final class Constants {
 //in transit
 //received
 //cancelled
-//    public static final String Order_Status_Wait =  "Chờ Lấy Hàng";
+    public static final String Order_Status_Process =  "Đang Xử Lý";
     public static final String Order_Status_Unpaid =  "Chưa Thanh Toán";
     public static final String Order_Status_Paid =  "Đã Thanh Toán";
     public static final String Order_Status_In_Transit =  "Đang Vận Chuyển";

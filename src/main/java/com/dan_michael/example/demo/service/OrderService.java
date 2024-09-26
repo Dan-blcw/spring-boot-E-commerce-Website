@@ -151,18 +151,19 @@ public class OrderService {
                             CommentDto commentDto = CommentDto
                                     .builder()
                                     .rating(0.0f)
+                                    .idOrder(y.getId())
                                     .username(userRepository.findById(request.getUserId()).get().getName())
                                     .color(x.getColor())
                                     .size(y_0.getSize())
                                     .build();
                             try {
-                                if(request.getPaymentStatus() != 0 ){
-                                    commentDto.setStatus(1);
-                                    productService.createComment(commentDto,x.getItemDetail_id());
-                                }else {
+//                                if(request.getPaymentStatus() != 0 ){
+//                                    commentDto.setStatus(1);
+//                                    productService.createComment(commentDto,x.getItemDetail_id());
+//                                }else {
                                     commentDto.setStatus(0);
                                     productService.createComment(commentDto,x.getItemDetail_id());
-                                }
+//                                }
                             } catch (ChangeSetPersister.NotFoundException e) {
                                 throw new RuntimeException(e);
                             }
@@ -244,40 +245,55 @@ public class OrderService {
     }
 
     @Transactional
-    public Optional<Order> updateOrder(Integer id, OrderDtos request) {
+    public Optional<Order> updateOrderAdmin(Integer id, OrderDtos request) {
         return orderRepository.findById(id).map(order -> {
             if(order.getPaymentStatus() == 0 && request.getPaymentStatus() !=0){
-                var comment = commentRepository.findCommentStatus0(userRepository.findById_create(order.getIdentification_user()).getName());
+                var comment = commentRepository.findCommentStatus0(userRepository.findById_create(order.getIdentification_user()).getName(),id);
                 for(var change :comment){
-                    change.setStatus(1);
+                    if(request.getOrderStatus() == Constants.Order_Status_Received){
+                        change.setStatus(1);
+                    }
                 }
                 commentRepository.saveAll(comment);
             }
             order.setPaymentStatus(request.getPaymentStatus());
-            order.setAddress(request.getAddress());
-            order.setPhoneNumber(request.getPhoneNumber());
-            order.setEmailAddress(request.getEmailAddress());
             order.setOrderStatus(request.getOrderStatus());
             return orderRepository.save(order);
         });
     }
 
     @Transactional
+    public Optional<Order> CloneTime(Integer id, OrderDtos request) {
+        return orderRepository.findById(id).map(order -> {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(request.getYear(), request.getMonth()-1, request.getDay());  // Năm, Tháng (0-11), Ngày
+            Date fixedDate = calendar.getTime();
+            order.setCreatedAt(fixedDate);
+            return orderRepository.save(order);
+        });
+    }
+
+    @Transactional
+    public Optional<Order> updateOrderUser(Integer id, OrderDtos request) {
+        return orderRepository.findById(id).map(order -> {
+            if(order.getPaymentStatus() == 0 && request.getPaymentStatus() !=0){
+                var comment = commentRepository.findCommentStatus0(userRepository.findById_create(order.getIdentification_user()).getName(),id);
+                for(var change :comment){
+                    if(request.getOrderStatus() == Constants.Order_Status_Received){
+                        change.setStatus(1);
+                    }
+                }
+                commentRepository.saveAll(comment);
+            }
+            order.setAddress(request.getAddress());
+            order.setPhoneNumber(request.getPhoneNumber());
+            order.setEmailAddress(request.getEmailAddress());
+            return orderRepository.save(order);
+        });
+    }
+
+    @Transactional
     public ResponseMessageDtos CanceledOrder(Integer id) {
-//         orderRepository.findById(id).map(order -> {
-//            if(order.getOrderStatus() == null || (order.getOrderStatus() == Constants.Order_Status_Received && order.getPaymentStatus()==1)){
-//                order.setOrderStatus(Constants.Order_Status_Cancelled);
-//                orderRepository.save(order);
-//                return ResponseMessageDtos.builder()
-//                        .status(200)
-//                        .message("")
-//                        .build();
-//            }
-//        };
-//        return ResponseMessageDtos.builder()
-//                .status(200)
-//                .message("")
-//                .build();
         return orderRepository.findById(id).map(order -> {
             if (order.getOrderStatus() == null ||
                     (order.getOrderStatus() == Constants.Order_Status_Received && order.getPaymentStatus() == 1)) {

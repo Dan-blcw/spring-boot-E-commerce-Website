@@ -18,7 +18,7 @@ public interface TradeMarkRepository extends JpaRepository<TradeMark, Integer> {
     TradeMark findByName(@Param("name") String name);
 
     @Query("SELECT pi FROM TradeMark pi WHERE pi.status = 0")
-    TradeMark findByUnActive();
+    List<TradeMark> findByUnActive();
     @Query("SELECT pi FROM TradeMark pi WHERE pi.status = 1")
     List<TradeMark> findByActive();
 
