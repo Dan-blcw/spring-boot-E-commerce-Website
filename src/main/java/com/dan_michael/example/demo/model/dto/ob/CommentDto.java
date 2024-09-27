@@ -34,6 +34,6 @@ public class CommentDto {
     @JsonProperty("size")
     private String size;
 
-    @JsonProperty("username")
-    private String username;
+    @JsonProperty("name")
+    private String name;
 }
