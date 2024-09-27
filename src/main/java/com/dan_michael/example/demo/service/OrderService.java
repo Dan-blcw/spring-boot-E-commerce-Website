@@ -212,9 +212,9 @@ public class OrderService {
         y.setShippingFee(request.getShippingFee());
         y.setTaxFee(0.0f);
         y.setPercentDiscount(request.getPercentDiscount());
-        if(request.getPercentDiscount() > 0){
+        if(request.getPercentDiscount() > 0 && discountRepository.findBySku(request.getSkuDiscount()) != null){
             totalAmountOrder = (totalAmountOrder + request.getShippingFee());
-            totalAmountOrder = totalAmountOrder - totalAmountOrder*(request.getPercentDiscount()/100);
+            totalAmountOrder = totalAmountOrder - totalAmountOrder*((float) request.getPercentDiscount() /100);
         }else {
             totalAmountOrder = totalAmountOrder + request.getShippingFee();
         }
