@@ -37,6 +37,7 @@ public class Order {
 
     private String address;
     private String skuOrder;
+    private String skuDiscount;
     private String phoneNumber;
     private String emailAddress;
 

@@ -203,18 +203,15 @@ public class OrderService {
             box.add(detail);
             createOrderDetail(detail);
         }
-        if(discount !=null){
-//            totalAmountOrder = totalAmountOrder - totalAmountOrder*(discount.getPercentDiscount()/100);
-            discount.setStatus(0);
-            discountRepository.save(discount);
-        }
         y.setOrderDetails(box);
         y.setShippingFee(request.getShippingFee());
         y.setTaxFee(0.0f);
         y.setPercentDiscount(request.getPercentDiscount());
-        if(request.getPercentDiscount() > 0 && discountRepository.findBySku(request.getSkuDiscount()) != null){
+        if(request.getPercentDiscount() > 0 && discount != null){
             totalAmountOrder = (totalAmountOrder + request.getShippingFee());
             totalAmountOrder = totalAmountOrder - totalAmountOrder*((float) request.getPercentDiscount() /100);
+            discount.setStatus(0);
+            discountRepository.save(discount);
         }else {
             totalAmountOrder = totalAmountOrder + request.getShippingFee();
         }
