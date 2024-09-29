@@ -62,9 +62,12 @@ public class GuestController {
     private final DiscountRepository discountRepository;
 
 //------------------------------------------------------------
+    @GetMapping("/QR-info")
+    public List<TradeMark> getQRInfo() {
+        return null;
+    }
 
 //------------------------------------------------------------
-
     @GetMapping("/tradeMask")
     public List<TradeMark> getAllTradeMarks() {
         return service.findAllTradeMarkActive();

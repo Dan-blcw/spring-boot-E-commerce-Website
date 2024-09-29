@@ -24,6 +24,5 @@ public class ItemDetailDto {
     private String color;
 
     private Float unitPrice;
-
     private Float totalPrice;
 }

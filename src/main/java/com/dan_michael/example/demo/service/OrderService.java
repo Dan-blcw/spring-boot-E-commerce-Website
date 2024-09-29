@@ -6,8 +6,10 @@ import com.dan_michael.example.demo.model.dto.ob.sub.SubColor;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubSizeQuantity;
 import com.dan_michael.example.demo.model.entities.Discount;
 import com.dan_michael.example.demo.model.entities.Order;
+import com.dan_michael.example.demo.model.entities.QRInfo;
 import com.dan_michael.example.demo.model.entities.SubEn.OrderDetail;
 import com.dan_michael.example.demo.model.entities.SubEn.DetailSizeQuantity;
+import com.dan_michael.example.demo.model.entities.Transaction;
 import com.dan_michael.example.demo.model.response.OrderResponse;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.response.SubCart_OrderResponse;
@@ -46,6 +48,10 @@ public class OrderService {
     private final ProductService productService;
 
     private final DiscountRepository discountRepository;
+
+    private final QRInfoRepository qrInfoRepository;
+
+    private final TransactionRepository transactionRepository;
 
 //--------------------------Order----------------------------------
     public List<Order> getAllOrders() {
@@ -203,6 +209,8 @@ public class OrderService {
             box.add(detail);
             createOrderDetail(detail);
         }
+        // luu giao dich
+
         y.setOrderDetails(box);
         y.setShippingFee(request.getShippingFee());
         y.setTaxFee(0.0f);

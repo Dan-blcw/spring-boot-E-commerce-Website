@@ -9,6 +9,7 @@ import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.response.SubCart_OrderResponse;
 import com.dan_michael.example.demo.repositories.SupRe.CartDetailRepository;
 import com.dan_michael.example.demo.repositories.CartRepository;
+import com.dan_michael.example.demo.repositories.SupRe.DetailSizeQuantityRepository;
 import com.dan_michael.example.demo.repositories.UserRepository;
 import com.dan_michael.example.demo.util.Constants;
 import jakarta.transaction.Transactional;
@@ -26,6 +27,8 @@ public class CartService {
     private final CartDetailRepository cartDetailRepository;
 
     private final UserRepository userRepository;
+
+    private final DetailSizeQuantityRepository detailSizeQuantityRepository;
 
 //---------------------------Cart & cartDetail---------------------------------------
     public List<CartResponse> getAllCarts() {
@@ -71,12 +74,14 @@ public class CartService {
         List<SubCart_OrderResponse> boxItem = new ArrayList<>();
         var detail = cartDetailRepository.findByIdentification_cart(flag.get().getId());
         for(var y : detail){
+            var detailQuantity = detailSizeQuantityRepository.findDetailQuantity(y.getSize(),y.getColor(),y.getName());
             var itemCart = SubCart_OrderResponse.builder()
                     .itemDetail_id(y.getProduct_identification())
                     .name(y.getName())
                     .size(y.getSize())
                     .color(y.getColor())
                     .image(y.getImage())
+                    .totalQuantity(detailQuantity.getQuantity())
                     .quantity(y.getQuantity())
                     .unitPrice(y.getUnitPrice())
                     .totalPrice(y.getUnitPrice()*y.getQuantity())
@@ -101,12 +106,14 @@ public class CartService {
         List<SubCart_OrderResponse> boxItem = new ArrayList<>();
         var detail = cartDetailRepository.findByIdentification_cart(flag.getId());
         for(var y : detail){
+            var detailQuantity = detailSizeQuantityRepository.findDetailQuantity(y.getSize(),y.getColor(),y.getName());
             var itemCart = SubCart_OrderResponse.builder()
                     .itemDetail_id(y.getProduct_identification())
                     .name(y.getName())
                     .size(y.getSize())
                     .color(y.getColor())
                     .image(y.getImage())
+                    .totalQuantity(detailQuantity.getQuantity())
                     .quantity(y.getQuantity())
                     .unitPrice(y.getUnitPrice())
                     .totalPrice(y.getUnitPrice()*y.getQuantity())

@@ -13,7 +13,6 @@ import java.util.Optional;
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
-
     public List<Transaction> getAllTransactions() {
         return transactionRepository.findAll();
     }
@@ -27,25 +26,15 @@ public class TransactionService {
     }
 
     public Transaction updateTransaction(Long id, Transaction transactionDetails) {
-        Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new RuntimeException("Transaction not found"));
+        Transaction transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transaction not found with id: " + id));
 
-        transaction.setGateway(transactionDetails.getGateway());
-        transaction.setTransactionDate(transactionDetails.getTransactionDate());
-        transaction.setAccountNumber(transactionDetails.getAccountNumber());
-        transaction.setCode(transactionDetails.getCode());
-        transaction.setContent(transactionDetails.getContent());
-        transaction.setTransferType(transactionDetails.getTransferType());
-        transaction.setTransferAmount(transactionDetails.getTransferAmount());
-        transaction.setAccumulated(transactionDetails.getAccumulated());
-        transaction.setSubAccount(transactionDetails.getSubAccount());
-        transaction.setReferenceCode(transactionDetails.getReferenceCode());
-        transaction.setDescription(transactionDetails.getDescription());
+        transaction.setPaymentStatus(transactionDetails.getPaymentStatus());
 
         return transactionRepository.save(transaction);
     }
 
     public void deleteTransaction(Long id) {
-        Transaction transaction = transactionRepository.findById(id).orElseThrow(() -> new RuntimeException("Transaction not found"));
-        transactionRepository.delete(transaction);
+        transactionRepository.deleteById(id);
     }
 }

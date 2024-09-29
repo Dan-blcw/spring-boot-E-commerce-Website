@@ -43,7 +43,7 @@ public class Order {
 
 //    private String shippingStatus;
 
-    private String PaymentMethods;
+    private String paymentMethods;
     private Integer paymentStatus;
 
 //    private Float unitPrice;

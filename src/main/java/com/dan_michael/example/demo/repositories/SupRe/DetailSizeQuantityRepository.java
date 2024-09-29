@@ -17,6 +17,13 @@ public interface DetailSizeQuantityRepository extends JpaRepository<DetailSizeQu
             @Param("identification_pro") String identification_pro
     );
 
+    @Query("SELECT pi FROM DetailSizeQuantity pi WHERE pi.identification = :identification AND  pi.identification_pro = :identification_pro AND pi.size = :size")
+    DetailSizeQuantity findDetailQuantity(
+            @Param("size") String size,
+            @Param("identification") String identification,
+            @Param("identification_pro") String identification_pro
+    );
+
     @Transactional
     @Modifying
     @Query("DELETE FROM DetailSizeQuantity od WHERE od.identification = :identification and od.size = :size and od.identification_pro = :identification_pro")

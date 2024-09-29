@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Builder
@@ -17,17 +18,16 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String gateway;
-    private LocalDateTime transactionDate;
-    private String accountNumber;
-    private String code;
-    private String content;
-    private String transferType;
-    private Long transferAmount;
-    private Long accumulated;
-    private String subAccount;
-    private String referenceCode;
-    private String description;
+    private String accountNo;
+    private String accountName;
+    private String acqId;
+    private String addInfo;
+    private String amount;
+    private String template;
 
-    // Getters and Setters
+
+    private String skuOrder;
+    private String paymentMethods;
+    private Integer paymentStatus;
+    public Date transactionDate;
 }

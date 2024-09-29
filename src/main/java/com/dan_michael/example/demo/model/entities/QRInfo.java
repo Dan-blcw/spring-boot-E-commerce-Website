@@ -16,15 +16,19 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class QRInfoMethods {
+public class QRInfo {
 
     @Id
     @GeneratedValue
     public Integer id;
-    @Column(unique = true)
-    public Integer accountNo;
-    public String accountName;
-    @Column(length = 10485760)
-    public String description;
 
+    @Column(unique = true)
+    private String accountNo;
+    private String accountName;
+    private String acqId;
+    private String template;
+
+    private Integer status;
+    public Date createAt;
+    public String createBy;
 }

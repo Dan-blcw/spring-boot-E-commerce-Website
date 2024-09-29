@@ -39,6 +39,42 @@ public class AdminController {
 
     private final PaymentMethodsService paymentMethodsService;
 
+//--------------------------- QR ---------------------------------------
+    @GetMapping("/QR-info")
+    public List<QRInfo> getAllQRInfos() {
+        return service.getAllQRInfos();
+    }
+
+    @GetMapping("/QR-info/{id}")
+    public ResponseEntity<QRInfo> getQRInfoById(@PathVariable Integer id) {
+        Optional<QRInfo> qrInfo = service.getQRInfoById(id);
+        return qrInfo.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/QR-info")
+    public ResponseEntity<?> createQRInfo(@RequestBody QRInfoDtos qrInfo) {
+        var save = service.createQRInfo(qrInfo);
+        if(save == null){
+            return ResponseEntity.ok(ResponseMessageDtos.builder()
+                            .status(400)
+                            .message("QR account already exists")
+                    .build());
+        }
+        return ResponseEntity.ok(save);
+    }
+
+    @PutMapping("/QR-info/{id}")
+    public ResponseEntity<QRInfo> updateQRInfo(@PathVariable Integer id, @RequestBody QRInfo qrInfoDetails) {
+        QRInfo updatedQRInfo = service.updateQRInfo(id, qrInfoDetails);
+        return ResponseEntity.ok(updatedQRInfo);
+    }
+
+    @DeleteMapping("/QR-info/{id}")
+    public ResponseEntity<Void> deleteQRInfo(@PathVariable Integer id) {
+        service.deleteQRInfo(id);
+        return ResponseEntity.noContent().build();
+    }
 //--------------------------- THONG KE ---------------------------------------
 
     @GetMapping("/quantity-statistics")

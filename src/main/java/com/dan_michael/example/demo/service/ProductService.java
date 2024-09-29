@@ -66,6 +66,8 @@ public class ProductService {
 
     private final MaterialRepository materialRepository;
 
+    private final QRInfoRepository qrInfoRepository;
+
 //-------------------Answer AI -----------------------------------
     public String saveInfoChatBotAnswer(ProductResponse qa,List<String> sizes,List<String> colors,List<SubColor> boxResponse){
         String save = "";
@@ -1716,6 +1718,48 @@ public class ProductService {
         return ChartData.builder()
                 .datasets(list)
                 .build();
+    }
+//    -------------------------------QR info--------------------------------------------------
+    public List<QRInfo> getAllQRInfos() {
+        return qrInfoRepository.findAll();
+    }
+
+    public Optional<QRInfo> getQRInfoById(Integer id) {
+        return qrInfoRepository.findById(id);
+    }
+
+    public QRInfo createQRInfo(QRInfoDtos qrInfo) {
+        var save = qrInfoRepository.findQRAccount(qrInfo.getAccountNo(), qrInfo.getAccountName());
+        if(save != null){
+            return null;
+        }
+        var newSave =  new QRInfo();
+        newSave.setAccountNo(qrInfo.getAccountNo());
+        newSave.setAccountName(qrInfo.getAccountName());
+        newSave.setAcqId(qrInfo.getAcqId());
+        newSave.setTemplate(qrInfo.getTemplate());
+        newSave.setStatus(qrInfo.getStatus());
+        newSave.setCreateAt(new Date());
+        newSave.setCreateBy(qrInfo.getCreateBy());
+        return qrInfoRepository.save(newSave);
+    }
+
+    public QRInfo updateQRInfo(Integer id, QRInfo qrInfoDetails) {
+        QRInfo qrInfo = qrInfoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("QRInfo not found with id: " + id));
+
+        qrInfo.setAccountNo(qrInfoDetails.getAccountNo());
+        qrInfo.setAccountName(qrInfoDetails.getAccountName());
+        qrInfo.setAcqId(qrInfoDetails.getAcqId());
+        qrInfo.setTemplate(qrInfoDetails.getTemplate());
+        qrInfo.setStatus(qrInfoDetails.getStatus());
+        qrInfo.setCreateBy(qrInfoDetails.getCreateBy());
+
+        return qrInfoRepository.save(qrInfo);
+    }
+
+    public void deleteQRInfo(Integer id) {
+        qrInfoRepository.deleteById(id);
     }
 
 }

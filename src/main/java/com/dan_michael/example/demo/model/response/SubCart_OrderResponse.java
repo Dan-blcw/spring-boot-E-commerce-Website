@@ -15,6 +15,7 @@ public class SubCart_OrderResponse {
     private String image;
     private String color;
     private String size;
+    private Integer totalQuantity;
     private Integer quantity;
     private Float unitPrice;
     private Float totalPrice;

@@ -1,9 +1,13 @@
 package com.dan_michael.example.demo.controller;
 
+import com.dan_michael.example.demo.model.entities.Transaction;
 import com.dan_michael.example.demo.model.response.OrderResponse;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.entities.Order;
 import com.dan_michael.example.demo.model.entities.SubEn.OrderDetail;
+import com.dan_michael.example.demo.repositories.OrderRepository;
+import com.dan_michael.example.demo.repositories.QRInfoRepository;
+import com.dan_michael.example.demo.repositories.TransactionRepository;
 import com.dan_michael.example.demo.service.OrderService;
 import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
@@ -13,38 +17,23 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.dan_michael.example.demo.model.dto.ob.OrderDtos;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 @RestController
 @RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
 //--------------------------Clone hoa don----------------------------------
-//var createdAt = x.getCreatedAt();
-//    Calendar calendar = Calendar.getInstance();
-//            calendar.setTime(createdAt);
-//    int month = calendar.get(Calendar.MONTH);
-//            switch (month) {
-//        case 0 -> nt1 += x.getTotalAmountOrder();
-//        case 1 -> nt2 += x.getTotalAmountOrder();
-//        case 2 -> nt3 += x.getTotalAmountOrder();
-//        case 3 -> nt4 += x.getTotalAmountOrder();
-//        case 4 -> nt5 += x.getTotalAmountOrder();
-//        case 5 -> nt6 += x.getTotalAmountOrder();
-//        case 6 -> nt7 += x.getTotalAmountOrder();
-//        case 7 -> nt8 += x.getTotalAmountOrder();
-//        case 8 -> nt9 += x.getTotalAmountOrder();
-//        case 9 -> nt10 += x.getTotalAmountOrder();
-//        case 10 -> nt11 += x.getTotalAmountOrder();
-//        case 11 -> nt12 += x.getTotalAmountOrder();
-//        default -> {
-//        }
-//    }
 
 //--------------------------Order(CRUD)----------------------------------
     private final OrderService orderService;
+
+    private final OrderRepository orderRepository;
+
+    private final QRInfoRepository qrInfoRepository;
+
+    private final TransactionRepository transactionRepository;
 
     // Get all orders
     @PreAuthorize("hasRole('ADMIN')")
@@ -92,7 +81,60 @@ public class OrderController {
             @RequestBody OrderDtos request
     ) {
         OrderResponse response = orderService.createOrder(request);
-        return ResponseEntity.ok(response);
+        var newTransaction = Transaction.builder().build();
+        if(Objects.equals(request.getPaymentMethods(), "Quét Mã QR")){
+             var qrInfos = qrInfoRepository.findQRInfoActive();
+             if(qrInfos !=null){
+                 newTransaction = Transaction.builder()
+                         .accountNo(qrInfos.get(0).getAccountNo())
+                         .accountName(qrInfos.get(0).getAccountName())
+                         .acqId(qrInfos.get(0).getAcqId())
+                         .template(qrInfos.get(0).getTemplate())
+                         .skuOrder(response.getSkuOrder())
+                         .addInfo("Thanh toán cho mã hóa đơn " + response.getSkuOrder())
+                         .amount(String.valueOf(response.getTotalPayment()))
+                         .paymentMethods(response.getPaymentMethods())
+                         .paymentStatus(response.getPaymentStatus())
+                         .transactionDate(new Date())
+                         .build();
+                 transactionRepository.save(newTransaction);
+             }else {
+                 return ResponseEntity.ok(ResponseMessageDtos.builder()
+                                 .status(400)
+                                 .message("Hiện tại không có tài khản ngân hàng quét QR khả dụng !")
+                         .build());
+             }
+        }else if(Objects.equals(request.getPaymentMethods(), "VNPay")){
+             newTransaction = Transaction.builder()
+                    .accountNo("Liên kết VNPay")
+                    .accountName("Liên kết VNPay")
+                    .acqId("Liên kết VNPay")
+                    .template("Liên kết VNPay")
+                    .skuOrder(response.getSkuOrder())
+                    .addInfo("Thanh toán cho mã hóa đơn " + response.getSkuOrder())
+                    .amount(String.valueOf(response.getTotalPayment()))
+                    .paymentMethods(response.getPaymentMethods())
+                    .paymentStatus(response.getPaymentStatus())
+                    .transactionDate(new Date())
+                    .build();
+            transactionRepository.save(newTransaction);
+        }else {
+            newTransaction = Transaction.builder()
+                    .accountNo("")
+                    .accountName("")
+                    .acqId("")
+                    .template("")
+                    .skuOrder(response.getSkuOrder())
+                    .addInfo("Thanh toán cho mã hóa đơn " + response.getSkuOrder())
+                    .amount(String.valueOf(response.getTotalPayment()))
+                    .paymentMethods(response.getPaymentMethods())
+                    .paymentStatus(response.getPaymentStatus())
+                    .transactionDate(new Date())
+                    .build();
+            transactionRepository.save(newTransaction);
+        }
+        return ResponseEntity.ok(newTransaction);
+//        return ResponseEntity.ok(response);
     }
 
     // Update an existing order
@@ -103,6 +145,12 @@ public class OrderController {
             @RequestBody OrderDtos orderDetails
     ) {
         Optional<Order> updatedOrder = orderService.updateOrderAdmin(id, orderDetails);
+        if(updatedOrder.isPresent()){
+            var saveTran = transactionRepository.findTransactionBySkuOrder(updatedOrder.get().getSkuOrder());
+            saveTran.setPaymentMethods(updatedOrder.get().getPaymentMethods());
+            saveTran.setPaymentStatus(updatedOrder.get().getPaymentStatus());
+            transactionRepository.save(saveTran);
+        }
         return updatedOrder.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
