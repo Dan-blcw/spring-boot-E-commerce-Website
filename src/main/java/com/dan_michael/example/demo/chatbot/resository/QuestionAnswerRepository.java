@@ -12,5 +12,8 @@ public interface QuestionAnswerRepository extends JpaRepository<QuestionAnswer, 
     List<QuestionAnswer> findByKey(@Param("question") String question);
     @Query("SELECT pi FROM QuestionAnswer pi WHERE pi.question = :question")
     QuestionAnswer findByQuestion(@Param("question") String question);
+
+    @Query("SELECT pi FROM QuestionAnswer pi WHERE pi.id = :id")
+    QuestionAnswer findById_(@Param("id") Integer id);
 }
 

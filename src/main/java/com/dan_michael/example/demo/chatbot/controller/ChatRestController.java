@@ -12,6 +12,7 @@ import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.service.EmailSenderService;
 import com.dan_michael.example.demo.util.Constants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,6 +31,11 @@ public class ChatRestController {
         return questions;
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> All() {
+        return ResponseEntity.ok(chatBotService.all());
+    }
+
     @PostMapping("/chat")
     public String chat(@RequestBody RequestMessageChatBotDtos message) {
     	return chatBotService.handleInput(message.getMessage());
@@ -44,15 +50,18 @@ public class ChatRestController {
     }
 
     
-    @PutMapping("/qa")
-    public QuestionAnswer updateQuestionAnswer(@RequestBody QuestionAnswer request) {
-        return chatBotService.updateQuestionAnswer(request.getQuestion(),request.getAnswer());
+    @PutMapping("/qa/{id}")
+    public QuestionAnswer updateQuestionAnswer(
+            @RequestBody QuestionAnswer request,
+            @PathVariable Integer id
+    ) {
+        return chatBotService.updateQuestionAnswer(request.getAnswer(),id);
     }
 
     
-    @DeleteMapping("/qa")
-    public ResponseMessageDtos deleteQuestionAnswer(@RequestBody RequestMessageChatBotDtos question) {
-        var response = chatBotService.deleteQuestionAnswer(question.getMessage());
+    @DeleteMapping("/qa/{id}")
+    public ResponseMessageDtos deleteQuestionAnswer(@PathVariable Integer id) {
+        var response = chatBotService.deleteQuestionAnswer(id);
         if(response){
             return ResponseMessageDtos.builder()
                     .status(200)

@@ -126,8 +126,8 @@ public class ChatbotService {
         return qa.getData();
     }
     
-    public QuestionAnswer updateQuestionAnswer(String question, String newAnswer) {
-        QuestionAnswer qa = questionAnswerRepository.findByQuestion(removeDiacritics(question.toLowerCase()));
+    public QuestionAnswer updateQuestionAnswer(String newAnswer,Integer id) {
+        QuestionAnswer qa = questionAnswerRepository.findById_(id);
         if(qa != null){
             qa.setAnswer(newAnswer);
             questionAnswerRepository.save(qa);
@@ -135,8 +135,8 @@ public class ChatbotService {
         return qa;
     }
     
-    public Boolean deleteQuestionAnswer(String question) {
-        QuestionAnswer qa = questionAnswerRepository.findByQuestion(removeDiacritics(question.toLowerCase()));
+    public Boolean deleteQuestionAnswer(Integer id) {
+        QuestionAnswer qa = questionAnswerRepository.findById_(id);
         if(qa != null){
             questionAnswerRepository.delete(qa);
             return true;
@@ -148,6 +148,10 @@ public class ChatbotService {
     	return originalQuestionRepository.findAll().stream()
                 .map(OriginalQuestion::getQuestion)
                 .collect(Collectors.toList());
+    }
+
+    public List<QuestionAnswer> all() {
+        return questionAnswerRepository.findAll();
     }
 
     public List<String> getAllQuestionsOfGuest() {
