@@ -127,126 +127,126 @@ public class PjCdtnApplication {
 					.answer("Chào bạn! \uD83D\uDC4B Tôi là "+ Constants.Chat_Bot_Name +"\nTôi ở đây để giúp bạn tìm sản phẩm hoặc giải đáp bất kỳ thắc mắc nào. Bạn cần tìm kiếm sản phẩm nào hay có câu hỏi gì về dịch vụ của chúng tôi? Đừng ngần ngại cho tôi biết, tôi sẵn sàng hỗ trợ bạn!")
 					.build();
 
-			var responseAI1 = QuestionAnswer.builder()
-					.question("What is e-commerce?")
-					.answer("E-commerce is the buying and selling of goods or services using the internet.")
-					.build();
-
-			var responseAI2 = QuestionAnswer.builder()
-					.question("What are the types of e-commerce?")
-					.answer("The types of e-commerce are B2B, B2C, C2C, and C2B.")
-					.build();
-
-			var responseAI3 = QuestionAnswer.builder()
-					.question("What is a payment gateway?")
-					.answer("A payment gateway is a technology that reads and transfers payment information from a customer to a merchant's bank account.")
-					.build();
-
-			var responseAI4 = QuestionAnswer.builder()
-					.question("What is shopping cart software?")
-					.answer("Shopping cart software is a software that allows customers to select and store items for purchase.")
-					.build();
-
-			var responseAI5 = QuestionAnswer.builder()
-					.question("What is dropshipping?")
-					.answer("Dropshipping is a retail fulfillment method where a store doesn't keep the products it sells in stock.")
-					.build();
-
-			var responseAI6 = QuestionAnswer.builder()
-					.question("What is inventory management?")
-					.answer("Inventory management is the process of ordering, storing, and using a company's inventory.")
-					.build();
-
-			var responseAI7 = QuestionAnswer.builder()
-					.question("What is an e-commerce platform?")
-					.answer("An e-commerce platform is a software application that allows online businesses to manage their website, marketing, sales, and operations.")
-					.build();
-
-			var responseAI8 = QuestionAnswer.builder()
-					.question("What is SSL in e-commerce?")
-					.answer("SSL (Secure Sockets Layer) is a standard security technology for establishing an encrypted link between a server and a client.")
-					.build();
-
-			var responseAI9 = QuestionAnswer.builder()
-					.question("What is PCI DSS?")
-					.answer("PCI DSS (Payment Card Industry Data Security Standard) is a set of security standards designed to ensure that all companies that accept, process, store, or transmit credit card information maintain a secure environment.")
-					.build();
-
-			var responseAI10 = QuestionAnswer.builder()
-					.question("What is customer relationship management (CRM)?")
-					.answer("CRM is a technology for managing all your company's relationships and interactions with current and potential customers.")
-					.build();
-
-			var responseAI11 = QuestionAnswer.builder()
-					.question("What is SEO in e-commerce?")
-					.answer("SEO (Search Engine Optimization) is the practice of increasing the quantity and quality of traffic to your website through organic search engine results.")
-					.build();
-
-			var responseAI12 = QuestionAnswer.builder()
-					.question("What is the difference between multichannel and omnichannel?")
-					.answer("Multichannel refers to using multiple channels to reach customers, while omnichannel means providing a seamless experience across all channels.")
-					.build();
-
-			var responseAI13 = QuestionAnswer.builder()
-					.question("What is mobile commerce (m-commerce)?")
-					.answer("M-commerce is the buying and selling of goods and services through wireless handheld devices such as smartphones and tablets.")
-					.build();
-
-			var responseAI14 = QuestionAnswer.builder()
-					.question("What is a fulfillment center?")
-					.answer("A fulfillment center is a third-party logistics (3PL) warehouse where incoming orders are received, processed, and fulfilled.")
-					.build();
-
-			var responseAI15 = QuestionAnswer.builder()
-					.question("What is an abandoned cart?")
-					.answer("An abandoned cart refers to when a customer adds items to their online shopping cart but leaves the site without completing the purchase.")
-					.build();
-
-			var responseAI16 = QuestionAnswer.builder()
-					.question("What is cross-selling?")
-					.answer("Cross-selling is the practice of selling an additional product or service to an existing customer.")
-					.build();
-
-			var responseAI17 = QuestionAnswer.builder()
-					.question("What is up-selling?")
-					.answer("Up-selling is the practice of encouraging customers to purchase a more expensive item or add-ons to increase the value of the sale.")
-					.build();
-
-			var responseAI18 = QuestionAnswer.builder()
-					.question("What is a return policy?")
-					.answer("A return policy is a set of rules established by a retailer to manage how customers can return or exchange unwanted products.")
-					.build();
-
-			var responseAI19 = QuestionAnswer.builder()
-					.question("What is a customer loyalty program?")
-					.answer("A customer loyalty program is a rewards program offered by a company to customers who frequently make purchases.")
-					.build();
-
-			var responseAI20 = QuestionAnswer.builder()
-					.question("What is a product feed?")
-					.answer("A product feed is a file containing a list of products and their attributes used to provide information to e-commerce platforms and marketplaces.")
-					.build();
+//			var responseAI1 = QuestionAnswer.builder()
+//					.question("What is e-commerce?")
+//					.answer("E-commerce is the buying and selling of goods or services using the internet.")
+//					.build();
+//
+//			var responseAI2 = QuestionAnswer.builder()
+//					.question("What are the types of e-commerce?")
+//					.answer("The types of e-commerce are B2B, B2C, C2C, and C2B.")
+//					.build();
+//
+//			var responseAI3 = QuestionAnswer.builder()
+//					.question("What is a payment gateway?")
+//					.answer("A payment gateway is a technology that reads and transfers payment information from a customer to a merchant's bank account.")
+//					.build();
+//
+//			var responseAI4 = QuestionAnswer.builder()
+//					.question("What is shopping cart software?")
+//					.answer("Shopping cart software is a software that allows customers to select and store items for purchase.")
+//					.build();
+//
+//			var responseAI5 = QuestionAnswer.builder()
+//					.question("What is dropshipping?")
+//					.answer("Dropshipping is a retail fulfillment method where a store doesn't keep the products it sells in stock.")
+//					.build();
+//
+//			var responseAI6 = QuestionAnswer.builder()
+//					.question("What is inventory management?")
+//					.answer("Inventory management is the process of ordering, storing, and using a company's inventory.")
+//					.build();
+//
+//			var responseAI7 = QuestionAnswer.builder()
+//					.question("What is an e-commerce platform?")
+//					.answer("An e-commerce platform is a software application that allows online businesses to manage their website, marketing, sales, and operations.")
+//					.build();
+//
+//			var responseAI8 = QuestionAnswer.builder()
+//					.question("What is SSL in e-commerce?")
+//					.answer("SSL (Secure Sockets Layer) is a standard security technology for establishing an encrypted link between a server and a client.")
+//					.build();
+//
+//			var responseAI9 = QuestionAnswer.builder()
+//					.question("What is PCI DSS?")
+//					.answer("PCI DSS (Payment Card Industry Data Security Standard) is a set of security standards designed to ensure that all companies that accept, process, store, or transmit credit card information maintain a secure environment.")
+//					.build();
+//
+//			var responseAI10 = QuestionAnswer.builder()
+//					.question("What is customer relationship management (CRM)?")
+//					.answer("CRM is a technology for managing all your company's relationships and interactions with current and potential customers.")
+//					.build();
+//
+//			var responseAI11 = QuestionAnswer.builder()
+//					.question("What is SEO in e-commerce?")
+//					.answer("SEO (Search Engine Optimization) is the practice of increasing the quantity and quality of traffic to your website through organic search engine results.")
+//					.build();
+//
+//			var responseAI12 = QuestionAnswer.builder()
+//					.question("What is the difference between multichannel and omnichannel?")
+//					.answer("Multichannel refers to using multiple channels to reach customers, while omnichannel means providing a seamless experience across all channels.")
+//					.build();
+//
+//			var responseAI13 = QuestionAnswer.builder()
+//					.question("What is mobile commerce (m-commerce)?")
+//					.answer("M-commerce is the buying and selling of goods and services through wireless handheld devices such as smartphones and tablets.")
+//					.build();
+//
+//			var responseAI14 = QuestionAnswer.builder()
+//					.question("What is a fulfillment center?")
+//					.answer("A fulfillment center is a third-party logistics (3PL) warehouse where incoming orders are received, processed, and fulfilled.")
+//					.build();
+//
+//			var responseAI15 = QuestionAnswer.builder()
+//					.question("What is an abandoned cart?")
+//					.answer("An abandoned cart refers to when a customer adds items to their online shopping cart but leaves the site without completing the purchase.")
+//					.build();
+//
+//			var responseAI16 = QuestionAnswer.builder()
+//					.question("What is cross-selling?")
+//					.answer("Cross-selling is the practice of selling an additional product or service to an existing customer.")
+//					.build();
+//
+//			var responseAI17 = QuestionAnswer.builder()
+//					.question("What is up-selling?")
+//					.answer("Up-selling is the practice of encouraging customers to purchase a more expensive item or add-ons to increase the value of the sale.")
+//					.build();
+//
+//			var responseAI18 = QuestionAnswer.builder()
+//					.question("What is a return policy?")
+//					.answer("A return policy is a set of rules established by a retailer to manage how customers can return or exchange unwanted products.")
+//					.build();
+//
+//			var responseAI19 = QuestionAnswer.builder()
+//					.question("What is a customer loyalty program?")
+//					.answer("A customer loyalty program is a rewards program offered by a company to customers who frequently make purchases.")
+//					.build();
+//
+//			var responseAI20 = QuestionAnswer.builder()
+//					.question("What is a product feed?")
+//					.answer("A product feed is a file containing a list of products and their attributes used to provide information to e-commerce platforms and marketplaces.")
+//					.build();
 			chatbotService.createQuestionAnswer(responseAI0);
-			chatbotService.createQuestionAnswer(responseAI1);
-			chatbotService.createQuestionAnswer(responseAI2);
-			chatbotService.createQuestionAnswer(responseAI3);
-			chatbotService.createQuestionAnswer(responseAI4);
-			chatbotService.createQuestionAnswer(responseAI5);
-			chatbotService.createQuestionAnswer(responseAI6);
-			chatbotService.createQuestionAnswer(responseAI7);
-			chatbotService.createQuestionAnswer(responseAI8);
-			chatbotService.createQuestionAnswer(responseAI9);
-			chatbotService.createQuestionAnswer(responseAI10);
-			chatbotService.createQuestionAnswer(responseAI11);
-			chatbotService.createQuestionAnswer(responseAI12);
-			chatbotService.createQuestionAnswer(responseAI13);
-			chatbotService.createQuestionAnswer(responseAI14);
-			chatbotService.createQuestionAnswer(responseAI15);
-			chatbotService.createQuestionAnswer(responseAI16);
-			chatbotService.createQuestionAnswer(responseAI17);
-			chatbotService.createQuestionAnswer(responseAI18);
-			chatbotService.createQuestionAnswer(responseAI19);
-			chatbotService.createQuestionAnswer(responseAI20);
+//			chatbotService.createQuestionAnswer(responseAI1);
+//			chatbotService.createQuestionAnswer(responseAI2);
+//			chatbotService.createQuestionAnswer(responseAI3);
+//			chatbotService.createQuestionAnswer(responseAI4);
+//			chatbotService.createQuestionAnswer(responseAI5);
+//			chatbotService.createQuestionAnswer(responseAI6);
+//			chatbotService.createQuestionAnswer(responseAI7);
+//			chatbotService.createQuestionAnswer(responseAI8);
+//			chatbotService.createQuestionAnswer(responseAI9);
+//			chatbotService.createQuestionAnswer(responseAI10);
+//			chatbotService.createQuestionAnswer(responseAI11);
+//			chatbotService.createQuestionAnswer(responseAI12);
+//			chatbotService.createQuestionAnswer(responseAI13);
+//			chatbotService.createQuestionAnswer(responseAI14);
+//			chatbotService.createQuestionAnswer(responseAI15);
+//			chatbotService.createQuestionAnswer(responseAI16);
+//			chatbotService.createQuestionAnswer(responseAI17);
+//			chatbotService.createQuestionAnswer(responseAI18);
+//			chatbotService.createQuestionAnswer(responseAI19);
+//			chatbotService.createQuestionAnswer(responseAI20);
 			/*
 				What is e-commerce?
 				What are the types of e-commerce?

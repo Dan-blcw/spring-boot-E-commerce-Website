@@ -1,15 +1,16 @@
 package com.dan_michael.example.demo.service;
 
+import com.dan_michael.example.demo.chatbot.entities.OriginalQuestion;
+import com.dan_michael.example.demo.chatbot.entities.QuestionAnswer;
+import com.dan_michael.example.demo.chatbot.resository.OriginalQuestionRepository;
+import com.dan_michael.example.demo.chatbot.resository.QuestionAnswerRepository;
 import com.dan_michael.example.demo.model.dto.ob.CommentDto;
 import com.dan_michael.example.demo.model.dto.ob.OrderDtos;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubColor;
 import com.dan_michael.example.demo.model.dto.ob.sub.SubSizeQuantity;
-import com.dan_michael.example.demo.model.entities.Discount;
-import com.dan_michael.example.demo.model.entities.Order;
-import com.dan_michael.example.demo.model.entities.QRInfo;
+import com.dan_michael.example.demo.model.entities.*;
 import com.dan_michael.example.demo.model.entities.SubEn.OrderDetail;
 import com.dan_michael.example.demo.model.entities.SubEn.DetailSizeQuantity;
-import com.dan_michael.example.demo.model.entities.Transaction;
 import com.dan_michael.example.demo.model.response.OrderResponse;
 import com.dan_michael.example.demo.model.response.ResponseMessageDtos;
 import com.dan_michael.example.demo.model.response.SubCart_OrderResponse;
@@ -26,6 +27,10 @@ import org.springframework.stereotype.Service;
 import com.dan_michael.example.demo.model.dto.ob.ItemDetailDto;
 
 import java.util.*;
+
+import static com.dan_michael.example.demo.chatbot.service.ChatbotService.removeDiacritics;
+import static com.dan_michael.example.demo.util.UtilFunction.saveInfoChatBotAnswer;
+import static com.dan_michael.example.demo.util.UtilFunction.saveQuantityDetailAnswer;
 
 @Service
 @RequiredArgsConstructor
@@ -49,10 +54,9 @@ public class OrderService {
 
     private final DiscountRepository discountRepository;
 
-    private final QRInfoRepository qrInfoRepository;
+    private final QuestionAnswerRepository questionAnswerRepository;
 
-    private final TransactionRepository transactionRepository;
-
+    private final OriginalQuestionRepository originalQuestionRepository;
 //--------------------------Order----------------------------------
     public List<Order> getAllOrders() {
         var flag = orderRepository.findByAllOrderActive();
@@ -111,6 +115,9 @@ public class OrderService {
         }
         return flag;
     }
+//    public List<String> getsize(){
+//
+//    }
     @Transactional
     public OrderResponse createOrder(OrderDtos request) {
         var subtotalProduct = 0;
@@ -139,16 +146,24 @@ public class OrderService {
             var image_Detail = productRepository.findByName(x.getName()).get().getImageMain();
             var product = productRepository.findByID_(x.getItemDetail_id());
             var quantityDetailsList = quantityDetailRepository.findQuantityDetailsByIAndIdentification(product.getName());
+            List<String> sizes = new ArrayList<>();
+            List<String> colors = new ArrayList<>();
             List<SubColor> BoxResponse = new ArrayList<>();
             for (var x_0: quantityDetailsList) {
                 List<DetailSizeQuantity> detailSizeQuantities = detailSizeQuantityRepository.findDetailSizeQuantityByIdentification(x_0.getColor(),x_0.getIdentification());
+                if(!colors.contains(x_0.getColor())){
+                    colors.add(x_0.getColor());
+                }
                 List<SubSizeQuantity> sizeQuantities = new ArrayList<>();
                 for (var y_0: detailSizeQuantities){
+                    if(!sizes.contains(y_0.getSize())){
+                        sizes.add(y_0.getSize());
+                    }
                     if(y_0.getIdentification().equals(x.getColor())){
                         if((y_0.getQuantity() >= x.getQuantity()) && Objects.equals(x.getSize(), y_0.getSize())){
                             sizeQuantities.add(SubSizeQuantity.builder()
                                     .size(y_0.getSize())
-                                    .quantity(y_0.getQuantity())
+                                    .quantity(y_0.getQuantity()-x.getQuantity())
                                     .build());
                             y_0.setQuantity(y_0.getQuantity()-x.getQuantity());
                             detailSizeQuantityRepository.save(y_0);
@@ -178,11 +193,22 @@ public class OrderService {
                         .build());
                 x_0.setSizeQuantities(detailSizeQuantities);
             }
+//            update question
+            QuestionAnswer qa0 = questionAnswerRepository.findByQuestion(product.getSkuQa().toLowerCase());
+            qa0.setAnswer(saveInfoChatBotAnswer(product,sizes,colors,BoxResponse));
+
+            var oriqe10 = ("Số lượng chi tiết của "+ product.getName());
+            QuestionAnswer qa10 = questionAnswerRepository.findByQuestion(removeDiacritics(oriqe10.toLowerCase()));
+            qa10.setAnswer(saveQuantityDetailAnswer(product.getName(),sizes,colors,BoxResponse));
+
             totalQuantity_order += x.getQuantity();
             // cập nhập quantity product
             product.setQuantityDetails(quantityDetailsList);
             product.setTotalQuantity(product.getTotalQuantity()-subtotalProduct);
             productRepository.save(product);
+            var oriqe4 = ("Sản phẩm "+ product.getName()+" có còn hàng không?");
+            QuestionAnswer qa4 = questionAnswerRepository.findByQuestion(removeDiacritics(oriqe4.toLowerCase()));
+            qa4.setAnswer("Tổng hàng tồn kho của "+ product.getName()+" còn "+product.getTotalQuantity()+" sản phẩm các loại, Để kiểm tra tình trạng hàng tồn kho chi tiết, Bạn vui lòng nhấn vào trang sản phẩm của chúng tôi. ");
 
             detail.setName(x.getName());
             detail.setQuantity(x.getQuantity());
@@ -225,6 +251,49 @@ public class OrderService {
         }
         y.setTotalAmountOrder(totalAmountOrder);
         orderRepository.save(y);
+        List<Product> box0 = productRepository.search_all(null,null,null,null, null, null, null, null, null, null, null);
+        List<Product> box1 = productRepository.search_all(null,null,null,null, null, true, null, null, null, null, null);
+        List<Product> box2 = productRepository.search_all(null,null,null,null, null, null, true, null, null, null, null);
+        box0.sort(Comparator.comparing(Product::getQuantitySold).reversed());
+        var oriqe23 = ("Gợi ý cho tôi các sản phẩm bán chạy nhất");
+        var oriqe24 = ("Gợi ý cho tôi các sản phẩm giảm giá ổn nhất");
+        var oriqe25 = ("Gợi ý cho tôi các sản phẩm mới nhất");
+        QuestionAnswer qa23 = new QuestionAnswer();
+        QuestionAnswer qa24 = new QuestionAnswer();
+        QuestionAnswer qa25 = new QuestionAnswer();
+        if(questionAnswerRepository.findByQuestion(removeDiacritics(oriqe23.toLowerCase())) == null &&
+                questionAnswerRepository.findByQuestion(removeDiacritics(oriqe24.toLowerCase())) == null &&
+                questionAnswerRepository.findByQuestion(removeDiacritics(oriqe25.toLowerCase())) == null
+        ){
+                    originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe23).build());
+                    originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe24).build());
+                    originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe25).build());
+            qa23 = QuestionAnswer.builder()
+                    .question(removeDiacritics(oriqe23.toLowerCase()))
+                    .answer("Dưới đây là danh sách các sản phẩm bán chạy nhất hiện nay mà bạn có thể tham khảo: \\n1. "+box0.get(0).getName()+" - Đánh giá cao, nhiều người dùng yêu thích. \\n2. "+box0.get(1).getName()+" - Đang được rất nhiều khách hàng lựa chọn. \\n3. "+box0.get(2).getName()+" - Nhận được phản hồi tích cực từ khách hàng gần đây. Hãy thử xem những sản phẩm này có phù hợp với bạn không nhé!\"")
+                    .build();
+            qa24 = QuestionAnswer.builder()
+                    .question(removeDiacritics(oriqe24.toLowerCase()))
+                    .answer("Đây là các sản phẩm đang được giảm giá tốt nhất mà tôi tìm thấy cho bạn: \n1. "+box1.get(0).getName()+" - Giảm giá mạnh với ưu đãi đặc biệt. \n2. "+box1.get(1).getName()+" - Khuyến mãi lớn, chất lượng đáng tin cậy. \n3. "+box1.get(2).getName()+" - Đang có mức giá tốt nhất so với các sản phẩm tương tự.")
+                    .build();
+            qa25 = QuestionAnswer.builder()
+                    .question(removeDiacritics(oriqe25.toLowerCase()))
+                    .answer("Dưới đây là một số sản phẩm mới nhất mà bạn có thể muốn xem qua: \\n1. "+box2.get(0).getName()+" - Sản phẩm mới ra mắt, được nhiều người quan tâm. \\n2. "+box2.get(1).getName()+" - Thiết kế hiện đại, tính năng độc đáo. \\n3. "+box2.get(2).getName()+" - Một trong những sản phẩm mới hứa hẹn mang lại trải nghiệm tuyệt vời cho người dùng.")
+                    .build();
+            questionAnswerRepository.save(qa23);
+            questionAnswerRepository.save(qa24);
+            questionAnswerRepository.save(qa25);
+        }else {
+            qa23 = questionAnswerRepository.findByQuestion(removeDiacritics(oriqe23.toLowerCase()));
+            qa23.setAnswer("Dưới đây là danh sách các sản phẩm bán chạy nhất hiện nay mà bạn có thể tham khảo: \\n1. "+box0.get(0).getName()+" - Đánh giá cao, nhiều người dùng yêu thích. \\n2. "+box0.get(1).getName()+" - Đang được rất nhiều khách hàng lựa chọn. \\n3. "+box0.get(2).getName()+" - Nhận được phản hồi tích cực từ khách hàng gần đây. Hãy thử xem những sản phẩm này có phù hợp với bạn không nhé!\"");
+            qa24 = questionAnswerRepository.findByQuestion(removeDiacritics(removeDiacritics(oriqe24.toLowerCase())));
+            qa23.setAnswer("Đây là các sản phẩm đang được giảm giá tốt nhất mà tôi tìm thấy cho bạn: \n1. "+box1.get(0).getName()+" - Giảm giá mạnh với ưu đãi đặc biệt. \n2. "+box1.get(1).getName()+" - Khuyến mãi lớn, chất lượng đáng tin cậy. \n3. "+box1.get(2).getName()+" - Đang có mức giá tốt nhất so với các sản phẩm tương tự.");
+            qa25 = questionAnswerRepository.findByQuestion(removeDiacritics(oriqe25.toLowerCase()));
+            qa23.setAnswer("Dưới đây là một số sản phẩm mới nhất mà bạn có thể muốn xem qua: \\n1. "+box2.get(0).getName()+" - Sản phẩm mới ra mắt, được nhiều người quan tâm. \\n2. "+box2.get(1).getName()+" - Thiết kế hiện đại, tính năng độc đáo. \\n3. "+box2.get(2).getName()+" - Một trong những sản phẩm mới hứa hẹn mang lại trải nghiệm tuyệt vời cho người dùng.");
+        }
+        questionAnswerRepository.save(qa23);
+        questionAnswerRepository.save(qa24);
+        questionAnswerRepository.save(qa25);
         return OrderResponse.builder()
                 .order_id(y.getId())
                 .skuOrder(y.getSkuOrder())

@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static com.dan_michael.example.demo.chatbot.service.ChatbotService.removeDiacritics;
+import static com.dan_michael.example.demo.util.UtilFunction.*;
 
 @Service
 @Transactional
@@ -68,93 +69,6 @@ public class ProductService {
 
     private final QRInfoRepository qrInfoRepository;
 
-//-------------------Answer AI -----------------------------------
-    public String saveInfoChatBotAnswer(ProductResponse qa,List<String> sizes,List<String> colors,List<SubColor> boxResponse){
-        String save = "";
-        String saveSizes = "";
-        String saveColors = "";
-        for (var x =0 ;x < sizes.size() ; ++x) {
-            if(x < sizes.size()){
-                saveSizes +=  sizes.get(x) + ", ";
-            } else if (x == sizes.size()) {
-                saveSizes +=  sizes.get(x);
-            }
-        }
-        for (var x =0 ;x < colors.size() ; ++x) {
-            if(x < colors.size()){
-                saveColors +=  colors.get(x) + ", ";
-            } else if (x == colors.size()) {
-                saveColors +=  colors.get(x);
-            }
-        }
-        String saveDetail = "";
-        for (var x: boxResponse){
-            saveDetail +=  "sản phẩm màu " + x.getColor().toUpperCase();
-            for(var y: x.getSizes()){
-                saveDetail += " có số lượng "+ y.quantity+ " cho kích thước "+ y.size.toUpperCase() +", ";
-            }
-            saveDetail += "Tiếp với ";
-        }
-        save =  "\n                                GIỚI THIỆU SẢN PHẨM                                \n" +
-                "\n     " +
-                "Chúng tôi xin giới thiệu sản phẩm " + qa.getName().toUpperCase() + " một lựa chọn tuyệt vời trong danh mục " + qa.getCategory().toUpperCase() + " và phân loại phụ " + qa.getSubCategory().toUpperCase() +
-                "\n     " +
-                "Sản phẩm này có màu sắc đa dạng, bao gồm "+saveColors.toUpperCase()+" cùng với các kích thước từ "+saveSizes.toUpperCase()+"." +
-                "\n     " +
-                "Với chi tiết số lượng phong phú, "+saveDetail+" Tổng số lượng sản phẩm hiện có là "+qa.getTotalQuantity()+"." +
-                "\n     " +
-                "Sản phẩm này có giá gốc "+String.valueOf(qa.getOriginalPrice()).toUpperCase()+" VND, hiện đang được giảm giá "+String.valueOf(qa.getSaleDiscountPercent()).toUpperCase()
-                +"%, với giá cuối cùng là "+String.valueOf(qa.getFinalPrice()).toUpperCase()+" VND. Được đánh giá "+String.valueOf(qa.getRating()).toUpperCase()+" ✨, "+ qa.getName() +" không chỉ có chất lượng xuất sắc mà còn mang đến giá trị tốt cho khách hàng." +
-                "\n     " +
-                "Tình trạng của sản phẩm hiện tại là có khuyến mãi và mới. Nhận xét từ các khách hàng cho biết sản phẩm mang lại giá trị rất tốt với chất lượng tuyệt vời." +
-                "\n     " +
-                "Hy vọng mẫu giới thiệu này đáp ứng được yêu cầu của bạn!";
-        return save;
-    }
-    public String savesizesAnswer(String namepro,List<String> sizes){
-        String save = "";
-        String saveSizes = "";
-        for (var x =0 ;x < sizes.size() ; ++x) {
-            if(x < sizes.size()){
-                saveSizes +=  sizes.get(x) + ", ";
-            } else if (x == sizes.size()) {
-                saveSizes +=  sizes.get(x);
-            }
-        }
-        return save + " Hiện Tại có " + sizes.size() + " kích thước .Danh sách gồm : [" +saveSizes+"]. Để biết thông tin chi biết về số lương và kích thước chi tiết bạn có thể đặt câu hỏi : Chi tiết Quantity Detail of "+namepro;
-    }
-    public String savecolorsAnswer(String namepro,List<String> colors){
-        String save = namepro ;
-        String savecolors = "";
-        for (var x =0 ;x < colors.size() ; ++x) {
-            if(x < colors.size()){
-                savecolors +=  colors.get(x) + ", ";
-            } else if (x == colors.size()) {
-                savecolors +=  colors.get(x);
-            }
-        }
-        return save + " Hiện Tại có " + colors.size() + " màu .Danh sách gồm : [" +savecolors+"]. Để biết thông tin chi biết về số lương và màu chi tiết bạn có thể đặt câu hỏi : Chi tiết Quantity Detail of "+namepro;
-    }
-    public String saveQuantityDetailAnswer(ProductResponse qa,List<String> sizes,List<String> colors,List<SubColor> boxResponse){
-        String saveDetail = "Chi tiết Quantity Detail of " + qa.getName() + "\n";
-        for (var x: boxResponse){
-            saveDetail +=  "Màu " + x.getColor().toUpperCase();
-            for(var y: x.getSizes()){
-                saveDetail += " có số lượng "+ y.quantity+ " cho kích thước "+ y.size.toUpperCase() +".\n";
-            }
-        }
-        return saveDetail + "Nếu bạn muốn yêu cầu màu hoặc thích thước khác thì bạn có thể gửi cầu hỏi cho quản trị viên để có thể nhận được phản hồi sớm !";
-    }
-
-    public String rating(String namepro,Float rating, Integer nRating){
-        if(rating >= 4){
-            return "Sản phẩm "+ namepro + " hiện đang được đánh giá tôt nhất với rating là " + rating +" ✨ với tổng "+ nRating+ " đánh giá từ khách hàng. Tôi nghĩ sản phẩm này là 1 trong những lựa chọn tốt cho bạn";
-        }else if(rating >= 3){
-            return "Sản phẩm "+ namepro + " hiện đang được đánh giá ổn với rating là " + rating +" \uD83C\uDF1F với tổng "+ nRating+ " đánh giá từ khách hàng. Đây có thể sẽ là sản phẩm phù với bạn hoặc bạn có thể tìm kiếm các sản phẩm tương tự tốt hơn";
-        }else {
-            return "Sản phẩm" + namepro + " hiện đang được đánh giá không được tốt với rating là " + rating +" ⭐ với tổng "+ nRating+" đánh giá từ khách hàng. Sản phẩm đang được hoàn thiện và cải tiến để có thể đáp ứng tốt hơn khách hang \n.Nếu bạn thấy sản phẩm phù hợp với bản thân thi có thể thêm vào giở hàng và tiến hành order";
-        }
-    }
 //-------------------Product-----------------------------------
     public static String generateSku() {
         UUID uuid = UUID.randomUUID();
@@ -328,62 +242,74 @@ public class ProductService {
                 .createdByUserid(product_flag.getCreatedByUserid())
                 .build();
         //originalQuestion
-        var oriqe0 = product_flag.getName();
-        var oriqe1 = ("Bạn có sản phẩm "+ save.getName()+" không?");
-        var oriqe2 = ("Giá của "+ save.getName()+" là bao nhiêu?");
-        var oriqe3 = ("Bạn có chương trình khuyến mãi nào cho "+ save.getName()+" không?");
+//        var oriqe0 = product_flag.getName();
         var oriqe4 = ("Sản phẩm "+ save.getName()+" có còn hàng không?");
+        var oriqe3 = ("Hiện tại "+ save.getName()+" có chương trình giảm giá hoặc khuyến mãi nào không?");
         var oriqe5 = ("Tôi có thể xem đánh giá của khách hàng về "+ save.getName()+" ở đâu?");
         var oriqe6 = ("Tôi có thể trả lại "+ save.getName()+" nếu không hài lòng không?");
-//        var oriqe7 = ("Tôi có thể thay đổi hoặc hủy đơn hàng của mình không?");
-        var oriqe8 = (save.getName()+" hiện có màu sắc nào");
-        var oriqe9 = (save.getName()+" hiện có kích thước nào");
-        var oriqe10 = ("Chi tiết Quantity Detail of "+ save.getName());
-        var oriqe11 = (save.getName()+" thuộc hãng nào?");
+        var oriqe8 = ("Màu sắc của "+ save.getName()+" có những lựa chọn nào ?");
+        var oriqe9 = ("Kích cỡ của "+ save.getName()+" có những lựa chọn nào ?");
+        var oriqe10 = ("Số lượng chi tiết của "+ save.getName());
         var oriqe13 = ("Giá gốc của "+ save.getName()+" là bao nhiêu?");
-        var oriqe14 = ("Giá khuyến mãi hiện tại của "+ save.getName()+" là bao nhiêu?");
-        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe0).build());
-        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe1).build());
-        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe2).build());
-        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe3).build());
+        var oriqe14 = ("Giá hiện tại của "+ save.getName()+" là bao nhiêu?");
+
+        var oriqe15 = (save.getName()+" có chương trình tích điểm hoặc nhận quà khi mua hàng không?");
+        var oriqe16 = (save.getName()+" có co giãn tốt không?");
+        var oriqe17 = ("Chất liệu của " +save.getName()+" có bền màu sau nhiều lần giặt không?");
+        var oriqe18 = ("Có gói quà tặng hoặc dịch vụ bọc quà khi mua " +save.getName()+" không?");
+        var oriqe19 = ("Có phụ kiện hoặc trang phục nào đi kèm với " +save.getName()+" không?");
+        var oriqe20 = ("Màu sắc của " +save.getName()+" có dễ phai sau nhiều lần giặt không?");
+        var oriqe21 = ("Khi mặc, " +save.getName()+" có cảm giác thoải mái không?");
+        var oriqe22 = ("Có phiên bản giới hạn (limited edition) của" +save.getName()+" không?");
+
+//        var oriqe23 = ("Gợi ý cho tôi các sản phẩm bán chạy nhất");
+//        var oriqe24 = ("Gợi ý cho tôi các sản phẩm giảm giá ổn nhất");
+//        var oriqe25 = ("Gợi ý cho tôi các sản phẩm mới nhất");
+
+//        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe0).build());
         originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe4).build());
+        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe3).build());
         originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe5).build());
         originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe6).build());
-//        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe7).build());
         originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe8).build());
         originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe9).build());
         originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe10).build());
-        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe11).build());
         originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe13).build());
         originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe14).build());
+        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe15).build());
+        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe16).build());
+        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe17).build());
+        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe18).build());
+        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe19).build());
+        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe20).build());
+        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe21).build());
+        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe22).build());
+
+//        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe23).build());
+//        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe24).build());
+//        originalQuestionRepository.save(OriginalQuestion.builder().question(oriqe25).build());
 
 
         //info
         QuestionAnswer qa0 = QuestionAnswer.builder()
-//                .question(removeDiacritics(oriqe0.toLowerCase()))
                 .question(removeDiacritics(product_flag.getSkuQa().toLowerCase()))
                 .answer(saveInfoChatBotAnswer(save,sizes,colors,BoxResponse))
-                .build();
-        //Bạn có sản phẩm [tên sản phẩm] không?
-        QuestionAnswer qa1 = QuestionAnswer.builder()
-                .question(removeDiacritics(oriqe1.toLowerCase()))
-                .answer("Vâng, chúng tôi có "+ save.getName()+". Bạn có thể tìm thấy nó trong danh mục sản phẩm hoặc nhấn vào liên kết sản phẩm.")
-                .build();
-        //Giá của [tên sản phẩm] là bao nhiêu?
-        QuestionAnswer qa2 = QuestionAnswer.builder()
-                .question(removeDiacritics(oriqe2.toLowerCase()))
-                .answer("")
-                .build();
-        //Bạn có chương trình khuyến mãi nào cho [tên sản phẩm] không?
-        QuestionAnswer qa3 = QuestionAnswer.builder()
-                .question(removeDiacritics(oriqe3.toLowerCase()))
-                .answer("Hiện tại, chúng tôi đang có chương trình khuyến mãi "+ save.getSaleDiscountPercent()+"% cho "+ save.getName()+". Bạn có thể tìm hiểu thêm tại trang khuyến mãi của chúng tôi.")
                 .build();
         //Sản phẩm [tên sản phẩm] có còn hàng không?
         QuestionAnswer qa4 = QuestionAnswer.builder()
                 .question(removeDiacritics(oriqe4.toLowerCase()))
                 .answer("Tổng hàng tồn kho của "+ save.getName()+" còn "+save.getTotalQuantity()+" sản phẩm các loại, Để kiểm tra tình trạng hàng tồn kho chi tiết, Bạn vui lòng nhấn vào trang sản phẩm của chúng tôi. ")
                 .build();
+        //Bạn có chương trình khuyến mãi nào cho [tên sản phẩm] không?
+        QuestionAnswer qa3 = QuestionAnswer.builder()
+                .question(removeDiacritics(oriqe3.toLowerCase()))
+//                .answer("Hiện tại, chúng tôi đang có chương trình khuyến mãi "+ save.getSaleDiscountPercent()+"% cho "+ save.getName()+". Bạn có thể tìm hiểu thêm tại trang khuyến mãi của chúng tôi.")
+                .build();
+        if(save.getSaleDiscountPercent() !=0) {
+            qa3.setAnswer("Hiện tại, chúng tôi đang có chương trình khuyến mãi "+ save.getSaleDiscountPercent()+"% cho "+ save.getName()+". Bạn có thể tìm hiểu thêm tại trang khuyến mãi của chúng tôi.");
+        }else {
+            qa3.setAnswer("Hiện tại, chúng tôi không có chương trình khuyến mãi cho "+ save.getName()+". Bạn có thể tìm hiểu thêm tại trang khuyến mãi của chúng tôi.");
+        }
         //Tôi có thể xem đánh giá của khách hàng về [tên sản phẩm] ở đâu?
         QuestionAnswer qa5 = QuestionAnswer.builder()
                 .question(removeDiacritics(oriqe5.toLowerCase()))
@@ -394,11 +320,6 @@ public class ProductService {
                 .question(removeDiacritics(oriqe6.toLowerCase()))
                 .answer("Vâng, bạn có thể trả lại "+ save.getName()+" trong vòng 2 ngày kể từ ngày nhận hàng, theo chính sách đổi trả của chúng tôi. Bạn vui lòng kiểm tra chi tiết trong phần chính sách đổi trả.")
                 .build();
-//        //Tôi có thể thay đổi hoặc hủy đơn hàng của mình không?
-//        QuestionAnswer qa7 = QuestionAnswer.builder()
-//                .question(removeDiacritics(oriqe7.toLowerCase()))
-//                .answer("Hiện tại, chúng tôi đang có chương trình khuyến mãi "+ save.getSaleDiscountPercent()+"% cho "+ save.getName()+". Bạn có thể tìm hiểu thêm tại trang khuyến mãi của chúng tôi.")
-//                .build();
         // [tên sản phẩm] hiện Có màu sắc nào?
         QuestionAnswer qa8 = QuestionAnswer.builder()
                 .question(removeDiacritics(oriqe8.toLowerCase()))
@@ -414,11 +335,6 @@ public class ProductService {
                 .question(removeDiacritics(oriqe10.toLowerCase()))
                 .answer(saveQuantityDetailAnswer(save,sizes,colors,BoxResponse))
                 .build();
-        // [tên sản phẩm] thuộc hãng nào?
-        QuestionAnswer qa11 = QuestionAnswer.builder()
-                .question(removeDiacritics(oriqe11.toLowerCase()))
-                .answer((save.getName() + " thuộc hãng " + save.getTradeMask() + " ." + save.getTradeMask()+ " là 1 nhãn hàng với chất liệu khá tốt, sản phẩm đẹp mắt và hiện đâng hợp tác với chúng tôi"))
-                .build();
         //Giá gốc của [tên sản phẩm] là bao nhiêu?
         QuestionAnswer qa13 = QuestionAnswer.builder()
                 .question(removeDiacritics(oriqe13.toLowerCase()))
@@ -429,23 +345,56 @@ public class ProductService {
                 .question(removeDiacritics(oriqe14.toLowerCase()))
                 .answer("Giá khuyến mãi hiện tại của "+ save.getName()+" là "+save.getFinalPrice() + "VND")
                 .build();
+        QuestionAnswer qa15 = QuestionAnswer.builder()
+                .question(removeDiacritics(oriqe15.toLowerCase()))
+                .answer("Có, " + save.getName() + " có chương trình tích điểm và bạn sẽ nhận được quà tặng khi tích đủ điểm.")
+                .build();
+        QuestionAnswer qa16 = QuestionAnswer.builder()
+                .question(removeDiacritics(oriqe16.toLowerCase()))
+                .answer("Sản phẩm " + save.getName() + " có độ co giãn tốt, phù hợp với nhiều kích cỡ khác nhau.")
+                .build();
+        QuestionAnswer qa17 = QuestionAnswer.builder()
+                .question(removeDiacritics(oriqe17.toLowerCase()))
+                .answer("Chất liệu của " + save.getName() + " bền màu và không phai sau nhiều lần giặt.")
+                .build();
+        QuestionAnswer qa18 = QuestionAnswer.builder()
+                .question(removeDiacritics(oriqe18.toLowerCase()))
+                .answer("Có, chúng tôi cung cấp gói quà tặng khi bạn đặt hàng sản phẩm " + save.getName() + ".")
+                .build();
+        QuestionAnswer qa19 = QuestionAnswer.builder()
+                .question(removeDiacritics(oriqe19.toLowerCase()))
+                .answer("Sản phẩm " + save.getName() + " không đi kèm phụ kiện, nhưng bạn có thể mua riêng các phụ kiện phù hợp.")
+                .build();
+        QuestionAnswer qa20 = QuestionAnswer.builder()
+                .question(removeDiacritics(oriqe20.toLowerCase()))
+                .answer("Màu sắc của " + save.getName() + " không dễ phai sau nhiều lần giặt, bạn có thể yên tâm sử dụng.")                .build();
+        QuestionAnswer qa21 = QuestionAnswer.builder()
+                .question(removeDiacritics(oriqe21.toLowerCase()))
+                .answer("Khi mặc, " + save.getName() + " rất thoải mái và không gây khó chịu cho người sử dụng.")
+                .build();
+        QuestionAnswer qa22 = QuestionAnswer.builder()
+                .question(removeDiacritics(oriqe22.toLowerCase()))
+                .answer("Hiện tại không có phiên bản giới hạn của " + save.getName() + ", nhưng chúng tôi sẽ thông báo nếu có. Bạn có thể để lại thắc mắc ở trong phần liên lạc của chúng tôi !")
+                .build();
+
         questionAnswerRepository.save(qa0);
-        questionAnswerRepository.save(qa1);
-        questionAnswerRepository.save(qa2);
         questionAnswerRepository.save(qa3);
         questionAnswerRepository.save(qa4);
         questionAnswerRepository.save(qa5);
         questionAnswerRepository.save(qa6);
-//        questionAnswerRepository.save(qa7);
         questionAnswerRepository.save(qa8);
         questionAnswerRepository.save(qa9);
         questionAnswerRepository.save(qa10);
-        questionAnswerRepository.save(qa11);
-        //12 ở chỗ comment
         questionAnswerRepository.save(qa13);
         questionAnswerRepository.save(qa14);
-//        questionAnswerRepository.save(qa15);
-//        questionAnswerRepository.save(qa16);
+        questionAnswerRepository.save(qa15);
+        questionAnswerRepository.save(qa16);
+        questionAnswerRepository.save(qa17);
+        questionAnswerRepository.save(qa18);
+        questionAnswerRepository.save(qa19);
+        questionAnswerRepository.save(qa20);
+        questionAnswerRepository.save(qa21);
+        questionAnswerRepository.save(qa22);
         return save;
     }
 
@@ -629,21 +578,6 @@ public class ProductService {
             //      Log ra Status
             var colorchange = valueadd(colors, colorsadd);
             var sizechange = valueadd(sizesadd, sizes);
-
-//            System.out.println("Colors : " + colors);
-//            System.out.println("sizes : " + sizes);
-//
-//            System.out.println("Color_add : " + colorsadd);
-//            System.out.println("size_add : " + sizesadd);
-//
-//            System.out.println("Color_change : " + colorchange);
-//            System.out.println("size_change : " + sizechange);
-//
-//            System.out.println("xoaColor : " + xoaColor);
-//            System.out.println("xoaSize : " + xoaSize);
-//
-//            System.out.println("addColor : " + addColor);
-//            System.out.println("addSize : " + addSize);
             //      Xóa đi nếu có
             if ((xoaColor || xoaSize)) {
                 if (request.getQuantityDetails() != null && !request.getQuantityDetails().isEmpty()) {
@@ -796,6 +730,50 @@ public class ProductService {
                 .createDate(product_flag.getCreateDate())
                 .createdByUserid(product_flag.getCreatedByUserid())
                 .build();
+        var oriqe4 = ("Sản phẩm "+ save.getName()+" có còn hàng không?");
+        var oriqe3 = ("Hiện tại "+ save.getName()+" có chương trình giảm giá hoặc khuyến mãi nào không?");
+        var oriqe8 = ("Màu sắc của "+ save.getName()+" có những lựa chọn nào ?");
+        var oriqe9 = ("Kích cỡ của "+ save.getName()+" có những lựa chọn nào ?");
+        var oriqe10 = ("Số lượng chi tiết của "+ save.getName());
+        var oriqe13 = ("Giá gốc của "+ save.getName()+" là bao nhiêu?");
+        var oriqe14 = ("Giá hiện tại của "+ save.getName()+" là bao nhiêu?");
+
+        //info
+        QuestionAnswer qa0 = questionAnswerRepository.findByQuestion(product_flag.getSkuQa().toLowerCase());
+        qa0.setAnswer(saveInfoChatBotAnswer(save,sizes,colors,BoxResponse));
+        QuestionAnswer qa4 = questionAnswerRepository.findByQuestion(removeDiacritics(oriqe4.toLowerCase()));
+        qa4.setAnswer("Tổng hàng tồn kho của "+ save.getName()+" còn "+save.getTotalQuantity()+" sản phẩm các loại, Để kiểm tra tình trạng hàng tồn kho chi tiết, Bạn vui lòng nhấn vào trang sản phẩm của chúng tôi. ");
+        QuestionAnswer qa3 = questionAnswerRepository.findByQuestion(removeDiacritics(oriqe3.toLowerCase()));
+        if(save.getSaleDiscountPercent() !=0) {
+            qa3.setAnswer("Hiện tại, chúng tôi đang có chương trình khuyến mãi "+ save.getSaleDiscountPercent()+"% cho "+ save.getName()+". Bạn có thể tìm hiểu thêm tại trang khuyến mãi của chúng tôi.");
+        }else {
+            qa3.setAnswer("Hiện tại, chúng tôi không có chương trình khuyến mãi cho "+ save.getName()+". Bạn có thể tìm hiểu thêm tại trang khuyến mãi của chúng tôi.");
+        }
+        // [tên sản phẩm] hiện màu sắc nào?
+        QuestionAnswer qa8 = questionAnswerRepository.findByQuestion(removeDiacritics(oriqe8.toLowerCase()));
+        qa8.setAnswer(savesizesAnswer(save.getName(),colors));
+        // [tên sản phẩm] hiện Có kích thước nào?
+        QuestionAnswer qa9 = questionAnswerRepository.findByQuestion(removeDiacritics(oriqe9.toLowerCase()));
+        qa9.setAnswer(savecolorsAnswer(save.getName(),sizes));
+        //Số lượng Chi tiết của  "+ namepro
+        QuestionAnswer qa10 = questionAnswerRepository.findByQuestion(removeDiacritics(oriqe10.toLowerCase()));
+        qa10.setAnswer(saveQuantityDetailAnswer(save,sizes,colors,BoxResponse));
+        //Giá gốc của [tên sản phẩm] là bao nhiêu?
+        QuestionAnswer qa13 = questionAnswerRepository.findByQuestion(removeDiacritics(oriqe13.toLowerCase()));
+        qa13.setAnswer("Giá gốc của "+ save.getName()+" là "+save.getOriginalPrice() + " VND");
+        // Giá khuyến mãi hiện tại của [tên sản phẩm] là bao nhiêu?
+        QuestionAnswer qa14 = questionAnswerRepository.findByQuestion(removeDiacritics(oriqe14.toLowerCase()));
+        qa13.setAnswer("Giá khuyến mãi hiện tại của "+ save.getName()+" là "+save.getFinalPrice() + "VND");
+
+
+        questionAnswerRepository.save(qa0);
+        questionAnswerRepository.save(qa3);
+        questionAnswerRepository.save(qa4);
+        questionAnswerRepository.save(qa8);
+        questionAnswerRepository.save(qa9);
+        questionAnswerRepository.save(qa10);
+        questionAnswerRepository.save(qa13);
+        questionAnswerRepository.save(qa14);
         return save;
     }
     public List<String> valueadd(List<String>a , List<String>b){
@@ -1000,11 +978,17 @@ public class ProductService {
                     .build();
             productsResponseList.add(y);
         }
-        int start = Math.max((_page - 1) * _limit, 0);
-        int end = Math.min(start + _limit, productList.size());
-        List<ProductResponse> paginatedProducts = productsResponseList.subList(start, end);
+        List<ProductResponse> paginatedProducts = new ArrayList<>();
         if(removeDetail != null){
-            Collections.shuffle(paginatedProducts);
+            Collections.shuffle(productsResponseList);
+            int start = Math.max((_page - 1) * _limit, 0);
+            int end = Math.min(start + _limit, productList.size());
+            paginatedProducts = productsResponseList.subList(start, end);
+//            Collections.shuffle(paginatedProducts);
+        }else {
+            int start = Math.max((_page - 1) * _limit, 0);
+            int end = Math.min(start + _limit, productList.size());
+            paginatedProducts = productsResponseList.subList(start, end);
         }
         return ProductListDtos.builder().data(paginatedProducts).paginationDto(new PaginationDto(_limit,_page,_total)).build();
     }
@@ -1199,16 +1183,16 @@ public class ProductService {
         product.setRating(rating);
         //chất lượng của [tên sản phẩm] được đánh giá thế nào?
         QuestionAnswer qa12;
-        if(questionAnswerRepository.findByQuestion("chất lượng của "+ product.getName()+" được đánh giá thế nào?") !=null){
-            qa12 = questionAnswerRepository.findByQuestion("chất lượng của "+ product.getName()+" được đánh giá thế nào?");
+        if(questionAnswerRepository.findByQuestion("Người dùng trước đây có đánh giá như thế nào về "+ product.getName()) !=null){
+            qa12 = questionAnswerRepository.findByQuestion("Người dùng trước đây có đánh giá như thế nào về "+ product.getName());
             qa12.setAnswer(rating(product.getName(),rating,nRating));
         }else{
             qa12 = QuestionAnswer.builder()
-                    .question(removeDiacritics(("chất lượng của "+ product.getName()+" được đánh giá thế nào?").toLowerCase()))
+                    .question(removeDiacritics(("Người dùng trước đây có đánh giá như thế nào về "+ product.getName()).toLowerCase()))
                     .answer(rating(product.getName(),rating,nRating))
                     .build();
         }
-        originalQuestionRepository.save(OriginalQuestion.builder().question("chất lượng của "+ product.getName()+" được đánh giá thế nào?").build());
+        originalQuestionRepository.save(OriginalQuestion.builder().question("Người dùng trước đây có đánh giá như thế nào về "+ product.getName()).build());
         questionAnswerRepository.save(qa12);
         commentRepository.save(comment);
         productRepository.save(product);

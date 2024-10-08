@@ -186,7 +186,7 @@ public class GuestController {
     ) {
         List<String> sub = new ArrayList<>();
         sub.add(info);
-        var save =  service.search_all(_userId,_limit,_page,null,null,null,null,sub,null,null,null,null,null,null,null,name);
+        var save =  service.search_all(_userId,_limit,_page,null,null,null,null,sub,null,null,null,null,null,null,null,"true");
         return ResponseEntity.ok(save);
     }
 //--------------------------Search----------------------------------
